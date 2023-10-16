@@ -1,5 +1,5 @@
 package com.danaga.controller;
 
-public class MemberController {
+public class OrderController {
 
 }

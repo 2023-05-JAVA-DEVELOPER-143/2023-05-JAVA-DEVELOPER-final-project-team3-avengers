@@ -1,11 +1,5 @@
 package com.danaga.entity;
 
-import java.sql.Date;
-import java.time.LocalDateTime;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,31 +9,30 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Orders {
-	
-/*	o_no (PK)
-	o_date
+public class Refund {
 
-	user_id(FK)
-	o_desc
-	o_price
-	o_state         주문상태( 주문완료, 배송중, 배송완료, 환불대기중, 환불완료)
-*/
+	/*
+	 * re_no(Pk) 
+	 * re_desc 환불 사유 
+	 * re_acno 환불 계좌번호 
+	 * o_no(Fk)
+	 */
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(length = 1000)
-	private Long oNo;
+	private Long re_no;
 	@Column(length = 1000)
-	private String oDesc;
+	private String re_desc;
 	@Column(length = 100)
-	private Integer oPrice;
-	@Column(length = 100)
-	private String oState;
-	@CreationTimestamp
-	private LocalDateTime createdate;
+	private String re_acno;
+
+	
+
 }

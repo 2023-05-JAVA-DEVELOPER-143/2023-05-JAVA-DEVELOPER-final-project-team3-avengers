@@ -1,5 +1,5 @@
 package com.danaga.dto;
 
-public class MemberDto {
+public class OrderDto {
 
 }
