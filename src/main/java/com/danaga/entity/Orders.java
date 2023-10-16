@@ -11,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,6 +32,7 @@ public class Orders {
 	o_state         주문상태( 주문완료, 배송중, 배송완료, 환불대기중, 환불완료)
 */
 	@Id
+	@SequenceGenerator(name = "order_order_no_seq",sequenceName = "order_order_no_seq",initialValue = 1,allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(length = 1000)
 	private Long oNo;
