@@ -28,7 +28,7 @@ public class ReviewDto {
 	private Long productNo;
 	
 	public static ReviewDto createReviewDto(Review review) {
-		return new ReviewDto(review.getReviewNo(),review.getTitle(),review.getContent(),review.getImg(),review.getRating(),review.getMember().getMemberId(),review.getProduct().getProductNo());
+		return new ReviewDto(review.getReviewNo(),review.getTitle(),review.getContent(),review.getImg(),review.getRating(),review.getMember().getMemberId(),review.getProduct().getId());
 		
 	}
 }

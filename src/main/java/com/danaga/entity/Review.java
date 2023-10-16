@@ -51,7 +51,7 @@ public class Review {
 		if(dto.getReviewNo()!=null) {
 			throw new IllegalArgumentException("리뷰 생성 실패 ! 리뷰의 번호가 없어야 해요!");
 		}
-		if(dto.getProductNo() !=product.getProductNo()) {
+		if(dto.getProductNo() !=product.getId()) {
 			throw new IllegalArgumentException("리뷰 생성 실패 ! 리뷰의 id가 잘못되었어요");
 		}
 		if(dto.getMemberId()!=member.getMemberId()) {
