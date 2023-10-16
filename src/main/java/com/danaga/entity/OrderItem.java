@@ -1,5 +1,6 @@
 package com.danaga.entity;
 
+import java.sql.*;
 import java.time.*;
 
 import org.hibernate.annotations.*;
@@ -22,10 +23,7 @@ public class OrderItem {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ORDERITEM_ORIM_NO_SEQ")
 	private Long oi_no;
 	private Integer oi_qty;
-	
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-	
+
 	public static OrderItem toEntity(OrderItemDto dto) {
 		return OrderItem.builder()
 				.oi_no(dto.getOi_no())

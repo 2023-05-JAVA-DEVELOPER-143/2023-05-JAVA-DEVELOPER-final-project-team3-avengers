@@ -18,9 +18,5 @@ public class Delivery {
 	private Long de_no;
 	private String de_name;		    	
 	private Integer de_phonenumber;    
-	private String de_address;	  
-	
-	
-	
+	private String de_address;	    
 }
-
