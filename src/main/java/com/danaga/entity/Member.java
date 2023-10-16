@@ -1,6 +1,11 @@
 package com.danaga.entity;
 
-import jakarta.persistence.Column;
+import java.sql.Date;
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
@@ -16,18 +21,21 @@ import lombok.NoArgsConstructor;
 public class Member {
 	@Id
 	private String memberEmail;
-	@Column(length = 255, nullable = false)
 	private String memberId;
-	@Column(length = 255, nullable = false)
 	private String memberPassword;
-	@Column(length = 255, nullable = false)
 	private String memberAddress;
-	private String memberBirthday;
-	@Column(length = 255, nullable = false)
+	private Date memberBirthday;
 	private String memberPhoneNo;
-	private String memberJoinDate;
+	@CreationTimestamp
+	private LocalDateTime memberJoinDate;
 	private String memberRole;
-	private String memberGrade;
+	private String memberGrade; /* Rookie Bronze, Silver, Gold, Platinum, Diamond 결제 가격의 1%가 등급 포인트로 쌓임
+	 							등급 점수  Bronze : 1000 ~ 5000
+	 										Silver : 5001 ~ 10000
+	 										Gold : 10001 ~ 20000
+	 										Platinum : 20001 ~ 35000
+	 										Diamond : 35001 ~ MAX */
+	private Long memberGradePoint;
 	
 	
 }
