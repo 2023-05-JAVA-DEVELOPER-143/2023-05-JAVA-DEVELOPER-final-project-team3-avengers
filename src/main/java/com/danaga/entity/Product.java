@@ -47,10 +47,9 @@ public class Product extends BaseEntity {
 	@Builder.Default
 	private Event event = new Event();
 	
-	@OneToOne
-	@JoinColumn(name = "category_id")
+	@OneToMany(mappedBy = "product")
 	@Builder.Default
-	private Category category = new Category();
+	private List<CategorySet> categorysets = new ArrayList<>();
 	
 	@Builder.Default
 	@OneToMany(mappedBy = "product")

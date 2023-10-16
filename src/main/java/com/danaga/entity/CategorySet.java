@@ -24,17 +24,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Category {
+public class CategorySet {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE) 
 	private Long id;
 	private String categoryName;
 	
-	@JoinColumn(name="superType", nullable = true)
+	@JoinColumn(name="category_no")
 	@ManyToOne
-	private Category superType;
+	private Category category;
 	
-	@OneToMany(mappedBy = "superType")
-	@Builder.Default
-	private List<Category> childTypes= new ArrayList();
+	@JoinColumn(name = "product_no")
+	@ManyToOne
+	private Product product;
 }
