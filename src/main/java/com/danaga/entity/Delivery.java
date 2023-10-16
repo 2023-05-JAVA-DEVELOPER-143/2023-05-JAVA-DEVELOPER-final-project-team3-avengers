@@ -13,8 +13,8 @@ import lombok.*;
 @AllArgsConstructor
 public class Delivery {
 	@Id
-	@SequenceGenerator(name = "DELIVERY_DEV_NO_SEQ", sequenceName = "DELIVERY_DEV_NO_SEQ", initialValue = 1, allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DELIVERY_DEV_NO_SEQ")
+	@SequenceGenerator(name = "DELIVERY_DELIVERY_NO_SEQ", sequenceName = "DELIVERY_DELIVERY_NO_SEQ", initialValue = 1, allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DELIVERY_DELIVERY_NO_SEQ")
 	private Long de_no;
 	private String de_name;		    	
 	private Integer de_phonenumber;    
