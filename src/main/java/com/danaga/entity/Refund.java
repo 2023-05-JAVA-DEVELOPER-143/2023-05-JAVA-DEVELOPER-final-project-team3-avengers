@@ -25,6 +25,7 @@ public class Refund {
 	 * o_no(Fk)
 	 */
 	
+	
 	@Id
 	@SequenceGenerator(name = "refund_refund_no_seq",sequenceName = "refund_refund_no_seq",initialValue = 1,allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
