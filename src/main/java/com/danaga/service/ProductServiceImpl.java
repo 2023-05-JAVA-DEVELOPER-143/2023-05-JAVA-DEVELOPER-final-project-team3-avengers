@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.danaga.dao.OptionSetDao;
 import com.danaga.dao.ProductDao;
 import com.danaga.dto.ProductDto;
 import com.danaga.dto.ResponseDto;
@@ -16,8 +15,6 @@ import com.danaga.entity.Product;
 public class ProductServiceImpl implements ProductService{
 	@Autowired
 	private ProductDao productDao;
-	@Autowired
-	private OptionSetDao optionSetDao;
 	
 	public List<ResponseDto<ProductDto>> products(){
 		return null;

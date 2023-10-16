@@ -22,7 +22,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(name = "RECENT_VIEW_UQ", columnNames = {"user_id","product_id"})})
+@Table(uniqueConstraints = {@UniqueConstraint(name = "RECENT_VIEW_UQ", columnNames = {"member_id","product_id"})})
 public class RecentView extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
