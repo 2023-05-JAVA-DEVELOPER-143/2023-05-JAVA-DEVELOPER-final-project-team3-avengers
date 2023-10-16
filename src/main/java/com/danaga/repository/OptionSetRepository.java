@@ -19,5 +19,6 @@ public interface OptionSetRepository extends JpaRepository<OptionSet, Long> {
 	List<OptionSet> findByProduct(Product product);
 	List<OptionSet> findByUpdateTime(LocalDateTime updateTime);
 	OptionSet findByOrderItem(OrderItem orderItem);
+	List<OptionSet> findByStockIsNotEmptyAndProduct_NameLikeOrProduct_ModelLike(String name, String model);
 	
 }
