@@ -12,5 +12,5 @@ public interface OrderRepository extends JpaRepository<Orders, Long>{
 
 
 	
-	public void deleteByMember_MemberId(String memberId);
+	public void selectByMember_MemberId(String memberId);
 }

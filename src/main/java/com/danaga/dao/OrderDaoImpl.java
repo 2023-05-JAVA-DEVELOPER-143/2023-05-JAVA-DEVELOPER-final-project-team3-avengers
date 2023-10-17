@@ -35,11 +35,6 @@ public class OrderDaoImpl implements OrderDao {
 		return null;
 	}
 
-	@Override
-	public void deleteByUserId(String memberId) throws Exception {
-			orderRepository.deleteByMember_MemberId(memberId);
-		
-	}
 
 	@Override
 	public void deleteByOrderNo(Long o_no) {
@@ -63,6 +58,13 @@ public class OrderDaoImpl implements OrderDao {
 	public Orders findbyOrderNo(Long memberIdCode) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+	@Override
+	public void deleteByUserId(String memberId) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
