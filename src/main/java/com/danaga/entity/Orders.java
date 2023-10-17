@@ -57,11 +57,11 @@ public class Orders {
 	private LocalDateTime createdate;
 
 	@OneToOne
-	@JoinColumn(name = "de_no")
+	@JoinColumn(name = "deNo")
 	private Delivery delivery;
 	
 	@OneToOne
-	@JoinColumn(name = "re_no")
+	@JoinColumn(name = "reNo")
 	private Refund refund;
 	
 	@OneToMany(mappedBy = "orders")

@@ -15,12 +15,12 @@ public class Delivery {
 	@Id
 	@SequenceGenerator(name = "DELIVERY_DELIVERY_NO_SEQ", sequenceName = "DELIVERY_DELIVERY_NO_SEQ", initialValue = 1, allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DELIVERY_DELIVERY_NO_SEQ")
-	private Long de_no;
-	private String de_name;		    	
-	private Integer de_phonenumber;    
-	private String de_address;	    
+	private Long deNo;
+	private String deName;		    	
+	private Integer dePhonenumber;    
+	private String deAddress;	    
 	
 	@OneToOne
-	@JoinColumn(name = "o_no")
+	@JoinColumn(name = "oNo")
 	private Orders orders;
 }

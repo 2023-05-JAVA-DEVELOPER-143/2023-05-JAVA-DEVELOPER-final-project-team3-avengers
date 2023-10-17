@@ -33,7 +33,7 @@ public class OrderItem {
 	}
 	
 	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "o_no")
+	@JoinColumn(name = "oNo")
 	private Orders orders;
 	
 	@ManyToOne(cascade = CascadeType.PERSIST)

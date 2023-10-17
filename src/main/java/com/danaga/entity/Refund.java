@@ -39,7 +39,7 @@ public class Refund {
 	private String reAcno;
 
 	@OneToOne
-	@JoinColumn(name = "o_no")
+	@JoinColumn(name = "oNo")
 	private Orders orders;
 
 }
