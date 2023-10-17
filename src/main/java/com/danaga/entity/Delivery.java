@@ -19,4 +19,8 @@ public class Delivery {
 	private String de_name;		    	
 	private Integer de_phonenumber;    
 	private String de_address;	    
+	
+	@OneToOne
+	@JoinColumn(name = "o_no")
+	private Orders orders;
 }

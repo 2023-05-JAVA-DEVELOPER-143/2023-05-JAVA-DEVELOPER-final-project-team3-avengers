@@ -2,8 +2,13 @@ package com.danaga.entity;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.ManyToAny;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Column;
@@ -11,7 +16,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.criteria.Order;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -42,6 +52,23 @@ public class Orders {
 	private Integer oPrice;
 	@Column(length = 100)
 	private String oState;
+	@Column(updatable = false)
 	@CreationTimestamp
 	private LocalDateTime createdate;
+
+	@OneToOne
+	@JoinColumn(name = "de_no")
+	private Delivery delivery;
+	
+	@OneToOne
+	@JoinColumn(name = "re_no")
+	private Refund refund;
+	
+	@OneToMany(mappedBy = "orders")
+	@Builder.Default
+	private List<OrderItem> orderItems = new ArrayList<>();
+	
+	@ManyToOne
+	@JoinColumn(name = "memberEmail")
+	private Member member;
 }

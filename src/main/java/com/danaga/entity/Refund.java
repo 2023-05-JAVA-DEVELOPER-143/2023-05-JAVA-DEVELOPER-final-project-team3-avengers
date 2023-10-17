@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,6 +38,8 @@ public class Refund {
 	@Column(length = 100)
 	private String re_acno;
 
-	
+	@OneToOne
+	@JoinColumn(name = "o_no")
+	private Orders orders;
 
 }

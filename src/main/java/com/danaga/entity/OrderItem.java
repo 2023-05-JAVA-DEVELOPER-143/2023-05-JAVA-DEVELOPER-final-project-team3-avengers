@@ -8,6 +8,7 @@ import org.hibernate.annotations.*;
 import com.danaga.dto.*;
 
 import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Table;
 import lombok.*;
 
@@ -30,4 +31,12 @@ public class OrderItem {
 				.oi_qty(dto.getOi_qty())
 				.build();
 	}
+	
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "o_no")
+	private Orders orders;
+	
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "id")
+	private OptionSet optionSet;
 }
