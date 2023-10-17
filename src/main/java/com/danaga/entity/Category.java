@@ -28,13 +28,13 @@ public class Category {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE) 
 	private Long id;
-	private String categoryName;
+	private String name;
 	
-	@JoinColumn(name="superType", nullable = true)
+	@JoinColumn(name="parent", nullable = true)
 	@ManyToOne
-	private Category superType;
+	private Category parent;
 	
-	@OneToMany(mappedBy = "superType")
+	@OneToMany(mappedBy = "parent")
 	@Builder.Default
 	private List<Category> childTypes= new ArrayList();
 }
