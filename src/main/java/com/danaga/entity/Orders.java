@@ -69,6 +69,6 @@ public class Orders {
 	private List<OrderItem> orderItems = new ArrayList<>();
 	
 	@ManyToOne
-	@JoinColumn(name = "memberEmail")
+	@JoinColumn(name = "memeber_id_code")
 	private Member member;
 }
