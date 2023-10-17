@@ -11,6 +11,13 @@ import jakarta.persistence.criteria.Order;
 public interface OrderRepository extends JpaRepository<Orders, Long>{
 
 
+	/************************Custom Method******************/
+	/*
+	 * MemberId로 order찾기(회원)
+	 */
+	public void findByMember_MemberId(String memberId);
 	
-	public void selectByMember_MemberId(String memberId);
+	/*
+	 * 
+	 */
 }

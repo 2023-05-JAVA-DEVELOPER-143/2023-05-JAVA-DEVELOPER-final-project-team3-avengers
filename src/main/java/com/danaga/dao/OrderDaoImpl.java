@@ -20,6 +20,11 @@ public class OrderDaoImpl implements OrderDao {
 	@Autowired
 	OrderRepository orderRepository;
 	
+	/*
+	 * order insert
+	 */
+	
+	
 	@Override
 	public Orders insert(Orders order) {
 		
@@ -35,36 +40,38 @@ public class OrderDaoImpl implements OrderDao {
 		return null;
 	}
 
-
 	@Override
-	public void deleteByOrderNo(Long o_no) {
-		orderRepository.deleteById(o_no);
-		
-	}
-
-	@Override
-	public List<Orders> findOrderByUserId(Long memberIdCode) {
+	public Orders updateOrderByOState(String oState) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Orders> findOrderWithOrderItemByUserId(Long memberIdCode) {
+	public List<Orders> findOrderByMemberId(Long memberId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Orders findbyOrderNo(Long memberIdCode) {
+	public List<Orders> findOrderWithOrderItemByMemberId(Long memberId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
+	public Orders findOrderByOrderNo(Long oNo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	@Override
-	public void deleteByUserId(String memberId) throws Exception {
+	public Orders findOrderByOrderNoAndMemberNameandMemberPhoneNo(Long oNo, String MemberName, String memberPhoneNo) {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
+
+	
+
+	
 	
 }
