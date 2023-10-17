@@ -22,13 +22,13 @@ public class OrderItem {
 	@Id
 	@SequenceGenerator(name = "ORDERITEM_ORDERITEM_NO_SEQ", sequenceName = "ORDERITEM_ORDERITEM_NO_SEQ", initialValue = 1, allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	private Long oi_no;
-	private Integer oi_qty;
+	private Long oiNo;
+	private Integer oiQty;
 
 	public static OrderItem toEntity(OrderItemDto dto) {
 		return OrderItem.builder()
-				.oi_no(dto.getOi_no())
-				.oi_qty(dto.getOi_qty())
+				.oiNo(dto.getOi_no())
+				.oiQty(dto.getOi_qty())
 				.build();
 	}
 	

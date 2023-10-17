@@ -44,11 +44,11 @@ public class Orders {
 	@Id
 	@SequenceGenerator(name = "order_order_no_seq",sequenceName = "order_order_no_seq",initialValue = 1,allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(length = 1000)
+	@Column(length = 10)
 	private Long oNo;
-	@Column(length = 1000)
-	private String oDesc;
 	@Column(length = 100)
+	private String oDesc;
+	@Column(length = 10)
 	private Integer oPrice;
 	@Column(length = 100)
 	private String oState;
@@ -69,6 +69,6 @@ public class Orders {
 	private List<OrderItem> orderItems = new ArrayList<>();
 	
 	@ManyToOne
-	@JoinColumn(name = "memeber_id_code")
+	@JoinColumn(name = "memberIdCode")
 	private Member member;
 }

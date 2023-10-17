@@ -17,7 +17,7 @@ public interface OrderDao {
 	/*
 	 * 주문전체삭제
 	 */
-	public void deleteByUserId(Long memberIdCode) throws Exception;
+	public void deleteByUserId(String memberId) throws Exception;
 	
 	/*
 	 * 주문1건삭제
@@ -38,4 +38,5 @@ public interface OrderDao {
 	 * 주문1개보기(주문상세리스트)
 	 */
 	public Orders findbyOrderNo(Long memberIdCode);
+	
 }
