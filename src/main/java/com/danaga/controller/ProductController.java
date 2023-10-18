@@ -1,5 +1,6 @@
 package com.danaga.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.danaga.dto.OptionSetDto;
 import com.danaga.dto.ProductDto;
 import com.danaga.dto.ResponseDto;
+import com.danaga.entity.OptionSet;
 import com.danaga.entity.Product;
 import com.danaga.service.ProductService;
 
@@ -23,16 +26,7 @@ import com.danaga.service.ProductService;
 public class ProductController {
 	@Autowired
 	private ProductService productService;
-	@GetMapping("/{osid}")
-	public ResponseEntity<?> detail(@RequestBody ProductDto productDto, @PathVariable Long osid){
-		try {
-			ResponseDto<ProductDto> response = ResponseDto.<ProductDto>builder().data(productService.findById(osid)).build();
-			return ResponseEntity.ok().body(response);
-		}catch(Exception e) {
-			ResponseDto<ProductDto> response = ResponseDto.<ProductDto>builder().error(e.getMessage()).build();
-			return ResponseEntity.badRequest().body(response);
-		}
-	}
+	
 	//List<ProductDto> dtos = entities.stream().map(ProductDto::new).collect(Collectors.toList());
 		
 }

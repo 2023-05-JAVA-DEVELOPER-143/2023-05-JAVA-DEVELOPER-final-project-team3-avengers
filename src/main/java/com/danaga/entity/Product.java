@@ -31,12 +31,11 @@ public class Product extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
-	private String model;
 	private String name;
 	private String brand;
 	private Integer price;
 	private String descImage;
-	private String thumhnailDesc;
+	private String prevDesc;
 	private String pImage;
 	
 	@ColumnDefault(value = "0.0")
@@ -47,10 +46,9 @@ public class Product extends BaseEntity {
 	@Builder.Default
 	private Event event = new Event();
 	
-	@OneToOne
-	@JoinColumn(name = "category_id")
+	@OneToMany(mappedBy = "product")
 	@Builder.Default
-	private Category category = new Category();
+	private List<CategorySet> categorysets = new ArrayList<>();
 	
 	@Builder.Default
 	@OneToMany(mappedBy = "product")
@@ -62,9 +60,5 @@ public class Product extends BaseEntity {
 	@OneToMany(mappedBy = "product")
 	@Builder.Default
 	private List<OptionSet> optionsets = new ArrayList<>();
-	
-	
-	
-	
 	
 }
