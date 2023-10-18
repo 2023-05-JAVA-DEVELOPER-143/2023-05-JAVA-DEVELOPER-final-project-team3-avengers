@@ -12,9 +12,7 @@ public class RefundDaoImpl  implements RefundDao{
 
 	@Autowired
 	RefundRepository refundRepository;
-//		Refund insertRefund(Refund refund);
-//		Refund selectRefund(Long re_no);
-//		int deleteRefund(Long de_no);
+
 	
 	@Override
 	public Refund selectRefund(Long re_no) {
