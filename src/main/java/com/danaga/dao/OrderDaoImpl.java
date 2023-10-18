@@ -6,11 +6,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.danaga.dto.OrderItemDto;
 import com.danaga.entity.Delivery;
 import com.danaga.entity.Member;
 import com.danaga.entity.OptionSet;
 import com.danaga.entity.OrderItem;
 import com.danaga.entity.Orders;
+import com.danaga.repository.DeliveryRepository;
 import com.danaga.repository.MemberRepository;
 import com.danaga.repository.OrderRepository;
 
@@ -23,16 +25,27 @@ public class OrderDaoImpl implements OrderDao {
 	OrderRepository orderRepository;
 	@Autowired
 	MemberRepository memberRepository;
+	@Autowired
+	DeliveryRepository deliveryRepository;
 	
 	
 	@Override
 	public Orders insert(Orders order) {
+		
+		/*
+		 * 1.Order를 저장
+		 * 2.OrderItemList를 저장
+		 * 3.Delivery저장
+		 * 4.비회원 Member저장
+		 */
 		Orders insertOrder = orderRepository.save(order);
 		List<OrderItem> itemList = insertOrder.getOrderItems();
 		
 		for (OrderItem orderItem : itemList) {
-			orderItem.setOrders(insertOrder);
+			OrderItemDto.toDto(orderItem);
+			
 			OptionSet optionSet = orderItem.getOptionSet();
+
 			// OptionSet 처리 로직 추가 (optionSet을 데이터베이스에 저장하거나 기타 작업)
 		}
 		

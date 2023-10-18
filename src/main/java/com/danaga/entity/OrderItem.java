@@ -27,12 +27,6 @@ public class OrderItem {
 	@Column(length = 10)
 	private Integer oiQty;
 
-	public static OrderItem toEntity(OrderItemDto dto) {
-		return OrderItem.builder()
-				.oiNo(dto.getOi_no())
-				.oiQty(dto.getOi_qty())
-				.build();
-	}
 	
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "oNo")
