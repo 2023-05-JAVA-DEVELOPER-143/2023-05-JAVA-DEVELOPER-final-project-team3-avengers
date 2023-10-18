@@ -12,16 +12,16 @@ import lombok.*;
 @ToString
 @Builder
 public class DeliveryResponseDto {
-	private Long de_no;
-	private String de_name;	
-	private String de_phonenumber;    
-	private String de_address;	 
+	private Long deNo;
+	private String deName;	
+	private String dePhonenumber;    
+	private String deAddress;	 
 	public static DeliveryResponseDto toDto(Delivery entity) {
 		return DeliveryResponseDto.builder()
-				.de_no(entity.getDeNo())
-				.de_name(entity.getDeName())
-				.de_phonenumber(entity.getDePhonenumber())
-				.de_address(entity.getDeAddress())
+				.deNo(entity.getDeNo())
+				.deName(entity.getDeName())
+				.dePhonenumber(entity.getDePhonenumber())
+				.deAddress(entity.getDeAddress())
 				.build();
 	}
 }
