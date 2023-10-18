@@ -22,7 +22,9 @@ public class OrderItem {
 	@Id
 	@SequenceGenerator(name = "ORDERITEM_ORDERITEM_NO_SEQ", sequenceName = "ORDERITEM_ORDERITEM_NO_SEQ", initialValue = 1, allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@Column(length = 20)
 	private Long oiNo;
+	@Column(length = 10)
 	private Integer oiQty;
 
 	public static OrderItem toEntity(OrderItemDto dto) {
