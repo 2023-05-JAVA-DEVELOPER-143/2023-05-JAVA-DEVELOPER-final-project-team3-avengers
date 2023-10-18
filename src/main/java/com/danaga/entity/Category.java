@@ -41,6 +41,6 @@ public class Category {//셀프 참조하는 오너테이블, 카테고리셋과
 	
 	@OneToMany(mappedBy = "category")
 	@Builder.Default
-	private List<CategorySet> categorysets = new ArrayList<>();
+	private List<CategorySet> categorySets = new ArrayList<>();
 	//다대다 맵핑을 위한 categorySet과 관계 설정
 }
