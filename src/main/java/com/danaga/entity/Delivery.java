@@ -27,4 +27,9 @@ public class Delivery {
 	@OneToOne
 	@JoinColumn(name = "oNo")
 	private Orders orders;
+	private Long de_no;
+	private String de_name;	
+	private String de_phonenumber;    
+	private String de_address;	    
+
 }
