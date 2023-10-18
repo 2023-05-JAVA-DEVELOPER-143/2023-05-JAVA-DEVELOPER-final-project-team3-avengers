@@ -8,12 +8,16 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+
+
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,6 +30,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @DynamicUpdate
 public class Member {
+
    @Id
    @GeneratedValue(strategy = GenerationType.AUTO)
    private Long memberIdCode;
@@ -95,4 +100,6 @@ public class Member {
 //   @OneToMany(mappedBy = "member")
 //   @Builder.Default
 //   private List<Coupon> couponList = new ArrayList<>();
+
+
 }
