@@ -10,6 +10,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -46,9 +48,13 @@ public class Product extends BaseEntity {
 	@Builder.Default
 	private Event event = new Event();
 	
-	@OneToMany(mappedBy = "product")
+	@ManyToMany
+	@JoinTable(name="category_set",
+		joinColumns = @JoinColumn(name="product_id"),
+		inverseJoinColumns = @JoinColumn(name="category_id")
+			)
 	@Builder.Default
-	private List<CategorySet> categorysets = new ArrayList<>();
+	private List<Category> categoryset = new ArrayList<>();
 	
 	@Builder.Default
 	@OneToMany(mappedBy = "product")
