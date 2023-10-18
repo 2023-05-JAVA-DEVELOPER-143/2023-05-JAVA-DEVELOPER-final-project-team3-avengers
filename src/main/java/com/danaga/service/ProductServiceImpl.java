@@ -14,7 +14,6 @@ import com.danaga.dto.ResponseDto;
 import com.danaga.entity.OptionSet;
 import com.danaga.entity.Options;
 import com.danaga.entity.Product;
-import com.danaga.entity.Review;
 
 
 @Service
@@ -40,8 +39,8 @@ public class ProductServiceImpl implements ProductService{
 	public ProductDto findById(OptionSetDto optionSetDto) {
 		OptionSet optionSets = optionSetDao.findById(optionSetDto.getId());
 		Product product = optionSets.getProduct();
-		List<Review> reviews = product.getReviews();
+		//List<Review> reviews = product.getReviews();
 		List<Options> options = optionsDao.findOptionsByOptionSet(optionSets);
-		return new ProductDto(product,optionSets,reviews,options);
+		return new ProductDto(product,optionSets,options);
 	}
 }

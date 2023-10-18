@@ -18,10 +18,10 @@ public class DeliveryResponseDto {
 	private String de_address;	 
 	public static DeliveryResponseDto toDto(Delivery entity) {
 		return DeliveryResponseDto.builder()
-				.de_no(entity.getDe_no())
-				.de_name(entity.getDe_name())
-				.de_phonenumber(entity.getDe_phonenumber())
-				.de_address(entity.getDe_address())
+				.de_no(entity.getDeNo())
+				.de_name(entity.getDeName())
+				.de_phonenumber(entity.getDePhonenumber())
+				.de_address(entity.getDeAddress())
 				.build();
 	}
 }

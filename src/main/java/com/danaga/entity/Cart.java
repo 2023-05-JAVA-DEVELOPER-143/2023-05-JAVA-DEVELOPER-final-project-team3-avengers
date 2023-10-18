@@ -1,5 +1,7 @@
 package com.danaga.entity;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import com.danaga.dto.CartDto;
 
 import jakarta.persistence.Column;
@@ -28,13 +30,13 @@ public class Cart extends BaseEntity{
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name="cart_no")
 	private Long id;
-	@Builder.Default()
-	private int cartQty = 1;
+
+	private int cartQty;
 	@ManyToOne
 	@JoinColumn(name="member_id")
 	private Member member;
 	
 	@ManyToOne
-	@JoinColumn(name="optionset_id")
+	@JoinColumn(name="optionSet_id")
 	private OptionSet optionSet;
 }

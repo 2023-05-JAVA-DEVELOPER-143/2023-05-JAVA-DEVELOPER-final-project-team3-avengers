@@ -54,17 +54,17 @@ public class Product extends BaseEntity {
 		inverseJoinColumns = @JoinColumn(name="category_id")
 			)
 	@Builder.Default
-	private List<Category> categoryset = new ArrayList<>();
+	private List<Category> categorySet = new ArrayList<>();
 	
-	@Builder.Default
-	@OneToMany(mappedBy = "product")
-	private List<Review> reviews = new ArrayList<>();
+//	@Builder.Default
+//	@OneToMany(mappedBy = "product")
+//	private List<Review> reviews = new ArrayList<>();
 	@Builder.Default
 	@OneToMany(mappedBy = "product")
 	private List<RecentView> recentViews = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "product")
 	@Builder.Default
-	private List<OptionSet> optionsets = new ArrayList<>();
+	private List<OptionSet> optionSets = new ArrayList<>();
 	
 }

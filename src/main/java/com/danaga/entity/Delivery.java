@@ -20,16 +20,13 @@ public class Delivery {
 	@Column(length = 10)
 	private String deName;
 	@Column(length = 20)
-	private Integer dePhonenumber;
+	private String dePhonenumber;
 	@Column(length = 100)
 	private String deAddress;	    
 	
 	@OneToOne
 	@JoinColumn(name = "oNo")
 	private Orders orders;
-	private Long de_no;
-	private String de_name;	
-	private String de_phonenumber;    
-	private String de_address;	    
+	 
 
 }

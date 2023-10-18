@@ -39,6 +39,6 @@ public class OrderItem {
 	private Orders orders;
 	
 	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "osId")
 	private OptionSet optionSet;
 }

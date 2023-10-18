@@ -9,7 +9,6 @@ import com.danaga.entity.CategorySet;
 import com.danaga.entity.OptionSet;
 import com.danaga.entity.Options;
 import com.danaga.entity.Product;
-import com.danaga.entity.Review;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,8 +28,8 @@ public class ProductDto {
 	private String descImage;
 	private String prevDesc;
 	private String pImage;
-	@Builder.Default
-	private List<Review> reviews = new ArrayList<>();
+	//@Builder.Default
+	//private List<Review> reviews = new ArrayList<>();
 //	@Builder.Default
 //	private List<Category> categorySet=new ArrayList<>();
 	private Integer stock;
@@ -38,7 +37,7 @@ public class ProductDto {
 	@Builder.Default
 	private List<Options> optionSet = new ArrayList<>();
 
-	public ProductDto(final Product product, final OptionSet optionSet, final List<Review> reviews,
+	public ProductDto(final Product product, final OptionSet optionSet, 
 			List<Options> options) {// 처리한 후 다시 유저한테 보내는 entity를 dto로 바꿔서 보내줌
 		this.brand = product.getBrand();
 		this.name = product.getName();
@@ -49,7 +48,7 @@ public class ProductDto {
 		this.updateTime = optionSet.getUpdateTime();
 		this.stock = optionSet.getStock();
 		this.osId = optionSet.getId();
-		this.reviews = reviews;
+		//this.reviews = reviews;
 		this.optionSet = options;
 		this.price = product.getPrice();
 		for (int i = 0; i < options.size(); i++) {
