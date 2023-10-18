@@ -1,4 +1,4 @@
-package com.danaga.entity;
+	package com.danaga.entity;
 
 import java.util.ArrayList;
 import java.util.List;
