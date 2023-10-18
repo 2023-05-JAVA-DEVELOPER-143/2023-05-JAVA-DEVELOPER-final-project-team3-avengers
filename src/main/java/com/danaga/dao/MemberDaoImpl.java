@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.danaga.entity.Member;
 import com.danaga.repository.MemberRepository;
 
+@Repository
 public class MemberDaoImpl implements MemberDao{
 	@Autowired
 	private MemberRepository memberRepository;
@@ -15,7 +17,7 @@ public class MemberDaoImpl implements MemberDao{
 	public List<Member> findMembers() {
 		return memberRepository.findAll();
 	}
-	public Member findMemberById(String memberId) {
+	public Member findByMemberId(String memberId) {
 		return memberRepository.findByMemberId(memberId);
 	}
 	public Member findByMemberEmail(String MemberEmail) {
@@ -47,4 +49,40 @@ public class MemberDaoImpl implements MemberDao{
 		}
 		return updatedMember;
 	}
+	
+	public void delete(Member deleteMember) throws Exception {
+		Member findMember = memberRepository.findByMemberId(deleteMember.getMemberId());
+		Optional<Member> findOptionalMember = memberRepository.findById(findMember.getMemberIdCode());
+		if (findOptionalMember.isPresent()) {
+			memberRepository.delete(findMember);
+		} else {
+			throw new Exception("존재하지 않는 회원입니다");
+		}
+	}
+	
+	public boolean existedMemberById(String memberId) throws Exception {
+		Member findMember = memberRepository.findByMemberId(memberId);
+		Optional<Member> findOptionalMember = memberRepository.findById(findMember.getMemberIdCode());
+		if (findOptionalMember.isPresent()) {
+			return false;
+		}
+		return true;
+	}
+	public boolean existedMemberByEmail(String memberEmail) throws Exception {
+		Member findMember = memberRepository.findByMemberEmail(memberEmail);
+		Optional<Member> findOptionalMember = memberRepository.findById(findMember.getMemberIdCode());
+		if (findOptionalMember.isPresent()) {
+			return false;
+		}
+		return true;
+	}
+	public boolean existedMemberByPhoneNo(String memberPhoneNo) throws Exception {
+		Member findMember = memberRepository.findByMemberPhoneNo(memberPhoneNo);
+		Optional<Member> findOptionalMember = memberRepository.findById(findMember.getMemberIdCode());
+		if (findOptionalMember.isPresent()) {
+			return false;
+		}
+		return true;
+	}
+	
 }
