@@ -39,7 +39,8 @@ public class Category {
 	@Builder.Default
 	private List<Category> childTypes= new ArrayList();
 	
-	@ManyToMany(mappedBy = "categorySet")
+	@OneToMany(mappedBy = "category")
 	@Builder.Default
-	private List<Product> products = new ArrayList<>();
+	private List<CategorySet> categorysets = new ArrayList<>();
+
 }

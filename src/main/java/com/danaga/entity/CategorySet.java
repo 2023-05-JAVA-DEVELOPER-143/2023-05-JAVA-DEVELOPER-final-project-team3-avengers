@@ -21,19 +21,19 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-//@AllArgsConstructor
-//@NoArgsConstructor
-//@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
 public class CategorySet {
-//	@Id
-//	@GeneratedValue(strategy = GenerationType.SEQUENCE) 
-//	private Long id;
-//	
-//	@JoinColumn(name="category_no")
-//	@ManyToOne
-//	private Category category;
-//	
-//	@JoinColumn(name = "product_no")
-//	@ManyToOne
-//	private Product product;
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE) 
+	private Long id;
+	
+	@JoinColumn(name="category_no")
+	@ManyToOne
+	private Category category;
+	
+	@JoinColumn(name = "product_no")
+	@ManyToOne
+	private Product product;
 }
