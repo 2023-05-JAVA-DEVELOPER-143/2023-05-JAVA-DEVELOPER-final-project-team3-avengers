@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Column;
@@ -33,8 +34,9 @@ public class Orders {
 */
 	@Id
 	@SequenceGenerator(name = "order_order_no_seq",sequenceName = "order_order_no_seq",initialValue = 1,allocationSize = 1)
+	
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(length = 1000)
+	@Column(length = 20)
 	private Long oNo;
 	@Column(length = 1000)
 	private String oDesc;
