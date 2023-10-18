@@ -15,8 +15,16 @@ public class Delivery {
 	@Id
 	@SequenceGenerator(name = "DELIVERY_DELIVERY_NO_SEQ", sequenceName = "DELIVERY_DELIVERY_NO_SEQ", initialValue = 1, allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DELIVERY_DELIVERY_NO_SEQ")
-	private Long de_no;
-	private String de_name;		    	
-	private Integer de_phonenumber;    
-	private String de_address;	    
+	@Column(length = 20)
+	private Long deNo;
+	@Column(length = 10)
+	private String deName;
+	@Column(length = 20)
+	private Integer dePhonenumber;
+	@Column(length = 100)
+	private String deAddress;	    
+	
+	@OneToOne
+	@JoinColumn(name = "oNo")
+	private Orders orders;
 }

@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,16 +27,19 @@ public class Refund {
 	 * o_no(Fk)
 	 */
 	
+	
 	@Id
 	@SequenceGenerator(name = "refund_refund_no_seq",sequenceName = "refund_refund_no_seq",initialValue = 1,allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@Column(length = 1000)
-	private Long re_no;
-	@Column(length = 1000)
-	private String re_desc;
+	@Column(length = 20)
+	private Long reNo;
 	@Column(length = 100)
-	private String re_acno;
+	private String reDesc;
+	@Column(length = 100)
+	private String reAcno;
 
-	
+	@OneToOne
+	@JoinColumn(name = "oNo")
+	private Orders orders;
 
 }
