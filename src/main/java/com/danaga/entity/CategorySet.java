@@ -28,7 +28,6 @@ public class CategorySet {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE) 
 	private Long id;
-	private String categoryName;
 	
 	@JoinColumn(name="category_no")
 	@ManyToOne

@@ -10,6 +10,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -31,12 +33,11 @@ public class Product extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
-	private String model;
 	private String name;
 	private String brand;
 	private Integer price;
 	private String descImage;
-	private String thumhnailDesc;
+	private String prevDesc;
 	private String pImage;
 	
 	@ColumnDefault(value = "0.0")
@@ -46,20 +47,20 @@ public class Product extends BaseEntity {
 	@JoinColumn(name = "event_id")
 	@Builder.Default
 	private Event event = new Event();
-	
+
 	@OneToMany(mappedBy = "product")
 	@Builder.Default
 	private List<CategorySet> categorysets = new ArrayList<>();
 	
-	@Builder.Default
-	@OneToMany(mappedBy = "product")
-	private List<Review> reviews = new ArrayList<>();
+//	@Builder.Default
+//	@OneToMany(mappedBy = "product")
+//	private List<Review> reviews = new ArrayList<>();
 	@Builder.Default
 	@OneToMany(mappedBy = "product")
 	private List<RecentView> recentViews = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "product")
 	@Builder.Default
-	private List<OptionSet> optionsets = new ArrayList<>();
+	private List<OptionSet> optionSets = new ArrayList<>();
 	
 }

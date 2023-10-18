@@ -25,6 +25,6 @@ public class Options {
 	private String value;
 	private Integer extraPrice;
 	@ManyToOne
-	@JoinColumn(name = "optionset_id")
-	private OptionSet optionset;
+	@JoinColumn(name = "optionSet_id")
+	private OptionSet optionSet;
 }

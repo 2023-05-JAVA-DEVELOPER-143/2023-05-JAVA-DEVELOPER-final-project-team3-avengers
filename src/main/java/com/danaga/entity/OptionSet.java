@@ -1,4 +1,4 @@
-package com.danaga.entity;
+	package com.danaga.entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +30,8 @@ public class OptionSet extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
+	
+	private Integer totalPrice;
 
 	private Integer stock;
 	@ColumnDefault(value = "0")
@@ -37,7 +39,7 @@ public class OptionSet extends BaseEntity {
 	@ColumnDefault(value = "0")
 	private Integer orderCount;
 
-	@OneToMany(mappedBy = "optionset")
+	@OneToMany(mappedBy = "optionSet")
 	@Builder.Default
 	private List<Options> options = new ArrayList<>();
 
@@ -45,13 +47,13 @@ public class OptionSet extends BaseEntity {
 	@JoinColumn(name = "product_id")
 	private Product product;
 
-//	@OneToMany(mappedBy = "optionset")
-//	@Builder.Default
-//	private List<OrderItem> orderItems = new ArrayList<>();
+	@OneToMany(mappedBy = "optionSet")
+	@Builder.Default
+	private List<OrderItem> orderItems = new ArrayList<>();
 
-//	@OneToMany(mappedBy = "optionset")
-//	@Builder.Default 
-//	private List<Cart> carts = new ArrayList<>();
+	@OneToMany(mappedBy = "optionSet")
+	@Builder.Default 
+	private List<Cart> carts = new ArrayList<>();
 	
 
 }

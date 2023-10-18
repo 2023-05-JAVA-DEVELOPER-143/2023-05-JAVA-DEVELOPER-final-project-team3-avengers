@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -28,13 +29,18 @@ public class Category {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE) 
 	private Long id;
-	private String categoryName;
+	private String name;
 	
-	@JoinColumn(name="superType", nullable = true)
+	@JoinColumn(name="parent", nullable = true)
 	@ManyToOne
-	private Category superType;
+	private Category parent;
 	
-	@OneToMany(mappedBy = "superType")
+	@OneToMany(mappedBy = "parent")
 	@Builder.Default
 	private List<Category> childTypes= new ArrayList();
+	
+	@OneToMany(mappedBy = "category")
+	@Builder.Default
+	private List<CategorySet> categorysets = new ArrayList<>();
+
 }

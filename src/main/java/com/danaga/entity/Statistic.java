@@ -29,5 +29,6 @@ public class Statistic {
 	//일일 신규멤버 숫자
 	private Long dailyNewMember;
 	
+	
 
 }
