@@ -1,9 +1,5 @@
 package com.danaga.entity;
 
-import org.hibernate.annotations.ColumnDefault;
-
-import com.danaga.dto.CartDto;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -39,4 +35,8 @@ public class Cart extends BaseEntity{
 	@ManyToOne
 	@JoinColumn(name="optionSet_id")
 	private OptionSet optionSet;
+
+	
+	
+		
 }
