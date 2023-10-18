@@ -26,10 +26,10 @@ public class DeliveryDaoImpl implements DeliveryDao {
 		return insertDelivery;
 	}
 	
-	@Override
-	public void deleteDelivery(Long de_no)  {
-		Delivery deleteDelivery = deliveryRepository.findById(de_no).get();
-		deliveryRepository.delete(deleteDelivery);
-	}
+//	@Override
+//	public void deleteDelivery(Long de_no)  {
+//		Delivery deleteDelivery = deliveryRepository.findById(de_no).get();
+//		deliveryRepository.delete(deleteDelivery);
+//	}
 	
 }

@@ -26,9 +26,9 @@ public class RefundDaoImpl  implements RefundDao{
 		return saveRefund;
 	}
 	
-	@Override
-	public void deleteRefund(Long re_no)  {
-		Refund DeleteRefund= refundRepository.findById(re_no).get();
-		refundRepository.delete(DeleteRefund);
-	}
+//	@Override
+//	public void deleteRefund(Long re_no)  {
+//		Refund DeleteRefund= refundRepository.findById(re_no).get();
+//		refundRepository.delete(DeleteRefund);
+//	}
 }

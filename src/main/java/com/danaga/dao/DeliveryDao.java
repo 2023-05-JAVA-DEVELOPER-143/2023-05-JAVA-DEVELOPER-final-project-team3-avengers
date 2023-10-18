@@ -11,6 +11,6 @@ public interface DeliveryDao {
 	
 	//update는 없음
 	
-	//배송취소
-	void deleteDelivery(Long de_no); // 주문목록의 현재 주문상태가 결제 완료인 상태에서 취소 가능하기 떄문에
+	//배송취소   //배송취소는 Orders의 oState가 변경된다.
+//	void deleteDelivery(Long de_no); // 주문목록의 현재 주문상태가 결제 완료인 상태에서 취소 가능하기 떄문에
 }

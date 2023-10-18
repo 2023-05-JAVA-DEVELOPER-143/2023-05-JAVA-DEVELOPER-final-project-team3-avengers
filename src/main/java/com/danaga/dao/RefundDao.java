@@ -13,8 +13,8 @@ public interface RefundDao {
 	
 	//update는 없음
 	
-	//환불 요청취소
-	void deleteRefund(Long de_no); //주문목록에서 주문상태가 환불요청 취소일 때 가능하다. 
+	//환불 요청취소     // 환불
+	//void deleteRefund(Long de_no); //주문목록에서 주문상태가 환불요청 취소일 때 가능하다. 
 	
 	
 }
