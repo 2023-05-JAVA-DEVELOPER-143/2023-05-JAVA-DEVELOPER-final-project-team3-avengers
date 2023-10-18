@@ -53,7 +53,7 @@ public class Orders {
 	@Column(length = 20)
 	private Long oNo;
 	@Column(length = 20)
-	private String oFindNO;
+	private String oFindNo;
 	@Column(length = 100)
 	private String oDesc;
 	@Column(length = 10)
