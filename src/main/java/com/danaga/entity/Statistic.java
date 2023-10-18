@@ -24,8 +24,6 @@ public class Statistic {
 	private Long dailySalesTotQty;
 	//일일 총 판매 수익
 	private Long dailySalesRevenue;
-	//일일 제품별 판매 수량
-	private Long dailySalesProductQty;
 	//일일 게시글 갯수
 	private Long dailyBoardInquiry;
 	//일일 신규멤버 숫자
