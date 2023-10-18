@@ -25,22 +25,22 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Category {
+public class Category {//셀프 참조하는 오너테이블, 카테고리셋과는 종속테이블
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE) 
-	private Long id;
-	private String name;
+	private Long id; //pk
+	private String name; //카테고리 이름
 	
 	@JoinColumn(name="parent", nullable = true)
 	@ManyToOne
-	private Category parent;
+	private Category parent; //부모 카테고리
 	
 	@OneToMany(mappedBy = "parent")
 	@Builder.Default
-	private List<Category> childTypes= new ArrayList();
+	private List<Category> childTypes= new ArrayList(); //자식 카테고리들
 	
 	@OneToMany(mappedBy = "category")
 	@Builder.Default
 	private List<CategorySet> categorysets = new ArrayList<>();
-
+	//다대다 맵핑을 위한 categorySet과 관계 설정
 }

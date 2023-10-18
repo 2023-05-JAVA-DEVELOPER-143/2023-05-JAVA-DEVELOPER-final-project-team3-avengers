@@ -24,16 +24,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class CategorySet {
+public class CategorySet {//중간테이블, 오너테이블
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE) 
-	private Long id;
+	private Long id; //pk
 	
 	@JoinColumn(name="category_no")
 	@ManyToOne
-	private Category category;
+	private Category category; //카테고리 FK
 	
 	@JoinColumn(name = "product_no")
 	@ManyToOne
-	private Product product;
+	private Product product; //프로덕트 FK
 }

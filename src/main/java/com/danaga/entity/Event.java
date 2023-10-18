@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,12 +24,13 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class Event extends BaseEntity{
+public class Event extends BaseEntity{ 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	private Long id;
-	@Builder.Default
-	private String status="F";
+	private Long id;//pk
+//	@Builder.Default
+	@Enumerated
+	private String status="F"; // 상
 	private String name;
 	private String type;
 	private LocalDateTime startDay;

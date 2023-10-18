@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class BaseEntity {
 	@CreationTimestamp
 	@Column(updatable = false)
-	private LocalDateTime createTime;
+	private LocalDateTime createTime;//데이터 생성시간
 	@UpdateTimestamp
-	private LocalDateTime updateTime;
+	private LocalDateTime updateTime;//데이터 갱신시간
 }
