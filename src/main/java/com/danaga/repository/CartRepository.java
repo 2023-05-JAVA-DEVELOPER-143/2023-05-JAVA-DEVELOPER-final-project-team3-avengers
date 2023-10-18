@@ -6,14 +6,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.danaga.entity.Cart;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 
-// 카트 전체보기 , 카트전체삭제, 카트개별삭제, 카트 추가, 카트업데이트 
-public interface CartRepository extends JpaRepository<Cart,Long> {
+import com.danaga.entity.Cart;
+import com.danaga.entity.OptionSet;
+
+public interface CartRepository extends JpaRepository<Cart, Long>{
+
 	
-	// 유저 카트리스트
-	List<Cart> findCartByMemberId(String memberId);
-	
-	// 유저 카트 -> 제품 한개 [옵션 변경]
-	Cart findCartByOptionSetIdAndMemberId(String memberId,Long optionSetId);
+//	List<Cart> findByUserId(String member_id);
+	Cart findByMemberId(String member_id);
+	Long updateQty(Long id, int cartQty);
+	Long deleteByCartNo(Long id);
+	Cart findByOptionSetIdAndUserId(Long optionset_id, String member_id);
 	
 }
