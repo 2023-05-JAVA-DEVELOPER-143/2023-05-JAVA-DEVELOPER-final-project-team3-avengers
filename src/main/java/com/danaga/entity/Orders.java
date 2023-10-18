@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import org.hibernate.annotations.ManyToAny;
@@ -14,6 +15,8 @@ import org.hibernate.annotations.ManyToAny;
 import org.hibernate.annotations.GenericGenerator;
 
 import org.hibernate.annotations.UpdateTimestamp;
+
+import com.danaga.config.OrderStateMsg;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -60,6 +63,7 @@ public class Orders {
 	@Column(length = 10)
 	private Integer oPrice;
 	@Column(length = 100)
+	@ColumnDefault(OrderStateMsg.msg1)
 	private String oState;
 	@Column(updatable = false)
 	@CreationTimestamp

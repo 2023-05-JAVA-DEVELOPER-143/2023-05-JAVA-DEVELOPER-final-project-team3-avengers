@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.danaga.config.OrderStateMsg;
 import com.danaga.dto.OrderItemDto;
 import com.danaga.entity.Delivery;
 import com.danaga.entity.Member;
@@ -14,6 +15,7 @@ import com.danaga.entity.OrderItem;
 import com.danaga.entity.Orders;
 import com.danaga.repository.DeliveryRepository;
 import com.danaga.repository.MemberRepository;
+import com.danaga.repository.OrderItemRepository;
 import com.danaga.repository.OrderRepository;
 
 import jakarta.persistence.criteria.Order;
@@ -26,7 +28,8 @@ public class OrderDaoImpl implements OrderDao {
 	@Autowired
 	MemberRepository memberRepository;
 	@Autowired
-	DeliveryRepository deliveryRepository;
+	OrderItemRepository orderItemRepository;
+	
 	
 	
 	@Override
@@ -35,33 +38,35 @@ public class OrderDaoImpl implements OrderDao {
 		/*
 		 * 1.Order를 저장
 		 * 2.OrderItemList를 저장
-		 * 3.Delivery저장
-		 * 4.비회원 Member저장
+		 * 3.Delivery저장 --service에서 처리
+		 * 4.비회원 Member저장--service에서 처리
 		 */
 		Orders insertOrder = orderRepository.save(order);
 		List<OrderItem> itemList = insertOrder.getOrderItems();
 		
 		for (OrderItem orderItem : itemList) {
-			OrderItemDto.toDto(orderItem);
-			
-			OptionSet optionSet = orderItem.getOptionSet();
-
-			// OptionSet 처리 로직 추가 (optionSet을 데이터베이스에 저장하거나 기타 작업)
+			orderItem.setOrders(order);
+			orderItemRepository.save(orderItem);
 		}
 		
 		return insertOrder; // 저장된 주문 객체 반환
 	}
-
-	public Orders insertGuest(Orders order) {
-		return null;
-	}
-	
 	
 	@Override
 	public Orders updateOrderByOState(String oState) {
-		// Orders 테이블에서 oState를 기반으로 주문을 업데이트하려면 적절한 로직을 추가
-		// orderRepository를 사용하여 업데이트할 주문을 찾아 업데이트하는 방식으로 구현 가능
-		// orderRepository의 save 또는 update 메서드를 사용하여 주문 정보를 업데이트
+		if(OrderStateMsg.msg1.equals(oState)) {
+			
+		}else if (OrderStateMsg.msg2.equals(oState)) {
+			
+		}else if (OrderStateMsg.msg3.equals(oState)) {
+			
+		}else if (OrderStateMsg.msg4.equals(oState)) {
+			
+		}else if (OrderStateMsg.msg5.equals(oState)) {
+			
+		}else if (OrderStateMsg.msg6.equals(oState)) {
+			
+		}
 		return null;
 	}
 

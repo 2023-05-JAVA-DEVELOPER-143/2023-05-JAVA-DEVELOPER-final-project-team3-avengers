@@ -16,14 +16,14 @@ public class OrderItemDto {
 	private Long oiNo;
 	private Integer oiQty;
 	private Long oNo;
-	private OptionSet optionSet;
+	private Long optionSetId;
 	
 	public static OrderItemDto toDto(OrderItem entity) {
 		return OrderItemDto.builder()
 				.oNo(entity.getOrders().getONo())
 				.oiNo(entity.getOiNo())
 				.oiQty(entity.getOiQty())
-				.optionSet(entity.getOptionSet())
+				.optionSetId(entity.getOptionSet().getId())
 				.build();
 	}
 }
