@@ -81,11 +81,15 @@ public class Member {
    @Builder.Default
    private List<RecentView> recentViewList = new ArrayList<>();
    
-//   // Board
-//   @OneToMany(mappedBy = "member")
-//   @Builder.Default
-//   private List<Board> boardList = new ArrayList<>();
-//   
+   // Board
+   @OneToMany(mappedBy = "member")
+   @Builder.Default
+   private List<Board> boardList = new ArrayList<>();
+   
+   // LikeConfig
+   @OneToMany(mappedBy = "member")
+   @Builder.Default
+   private List<LikeConfig> lConfigs= new ArrayList<>();
 //   // Comment
 //   @OneToMany(mappedBy = "member")
 //   @Builder.Default
