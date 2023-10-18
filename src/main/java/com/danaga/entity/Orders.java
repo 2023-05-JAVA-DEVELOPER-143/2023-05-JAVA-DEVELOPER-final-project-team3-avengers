@@ -52,6 +52,8 @@ public class Orders {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(length = 20)
 	private Long oNo;
+	@Column(length = 20)
+	private String oFindNO;
 	@Column(length = 100)
 	private String oDesc;
 	@Column(length = 10)
