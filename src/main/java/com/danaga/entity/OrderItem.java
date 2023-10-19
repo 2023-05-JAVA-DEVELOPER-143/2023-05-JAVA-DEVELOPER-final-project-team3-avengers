@@ -21,7 +21,7 @@ import lombok.*;
 public class OrderItem {
 	@Id
 	@SequenceGenerator(name = "ORDERITEM_ORDERITEM_NO_SEQ", sequenceName = "ORDERITEM_ORDERITEM_NO_SEQ", initialValue = 1, allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ORDERITEM_ORDERITEM_NO_SEQ")
 	@Column(length = 20)
 	private Long id;
 	@Column(length = 10)
