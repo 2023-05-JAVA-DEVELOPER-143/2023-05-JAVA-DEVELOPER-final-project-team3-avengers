@@ -65,6 +65,7 @@ public class Orders {
 	@JoinColumn(name = "deliveryId")
 	private Delivery delivery; //배송
 	
+	
 	@OneToOne
 	@JoinColumn(name = "refundId")
 	private Refund refund; //환불
