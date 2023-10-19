@@ -1,9 +1,5 @@
 package com.danaga.entity;
 
-import org.hibernate.annotations.ColumnDefault;
-
-import com.danaga.dto.CartDto;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,6 +10,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -21,9 +19,10 @@ import lombok.ToString;
 @Entity
 @Builder
 @ToString(callSuper = true)
-@Getter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class Cart extends BaseEntity{
 	@Id
 	@SequenceGenerator(name = "cart_cart_no_seq",sequenceName = "cart_cart_no_seq",initialValue = 1,allocationSize = 1)
@@ -39,4 +38,8 @@ public class Cart extends BaseEntity{
 	@ManyToOne
 	@JoinColumn(name="optionSet_id")
 	private OptionSet optionSet;
+
+	
+	
+		
 }

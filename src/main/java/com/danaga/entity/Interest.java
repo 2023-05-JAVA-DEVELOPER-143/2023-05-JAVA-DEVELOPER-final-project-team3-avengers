@@ -20,18 +20,18 @@ import lombok.ToString;
 @Builder
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class Interest extends BaseEntity{
-
+public class Interest extends BaseEntity{//관심상품
+//유저와 옵션셋을 이어주는 중간테이블
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	private Long id;
+	private Long id;//pk
 	
 	@JoinColumn(name = "member_id")
 	@ManyToOne
-	private Member member;
+	private Member member;// 유저FK
 	
-	@JoinColumn(name = "optionset_id")
+	@JoinColumn(name = "option_set_id")
 	@ManyToOne
-	private OptionSet optionset;
+	private OptionSet optionSet;// 옵션셋FK
 	
 }
