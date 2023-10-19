@@ -18,8 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Statistic {
 	@Id
-	@Temporal(TemporalType.DATE)
-	private Date sDate;
+	private String id;
 	//일일 총 판매 수량
 	private Long dailySalesTotQty;
 	//일일 총 판매 수익

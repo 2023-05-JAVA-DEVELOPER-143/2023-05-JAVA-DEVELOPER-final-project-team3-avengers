@@ -38,7 +38,7 @@ public class Product extends BaseEntity {//제품의 기본 모델 정보
 	private Integer price;//기본 가격
 	private String descImage;//설명 이미지 파일
 	private String prevDesc;//설명 미리보기 이미지 파일
-	private String pImage;//제품 이미지
+	private String img;//제품 이미지
 	
 	@ColumnDefault(value = "0.0")
 	private Double rating;//평점 리뷰가 등록될 때마다 매번 갱신

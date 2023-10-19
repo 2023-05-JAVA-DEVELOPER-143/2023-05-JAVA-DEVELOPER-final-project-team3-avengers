@@ -34,23 +34,23 @@ public class Member {
 
    @Id
    @GeneratedValue(strategy = GenerationType.AUTO)
-   private Long memberIdCode;
+   private Long id;
    @Column(unique = true)
-   private String memberId;
-   private String memberPassword;
+   private String userName;
+   private String password;
    @Column(unique = true)
-   private String memberEmail;
-   private String memberName;
-   private String memberNickname;
-   private String memberAddress;
-   private Date memberBirthday;
+   private String email;
+   private String name;
+   private String nickname;
+   private String address;
+   private Date birthday;
    @Column(unique = true)
-   private String memberPhoneNo;
+   private String phoneNo;
    @CreationTimestamp
-   private LocalDateTime memberJoinDate;
-   private String memberRole;// Member, Guest, Admin
+   private LocalDateTime joinDate;
+   private String role;// Member, Guest, Admin
    @Builder.Default
-   private String memberGrade = "Rookie"; /* Rookie Bronze, Silver, Gold, Platinum, Diamond 결제 가격의 1%가 등급 포인트로 쌓임
+   private String grade = "Rookie"; /* Rookie Bronze, Silver, Gold, Platinum, Diamond 결제 가격의 1%가 등급 포인트로 쌓임
                          등급 점수   Rookie : 0 ~ 1000
                                   Bronze : 1001 ~ 5000
                                   Silver : 5001 ~ 10000
@@ -58,20 +58,20 @@ public class Member {
                                   Platinum : 20001 ~ 35000
                                   Diamond : 35001 ~  */
    @Builder.Default
-   private Integer memberGradePoint = 0;
+   private Integer gradePoint = 0;
    
    
-   public static Member toUpdateEntity(MemberUpdateDto memberUpdateDto) {
-	   return Member.builder()
-			   .memberIdCode(memberUpdateDto.getMemberIdCode())
-   			.memberId(memberUpdateDto.getMemberId())
-   			.memberPassword(memberUpdateDto.getMemberPassword())
-   			.memberEmail(memberUpdateDto.getMemberEmail())
-   			.memberNickname(memberUpdateDto.getMemberNickname())
-   			.memberAddress(memberUpdateDto.getMemberAddress())
-   			.memberPhoneNo(memberUpdateDto.getMemberPhoneNo())
-			   .build();
-   }
+//   public static Member toUpdateEntity(MemberUpdateDto memberUpdateDto) {
+//	   return Member.builder()
+//			   .id(memberUpdateDto.getMemberIdCode())
+//   			.userName(memberUpdateDto.getMemberId())
+//   			.password(memberUpdateDto.getMemberPassword())
+//   			.email(memberUpdateDto.getMemberEmail())
+//   			.nickname(memberUpdateDto.getMemberNickname())
+//   			.address(memberUpdateDto.getMemberAddress())
+//   			.phoneNo(memberUpdateDto.getMemberPhoneNo())
+//			   .build();
+//   }
    //관계설정
    
    // Orders

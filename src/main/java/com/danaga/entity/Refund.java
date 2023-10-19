@@ -32,14 +32,14 @@ public class Refund {
 	@SequenceGenerator(name = "refund_refund_no_seq",sequenceName = "refund_refund_no_seq",initialValue = 1,allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(length = 20)
-	private Long reNo;
+	private Long id;
 	@Column(length = 100)
-	private String reDesc;
+	private String description;
 	@Column(length = 100)
-	private String reAcno;
+	private String acNo;
 
 	@OneToOne
-	@JoinColumn(name = "oNo")
+	@JoinColumn(name = "orderId")
 	private Orders orders;
 
 }

@@ -46,7 +46,7 @@ public class OptionSet extends BaseEntity {
 	private List<Options> options = new ArrayList<>();//옵션들을 가진다.
 
 	@ManyToOne
-	@JoinColumn(name = "product_id")
+	@JoinColumn(name = "productId")
 	private Product product;//프로덕트FK
 
 	@OneToMany(mappedBy = "optionSet")

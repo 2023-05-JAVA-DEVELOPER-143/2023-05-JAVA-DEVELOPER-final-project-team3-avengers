@@ -19,13 +19,13 @@ public class MemberInsertGuestDto {
 	private String memberName;
 	private String memberPhoneNo;
 	
-	public static MemberInsertGuestDto toDto(Member entity) {
-    	return MemberInsertGuestDto.builder()
-    			.memberIdCode(entity.getMemberIdCode())
-    			.memberId(entity.getMemberId())
-    			.memberName(entity.getMemberName())
-    			.memberPhoneNo(entity.getMemberPhoneNo())
-    			.build();
-    }
+//	public static MemberInsertGuestDto toDto(Member entity) {
+//    	return MemberInsertGuestDto.builder()
+//    			.memberIdCode(entity.getMemberIdCode())
+//    			.memberId(entity.getMemberId())
+//    			.memberName(entity.getMemberName())
+//    			.memberPhoneNo(entity.getMemberPhoneNo())
+//    			.build();
+//    }
 }
 

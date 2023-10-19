@@ -31,7 +31,7 @@ public class LikeConfig {
 	@Id
 	@SequenceGenerator(name = "like_config_id_seq",sequenceName = "like_config_id_seq",initialValue = 1,allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "like_config_id_seq")
-	private Long likeId;
+	private Long id;
 	
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "boardNo")

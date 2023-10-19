@@ -20,13 +20,13 @@ public class CartCreateDto {
 	private int cartQty;
 	private Member member;
 	private OptionSet optionset;
-		
-	public static Cart toEntity(CartCreateDto cartCreateDto) {
-		return Cart.builder()
-				.cartQty(cartCreateDto.getCartQty())
-				.member(cartCreateDto.getMember())
-				.optionSet(cartCreateDto.getOptionset())
-				.build();
-	}
+//		
+//	public static Cart toEntity(CartCreateDto cartCreateDto) {
+//		return Cart.builder()
+//				.cartQty(cartCreateDto.getCartQty())
+//				.member(cartCreateDto.getMember())
+//				.optionSet(cartCreateDto.getOptionset())
+//				.build();
+//	}
 	
 }

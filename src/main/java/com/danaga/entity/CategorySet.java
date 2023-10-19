@@ -30,11 +30,11 @@ public class CategorySet {//중간테이블, 오너테이블
 	@GeneratedValue(strategy = GenerationType.SEQUENCE) 
 	private Long id; //pk
 	
-	@JoinColumn(name="category_id")
+	@JoinColumn(name="categoryId")
 	@ManyToOne
 	private Category category; //카테고리 FK
 	
-	@JoinColumn(name = "product_id")
+	@JoinColumn(name = "productId")
 	@ManyToOne
 	private Product product; //프로덕트 FK
 }

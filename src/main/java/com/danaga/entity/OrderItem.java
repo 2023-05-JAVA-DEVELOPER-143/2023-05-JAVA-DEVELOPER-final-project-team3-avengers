@@ -23,16 +23,16 @@ public class OrderItem {
 	@SequenceGenerator(name = "ORDERITEM_ORDERITEM_NO_SEQ", sequenceName = "ORDERITEM_ORDERITEM_NO_SEQ", initialValue = 1, allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(length = 20)
-	private Long oiNo;
+	private Long id;
 	@Column(length = 10)
-	private Integer oiQty;
+	private Integer qty;
 
 	
 	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "oNo")
+	@JoinColumn(name = "orderId")
 	private Orders orders;
 	
 	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "osId")
+	@JoinColumn(name = "optionSetId")
 	private OptionSet optionSet;
 }

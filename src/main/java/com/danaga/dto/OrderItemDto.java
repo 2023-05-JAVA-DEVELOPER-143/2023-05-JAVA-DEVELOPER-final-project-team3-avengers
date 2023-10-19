@@ -18,12 +18,12 @@ public class OrderItemDto {
 	private Long oNo;
 	private Long optionSetId;
 	
-	public static OrderItemDto toDto(OrderItem entity) {
-		return OrderItemDto.builder()
-				.oNo(entity.getOrders().getONo())
-				.oiNo(entity.getOiNo())
-				.oiQty(entity.getOiQty())
-				.optionSetId(entity.getOptionSet().getId())
-				.build();
-	}
+//	public static OrderItemDto toDto(OrderItem entity) {
+//		return OrderItemDto.builder()
+//				.oNo(entity.getOrders().getONo())
+//				.oiNo(entity.getOiNo())
+//				.oiQty(entity.getOiQty())
+//				.optionSetId(entity.getOptionSet().getId())
+//				.build();
+//	}
 }

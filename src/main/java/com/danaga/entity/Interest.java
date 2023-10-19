@@ -26,11 +26,11 @@ public class Interest extends BaseEntity{//관심상품
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;//pk
 	
-	@JoinColumn(name = "member_id")
+	@JoinColumn(name = "memberId")
 	@ManyToOne
 	private Member member;// 유저FK
 	
-	@JoinColumn(name = "option_set_id")
+	@JoinColumn(name = "optionSetId")
 	@ManyToOne
 	private OptionSet optionSet;// 옵션셋FK
 	

@@ -47,26 +47,26 @@ public class Orders {
 	@SequenceGenerator(name = "order_order_no_seq",sequenceName = "order_order_no_seq",initialValue = 1,allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(length = 20)
-	private Long oNo; 
+	private Long id; 
 	
 	@Column(length = 20,unique = true)
-	private String oFindNo; //주문번호
+	private String findNo; //주문번호
 	@Column(length = 100)
-	private String oDesc; //주문설명
+	private String description; //주문설명
 	@Column(length = 10)
-	private Integer oPrice; //총주문가격
-	@Column(length = 100, columnDefinition = "VARCHAR(100) DEFAULT \'입금대기중\'")
-	private String oState; //주문상태
+	private Integer price; //총주문가격
+	@Column(length = 100, columnDefinition = "VARCHAR(100) DEFAULT '입금대기중'")
+	private String statement; //주문상태
 	@Column(updatable = false)
 	@CreationTimestamp
-	private LocalDateTime createdate; //주문날짜
+	private LocalDateTime createDate; //주문날짜
 
 	@OneToOne
-	@JoinColumn(name = "deNo")
+	@JoinColumn(name = "deliveryId")
 	private Delivery delivery; //배송
 	
 	@OneToOne
-	@JoinColumn(name = "reNo")
+	@JoinColumn(name = "refundId")
 	private Refund refund; //환불
 	
 	@OneToMany(mappedBy = "orders")

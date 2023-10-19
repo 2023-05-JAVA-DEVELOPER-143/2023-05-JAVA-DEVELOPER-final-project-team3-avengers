@@ -25,15 +25,15 @@ public class MemberUpdateDto {
 	private String memberAddress;
 	private String memberPhoneNo;
 	
-	public static MemberUpdateDto toDto(Member entity) {
-    	return MemberUpdateDto.builder()
-    			.memberIdCode(entity.getMemberIdCode())
-    			.memberId(entity.getMemberId())
-    			.memberPassword(entity.getMemberPassword())
-    			.memberEmail(entity.getMemberEmail())
-    			.memberNickname(entity.getMemberNickname())
-    			.memberAddress(entity.getMemberAddress())
-    			.memberPhoneNo(entity.getMemberPhoneNo())
-    			.build();
-    }
+//	public static MemberUpdateDto toDto(Member entity) {
+//    	return MemberUpdateDto.builder()
+//    			.memberIdCode(entity.getMemberIdCode())
+//    			.memberId(entity.getMemberId())
+//    			.memberPassword(entity.getMemberPassword())
+//    			.memberEmail(entity.getMemberEmail())
+//    			.memberNickname(entity.getMemberNickname())
+//    			.memberAddress(entity.getMemberAddress())
+//    			.memberPhoneNo(entity.getMemberPhoneNo())
+//    			.build();
+//    }
 }

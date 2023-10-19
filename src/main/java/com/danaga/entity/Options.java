@@ -26,6 +26,6 @@ public class Options {//옵션셋FK를 가지는 오너테이블
 	private Integer extraPrice;
 	//해당 옵션이 옵션셋에 등록될 경우 프로덕트의 총 가격에 추가금
 	@ManyToOne
-	@JoinColumn(name = "option_set_id")
+	@JoinColumn(name = "optionSetId")
 	private OptionSet optionSet;//옵션셋 FK
 }

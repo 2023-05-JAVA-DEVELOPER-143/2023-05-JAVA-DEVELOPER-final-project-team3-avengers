@@ -25,9 +25,9 @@ public class Coupon extends BaseEntity{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long couponId;
+	private Long id;
 	
-	private String couponName;
+	private String name;
 	
 	//정률할인
 	private Integer discountRate;

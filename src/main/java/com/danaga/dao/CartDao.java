@@ -23,13 +23,13 @@ public interface CartDao {
 
 
 	// 카트 담기
-	void addCart(Cart cart); 
+	//void addCart(Cart cart); 
 
 	// 카트리스트
 	//List<Cart> getCarts(String memberId);
 
 	// 카트 보기
-	Cart getCart(Long cartNo);
+	//Cart getCart(Long cartNo);
 
 	// 카트 제품
 	//Cart getCartByOptionSetId(String memberId, Long optionSetId);
