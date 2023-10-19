@@ -19,11 +19,7 @@ public class DeliveryDaoImpl implements DeliveryDao {
 //	@Autowired
 	OrderStateMsg orderStateMsg;
 
-	@Override
-	public Delivery selectDelivery(Long id) {
-		Delivery selectDelivery = deliveryRepository.findById(id).get();
-		return selectDelivery;
-	}
+
 
 //	@Override
 	public Delivery insertDelivery(Delivery delivery) {

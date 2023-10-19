@@ -2,6 +2,8 @@ package com.danaga.entity;
 
 import java.time.*;
 
+
+
 import com.danaga.dto.*;
 
 import jakarta.persistence.*;
@@ -28,13 +30,13 @@ public class Delivery {
 	
 	@OneToOne
 	@JoinColumn(name = "orderId")
+	@ToString.Exclude
 	private Orders orders; //주문번호
 	 
 
 	
     public static Delivery toEntity(DeliveryDto dto) {
     	return Delivery.builder()
-    			.id(dto.getId())
     			.name(dto.getName())
     			.phoneNumber(dto.getPhoneNumber())
     			.address(dto.getAddress())
