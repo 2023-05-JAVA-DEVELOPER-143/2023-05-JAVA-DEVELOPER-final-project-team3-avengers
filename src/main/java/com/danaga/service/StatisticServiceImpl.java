@@ -18,7 +18,7 @@ public class StatisticServiceImpl implements StatisticService{
 		List<Statistic> statisticList = statisticRepository.findAll();
 		return statisticList;
 	}
-	
+	//수동업데이트
 	@Override
 	public Statistic updateAt(String findDate) {
 		Long salesTotQty = statisticRepository.countTotSalesAt(findDate);
