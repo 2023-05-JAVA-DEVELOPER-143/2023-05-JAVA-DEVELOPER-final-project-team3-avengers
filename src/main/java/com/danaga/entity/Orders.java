@@ -48,28 +48,22 @@ public class Orders {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "order_order_no_seq")
 	@Column(length = 20)
 	private Long id; 
-	
-	
-	@Column(length = 20,unique = true)
-	private Long orderNo; //주문번호
-	
+
 	@Column(length = 100)
 	private String description; //주문설명
 	@Column(length = 10)
 	private Integer price; //총주문가격
-	@Column(length = 100, columnDefinition = "VARCHAR(100) DEFAULT '입금대기중'")
-	private String statement; //주문상태
+	@Column(length = 100 )
+	@Enumerated(EnumType.ORDINAL)
+	private OrderStateMsg statement; //주문상태 //notnull
 	@Column(updatable = false)
 	@CreationTimestamp
 	private LocalDateTime createDate; //주문날짜
 
-	@OneToOne
-	@JoinColumn(name = "deliveryId")
+	@OneToOne(mappedBy = "orders")
 	private Delivery delivery; //배송
 	
-	
-	@OneToOne
-	@JoinColumn(name = "refundId")
+	@OneToOne(mappedBy = "orders")
 	private Refund refund; //환불
 	
 	@OneToMany(mappedBy = "orders")
