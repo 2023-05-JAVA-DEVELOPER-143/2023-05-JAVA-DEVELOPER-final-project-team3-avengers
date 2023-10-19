@@ -6,9 +6,11 @@ import java.util.Date;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.danaga.entity.Member;
 
+@SpringBootTest
 class MemberServiceImplTest {
 	
 	@Autowired
@@ -23,7 +25,6 @@ class MemberServiceImplTest {
 				.name("유저11")
 				.nickname("닉네임11")
 				.address("주소11")
-				.birthday(new Date("1999-09-19"))
 				.phoneNo("010-1123-3512")
 				.role("Member")
 				.build());
