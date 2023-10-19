@@ -60,7 +60,8 @@ public class Member {
    @Builder.Default
    private Integer memberGradePoint = 0;
    
-   public static Member toEntity(MemberUpdateDto memberUpdateDto) {
+   
+   public static Member toUpdateEntity(MemberUpdateDto memberUpdateDto) {
 	   return Member.builder()
 			   .memberIdCode(memberUpdateDto.getMemberIdCode())
    			.memberId(memberUpdateDto.getMemberId())
