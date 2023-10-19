@@ -22,7 +22,7 @@ public interface StatisticRepository extends JpaRepository<Statistic, Date>{
 	@Query(value = "select nvl(count(id),0) from member where to_char(join_date,'YYYYMMDD') = :findDate", nativeQuery = true)
 	Long countNewMembersAt(@Param("findDate") String findDate);
 	
-	// N일 작성된 게시글 수
+	// N일 작성된 게시글 수 완료
 	
 
 }
