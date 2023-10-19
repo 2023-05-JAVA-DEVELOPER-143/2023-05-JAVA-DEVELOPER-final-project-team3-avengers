@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.hibernate.annotations.ColumnDefault;
 
+import com.querydsl.core.annotations.Generated;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
