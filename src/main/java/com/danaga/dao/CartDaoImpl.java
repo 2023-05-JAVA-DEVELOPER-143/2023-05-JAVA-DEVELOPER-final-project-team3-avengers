@@ -12,18 +12,33 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class CartDaoImpl implements CartDao{
-	
+public class CartDaoImpl implements CartDao {
+
 	private final CartRepository cartRepository;
 
-	/*
-	 * 카트리스트 보기
-	 */
+	// 카트리스트 보기
 	@Override
-	public List<Cart> findCartList(String memberId) {
-		return cartRepository.findByMember_UserName(memberId);
+	public List<Cart> findCartList(Long memberId) {
+		return cartRepository.findByMemberId(memberId);
+	}
+
+	// 유저 아이디 + 제품 아이디로 찾기
+	@Override
+	public Cart findCart(Long optionSetId, Long memberId) {
+		return cartRepository.findByOptionSetIdAndMemberId(optionSetId, memberId);
 	}
 	
+	// 장바구니 담기
+	@Override
+	public void addCart(Cart cart) {
+		cartRepository.save(cart);
+	}
+	// 장바구니 제품 삭제
+	@Override
+	public void deleteCart(Long id) {
+		cartRepository.deleteById(id);
+	}
+
 	/*
 	 * 카트생성
 	 */
@@ -51,26 +66,5 @@ public class CartDaoImpl implements CartDao{
 	/*
 	 * 카트 1개 삭제
 	 */
-	@Override
-	public void deleteCart(Long id) throws Exception {
-		Optional<Cart> findCart = cartRepository.findById(id);
-		if(findCart.isEmpty()) {
-			throw new Exception();
-		}
-		cartRepository.delete(findCart.get());
-	}
-
-	@Override
-	public Cart create(Member member, Cart cart) {
-		return null;
-	}
-	
-	
-
-	
-	
-
-
-	
 
 }
