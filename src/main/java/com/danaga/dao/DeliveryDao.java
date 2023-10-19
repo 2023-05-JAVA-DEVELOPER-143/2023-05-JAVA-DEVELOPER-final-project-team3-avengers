@@ -6,8 +6,7 @@ public interface DeliveryDao {
 	//배송신청
 	Delivery insertDelivery(Delivery delivery);// 배송정보 입력후 배송하기 눌렀을 때
 	
-	//주문번호로 배송내역찾기
-	Delivery selectDelivery(Long id);// 주문목록에서 현재 주문상태가 배송중, 배송완료일 때 배송번호나오게하기
+
 	
 	//update는 없음
 	

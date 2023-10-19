@@ -15,16 +15,15 @@ public class DeliveryServiceImpl {
 	
 	
 	//배송번호로 배송내역찾기
-	public DeliveryResponseDto  getDeliveryById(Long id) {
-		Delivery getDelivery = deliveryDao.selectDelivery(id);
-		DeliveryResponseDto deliveryResponseDto = DeliveryResponseDto.toDto(getDelivery);
-		return deliveryResponseDto;
-	};
+//	public DeliveryResponseDto  getDeliveryById(Long id) {
+//		Delivery getDelivery = deliveryDao.selectDelivery(id);
+//		DeliveryResponseDto deliveryResponseDto = DeliveryResponseDto.toDto(getDelivery);
+//		return deliveryResponseDto;
+//	}
 	//배송신청
-	DeliveryResponseDto saveDelivery(DeliveryDto deliveryDto) {
+	Delivery saveDelivery(DeliveryDto deliveryDto) {
 		Delivery createdDelivery = deliveryDao.insertDelivery(Delivery.toEntity(deliveryDto));
-		DeliveryResponseDto refundResponseDto = DeliveryResponseDto.toDto(createdDelivery);
-		return refundResponseDto;
+		return createdDelivery;
 	}
 	
 }
