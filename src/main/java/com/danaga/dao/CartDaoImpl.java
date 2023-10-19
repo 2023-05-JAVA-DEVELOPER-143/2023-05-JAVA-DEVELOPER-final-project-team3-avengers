@@ -21,7 +21,7 @@ public class CartDaoImpl implements CartDao{
 	 */
 	@Override
 	public List<Cart> findCartList(String memberId) {
-		return cartRepository.findByMemberId(memberId);
+		return cartRepository.findByMember_UserName(memberId);
 	}
 	
 	/*

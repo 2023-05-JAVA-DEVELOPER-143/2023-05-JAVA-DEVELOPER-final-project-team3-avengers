@@ -22,7 +22,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(name = "RECENT_VIEW_UQ", columnNames = {"memberId","productId"})})
+@Table(uniqueConstraints = {@UniqueConstraint(name = "RECENT_VIEW_UQ", columnNames = {"memberId","optionSetId"})})
 public class RecentView extends BaseEntity{//멤버아이디와 프로덕트아이디로 고유키 제약 
 	//최근 조회한 상품 
 	//30일간만 보관 
@@ -33,6 +33,6 @@ public class RecentView extends BaseEntity{//멤버아이디와 프로덕트아�
 	@JoinColumn(name = "memberId")
 	private Member member;//member FK
 	@ManyToOne
-	@JoinColumn(name = "productId")
-	private Product product;//product FK
+	@JoinColumn(name = "optionSetId")
+	private OptionSet optionSet;//product FK
 }

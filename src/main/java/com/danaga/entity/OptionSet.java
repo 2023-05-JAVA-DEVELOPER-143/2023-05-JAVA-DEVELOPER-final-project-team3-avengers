@@ -58,5 +58,10 @@ public class OptionSet extends BaseEntity {
 	@Builder.Default 
 	private List<Cart> carts = new ArrayList<>();
 	//카트아이템List
+	
+	@Builder.Default
+	@OneToMany(mappedBy = "optionSet")
+	private List<RecentView> recentViews = new ArrayList<>();
+	
 
 }

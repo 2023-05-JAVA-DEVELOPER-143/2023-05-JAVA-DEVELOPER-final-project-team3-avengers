@@ -24,7 +24,7 @@ public class CartServiceImpl implements CartService{
 	// 유저 카트 리스트
 	@Override
 	public List<Cart> findCartList(String memberId) {
-		return cartRepository.findByMemberId(memberId);
+		return cartRepository.findByMember_UserName(memberId);
 	}
 	
 //	public void saveCart(Member member, Long optionset_id, int cartQty) throws Exception {

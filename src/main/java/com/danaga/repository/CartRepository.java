@@ -14,13 +14,13 @@ import com.danaga.entity.OptionSet;
 public interface CartRepository extends JpaRepository<Cart, Long>{
 
 	// 유저 카트리스트
-	List<Cart> findByMemberId(String memberId);
+	List<Cart> findByMember_UserName(String userName);
 	
 	// 유저 카트 제품한개
-	Cart findCartByOptionSetIdAndMemberId(String memberId,Long optionSetId);
+	Cart findCartByOptionSetIdAndMember_UserName(Long optionSetId,String memberId);
 	
 	// 장바구니 수량
-	int countByMemberId(String memberId);
+	int countByMember_UserName(String memberId);
 	
 	
 	 

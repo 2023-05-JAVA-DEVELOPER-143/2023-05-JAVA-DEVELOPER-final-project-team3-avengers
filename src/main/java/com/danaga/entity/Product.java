@@ -54,10 +54,7 @@ public class Product extends BaseEntity {//제품의 기본 모델 정보
 //	@Builder.Default
 //	@OneToMany(mappedBy = "product")
 //	private List<Review> reviews = new ArrayList<>();
-	@Builder.Default
-	@OneToMany(mappedBy = "product")
-	private List<RecentView> recentViews = new ArrayList<>();
-	
+
 	
 	@OneToMany(mappedBy = "product")
 	@Builder.Default
