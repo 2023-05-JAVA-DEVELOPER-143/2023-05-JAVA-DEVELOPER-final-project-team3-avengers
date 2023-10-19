@@ -21,18 +21,18 @@ public class MemberDaoImpl implements MemberDao {
 	public Member findMember(String value) throws Exception {
 
 		if (value.contains("@")) {
-			if (memberRepository.findByMemberId(value).isPresent()) {
-				return memberRepository.findByMemberId(value).get();
+			if (memberRepository.findByUserName(value).isPresent()) {
+				return memberRepository.findByUserName(value).get();
 			}
 			throw new Exception("해당 이메일로 찾을 수 없습니다");
 		} else if (value.contains("-")) {
-			if (memberRepository.findByMemberId(value).isPresent()) {
-				return memberRepository.findByMemberId(value).get();
+			if (memberRepository.findByEmail(value).isPresent()) {
+				return memberRepository.findByEmail(value).get();
 			}
 			throw new Exception("해당 번호로 찾을 수 없습니다");
 		} else {
-			if (memberRepository.findByMemberId(value).isPresent()) {
-				return memberRepository.findByMemberId(value).get();
+			if (memberRepository.findByPhoneNo(value).isPresent()) {
+				return memberRepository.findByPhoneNo(value).get();
 			}
 			throw new Exception("해당 아이디로 찾을 수 없습니다");
 		}
@@ -43,7 +43,7 @@ public class MemberDaoImpl implements MemberDao {
 	}
 
 	public Member update(Member updateMember) throws Exception {
-		Optional<Member> findOptionalMember = memberRepository.findByMemberId(updateMember.getUserName());
+		Optional<Member> findOptionalMember = memberRepository.findByUserName(updateMember.getUserName());
 		Member updatedMember = null;
 		if (findOptionalMember.isPresent()) {
 			Member member = findOptionalMember.get();
@@ -61,8 +61,8 @@ public class MemberDaoImpl implements MemberDao {
 	}
 
 	public void delete(String memberId) throws Exception {
-		if (memberRepository.findByMemberId(memberId).isPresent()) {
-			memberRepository.delete(memberRepository.findByMemberId(memberId).get());
+		if (memberRepository.findByUserName(memberId).isPresent()) {
+			memberRepository.delete(memberRepository.findByUserName(memberId).get());
 		} else {
 			throw new Exception("존재하지 않는 회원입니다");
 		}
@@ -70,17 +70,17 @@ public class MemberDaoImpl implements MemberDao {
 
 	public boolean existedMemberBy(String value) throws Exception {
 		if (value.contains("@")) {
-			if (memberRepository.findByMemberEmail(value).isPresent()) {
+			if (memberRepository.findByEmail(value).isPresent()) {
 				return false;
 			}
 			return true;
 		} else if (value.contains("-")) {
-			if (memberRepository.findByMemberPhoneNo(value).isPresent()) {
+			if (memberRepository.findByPhoneNo(value).isPresent()) {
 				return false;
 			}
 			return true;
 		} else {
-			if (memberRepository.findByMemberId(value).isPresent()) {
+			if (memberRepository.findByUserName(value).isPresent()) {
 				return false;
 			}
 			return true;

@@ -62,7 +62,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	public boolean login(String userName, String password) throws Exception {
-		Optional<Member> findOptionalMember = memberRepository.findByMemberId(userName);
+		Optional<Member> findOptionalMember = memberRepository.findByUserName(userName);
 		if (findOptionalMember.isEmpty()) {
 			throw new Exception(userName + " 는 존재하지않는 아이디입니다.");
 		} else if (findOptionalMember.isPresent()) {
