@@ -17,23 +17,23 @@ import lombok.ToString;
 @Data
 @ToString
 public class MemberUpdateDto {
-	private Long memberIdCode;
-	private String memberId;
-	private String memberPassword;
-	private String memberEmail;
-	private String memberNickname;
-	private String memberAddress;
-	private String memberPhoneNo;
+	private Long id;
+	private String userName;
+	private String password;
+	private String email;
+	private String nickname;
+	private String address;
+	private String phoneNo;
 	
-//	public static MemberUpdateDto toDto(Member entity) {
-//    	return MemberUpdateDto.builder()
-//    			.memberIdCode(entity.getMemberIdCode())
-//    			.memberId(entity.getMemberId())
-//    			.memberPassword(entity.getMemberPassword())
-//    			.memberEmail(entity.getMemberEmail())
-//    			.memberNickname(entity.getMemberNickname())
-//    			.memberAddress(entity.getMemberAddress())
-//    			.memberPhoneNo(entity.getMemberPhoneNo())
-//    			.build();
-//    }
+	public static MemberUpdateDto toDto(Member entity) {
+    	return MemberUpdateDto.builder()
+    			.id(entity.getId())
+    			.userName(entity.getUserName())
+    			.password(entity.getPassword())
+    			.email(entity.getEmail())
+    			.nickname(entity.getNickname())
+    			.address(entity.getAddress())
+    			.phoneNo(entity.getPhoneNo())
+    			.build();
+    }
 }
