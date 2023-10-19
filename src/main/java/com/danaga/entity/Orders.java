@@ -51,7 +51,7 @@ public class Orders {
 	
 	
 	@Column(length = 20,unique = true)
-	private Integer orderNo; //주문번호
+	private Long orderNo; //주문번호
 	
 	@Column(length = 100)
 	private String description; //주문설명
