@@ -9,13 +9,14 @@ import org.springframework.stereotype.Repository;
 import com.danaga.entity.Product;
 import com.danaga.repository.ProductRepository;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Repository
+@RequiredArgsConstructor
 public class ProductDaoImpl implements ProductDao{
-	@Autowired
-	ProductRepository productRepository;
+	private final ProductRepository productRepository;
 	
 	public List<Product> findAllProducts(){
 		return productRepository.findAll();

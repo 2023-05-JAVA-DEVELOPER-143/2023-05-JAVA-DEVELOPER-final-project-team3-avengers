@@ -8,7 +8,7 @@ import com.danaga.entity.OptionSet;
 import com.danaga.entity.Options;
 
 public interface OptionsRepository extends JpaRepository<Options, Long> {
-	List<Options> findByName(String name);
-	List<Options> findByValue(String value);
-	List<Options> findByOptionSet(OptionSet optionset);
+//	List<Options> findByName(String name);
+//	List<Options> findByValue(String value);
+//	List<Options> findByOptionSet(OptionSet optionset);
 }

@@ -8,15 +8,17 @@ import org.springframework.stereotype.Repository;
 import com.danaga.entity.OptionSet;
 import com.danaga.entity.Options;
 import com.danaga.repository.OptionsRepository;
+
+import lombok.RequiredArgsConstructor;
 @Repository
+@RequiredArgsConstructor
 public class OptionsDaoImpl implements OptionsDao{
 
-	@Autowired
-	private OptionsRepository optionsRepository;
-	@Override
-	public List<Options> findOptionsByOptionSet(OptionSet optionSet) {
-		List<Options> options = optionsRepository.findByOptionSet(optionSet);
-		return options;
-	}
+	private final OptionsRepository optionsRepository;
+//	@Override
+//	public List<Options> findOptionsByOptionSet(OptionSet optionSet) {
+//		List<Options> options = optionsRepository.findByOptionSet(optionSet);
+//		return options;
+//	}
 
 }

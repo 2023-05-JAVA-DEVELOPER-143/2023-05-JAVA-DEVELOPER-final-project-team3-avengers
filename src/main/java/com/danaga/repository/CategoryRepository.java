@@ -9,8 +9,8 @@ import com.danaga.entity.Product;
 
 
 public interface CategoryRepository extends JpaRepository<Category, Long>{
-	List<Category> findByCategoryName(String categoryName);
-	List<Category> findByChildTypes(List<Category> childTypes);
-	List<Category> findByProducts(List<Product> products);
-	List<Category> findBySuperType(Category superType);
+//	List<Category> findByCategoryName(String categoryName);
+//	List<Category> findByChildTypes(List<Category> childTypes);
+//	List<Category> findByProducts(List<Product> products);
+//	List<Category> findBySuperType(Category superType);
 }
