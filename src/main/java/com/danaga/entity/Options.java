@@ -16,15 +16,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Options {
+public class Options {//옵션셋FK를 가지는 오너테이블
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	private Long id;
+	private Long id;//pk
 	
-	private String name;
-	private String value;
+	private String name; //옵션명
+	private String value; //옵션값
 	private Integer extraPrice;
+	//해당 옵션이 옵션셋에 등록될 경우 프로덕트의 총 가격에 추가금
 	@ManyToOne
-	@JoinColumn(name = "optionSet_id")
-	private OptionSet optionSet;
+	@JoinColumn(name = "option_set_id")
+	private OptionSet optionSet;//옵션셋 FK
 }

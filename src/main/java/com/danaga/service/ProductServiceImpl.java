@@ -15,15 +15,15 @@ import com.danaga.entity.OptionSet;
 import com.danaga.entity.Options;
 import com.danaga.entity.Product;
 
+import lombok.RequiredArgsConstructor;
+
 
 @Service
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService{
-	@Autowired
-	private ProductDao productDao;
-	@Autowired
-	private OptionSetDao optionSetDao;
-	@Autowired
-	private OptionsDao optionsDao;
+	private final ProductDao productDao;
+	private final OptionSetDao optionSetDao;
+	private final OptionsDao optionsDao;
 	
 	public List<ResponseDto<ProductDto>> products(){
 		return null;
@@ -37,10 +37,11 @@ public class ProductServiceImpl implements ProductService{
 
 	@Override
 	public ProductDto findById(OptionSetDto optionSetDto) {
-		OptionSet optionSets = optionSetDao.findById(optionSetDto.getId());
-		Product product = optionSets.getProduct();
-		//List<Review> reviews = product.getReviews();
-		List<Options> options = optionsDao.findOptionsByOptionSet(optionSets);
-		return new ProductDto(product,optionSets,options);
+//		OptionSet optionSets = optionSetDao.findById(optionSetDto.getId());
+//		Product product = optionSets.getProduct();
+//		//List<Review> reviews = product.getReviews();
+//		List<Options> options = optionsDao.findOptionsByOptionSet(optionSets);
+//		return new ProductDto(product,optionSets,options);
+		return null;
 	}
 }

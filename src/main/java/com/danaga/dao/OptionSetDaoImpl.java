@@ -9,16 +9,18 @@ import org.springframework.stereotype.Repository;
 import com.danaga.entity.OptionSet;
 import com.danaga.repository.OptionSetRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Repository
+@RequiredArgsConstructor
 public class OptionSetDaoImpl implements OptionSetDao{
 
-	@Autowired
-	private OptionSetRepository optionSetRepository;
-	@Override
-	public List<OptionSet> findByAllId(Long id) {
-		final List<OptionSet> optionSets = optionSetRepository.findByAllId(id);
-		return optionSets;
-	}
+	private final OptionSetRepository optionSetRepository;
+//	@Override
+//	public List<OptionSet> findByAllId(Long id) {
+//		final List<OptionSet> optionSets = optionSetRepository.findByAllId(id);
+//		return optionSets;
+//	}
 	@Override
 	public OptionSet findById(Long id) {
 		return optionSetRepository.findById(id).get();
