@@ -26,28 +26,26 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class Cart extends BaseEntity{
+public class Cart extends BaseEntity {
 	@Id
-	@SequenceGenerator(name = "cart_cart_no_seq",sequenceName = "cart_cart_no_seq",initialValue = 1,allocationSize = 1)
+	@SequenceGenerator(name = "cart_cart_no_seq", sequenceName = "cart_cart_no_seq", initialValue = 1, allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
 
 	private int qty;
 	@ManyToOne
-	@JoinColumn(name="memberId")
+	@JoinColumn(name = "memberId")
 	private Member member;
-	
+
 	@ManyToOne
-	@JoinColumn(name="optionSetId")
+	@JoinColumn(name = "optionSetId")
 	private OptionSet optionSet;
 
-	public static Cart toEntity(CartCreateDto cartCreateDto) {
-		return Cart.builder()
-				.qty(cartCreateDto.getCartQty())
-				.member(cartCreateDto.getMember())
-				.optionSet(cartCreateDto.getOptionset())
-				.build();
-	}
+	/*
+	 * public static Cart toEntity(CartCreateDto cartCreateDto) { return
+	 * Cart.builder().member(cartCreateDto.getMember())
+	 * .qty(cartCreateDto.getCartQty())
+	 * .optionSet(cartCreateDto.getOptionset()).build(); }
+	 */
 	
-		
 }

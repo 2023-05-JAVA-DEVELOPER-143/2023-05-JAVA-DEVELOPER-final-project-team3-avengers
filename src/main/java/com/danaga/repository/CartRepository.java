@@ -11,20 +11,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.danaga.entity.Cart;
 import com.danaga.entity.OptionSet;
 
-public interface CartRepository extends JpaRepository<Cart, Long>{
+public interface CartRepository extends JpaRepository<Cart, Long> {
 
 	// 유저 카트리스트
-	List<Cart> findByMember_UserName(String userName);
-	
+	List<Cart> findByMemberId(Long memberId);
+
 	// 유저 카트 제품한개
-	Cart findCartByOptionSetIdAndMember_UserName(Long optionSetId,String memberId);
-	
+	Cart findByOptionSetIdAndMemberId(Long optionSetId, Long memberId);
+
 	// 장바구니 수량
 	int countByMember_UserName(String memberId);
-	
-	
-	 
 
-	
-	
 }
