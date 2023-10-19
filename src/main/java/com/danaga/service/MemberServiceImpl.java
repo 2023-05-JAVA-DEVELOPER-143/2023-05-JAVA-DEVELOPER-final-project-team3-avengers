@@ -32,7 +32,7 @@ public class MemberServiceImpl implements MemberService {
 		// 1.아이디중복체크
 		if (memberDao.existedMemberBy(member.getUserName())) {
 			// 아이디중복
-			throw new Exception(member.getUserName() + " 는 이미 존재하는 아이디 입니다.");
+			//throw new Exception(member.getUserName() + " 는 이미 존재하는 아이디 입니다.");
 		} else if (memberDao.existedMemberBy(member.getEmail())) {
 			throw new Exception(member.getEmail() + " 는 이미 등록된 이메일 입니다.");
 		} else if (memberDao.existedMemberBy(member.getPhoneNo())) {
