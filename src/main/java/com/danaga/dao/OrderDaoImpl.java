@@ -35,7 +35,6 @@ public class OrderDaoImpl implements OrderDao {
 	 * @Override public Orders insert(Orders order) {
 	 * 
 	 * 
-	 * 
 	 * //OFindNo 월일+랜덤숫자5자리로 임의로 설정하기 LocalDateTime createdate =
 	 * order.getCreateDate(); int year = createdate.getYear(); // 년도 추출 int month =
 	 * createdate.getMonthValue(); // 월 추출 (1부터 12까지의 값) int day =
@@ -53,11 +52,14 @@ public class OrderDaoImpl implements OrderDao {
 	 * 
 	 * 
 	 * 
+	 * 
 	 * 1.Order를 저장 2.OrderItemList를 저장 3.OrderItemList안의 Optionset저장 --service에서 처리
 	 * 4.Delivery저장 --service에서 처리 5.비회원 Member저장--service에서 처리
 	 * 
 	 * 
 	 * Orders insertOrder = orderRepository.save(order);
+	 * 
+	 * insertOrder.setOrderNo(insertOrder.getId());
 	 * 
 	 * List<OrderItem> itemList = insertOrder.getOrderItems();
 	 * 
@@ -65,6 +67,9 @@ public class OrderDaoImpl implements OrderDao {
 	 * orderItemRepository.save(orderItem); }
 	 * 
 	 * return insertOrder; // 저장된 주문 객체 반환 }
+	 * 
+	 * 
+	 * 
 	 * 
 	 * @Override public Orders updateOrdersByStatement(String oState) {
 	 * if(OrderStateMsg.msg1.equals(oState)) {
@@ -104,6 +109,7 @@ public class OrderDaoImpl implements OrderDao {
 	 * 데이터베이스에서 주문을 조회할 수 있으며, 필요한 정보를 조건에 따라 조회 return
 	 * orderRepository.findOrdersByOrderNoAndMember_NameAndMember_PhoneNo(orderNo,
 	 * userName, phoneNo); }
+	 * 
 	 */
 
 }
