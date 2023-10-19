@@ -39,5 +39,5 @@ public interface OrderDao {
 	/*
 	 * 비회원 주문1개보기(주문상세리스트)
 	 */
-	public Orders findOrdersByOrderNoAndNameAndPhoneNo(Long orderNo, String userName,String phoneNo);
+	public Orders findOrdersByOrderNoAndNameAndPhoneNo(String orderNo, String userName,String phoneNo);
 }

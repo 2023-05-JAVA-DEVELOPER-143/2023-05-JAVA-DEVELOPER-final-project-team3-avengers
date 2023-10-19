@@ -17,14 +17,13 @@ public interface OrderRepository extends JpaRepository<Orders, Long>{
 	/*
 	 * MemberId로 order찾기(회원)
 	 */
-	public void findByMember_UserName(String userName);
 	
     // 사용자 정의 메서드: 회원 ID를 기반으로 주문 목록 조회
-    List<Orders> findByUserName(String userName);
+    List<Orders> findByMember_UserName(String userName);
 
 
     // 비회원 : 주문 번호, 회원 이름, 회원 전화번호를 기반으로 주문 조회
-    Orders findOrderByOrderNoAndNameAndPhoneNo(Long oNo, String memberName, String memberPhoneNo);	/*
+    Orders findOrdersByOrderNoAndMember_NameAndMember_PhoneNo(String orderNo, String userName,String phoneNo);	/*
 	 * 
 	 */
 }
