@@ -35,6 +35,7 @@ public class OrderDaoImpl implements OrderDao {
 	 * @Override public Orders insert(Orders order) {
 	 * 
 	 * 
+	 * 
 	 * //OFindNo 월일+랜덤숫자5자리로 임의로 설정하기 LocalDateTime createdate =
 	 * order.getCreateDate(); int year = createdate.getYear(); // 년도 추출 int month =
 	 * createdate.getMonthValue(); // 월 추출 (1부터 12까지의 값) int day =
