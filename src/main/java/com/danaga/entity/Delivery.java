@@ -16,17 +16,17 @@ public class Delivery {
 	@SequenceGenerator(name = "DELIVERY_DELIVERY_NO_SEQ", sequenceName = "DELIVERY_DELIVERY_NO_SEQ", initialValue = 1, allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DELIVERY_DELIVERY_NO_SEQ")
 	@Column(length = 20)
-	private Long deNo;
+	private Long deNo; //PK
 	@Column(length = 10)
-	private String deName;
+	private String deName; //수령인
 	@Column(length = 20)
-	private String dePhonenumber;
+	private String dePhonenumber; //수령인전화번호
 	@Column(length = 100)
-	private String deAddress;	    
+	private String deAddress; //수령인 주소
 	
 	@OneToOne
 	@JoinColumn(name = "oNo")
-	private Orders orders;
+	private Orders orders; //주문번호
 	 
 
 }
