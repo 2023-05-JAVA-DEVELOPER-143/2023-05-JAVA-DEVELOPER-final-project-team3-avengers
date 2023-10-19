@@ -2,6 +2,8 @@ package com.danaga.entity;
 
 import java.time.*;
 
+import com.danaga.dto.*;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,4 +31,15 @@ public class Delivery {
 	private Orders orders; //주문번호
 	 
 
+	
+    public static Delivery toEntity(DeliveryDto dto) {
+    	return Delivery.builder()
+    			.id(dto.getId())
+    			.name(dto.getName())
+    			.phoneNumber(dto.getPhoneNumber())
+    			.address(dto.getAddress())
+    			.build(); 
+    	
+    	
+    }
 }

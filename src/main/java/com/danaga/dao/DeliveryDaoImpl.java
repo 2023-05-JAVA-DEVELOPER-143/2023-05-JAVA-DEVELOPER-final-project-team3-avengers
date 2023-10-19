@@ -31,8 +31,8 @@ public class DeliveryDaoImpl implements DeliveryDao {
 		return insertDelivery;
 	}
 
-	@Override
-	public void deleteDelivery(Long id)  { // 주문상태가 입금대기중인 상태에서 배송취소 +  Orders의 oState가 취소로 변경
+//	@Override
+//	public void deleteDelivery(Long id)  { // 주문상태가 입금대기중인 상태에서 배송취소 +  Orders의 oState가 취소로 변경
 
        // Order 엔터티 업데이트
 //        Orders order = orderRepository.findByDeliveryId(Long id);
@@ -48,5 +48,5 @@ public class DeliveryDaoImpl implements DeliveryDao {
 //        	orderRepository.save(order); // 엔터티 업데이트
 //        }
 
-	}
+//	}
 }

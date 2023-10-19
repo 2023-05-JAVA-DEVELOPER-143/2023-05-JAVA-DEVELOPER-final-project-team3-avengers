@@ -1,5 +1,8 @@
 package com.danaga.entity;
 
+import com.danaga.dto.*;
+
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -41,5 +44,15 @@ public class Refund {
 	@OneToOne
 	@JoinColumn(name = "orderId")
 	private Orders orders;
+	
+    public static Refund toEntity(RefundDto dto) {
+    	return Refund.builder()
+    			.id(dto.getId())
+    			.description(dto.getDescription())
+    			.acNo(dto.getAcNo())
+    			.build(); 
+    	
+    	
+    }
 
 }

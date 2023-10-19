@@ -12,7 +12,7 @@ public interface DeliveryDao {
 	//update는 없음
 	
 	//배송취소                           Orders의 oState가 취소로 변경된다.
-	void deleteDelivery(Long id); // 주문상태가 입금대기중인 상태에서  배송취소가 가능하기 때문에
+//	void deleteDelivery(Long id); // 주문상태가 입금대기중인 상태에서  배송취소가 가능하기 때문에
 									// 주문신청을 했을 떄 주문정보와 배송정보를 입력했기 때문에 
 									//배송도 취소하고 oState상태도 취소로 만들어야함(결제안해서 관리자권한필요없어)
 }

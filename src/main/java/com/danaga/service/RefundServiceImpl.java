@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.*;
 import com.danaga.dao.*;
 import com.danaga.dto.*;
 import com.danaga.entity.*;
+;
 
 public class RefundServiceImpl implements RefundService {
 //	private final RefundDao refundDao;
@@ -20,11 +21,14 @@ public class RefundServiceImpl implements RefundService {
 		return refundResponseDto;
 	}
 	
+	
+	
+	
 	//환불요청
-	public RefundResponseDto saveRefund(RefundResponseDto refundResponseDto) {
-//		Refund createdRefund = refundDao.insertRefund(RefundResponseDto.toDto(refundResponseDto));
-//		RefundResponseDto refundResponseDto = RefundResponseDto.toDto(createdRefund);
-		return null;
+	public RefundResponseDto saveRefund(RefundDto refundDto) {
+		Refund createdRefund = refundDao.insertRefund(Refund.toEntity(refundDto));
+		RefundResponseDto refundResponseDto = RefundResponseDto.toDto(createdRefund);
+		return refundResponseDto;
 	}
 
 }
