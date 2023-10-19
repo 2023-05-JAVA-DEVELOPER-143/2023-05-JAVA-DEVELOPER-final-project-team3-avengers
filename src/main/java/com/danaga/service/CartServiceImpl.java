@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 
 import com.danaga.dao.CartDao;
 import com.danaga.dto.CartCreateDto;
+import com.danaga.dto.CartDto;
 import com.danaga.entity.Cart;
 import com.danaga.entity.Member;
+import com.danaga.entity.OptionSet;
 import com.danaga.repository.CartRepository;
 import com.danaga.repository.MemberRepository;
 import com.danaga.repository.OptionSetRepository;
@@ -33,37 +35,31 @@ public class CartServiceImpl implements CartService{
 		return cartRepository.findAll();
 	}
 	
-//	@Override
-//	public void create(Member member, Long optionset_id, int cartQty) throws Exception {
-//		Cart findCart = cartRepository.findByUserIdAndOptionSetId(member.getMemberId(), optionset_id).get();
+//	public void saveCart(Member member, Long optionset_id, int cartQty) throws Exception {
+//		Cart findCart = cartRepository.findByOptionSetIdAndUserId( optionset_id, member.getMemberId());
 //		if(findCart == null) {
 //			OptionSet optionSet = optionSetRepository.findById(optionset_id).orElseThrow(() -> {
 //				return new Exception("상품이 없습니다");
 //			});
-//			Cart cart = Cart.builder()
-//					.member(member)
-//					.optionSet(optionSet)
-//					.build();
-//		} else {
-//			int prev = findCart.getCartQty();
-//			findCart.setCartQty(prev+cartQty);
+//			
 //			cartRepository.save(findCart);
+//		} else {
+//			Cart cart = cartDao.create(findCart);
 //		}
 //	}
+	
+	
 
 	/*
 	 * 카트 담기
 	 */
 //	@Override
-//	public List<Cart> create(CartCreateDto cart) {
-//		Cart findCart = cartRepository.findByUserIdAndOptionSetId(cart.getMember().getMemberId(), cart.getOptionSet().getId()).get();
-//		CartCreateDto cartCreateDto = CartCreateDto.toEntity(findCart);
-//		//save
-//		//member id로 내 카트 아이템 전부 조회 해서 반환
-//		return cartCreateDto;
+//	public void saveCart(CartDto cartDto) {
+//		Cart cart = cartRepository.findByMemberId(null)
 //	}
 	
-
+	
+	
 	
 	
 	/*
@@ -78,11 +74,10 @@ public class CartServiceImpl implements CartService{
 		cartRepository.delete(findCart.get());
 	}
 
-@Override
-public Cart create(CartCreateDto cartCreateDto, String member_id) {
-	// TODO Auto-generated method stub
-	return null;
-}
+
+
+
+
 
 	
 	

@@ -3,21 +3,26 @@ package com.danaga.dao;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.danaga.entity.Cart;
+import com.danaga.entity.Member;
 import com.danaga.repository.CartRepository;
 
+import lombok.RequiredArgsConstructor;
+
+@Repository
+@RequiredArgsConstructor
 public class CartDaoImpl implements CartDao{
 	
-	@Autowired
-	CartRepository cartRepository;
+	private final CartRepository cartRepository;
 	
 	/*
 	 * 카트리스트 보기
 	 */
 	@Override
 	public List<Cart> findCartList(String member_id) {
-		List<Cart> cartList = cartRepository.findAll();
+		List<Cart> cartList = cartRepository.findByMemberId(member_id);
 		return cartList;
 	}
 	
@@ -46,14 +51,14 @@ public class CartDaoImpl implements CartDao{
 	 * 카트생성
 	 */
 	@Override
-	public Cart create(Cart cart) {
-		boolean exists = cartRepository.existsById(cart.getOptionSet().getId());
-		if(exists) {
-//			cart.setCartQty(cart.getCartQty()+1);
-			Cart insertCart = cartRepository.save(cart);
-			return insertCart;
+	public Cart create(Member member, Cart cart) {
+		Cart createCart = cartRepository.findCartByOptionSetIdAndMemberId(member.getMemberId(), cart.getOptionSet().getId());
+		
+		if(createCart == null) {
+			return cartRepository.save(createCart);
 		}
-		return cartRepository.save(cart);
+		createCart.setCartQty(createCart.getCartQty()+1);
+		return cartRepository.save(createCart);
 	}
 	
 	
@@ -68,20 +73,10 @@ public class CartDaoImpl implements CartDao{
 		}
 		cartRepository.delete(findCart.get());
 	}
-	/*
-	 * 카트 수량 변경
-	 */
-	@Override
-	public Long increaseQty(Cart cart) {
-		Cart findCart = cartRepository.findById(cart.getId()).get();
-		
-		return null;
-	}
 
-	@Override
-	public Long decreaseQty(Cart cart) {
-		return null;
-	}
+	
+
+	
 	
 
 	

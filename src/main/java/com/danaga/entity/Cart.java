@@ -1,5 +1,8 @@
 package com.danaga.entity;
 
+import com.danaga.dto.CartCreateDto;
+import com.danaga.dto.CartDto;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +13,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -17,7 +21,7 @@ import lombok.ToString;
 @Entity
 @Builder
 @ToString(callSuper = true)
-@Getter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Cart extends BaseEntity{
@@ -27,7 +31,7 @@ public class Cart extends BaseEntity{
 	@Column(name="cart_no")
 	private Long id;
 
-	private int cartQty;
+	private Integer cartQty;
 	@ManyToOne
 	@JoinColumn(name="member_id")
 	private Member member;
@@ -36,7 +40,13 @@ public class Cart extends BaseEntity{
 	@JoinColumn(name="optionSet_id")
 	private OptionSet optionSet;
 
-	
+	public static Cart toEntity(CartCreateDto cartCreateDto) {
+		return Cart.builder()
+				.cartQty(cartCreateDto.getCartQty())
+				.member(cartCreateDto.getMember())
+				.optionSet(cartCreateDto.getOptionset())
+				.build();
+	}
 	
 		
 }
