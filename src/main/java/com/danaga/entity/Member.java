@@ -8,6 +8,7 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.danaga.dto.MemberUpdateDto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -59,6 +60,18 @@ public class Member {
    @Builder.Default
    private Integer memberGradePoint = 0;
    
+   
+   public static Member toUpdateEntity(MemberUpdateDto memberUpdateDto) {
+	   return Member.builder()
+			   .memberIdCode(memberUpdateDto.getMemberIdCode())
+   			.memberId(memberUpdateDto.getMemberId())
+   			.memberPassword(memberUpdateDto.getMemberPassword())
+   			.memberEmail(memberUpdateDto.getMemberEmail())
+   			.memberNickname(memberUpdateDto.getMemberNickname())
+   			.memberAddress(memberUpdateDto.getMemberAddress())
+   			.memberPhoneNo(memberUpdateDto.getMemberPhoneNo())
+			   .build();
+   }
    //관계설정
    
    // Orders
@@ -104,6 +117,6 @@ public class Member {
 //   @OneToMany(mappedBy = "member")
 //   @Builder.Default
 //   private List<Coupon> couponList = new ArrayList<>();
-
+   
 
 }
