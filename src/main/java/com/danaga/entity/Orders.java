@@ -50,7 +50,7 @@ public class Orders {
 	private Long id; 
 	
 	@Column(length = 20,unique = true)
-	private String findNo; //주문번호
+	private String orderNo; //주문번호
 	@Column(length = 100)
 	private String description; //주문설명
 	@Column(length = 10)
@@ -64,6 +64,7 @@ public class Orders {
 	@OneToOne
 	@JoinColumn(name = "deliveryId")
 	private Delivery delivery; //배송
+	
 	
 	@OneToOne
 	@JoinColumn(name = "refundId")
