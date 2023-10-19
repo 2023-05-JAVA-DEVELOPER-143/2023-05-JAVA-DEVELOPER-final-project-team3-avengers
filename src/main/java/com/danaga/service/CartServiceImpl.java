@@ -21,6 +21,7 @@ import com.danaga.repository.OptionSetRepository;
 public class CartServiceImpl implements CartService {
 	private final CartDao cartDao;
 	private final MemberDao memberDao;
+	private final CartRepository cartRepository;
 
 	// 유저 카트 리스트
 	@Override
@@ -46,7 +47,11 @@ public class CartServiceImpl implements CartService {
 
 	@Override
 	public void deleteCart(Long id) throws Exception {
-		cartDao.deleteCart(id);
+		if(cartRepository.findById(id)==null) {
+			cartDao.deleteCart(id);
+		}else {
+			System.out.println("ㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴㄴ");
+		}
 	}
 
 //	public void saveCart(Member member, Long optionset_id, int cartQty) throws Exception {
