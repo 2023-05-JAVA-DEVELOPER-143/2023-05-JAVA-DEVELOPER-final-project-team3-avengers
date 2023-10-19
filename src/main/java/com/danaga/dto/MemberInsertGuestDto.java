@@ -14,18 +14,16 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class MemberInsertGuestDto {
-	private Long memberIdCode;
-	private String memberId;
-	private String memberName;
-	private String memberPhoneNo;
+	private Long id;
+	private String name;
+	private String phoneNo;
 	
-//	public static MemberInsertGuestDto toDto(Member entity) {
-//    	return MemberInsertGuestDto.builder()
-//    			.memberIdCode(entity.getMemberIdCode())
-//    			.memberId(entity.getMemberId())
-//    			.memberName(entity.getMemberName())
-//    			.memberPhoneNo(entity.getMemberPhoneNo())
-//    			.build();
-//    }
+	public static MemberInsertGuestDto toDto(Member entity) {
+    	return MemberInsertGuestDto.builder()
+    			.id(entity.getId())
+    			.name(entity.getName())
+    			.phoneNo(entity.getPhoneNo())
+    			.build();
+    }
 }
 

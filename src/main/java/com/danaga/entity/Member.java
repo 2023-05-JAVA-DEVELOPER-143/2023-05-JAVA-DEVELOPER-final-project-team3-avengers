@@ -1,8 +1,8 @@
 package com.danaga.entity;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -61,17 +61,17 @@ public class Member {
    private Integer gradePoint = 0;
    
    
-//   public static Member toUpdateEntity(MemberUpdateDto memberUpdateDto) {
-//	   return Member.builder()
-//			   .id(memberUpdateDto.getMemberIdCode())
-//   			.userName(memberUpdateDto.getMemberId())
-//   			.password(memberUpdateDto.getMemberPassword())
-//   			.email(memberUpdateDto.getMemberEmail())
-//   			.nickname(memberUpdateDto.getMemberNickname())
-//   			.address(memberUpdateDto.getMemberAddress())
-//   			.phoneNo(memberUpdateDto.getMemberPhoneNo())
-//			   .build();
-//   }
+   public static Member toUpdateEntity(MemberUpdateDto memberUpdateDto) {
+	   return Member.builder()
+			.id(memberUpdateDto.getId())
+   			.userName(memberUpdateDto.getUserName())
+   			.password(memberUpdateDto.getPassword())
+   			.email(memberUpdateDto.getEmail())
+   			.nickname(memberUpdateDto.getNickname())
+   			.address(memberUpdateDto.getAddress())
+   			.phoneNo(memberUpdateDto.getPhoneNo())
+			.build();
+   }
    //관계설정
    
    // Orders
