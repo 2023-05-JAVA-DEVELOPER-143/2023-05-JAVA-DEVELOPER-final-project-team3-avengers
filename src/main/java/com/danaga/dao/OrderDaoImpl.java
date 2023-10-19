@@ -36,34 +36,33 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public Orders insert(Orders order) {
 		
-		/*
-		 * 1.Order를 저장
-		 * 2.OrderItemList를 저장
-		 * 3.Delivery저장 --service에서 처리
-		 * 4.비회원 Member저장--service에서 처리
-		 */
-		Orders insertOrder = orderRepository.save(order);
-		
-		
 		//OFindNo 월일+랜덤숫자5자리로 임의로 설정하기
 		LocalDateTime createdate = order.getCreatedate();
 		int year = createdate.getYear(); // 년도 추출
 		int month = createdate.getMonthValue(); // 월 추출 (1부터 12까지의 값)
 		int day = createdate.getDayOfMonth(); // 일 추출 (1부터 31까지의 값)
 		String yearString = Integer.toString(year);
-		String subYearString = yearString.substring(2,4);
+		String subYearString = yearString.substring(2,4); //년도 뒷자리2개만 추출
 		String monthString =Integer.toString(month);
 		String dayString =Integer.toString(day);
 		
-		 Random random = new Random();
-	     // 5자리 난수 생성
-	     int min = 10000;  // 최소값 (5자리 숫자)
-	     int max = 99999;  // 최대값 (5자리 숫자)
-	     int randomNumber = random.nextInt(max - min + 1) + min;
-		
+		Random random = new Random();
+		// 5자리 난수 생성
+		int min = 10000;  // 최소값 (5자리 숫자)
+		int max = 99999;  // 최대값 (5자리 숫자)
+		int randomNumber = random.nextInt(max - min + 1) + min;
+	
 		//년도(뒷두자리)+월+일+randomNumber(5자리)
-		insertOrder.setOFindNo(subYearString+monthString+dayString+randomNumber);
+		order.setOFindNo(subYearString+monthString+dayString+randomNumber);
 		
+		/*
+		 * 1.Order를 저장
+		 * 2.OrderItemList를 저장
+		 * 3.OrderItemList안의 Optionset저장 --service에서 처리
+		 * 4.Delivery저장 --service에서 처리
+		 * 5.비회원 Member저장--service에서 처리
+		 */
+		Orders insertOrder = orderRepository.save(order);
 		
 		List<OrderItem> itemList = insertOrder.getOrderItems();
 		

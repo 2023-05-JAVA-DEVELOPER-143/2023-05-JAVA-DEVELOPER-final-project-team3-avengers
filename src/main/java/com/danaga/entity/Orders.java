@@ -20,6 +20,8 @@ import com.danaga.config.OrderStateMsg;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -41,47 +43,37 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Orders {
 	
-/*	o_no (PK)
-	o_date
-
-	user_id(FK)
-	o_desc
-	o_price
-	o_state         주문상태( 주문완료, 배송중, 배송완료, 환불대기중, 환불완료)
-*/
 	@Id
 	@SequenceGenerator(name = "order_order_no_seq",sequenceName = "order_order_no_seq",initialValue = 1,allocationSize = 1)
-	
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(length = 20)
-	private Long oNo;
+	private Long oNo; 
 	
 	@Column(length = 20,unique = true)
-	private String oFindNo;
+	private String oFindNo; //주문번호
 	@Column(length = 100)
-	private String oDesc;
+	private String oDesc; //주문설명
 	@Column(length = 10)
-	private Integer oPrice;
-	@Column(length = 100)
-	@ColumnDefault(OrderStateMsg.msg1)
-	private String oState;
+	private Integer oPrice; //총주문가격
+	@Column(length = 100, columnDefinition = "VARCHAR(100) DEFAULT \'입금대기중\'")
+	private String oState; //주문상태
 	@Column(updatable = false)
 	@CreationTimestamp
-	private LocalDateTime createdate;
+	private LocalDateTime createdate; //주문날짜
 
 	@OneToOne
 	@JoinColumn(name = "deNo")
-	private Delivery delivery;
+	private Delivery delivery; //배송
 	
 	@OneToOne
 	@JoinColumn(name = "reNo")
-	private Refund refund;
+	private Refund refund; //환불
 	
 	@OneToMany(mappedBy = "orders")
 	@Builder.Default
-	private List<OrderItem> orderItems = new ArrayList<>();
+	private List<OrderItem> orderItems = new ArrayList<>(); //주문상품목록
 	
 	@ManyToOne
-	@JoinColumn(name = "memberIdCode")
-	private Member member;
+	@JoinColumn(name = "memberId")
+	private Member member; //주문자
 }

@@ -17,7 +17,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 
-public class OrdersDto {
+public class OrdersUpdateDto {
 	private Long oNo;
 	private String oState;
 
