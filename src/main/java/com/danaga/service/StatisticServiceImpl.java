@@ -21,10 +21,12 @@ public class StatisticServiceImpl implements StatisticService{
 	
 	@Override
 	public Statistic updateAt(String findDate) {
-		Long SalesTotQty = statisticRepository.countTotSalesAt(findDate);
-		Long SalesRevenue = statisticRepository.countTotRevenueAt(findDate);
-		Long NewMember = statisticRepository.countNewMembersAt(findDate);
-		Statistic updatedStatistic = Statistic.builder().id(findDate).dailySalesTotQty(SalesTotQty).dailySalesRevenue(SalesRevenue).dailyNewMember(NewMember).build();
+		Long salesTotQty = statisticRepository.countTotSalesAt(findDate);
+		Long salesRevenue = statisticRepository.countTotRevenueAt(findDate);
+		Long newMember = statisticRepository.countNewMembersAt(findDate);
+		System.out.println("● " + salesTotQty + "● " + salesRevenue + "● " + newMember);
+		Statistic updatedStatistic = Statistic.builder().id(findDate).dailySalesTotQty(salesTotQty).dailySalesRevenue(salesRevenue).dailyNewMember(newMember).build();
+		statisticRepository.save(updatedStatistic);
 		return updatedStatistic;
 	}
 	
