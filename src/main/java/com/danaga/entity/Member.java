@@ -16,9 +16,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-
-
-
+import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,8 +30,9 @@ import lombok.NoArgsConstructor;
 @DynamicUpdate
 public class Member {
 
-   @Id
-   @GeneratedValue(strategy = GenerationType.AUTO)
+	@Id
+	@SequenceGenerator(name = "member_member_no_seq",sequenceName = "member_member_no_seq",initialValue = 1,allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "member_member_no_seq")
    private Long id;
    @Column(unique = true)
    private String userName;
