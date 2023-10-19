@@ -49,6 +49,7 @@ public class Orders {
 	@Column(length = 20)
 	private Long id; 
 	
+
 	
 	@Column(length = 20,unique = true)
 	private Long orderNo; //주문번호
