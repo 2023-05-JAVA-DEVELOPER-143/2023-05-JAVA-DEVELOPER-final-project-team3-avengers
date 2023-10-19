@@ -25,3 +25,4 @@ public class DeliveryResponseDto {
 				.build();
 	}
 }
+//클라이언트에게 배달접수받은거 보여주는 데이터
