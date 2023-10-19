@@ -1,5 +1,8 @@
 package com.danaga.entity;
 
+import com.danaga.dto.CartCreateDto;
+import com.danaga.dto.CartDto;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,7 +41,13 @@ public class Cart extends BaseEntity{
 	@JoinColumn(name="optionSetId")
 	private OptionSet optionSet;
 
-	
+	public static Cart toEntity(CartCreateDto cartCreateDto) {
+		return Cart.builder()
+				.qty(cartCreateDto.getCartQty())
+				.member(cartCreateDto.getMember())
+				.optionSet(cartCreateDto.getOptionset())
+				.build();
+	}
 	
 		
 }

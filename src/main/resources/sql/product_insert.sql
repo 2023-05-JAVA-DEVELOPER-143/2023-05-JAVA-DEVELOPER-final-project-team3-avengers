@@ -422,3 +422,32 @@ insert into options (EXTRA_PRICE, ID, OPTION_SET_ID, NAME, VALUE) values (329, 1
 insert into options (EXTRA_PRICE, ID, OPTION_SET_ID, NAME, VALUE) values (654, 130, 33, 'ram', '16');
 insert into options (EXTRA_PRICE, ID, OPTION_SET_ID, NAME, VALUE) values (367, 131, 33, 'cpu', 'i5');
 insert into options (EXTRA_PRICE, ID, OPTION_SET_ID, NAME, VALUE) values (798, 132, 33, 'gb', '256');
+
+//recentview
+insert into recent_view values(sysdate, 1, 1, 1, sysdate);
+insert into recent_view values(sysdate, 2, 1, 2, sysdate);
+insert into recent_view values(sysdate, 3, 1, 3, sysdate);
+insert into recent_view values(sysdate, 4, 1, 4, sysdate);
+insert into recent_view values(sysdate, 5, 1, 5, sysdate);
+insert into recent_view values(sysdate, 6, 1, 6, sysdate);
+insert into recent_view values(sysdate, 7, 2, 8, sysdate);
+insert into recent_view values(sysdate, 8, 2, 1, sysdate);
+insert into recent_view values(sysdate, 9, 2, 2, sysdate);
+insert into recent_view values(sysdate, 10, 2, 3, sysdate);
+insert into recent_view values(sysdate, 11, 2, 9, sysdate);
+insert into recent_view values(sysdate, 12, 3, 1, sysdate);
+insert into recent_view values(sysdate, 13, 3, 6, sysdate);
+//interest
+insert into interest values(sysdate, 1, 1, 1, sysdate);
+insert into interest values(sysdate, 2, 1, 2, sysdate);
+insert into interest values(sysdate, 3, 1, 3, sysdate);
+insert into interest values(sysdate, 4, 1, 4, sysdate);
+insert into interest values(sysdate, 5, 1, 5, sysdate);
+insert into interest values(sysdate, 6, 1, 6, sysdate);
+insert into interest values(sysdate, 7, 2, 8, sysdate);
+insert into interest values(sysdate, 8, 2, 1, sysdate);
+insert into interest values(sysdate, 9, 2, 2, sysdate);
+insert into interest values(sysdate, 10, 2, 3, sysdate);
+insert into interest values(sysdate, 11, 2, 9, sysdate);
+insert into interest values(sysdate, 12, 3, 1, sysdate);
+insert into interest values(sysdate, 13, 3, 6, sysdate);

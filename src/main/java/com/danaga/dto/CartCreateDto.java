@@ -1,6 +1,5 @@
 package com.danaga.dto;
 
-import com.danaga.entity.Cart;
 import com.danaga.entity.Member;
 import com.danaga.entity.OptionSet;
 
@@ -12,12 +11,12 @@ import lombok.NoArgsConstructor;
 
 
 @Data
-@Builder
 @NoArgsConstructor
+@Builder
 @AllArgsConstructor
 public class CartCreateDto {
 
-	private int cartQty;
+	private Integer cartQty;
 	private Member member;
 	private OptionSet optionset;
 //		
@@ -28,5 +27,8 @@ public class CartCreateDto {
 //				.optionSet(cartCreateDto.getOptionset())
 //				.build();
 //	}
+		
+
+	
 	
 }
