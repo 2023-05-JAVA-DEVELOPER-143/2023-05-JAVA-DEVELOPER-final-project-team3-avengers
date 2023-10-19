@@ -30,7 +30,7 @@ public class Refund {
 	
 	@Id
 	@SequenceGenerator(name = "refund_refund_no_seq",sequenceName = "refund_refund_no_seq",initialValue = 1,allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "refund_refund_no_seq")
 	@Column(length = 20)
 	private Long id;
 	@Column(length = 100)

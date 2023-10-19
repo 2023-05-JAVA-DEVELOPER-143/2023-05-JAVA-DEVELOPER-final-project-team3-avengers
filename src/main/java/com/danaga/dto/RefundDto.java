@@ -10,7 +10,7 @@ import lombok.*;
 public class RefundDto {
 	private Long id;
 	private String description;
-	private Integer acNo;
+	private String acNo;
 	
 }
 //주로 입력데이터를 담음  '환불하시겠습니까? 네'  누르면 refund객체 만들어진다. 
