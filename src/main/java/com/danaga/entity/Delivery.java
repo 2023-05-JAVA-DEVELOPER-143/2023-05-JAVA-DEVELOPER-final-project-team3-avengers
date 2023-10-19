@@ -27,7 +27,7 @@ public class Delivery {
 	private String address; //수령인 주소
 	
 	@OneToOne
-	@JoinColumn(name = "orderNo")
+	@JoinColumn(name = "orderId")
 	private Orders orders; //주문번호
 	 
 
