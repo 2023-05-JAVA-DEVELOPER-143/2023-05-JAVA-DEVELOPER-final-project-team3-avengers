@@ -13,11 +13,11 @@ import jakarta.persistence.criteria.Order;
 
 @SpringBootTest
 public class OrdersRepositoryTest {
-//	@Autowired
-//	OrderDao orderDao;
-//	@Autowired
-//	OrderRepository orderRepository;
-//
+	@Autowired
+	OrderDao orderDao;
+	@Autowired
+	OrderRepository orderRepository;
+
 //	
 //	
 //	@Test

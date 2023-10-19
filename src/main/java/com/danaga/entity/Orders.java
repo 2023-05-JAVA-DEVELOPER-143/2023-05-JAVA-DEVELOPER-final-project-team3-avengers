@@ -49,7 +49,10 @@ public class Orders {
 	@Column(length = 20)
 	private Long id; 
 	
+	
 	@Column(length = 20,unique = true)
+	@SequenceGenerator(name = "order_order_no1_seq",sequenceName = "order_order_no1_seq",initialValue = 10000,allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private String orderNo; //주문번호
 	@Column(length = 100)
 	private String description; //주문설명
