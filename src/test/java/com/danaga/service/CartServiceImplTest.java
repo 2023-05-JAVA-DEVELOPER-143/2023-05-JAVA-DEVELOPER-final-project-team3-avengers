@@ -18,7 +18,6 @@ import com.danaga.entity.Product;
 import com.danaga.repository.CartRepository;
 import com.danaga.repository.MemberRepository;
 import com.danaga.repository.OptionSetQueryRepository;
-import com.danaga.repository.OptionSetQueryRepositoryImpl;
 import com.danaga.repository.OptionSetRepository;
 
 @SpringBootTest
