@@ -24,8 +24,11 @@ public class StatisticServiceImpl implements StatisticService{
 		Long salesTotQty = statisticRepository.countTotSalesOn(findDate);
 		Long salesRevenue = statisticRepository.countTotRevenueOn(findDate);
 		Long newMember = statisticRepository.countNewMembersOn(findDate);
-		System.out.println("● " + salesTotQty + "● " + salesRevenue + "● " + newMember);
-		Statistic updatedStatistic = Statistic.builder().id(findDate).dailySalesTotQty(salesTotQty).dailySalesRevenue(salesRevenue).dailyNewMember(newMember).build();
+		Long newBoard = statisticRepository.countNewBoardsOn(findDate);
+		Statistic updatedStatistic = Statistic.builder().id(findDate).dailySalesTotQty(salesTotQty)
+																	.dailySalesRevenue(salesRevenue)
+																	.dailyNewMember(newMember)
+																	.dailyBoardInquiry(newBoard).build();
 		statisticRepository.save(updatedStatistic);
 		return updatedStatistic;
 	}
