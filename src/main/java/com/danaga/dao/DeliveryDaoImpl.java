@@ -21,7 +21,7 @@ public class DeliveryDaoImpl implements DeliveryDao {
 
 
 
-//	@Override
+	@Override
 	public Delivery insertDelivery(Delivery delivery) {
 		Delivery insertDelivery = deliveryRepository.save(delivery);
 		return insertDelivery;

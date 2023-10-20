@@ -29,18 +29,18 @@ class RefundServiceImplTest {
 	@Autowired
 	private OrderRepository orderRepository;
 
-//	@Test
-//	@Disabled
-//	@Transactional
-//	@Rollback(false)
-//	void testFindRefundByOrdersId() {
-//		Refund findRefund = refundService.findRefundByOrdersId(1L);
-//		System.out.println("##################" + findRefund);
-//		System.out.println("##################" + findRefund.getOrders());
-//	}
+	@Test
+	//@Disabled
+	@Transactional
+	@Rollback(false)
+	void testFindRefundByOrdersId() {
+		Refund findRefund = refundService.findRefundByOrdersId(1L);
+		System.out.println("##################" + findRefund);
+		System.out.println("##################" + findRefund.getOrders());
+	}
 
 	@Test
-	// @Disabled
+	 @Disabled
 	@Transactional
 	@Rollback(false)
 	void testsaveRefund() {
