@@ -1,8 +1,10 @@
 package com.danaga.repository;
 
 import java.util.Iterator;
+import java.util.List;
 
 import com.danaga.dto.QueryStringDataDto;
+import com.danaga.entity.Options;
 
 public class OptionSetSearchQuery {
 
@@ -21,45 +23,59 @@ public class OptionSetSearchQuery {
 		setOrderType(OptionSetQueryData.BY_ORDER_COUNT);//default 설정
 	}
 	public OptionSetSearchQuery(QueryStringDataDto searchDto) {
+		searchDto.getCategory().ifPresent((category)->{
+			
 		
 		this.searchQuery="SELECT os "
 				+ "FROM OptionSet os "
 				+ " join fetch os.product p"
 				+ OptionSetQueryData.JOIN_CATEGORY 
-				+ " WHERE os.stock >0 "
-				+ " Order By :orderType ";
-		if(searchDto.getOrderType().equals("판매순")) {
-			setOrderType(OptionSetQueryData.BY_ORDER_COUNT);
-		}else if(searchDto.getOrderType().equals("조회순")) {
-			setOrderType(OptionSetQueryData.BY_VIEW_COUNT);
-		}else if(searchDto.getOrderType().equals("최신순")) {
-			setOrderType(OptionSetQueryData.BY_CREATE_TIME);
-		}else if(searchDto.getOrderType().equals("평점순")) {
-			setOrderType(OptionSetQueryData.BY_RATING);
-		}else if(searchDto.getOrderType().equals("최저가순")) {
-			setOrderType(OptionSetQueryData.BY_TOTAL_PRICE);
+				+ " WHERE os.stock >0 ";
+		});
+		if(searchDto.getCategory().isEmpty()) {
+			this.searchQuery="SELECT os "
+					+ "FROM OptionSet os "
+					+ " join fetch os.product p"
+					+ " WHERE os.stock >0 ";
 		}
-		String brand = searchDto.getBrand();
-		String category = searchDto.getCategory();
-		String name = searchDto.getNameKeyword();
+		searchDto.getOptionset().ifPresent((optionset)->{
+			for(int i=0; i<optionset.size();i++) {
+				optionFilter(optionset.get(i).getName(), optionset.get(i).getValue());
+			}
+		});
+		
+		searchDto.getCategory().ifPresent((category)->{
+			categoryFilter(category);
+		});
+		searchDto.getNameKeyword().ifPresent((name)->{
+			nameKeyword(name);
+		});
+		searchDto.getBrand().ifPresent((brand)->{
+			brandFilter(brand);
+		});
 		
 		int minPrice = searchDto.getMinPrice();
 		int maxPrice = searchDto.getMaxPrice();
-		if(!category.isBlank()&&!category.isEmpty()&&category!=null) {
-			categoryFilter(category);
-		}
-		
-		for(int i=0; i<searchDto.getOptionset().size();i++) {
-			optionFilter(searchDto.getOptionset().get(i).getName(), searchDto.getOptionset().get(i).getValue());
-		}
-		if(!brand.isBlank()&&!brand.isEmpty()&&brand!=null) {
-			brandFilter(brand);
-		}
 		
 		priceRange(minPrice, maxPrice);
-		
-		if(!name.isBlank()&&!name.isEmpty()&&name!=null) {
-			nameKeyword(name);
+		this.searchQuery+= " Order By :orderType ";
+		searchDto.getOrderType().ifPresent((orderType)->{
+			if(orderType.equals("판매순")) {
+				setOrderType(OptionSetQueryData.BY_ORDER_COUNT);
+			}else if(orderType.equals("조회순")) {
+				setOrderType(OptionSetQueryData.BY_VIEW_COUNT);
+			}else if(orderType.equals("최신순")) {
+				setOrderType(OptionSetQueryData.BY_CREATE_TIME);
+			}else if(orderType.equals("평점순")) {
+				setOrderType(OptionSetQueryData.BY_RATING);
+			}else if(orderType.equals("최저가순")) {
+				setOrderType(OptionSetQueryData.BY_TOTAL_PRICE);
+			}else {//default
+				setOrderType(OptionSetQueryData.BY_ORDER_COUNT);
+			}
+		});
+		if(searchDto.getOrderType().isEmpty()) {
+			setOrderType(OptionSetQueryData.BY_ORDER_COUNT);
 		}
 	}
 	public void categoryFilter(String category) {

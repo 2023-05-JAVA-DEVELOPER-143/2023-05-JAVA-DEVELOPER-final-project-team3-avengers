@@ -1,6 +1,7 @@
 package com.danaga.dto;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.danaga.entity.Options;
 
@@ -14,11 +15,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class QueryStringDataDto {
-	private String orderType;
-	private String brand;
-	private List<Options> optionset;
+	
+	private Optional<String> orderType;
+	private Optional<String> brand;
+	private Optional<List<Options>> optionset;
 	private int minPrice=0;
 	private int maxPrice=Integer.MAX_VALUE;
-	private String nameKeyword;
-	private String category;
+	private Optional<String> nameKeyword;
+	private Optional<String> category;
 }
