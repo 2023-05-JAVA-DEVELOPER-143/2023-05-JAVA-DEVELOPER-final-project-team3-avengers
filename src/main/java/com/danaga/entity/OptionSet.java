@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.annotations.ColumnDefault;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -41,26 +42,29 @@ public class OptionSet extends BaseEntity {
 	@ColumnDefault(value = "0")
 	private Integer orderCount;//주문수
 
-	@OneToMany(mappedBy = "optionSet")
+	@OneToMany(mappedBy = "optionSet", fetch = FetchType.EAGER)
 	@Builder.Default
 	private List<Options> options = new ArrayList<>();//옵션들을 가진다.
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "productId")
 	private Product product;//프로덕트FK
 
 	@OneToMany(mappedBy = "optionSet")
 	@Builder.Default
+	@ToString.Exclude
 	private List<OrderItem> orderItems = new ArrayList<>();
 	//오더아이템List 
 
 	@OneToMany(mappedBy = "optionSet")
 	@Builder.Default 
+	@ToString.Exclude
 	private List<Cart> carts = new ArrayList<>();
 	//카트아이템List
 	
 	@Builder.Default
 	@OneToMany(mappedBy = "optionSet")
+	@ToString.Exclude
 	private List<RecentView> recentViews = new ArrayList<>();
 	
 
