@@ -44,13 +44,15 @@ public class BoardDto {
     	if(member.getId()==null) {
     		System.out.println("사용자가 없습니다");
     	}
+    	if(member.getRole()=="ADMIN") {
+    		dto.setIsAdmin(1);
+    	}
     	return Board.builder()
     			.id(dto.getId()).title(dto.getTitle())
     			.content(dto.getContent()).img1(dto.getImg1()).img2(dto.getImg2())
     			.img3(dto.getImg3()).img4(dto.getImg4()).img5(dto.getImg5())
     			.isLike(dto.getIsLike()).disLike(dto.getDisLike())
-    			.readCount(dto.getReadCount()).isAdmin(dto.getIsAdmin())
-    			.member(member).boardGroup(boardGroup).lConfigs(dto.getLConfigs())
+    			.readCount(dto.getReadCount()).member(member).boardGroup(boardGroup).lConfigs(dto.getLConfigs())
     			.build();
     }
     
