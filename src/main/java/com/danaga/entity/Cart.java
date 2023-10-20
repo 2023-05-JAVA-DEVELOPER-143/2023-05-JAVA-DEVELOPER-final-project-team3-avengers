@@ -41,15 +41,8 @@ public class Cart extends BaseEntity {
 	@JoinColumn(name = "optionSetId")
 	private OptionSet optionSet;
 
-	/*
-	 * public static Cart toEntity(CartCreateDto cartCreateDto) { return
-	 * Cart.builder().member(cartCreateDto.getMember())
-	 * .qty(cartCreateDto.getCartQty())
-	 * .optionSet(cartCreateDto.getOptionset()).build(); }
-	 */
-	
 	public static Cart toEntity(CartCreateDto dto) {
 		return Cart.builder().qty(dto.getCartQty()).optionSet(dto.getOptionset()).build();
 	}
-	
+
 }
