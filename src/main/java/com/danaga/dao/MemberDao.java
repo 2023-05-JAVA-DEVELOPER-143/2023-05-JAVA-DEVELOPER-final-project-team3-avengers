@@ -2,6 +2,7 @@ package com.danaga.dao;
 
 import java.util.List;
 
+import com.danaga.dto.MemberInsertGuestDto;
 import com.danaga.entity.Member;
 
 public interface MemberDao {
