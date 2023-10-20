@@ -24,7 +24,7 @@ public class StatisticRestController {
 	@Operation(summary = "admin : 전체 통계 호출")
 	@GetMapping("/list")
 	public ResponseEntity<List<Statistic>> getStatisticListAll() {
-		List<Statistic> statistics = statisticService.Statistics();
+		List<Statistic> statistics = statisticService.thisMonthStatistic();
 		return ResponseEntity.status(HttpStatus.OK).body(statistics);
 	}
 	@Operation(summary = "admin : 전체 통계 호출")
