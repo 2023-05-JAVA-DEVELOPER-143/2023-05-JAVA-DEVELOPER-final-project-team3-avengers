@@ -21,6 +21,7 @@ public class OptionSetSearchQuery {
 		setOrderType(OptionSetQueryData.BY_ORDER_COUNT);//default 설정
 	}
 	public OptionSetSearchQuery(QueryStringDataDto searchDto) {
+		
 		this.searchQuery="SELECT os "
 				+ "FROM OptionSet os "
 				+ " join fetch os.product p"
@@ -38,8 +39,27 @@ public class OptionSetSearchQuery {
 		}else if(searchDto.getOrderType().equals("최저가순")) {
 			setOrderType(OptionSetQueryData.BY_TOTAL_PRICE);
 		}
+		String brand = searchDto.getBrand();
+		String category = searchDto.getCategory();
+		String name = searchDto.getNameKeyword();
+		
+		int minPrice = searchDto.getMinPrice();
+		int maxPrice = searchDto.getMaxPrice();
+		if(!category.isBlank()&&!category.isEmpty()&&category!=null) {
+			categoryFilter(category);
+		}
+		
 		for(int i=0; i<searchDto.getOptionset().size();i++) {
 			optionFilter(searchDto.getOptionset().get(i).getName(), searchDto.getOptionset().get(i).getValue());
+		}
+		if(!brand.isBlank()&&!brand.isEmpty()&&brand!=null) {
+			brandFilter(brand);
+		}
+		
+		priceRange(minPrice, maxPrice);
+		
+		if(!name.isBlank()&&!name.isEmpty()&&name!=null) {
+			nameKeyword(name);
 		}
 	}
 	public void categoryFilter(String category) {
