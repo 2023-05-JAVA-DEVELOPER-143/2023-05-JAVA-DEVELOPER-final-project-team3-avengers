@@ -30,10 +30,10 @@ import lombok.ToString;
 public class LikeConfig {
     @Id
     @SequenceGenerator(name = "like_config_id_seq", sequenceName = "like_config_id_seq", initialValue = 1, allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "like_config_id_seq") // sequenceName 수정
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "like_config_id_seq") 
     private Long id;
-
-    // @ColumnDefault(value = "1") // 주석 처리: @ColumnDefault 사용에 대한 JPA 구현체 종속성 확인
+    @ColumnDefault(value = "0")
+    private Integer status;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "board_id")
@@ -44,4 +44,5 @@ public class LikeConfig {
     @JoinColumn(name = "member_id")
     @ToString.Exclude
     private Member member;
+    
 }
