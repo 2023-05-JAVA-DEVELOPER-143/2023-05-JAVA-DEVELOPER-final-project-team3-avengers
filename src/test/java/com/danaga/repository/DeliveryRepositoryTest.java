@@ -22,6 +22,7 @@ class DeliveryRepositoryTest {
 	void testFindDeliveryByOrdersId() {
 		Delivery deliveryByOrdersId = deliveryRepository.findDeliveryByOrdersId(1L);
 		System.out.println("@@@@@@@@@@@@"+deliveryByOrdersId);
+		System.out.println("@@@@@@@@@@@@"+deliveryByOrdersId.getOrders());
 	}
 
 }

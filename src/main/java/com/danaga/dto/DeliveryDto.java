@@ -8,9 +8,10 @@ import lombok.*;
 @ToString
 @Builder
 public class DeliveryDto {
-	private String name;
-	private String phoneNumber;
-	private String address;
+    private String name;
+    private String phoneNumber;
+    private String address;
+    
 	
 }
 // 클라이언트가 배달요청 입력한것 받는 데이터

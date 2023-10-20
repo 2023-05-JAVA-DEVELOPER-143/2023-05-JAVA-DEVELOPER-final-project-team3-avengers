@@ -18,6 +18,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @Builder
@@ -36,5 +37,6 @@ public class CategorySet {//중간테이블, 오너테이블
 	
 	@JoinColumn(name = "productId")
 	@ManyToOne
+	@ToString.Exclude
 	private Product product; //프로덕트 FK
 }
