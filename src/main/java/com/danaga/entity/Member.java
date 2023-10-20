@@ -8,6 +8,7 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.danaga.dto.MemberInsertGuestDto;
 import com.danaga.dto.MemberUpdateDto;
 
 import jakarta.persistence.Column;
@@ -70,6 +71,13 @@ public class Member {
    			.address(memberUpdateDto.getAddress())
    			.phoneNo(memberUpdateDto.getPhoneNo())
 			.build();
+   }
+   public static Member toGuestEntity(MemberInsertGuestDto memberInsertGuestDto) {
+	   return Member.builder()
+			   .id(memberInsertGuestDto.getId())
+			   .name(memberInsertGuestDto.getName())
+			   .phoneNo(memberInsertGuestDto.getPhoneNo())
+			   .build();
    }
    //관계설정
    
