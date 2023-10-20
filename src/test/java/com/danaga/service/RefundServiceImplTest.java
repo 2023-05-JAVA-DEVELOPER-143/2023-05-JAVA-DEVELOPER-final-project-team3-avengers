@@ -29,33 +29,33 @@ class RefundServiceImplTest {
 	@Autowired
 	private OrderRepository orderRepository;
 
-	@Test
-	//@Disabled
-	@Transactional
-	@Rollback(false)
-	void testFindRefundByOrdersId() {
-		Refund findRefund = refundService.findRefundByOrdersId(1L);
-		System.out.println("##################" + findRefund);
-		System.out.println("##################" + findRefund.getOrders());
-	}
-
 //	@Test
-//	// @Disabled
+//	@Disabled
 //	@Transactional
 //	@Rollback(false)
-//	void testsaveRefund() {
-//		Optional<Orders> optionalOrders = orderRepository.findById(1L);
-//		Orders orders = null;
-//		if (optionalOrders.isPresent()) {
-//			orders = optionalOrders.get();
-//			System.out.println("이제 orders 객체를 사용할 수 있습니다");
-//		} else {
-//			System.out.println("주문이 존재하지 않을 경우");
-//
-//		}
-//		Refund refund = new Refund(0L, "환불사유1", "계좌번호1", orders);
-//		Refund findRefund = refundService.saveRefund(refund);
+//	void testFindRefundByOrdersId() {
+//		Refund findRefund = refundService.findRefundByOrdersId(1L);
 //		System.out.println("##################" + findRefund);
 //		System.out.println("##################" + findRefund.getOrders());
 //	}
+
+	@Test
+	// @Disabled
+	@Transactional
+	@Rollback(false)
+	void testsaveRefund() {
+		Optional<Orders> optionalOrders = orderRepository.findById(1L);
+		Orders orders = null;
+		if (optionalOrders.isPresent()) {
+			orders = optionalOrders.get();
+			System.out.println("이제 orders 객체를 사용할 수 있습니다");
+		} else {
+			System.out.println("주문이 존재하지 않을 경우");
+
+		}
+		Refund refund = new Refund(0L, "환불사유1", "계좌번호1", orders);
+		Refund findRefund = refundService.saveRefund(refund);
+		System.out.println("##################" + findRefund);
+		System.out.println("##################" + findRefund.getOrders());
+	}
 }
