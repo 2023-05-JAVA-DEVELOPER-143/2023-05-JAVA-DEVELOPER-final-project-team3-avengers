@@ -1,7 +1,11 @@
 package com.danaga.entity;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.danaga.dto.CartCreateDto;
 import com.danaga.dto.CartDto;
+import com.danaga.dto.CartUpdateDto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,6 +39,7 @@ public class Cart extends BaseEntity {
 	private int qty;
 	@ManyToOne
 	@JoinColumn(name = "memberId")
+//	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Member member;
 
 	@ManyToOne
@@ -42,7 +47,10 @@ public class Cart extends BaseEntity {
 	private OptionSet optionSet;
 
 	public static Cart toEntity(CartCreateDto dto) {
-		return Cart.builder().qty(dto.getCartQty()).optionSet(dto.getOptionset()).build();
+		return Cart.builder().qty(dto.getQty()).optionSet(dto.getOptionset()).build();
 	}
+	
+	
+	
 
 }

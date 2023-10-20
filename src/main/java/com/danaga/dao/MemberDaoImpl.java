@@ -21,18 +21,18 @@ public class MemberDaoImpl implements MemberDao {
 	public Member findMember(String value) throws Exception {
 
 		if (value.contains("@")) {
-			if (memberRepository.findByUserName(value).isPresent()) {
-				return memberRepository.findByUserName(value).get();
-			}
-			throw new Exception("해당 이메일로 찾을 수 없습니다");
-		} else if (value.contains("-")) {
 			if (memberRepository.findByEmail(value).isPresent()) {
 				return memberRepository.findByEmail(value).get();
 			}
-			throw new Exception("해당 번호로 찾을 수 없습니다");
-		} else {
+			throw new Exception("해당 이메일로 찾을 수 없습니다");
+		} else if (value.contains("-")) {
 			if (memberRepository.findByPhoneNo(value).isPresent()) {
 				return memberRepository.findByPhoneNo(value).get();
+			}
+			throw new Exception("해당 번호로 찾을 수 없습니다");
+		} else {
+			if (memberRepository.findByUserName(value).isPresent()) {
+				return memberRepository.findByUserName(value).get();
 			}
 			throw new Exception("해당 아이디로 찾을 수 없습니다");
 		}

@@ -5,6 +5,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import com.danaga.dao.MemberDao;
 import com.danaga.dto.CartCreateDto;
+import com.danaga.dto.CartUpdateDto;
+
 import lombok.RequiredArgsConstructor;
 import com.danaga.entity.Cart;
 import com.danaga.repository.CartRepository;
@@ -30,11 +32,12 @@ public class CartServiceImpl implements CartService {
 				memberDao.findMember(value).getId());
 		// 인서트할 카트
 		Cart addCart = Cart.builder().member(memberDao.findMember(value)).optionSet(dto.getOptionset())
-				.qty(dto.getCartQty()).build();
+				.qty(dto.getQty()).build();
 		if (findCart == null) {
 			cartRepository.save(addCart);
 		} else {
-			findCart.setQty(findCart.getQty() + dto.getCartQty());
+			findCart.setQty(findCart.getQty() + dto.getQty());
+			cartRepository.save(findCart);
 		}
 	}
 
@@ -73,10 +76,14 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public void deleteCart(Long id) throws Exception {
 		cartRepository.deleteById(id);
-		Optional<Cart> findCart = cartRepository.findById(id);
-		if(findCart.isEmpty()) {
-			throw new Exception();
-		}
-		cartRepository.delete(findCart.get());
+	}
+	
+	
+	// 장바구니 수량 변경
+	public void updateCart(CartUpdateDto dto) {
+		Cart findCart = cartRepository.findById(dto.getId()).get();
+		findCart.setQty(dto.getQty());
+		cartRepository.save(findCart);
+		
 	}
 }
