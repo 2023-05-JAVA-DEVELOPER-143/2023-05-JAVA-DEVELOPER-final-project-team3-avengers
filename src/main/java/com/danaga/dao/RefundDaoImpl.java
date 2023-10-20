@@ -20,11 +20,11 @@ public class RefundDaoImpl  implements RefundDao{
 //		return selectedRefund;
 //	}
 	
-//	@Override
-//	public Refund insertRefund(Refund refund) { // 환불페이지. 환불하시겠습니까? 네
-//		Refund saveRefund = refundRepository.save(refund);
-//		return saveRefund;
-//	}
+	@Override
+	public Refund insertRefund(Refund refund) { // 환불페이지. 환불하시겠습니까? 네
+		Refund saveRefund = refundRepository.save(refund);
+		return saveRefund;
+	}
 	
 //	@Override
 //	public void deleteRefund(Long id)  {

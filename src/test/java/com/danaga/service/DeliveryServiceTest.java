@@ -21,7 +21,7 @@ class DeliveryServiceTest {
 	@Transactional
 	@Rollback(false)
 	void testSaveDelivery() {
-		DeliveryDto deliveryDto = new DeliveryDto("김덕배","01012345678", "아이티윌");
+		DeliveryDto deliveryDto = new DeliveryDto("김땡땡","2222222", "아이티윌");
 		Delivery delivery = deliveryService.saveDelivery(deliveryDto);
 		System.out.println("@@@@@@@@@@@@@@"+delivery);
 		//여기서 ResponseDto를 entity로
