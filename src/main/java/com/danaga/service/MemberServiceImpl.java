@@ -30,6 +30,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	public Member joinMember(Member member) throws Exception {
+		member.setRole("Member");
 		// 1.아이디중복체크
 		if (memberDao.existedMemberBy(member.getUserName())) {
 			// 아이디중복
@@ -37,7 +38,7 @@ public class MemberServiceImpl implements MemberService {
 		} else if (memberDao.existedMemberBy(member.getEmail())) {
 			throw new Exception(member.getEmail() + " 는 이미 등록된 이메일 입니다.");
 		} else if(memberDao.existedMemberBy(member.getPhoneNo()) && (memberDao.findMember(member.getPhoneNo()).getRole().equals("Guest"))) {
-			return memberDao.insert(member);
+			return memberDao.update(member);
 		} else if (memberDao.existedMemberBy(member.getPhoneNo())) {
 			throw new Exception(member.getPhoneNo() + " 는 이미 등록된 번호 입니다.");
 		}
@@ -48,9 +49,9 @@ public class MemberServiceImpl implements MemberService {
 	
 	public MemberInsertGuestDto joinGuest(MemberInsertGuestDto memberInsertGuestDto) throws Exception {
 		if (memberDao.existedMemberBy(memberInsertGuestDto.getPhoneNo())) {
-			return MemberInsertGuestDto.toDto(memberDao.findMember(Member.toGuestEntity(memberInsertGuestDto).getPhoneNo()));
-		} else {
 			return MemberInsertGuestDto.toDto(memberDao.insert(Member.toGuestEntity(memberInsertGuestDto)));
+		} else {
+			return MemberInsertGuestDto.toDto(memberDao.findMember(Member.toGuestEntity(memberInsertGuestDto).getPhoneNo()));
 		}
 	}
 	
@@ -92,6 +93,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	public boolean login(String userName, String password) throws Exception {
+		// 비회원 세션 카트에서 로그인하면 세션 카트를 로그인한 멤버의 카트DB에 담는다
 		Optional<Member> findOptionalMember = memberRepository.findByUserName(userName);
 		if (findOptionalMember.isEmpty()) {
 			throw new Exception(userName + " 는 존재하지않는 아이디입니다.");

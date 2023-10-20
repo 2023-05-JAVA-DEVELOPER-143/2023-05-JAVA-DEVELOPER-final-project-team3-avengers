@@ -11,6 +11,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import com.danaga.dto.MemberInsertGuestDto;
 import com.danaga.dto.MemberUpdateDto;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -41,6 +42,7 @@ public class Member {
    @Column(unique = true)
    private String email;
    private String name;
+   @Column(unique = true)
    private String nickname;
    private String address;
    private Date birthday;
@@ -48,7 +50,8 @@ public class Member {
    private String phoneNo;
    @CreationTimestamp
    private LocalDateTime joinDate;
-   private String role;// Member, Guest, Admin
+   @Builder.Default
+   private String role = "Member";// Member, Guest, Admin
    @Builder.Default
    private String grade = "Rookie"; /* Rookie Bronze, Silver, Gold, Platinum, Diamond 결제 가격의 1%가 등급 포인트로 쌓임
                          등급 점수   Rookie : 0 ~ 1000
@@ -82,22 +85,22 @@ public class Member {
    //관계설정
    
    // Orders
-   @OneToMany(mappedBy = "member")
+   @OneToMany(mappedBy = "member",cascade = CascadeType.REMOVE)
    @Builder.Default
    private List<Orders> orderList = new ArrayList<>();
    
    // Cart
-   @OneToMany(mappedBy = "member")
+   @OneToMany(mappedBy = "member",cascade = CascadeType.REMOVE)
    @Builder.Default
    private List<Cart> cartList = new ArrayList<>();
    
    // Interest
-   @OneToMany(mappedBy = "member")
+   @OneToMany(mappedBy = "member",cascade = CascadeType.REMOVE)
    @Builder.Default
    private List<Interest> interestList = new ArrayList<>();
    
    // RecnetView
-   @OneToMany(mappedBy = "member")
+   @OneToMany(mappedBy = "member",cascade = CascadeType.REMOVE)
    @Builder.Default
    private List<RecentView> recentViewList = new ArrayList<>();
    

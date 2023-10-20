@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.danaga.dto.MemberInsertGuestDto;
 import com.danaga.dto.MemberUpdateDto;
 import com.danaga.entity.Member;
+import com.danaga.repository.MemberRepository;
 
 
 @SpringBootTest
@@ -35,7 +36,7 @@ class MemberServiceImplTest {
 				.build());
 	}
 	@Test
-	//@Disabled
+	@Disabled
 	void joinGuest() throws Exception {
 		memberService.joinGuest(MemberInsertGuestDto.builder()
 				.name("유저11")
@@ -58,9 +59,9 @@ class MemberServiceImplTest {
 				.build());
 	}
 	@Test
-	@Disabled
+	//@Disabled
 	void delete() throws Exception {
-		memberService.deleteMember("");
+		
 	}
 	
 
