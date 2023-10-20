@@ -10,16 +10,17 @@ import com.danaga.repository.BoardRepository;
 @Repository
 public class BoardDaoImpl implements BoardDao{
 
-//	@Autowired
-//	BoardRepository bRepository;
-//	//공통 작업 게시판 별로 출력
-//	public List<Board> findWhichBoards(Long configId){	
-//		return bRepository.findByBoardConfig_IdOrderByCreateTime(configId);
-//	}
-//	//하나의 게시글 출력
-//	public Board freeBoardDetail(Long configId,Long boardId) {
-//		return bRepository.findByBoardConfig_IdAndBoard_Id(configId, boardId);
-//	}
+	@Autowired
+	private BoardRepository bRepository;
+	//공통 작업 게시판 별로 출력
+	public List<Board> findWhichBoards(Long boardGroupId){	
+		return bRepository.findByBoardGroupIdOrderByCreateTime(boardGroupId);
+	}
+	//해당 게시판 하나의 게시글 출력
+	public Board boardDetail(Long boardGroupId,Long boardId) {
+		return bRepository.findByBoardGroup_IdAndId(boardGroupId, boardId);
+	}
+	
 	/*
 	  자유게시판 C.R.U.D
 	   - 게시글 작성시 관리자만 답변가능
