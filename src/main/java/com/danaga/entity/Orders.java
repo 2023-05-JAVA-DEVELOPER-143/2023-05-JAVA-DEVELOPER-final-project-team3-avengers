@@ -63,7 +63,7 @@ public class Orders {
 	@OneToOne(mappedBy = "orders")
 	private Refund refund; //환불
 	
-	@OneToMany(mappedBy = "orders")
+	@OneToMany(mappedBy = "orders" )
 	@Builder.Default
 	private List<OrderItem> orderItems = new ArrayList<>(); //주문상품목록
 	

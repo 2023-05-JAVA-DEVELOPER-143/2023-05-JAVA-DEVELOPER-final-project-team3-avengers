@@ -31,13 +31,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService{
 	
-	private final OrderRepository orderRepository;
 	private final OrderItemRepository orderItemRepository;
 	private final MemberService memberService;
 	private final OptionSetDao optionSetDao;
 	private final DeliveryDao deliveryDao;
 	private final CartRepository cartRepository;
-
+	private final OrderDao orderDao;
+	
+	
 	/*
 	 * 상품에서 직접주문
 	 */
@@ -73,7 +74,7 @@ public class OrderServiceImpl implements OrderService{
 		orders.setDelivery(saveDelivery);
 		orderItem.setOrders(orders);
 		orderItemRepository.save(orderItem);
-		Orders saveOrders = orderRepository.save(orders);
+		Orders saveOrders = orderDao.save(orders);
 		
 		
 		return saveOrders;
@@ -81,7 +82,7 @@ public class OrderServiceImpl implements OrderService{
 	/*
 	 * cart에서 주문
 	 */
-	public Orders memberCartSave(Member member) {
+	public Orders memberCartSave(Member member,OrdersDto ordersDto) {
 		List<Cart> carList = cartRepository.findByMemberId(member.getId());
 		ArrayList<OrderItem> orderItemList = new ArrayList<OrderItem>();
 		int o_tot_price =0;
@@ -89,9 +90,8 @@ public class OrderServiceImpl implements OrderService{
 		for (Cart cart : carList) {
 			OrderItem orderItem =  OrderItem.builder()
 											.qty(cart.getQty())
-											.optionSet(null)
+											.optionSet(cart.getOptionSet())
 											.build();
-//					(0, cart.getQty(), orderRepository.findOrdersByMember_UserName(member.getUserName()), cart.getOptionSet());
 			orderItemList.add(orderItem);
 			o_tot_price += orderItem.getQty() * orderItem.getOptionSet().getTotalPrice();
 			oi_tot_count += orderItem.getQty();
@@ -100,9 +100,27 @@ public class OrderServiceImpl implements OrderService{
 		if(oi_tot_count==1) {
 			o_desc = orderItemList.get(0).getOptionSet().getProduct().getName();
 		}
-		Orders newOrder = Orders.builder().build();
-		orderRepository.save(newOrder);
-		return null;
+		Orders orders = Orders.builder()
+										.statement(OrderStateMsg.입금대기중)
+										.orderItems(orderItemList)
+										.price(o_tot_price)
+										.description(o_desc)
+										.member(member)
+										.build();
+		
+		Delivery delivery = Delivery.builder()
+				.name(ordersDto.getName())
+				.phoneNumber(ordersDto.getPhoneNumber())
+				.address(ordersDto.getAddress())
+				.orders(orders)
+				.build();
+		
+		Delivery saveDelivery= deliveryDao.insertDelivery(delivery);
+		orders.setDelivery(saveDelivery);
+		
+		
+		Orders saveOrder= orderDao.save(orders);
+		return saveOrder;
 	}
 	/*
 	 * cart에서 선택주문

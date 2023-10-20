@@ -45,10 +45,10 @@ class OrderServiceImplTest {
 		orderService.memberProductOrderSave(ordersDto);
 	}
 
-//	@Test
-//	void testMemberSave() {
-//		fail("Not yet implemented");
-//	}
+	@Test
+	void testMemberSave() {
+		
+	}
 //
 //	@Test
 //	void testGuestSave() {

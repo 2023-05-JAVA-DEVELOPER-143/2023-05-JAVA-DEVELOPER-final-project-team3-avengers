@@ -56,8 +56,14 @@ public class OrderDaoImpl implements OrderDao {
 //
 //	}
 	
-	//주문상태업데이트
+	//주문SAVE
+	public Orders save(Orders orders) {
+		return orderRepository.save(orders);
+	}
 	
+	
+	
+	//주문상태업데이트
 	@Override
 	public Orders updateOrdersByStatement(Orders orders) {
 
