@@ -1,6 +1,8 @@
 package com.danaga.service;
 
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Date;
 import java.util.Optional;
 
@@ -12,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.danaga.dto.MemberInsertGuestDto;
 import com.danaga.dto.MemberUpdateDto;
 import com.danaga.entity.Member;
+import com.danaga.repository.MemberRepository;
 
 
 @SpringBootTest
@@ -19,6 +22,8 @@ class MemberServiceImplTest {
 	
 	@Autowired
 	MemberService memberService;
+	@Autowired
+	MemberRepository memberRepository;
 	
 	@Test
 	@Disabled
@@ -61,16 +66,26 @@ class MemberServiceImplTest {
 	@Test
 	@Disabled
 	void delete() throws Exception {
-		
+		memberRepository.deleteById(1L);
+		memberRepository.deleteById(2L);
+		memberRepository.deleteById(3L);
+		memberRepository.deleteById(4L);
+		memberRepository.deleteById(5L);
+		memberRepository.deleteById(6L);
+		memberRepository.deleteById(7L);
+		memberRepository.deleteById(8L);
+		memberRepository.deleteById(9L);
+		memberRepository.deleteById(10L);
 	}
 	@Test
-	//@Disabled
+	@Disabled
 	void isDuplicate() throws Exception {
 		memberService.isDuplicate("010-1123-3512");
 	}
 	@Test
-	void login(String userName, String password) throws Exception {
-		
+	//@Disabled
+	void login() throws Exception {
+		System.out.println(memberService.login("User1", "password1"));
 	}
 
 }
