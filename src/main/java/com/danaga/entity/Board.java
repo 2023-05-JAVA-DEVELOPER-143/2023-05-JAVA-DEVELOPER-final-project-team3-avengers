@@ -24,44 +24,48 @@ import lombok.ToString;
 
 
 
-@Entity(name = "board")
+@Entity(name = "Board")
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Builder
-public class Board extends BaseEntity{
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	private Long boardNo;
-	
-	private String title;
-	private String content;
-	private String img;
-	@ColumnDefault(value = "0")
-	private Integer isLike;
-	@ColumnDefault(value = "0")
-	private Integer disLike;
-	@ColumnDefault(value = "0")
-	private Integer readCount;
-	
-	
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "memberId")
-	@ToString.Exclude
-	@Builder.Default
-	private Member member=new Member();
-	
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "configId")
-	@ToString.Exclude
-	@Builder.Default
-	private BoardGroup bConfig = new BoardGroup();
-	
-	@OneToMany(mappedBy = "board")
-	@Builder.Default
-	@ToString.Exclude
-	private List<LikeConfig> lConfigs= new ArrayList<>();
+public class Board extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
+
+    private String title;
+    private String content;
+    private String img1;
+    private String img2;
+    private String img3;
+    private String img4;
+    private String img5;
+    @ColumnDefault(value = "0")
+    private Integer isLike;
+    @ColumnDefault(value = "0")
+    private Integer disLike;
+    @ColumnDefault(value = "0")
+    private Integer readCount;
+    private Integer isAdmin;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "member_id") 
+    @ToString.Exclude
+    @Builder.Default
+    private Member member = new Member();
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "board_group_id") 
+    @ToString.Exclude
+    @Builder.Default
+    private BoardGroup boardGroup = new BoardGroup();
+
+    @OneToMany(mappedBy = "board")
+    @Builder.Default
+    @ToString.Exclude
+    private List<LikeConfig> lConfigs = new ArrayList<>();
 	
 	/*
 	 * 해당 entity는 BoardGroupConfig의 상태(pk)에따라 게시판의 성향이 달라진다. 
