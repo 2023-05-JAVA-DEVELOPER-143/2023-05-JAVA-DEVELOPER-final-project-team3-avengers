@@ -33,8 +33,10 @@ public class LikeConfig {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "like_config_id_seq") 
     private Long id;
     @ColumnDefault(value = "0")
-    private Integer status;
-
+    private Integer isLike; //1.좋아요누른 상태 0.좋아요 없는상태
+    @ColumnDefault(value = "0")
+    private Integer disLike; //0.싫어요 없는상태 1.좋아요 누른 상태
+    
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "board_id")
     @ToString.Exclude

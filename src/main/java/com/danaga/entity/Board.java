@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.hibernate.annotations.ColumnDefault;
 
+import com.danaga.dto.BoardDto;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -18,7 +19,9 @@ import jakarta.persistence.OneToMany;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
+
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -30,6 +33,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Builder
+@Data
 public class Board extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -85,4 +89,47 @@ public class Board extends BaseEntity {
 				thumbs_status
 		
 	 */
+
+  
+    public void patch(Board board) {
+    	if(this.id!=board.getId()) {
+    		throw new IllegalArgumentException("수정 실패!~ 대상이 잘못됬습니다.");
+    	}
+    	if(this.getMember().getId()!=board.getMember().getId()) {
+    		throw new IllegalArgumentException("수정 실패!~ 회원이 잘못됬습니다.");
+    	}
+    	if(this.getBoardGroup().getId()!=board.getBoardGroup().getId()) {
+    		throw new IllegalArgumentException("수정 실패!~ 게시판 선택이 잘못됬습니다.");
+    	}
+    	if(this.getBoardGroup().getId()!=board.getBoardGroup().getId()) {
+    		throw new IllegalArgumentException("수정 실패!~ 게시판 선택이 잘못됬습니다.");
+    	}
+    	if(board.getLConfigs()==null) {
+    		System.out.println("상태값이 없어요!");
+    	}
+    	if(board.getTitle()!=null) {
+    		this.title=board.getTitle();
+    	}
+    	if(board.getContent()!=null) {
+    		this.content=board.getContent();
+    	}
+    	if(board.getImg1()!=null) {
+    		this.img1=board.getImg1();
+    	}
+    	if(board.getImg2()!=null) {
+    		this.img2=board.getImg2();
+    	}
+    	if(board.getImg3()!=null) {
+    		this.img3=board.getImg3();
+    	}
+    	if(board.getImg4()!=null) {
+    		this.img4=board.getImg4();
+    	}
+    	if(board.getImg5()!=null) {
+    		this.img5=board.getImg5();
+    	}
+    	
+    	
+    }
+
 }
