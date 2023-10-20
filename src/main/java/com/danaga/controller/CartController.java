@@ -1,48 +1,88 @@
 package com.danaga.controller;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.danaga.dto.CartCreateDto;
 import com.danaga.service.CartService;
+import com.danaga.service.MemberService;
+
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
+@Controller
 @RequestMapping("/cart")
-@RestController
 @RequiredArgsConstructor
 public class CartController {
-	
 
 	private final CartService cartService;
-	/*
-	 * // 비회원 장바구니 ?
-	 * 
-	 * @PostMapping public ResponseEntity<Cart> createCart(Cart cart,HttpSession
-	 * session){ // 로그인 체크 if(session.getAttribute("sUserId") ==
-	 * cart.getMember().getMemberId()) { // return
-	 * ResponseEntity.status(HttpStatus.OK).body(cartService.addCart(cart)); }
-	 * return ResponseEntity.status(HttpStatus.OK).body(null); }
-	 * 
-	 * @GetMapping("/{memberId}") public ResponseEntity<List<Cart>>
-	 * getCartsByMemberId(String memberId){ return
-	 * ResponseEntity.status(HttpStatus.OK).body(cartService.getCarts(memberId)); }
-	 */
+	private final MemberService memberService;
 
+	@GetMapping("/{memberId}")
+	public String findCarts(HttpSession session) throws Exception {
+		String sUserId = (String) session.getAttribute("sUserId");
+		if (isLogin(sUserId)) {
+			cartService.findCartList(sUserId);
+		}
+		CartCreateDto fUserCart = (CartCreateDto) session.getAttribute("fUserCart");
 
-	
-	
-	
-	// 카트 담기
-//	@PostMapping()
-//	public ResponseEntity<CartCreateDto> createCart(@RequestBody Cart cart) {
-//		return ResponseEntity.status(HttpStatus.OK).body(cartService.saveCart());
-//	}
-	
-	
+		return null;
+	}
+
+	@GetMapping("/popup")
+	public String popup() {
+		return "팝업 템플릿";
+	}
+
+	// 장바구니 담기 컨트롤러...
+	@PostMapping
+	public String addCart(HttpSession session, CartCreateDto dto) throws Exception {
+		String sUserId = (String) session.getAttribute("sUserId");
+		List<CartCreateDto> findFUserCartList = (ArrayList<CartCreateDto>) session.getAttribute("fUserCarts");
+		// 로그인 유저 + 장바구니 비어있음
+		if (isLogin(sUserId) && findFUserCartList == null) {
+			cartService.addCart(dto, sUserId);
+		} else if (isLogin(sUserId) && findFUserCartList != null) /* 로그인 유저 +장바구니에 제품 존재 */ {
+			cartService.addCart(dto, sUserId);
+			for (int i = 0; i < findFUserCartList.size(); i++) {
+				cartService.addCart(findFUserCartList.get(i), sUserId);
+			}
+		} // 여기서 나오는 경우 == 비회원 ..........
+		if (!isLogin(sUserId) && findFUserCartList == null) {
+			List<CartCreateDto> fUserCarts = new ArrayList<>();
+			fUserCarts.add(dto);
+			session.setAttribute("fUserCarts", fUserCarts);
+		} else if (!isLogin(sUserId) && findFUserCartList != null) {
+			addFUserCart(findFUserCartList, dto);
+		}
+		return "팝업컨트롤러 url";
+	}
+
+	// 로그인 체크
+	boolean isLogin(String id) throws Exception {
+		// 아이디 존재 유무 확인
+		if (!memberService.isDuplicate(id)) {
+			return true;
+		}
+		return false;
+	}
+
+	// 비회원 장바구니 아이템 넣기
+	void addFUserCart(List<CartCreateDto> fUserCarts, CartCreateDto dto) throws Exception {
+		for (int i = 0; i < fUserCarts.size(); i++) {
+			if (dto.getOptionset().getId() == fUserCarts.get(i).getOptionset().getId()) {
+				fUserCarts.get(i).setCartQty(fUserCarts.get(i).getCartQty() + dto.getCartQty());
+			}
+			fUserCarts.add(dto);
+		}
+
+	}
 
 }

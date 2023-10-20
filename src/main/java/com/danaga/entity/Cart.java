@@ -26,8 +26,9 @@ public class Cart extends BaseEntity {
 	@SequenceGenerator(name = "cart_cart_no_seq", sequenceName = "cart_cart_no_seq", initialValue = 1, allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
-
+	
 	private int qty;
+	
 	@ManyToOne
 	@JoinColumn(name = "memberId")
 	private Member member;

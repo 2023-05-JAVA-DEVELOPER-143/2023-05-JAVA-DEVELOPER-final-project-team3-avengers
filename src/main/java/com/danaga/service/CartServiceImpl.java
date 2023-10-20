@@ -1,10 +1,10 @@
 package com.danaga.service;
 
 import java.util.List;
-import java.util.Optional;
 import org.springframework.stereotype.Service;
 import com.danaga.dao.MemberDao;
 import com.danaga.dto.CartCreateDto;
+import com.danaga.dto.CartUpdateDto;
 
 import lombok.RequiredArgsConstructor;
 import com.danaga.entity.Cart;
@@ -25,7 +25,7 @@ public class CartServiceImpl implements CartService {
 
 	// 카트에 동일제품 체크 후 장바구니 수량 업데이트 or 카트 인서트
 	@Override
-	public void addCart(CartCreateDto dto, String value) throws Exception {
+	public void addCart(CartCreateDto dto, String value)throws Exception{
 		// 로그인 유저 아이디와 OptionSetId 로 동일제품 찾기
 		Cart findCart = cartRepository.findByOptionSetIdAndMemberId(dto.getOptionset().getId(),
 				memberDao.findMember(value).getId());
@@ -36,6 +36,7 @@ public class CartServiceImpl implements CartService {
 			cartRepository.save(addCart);
 		} else {
 			findCart.setQty(findCart.getQty() + dto.getCartQty());
+			cartRepository.save(findCart);  
 		}
 	}
 
@@ -45,20 +46,15 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public void deleteCart(Long id) throws Exception {
 		cartRepository.deleteById(id);
-		Optional<Cart> findCart = cartRepository.findById(id);
-		if(findCart.isEmpty()) {
-			throw new Exception();
-		}
-		cartRepository.delete(findCart.get());
+		
 	}
 	
-	// 장바구니 수량변경 or 옵션 변경
+	// 장바구니 수량변경
 	@Override
-	public Cart updateCart(Cart updateCart) {
-		Cart findCart = cartRepository.findById(updateCart.getId()).get();
-		findCart.setQty(updateCart.getQty());
-		findCart.setOptionSet(updateCart.getOptionSet());
-		return findCart;
-	}
+	public void updateCart(CartUpdateDto dto) {
+		Cart findCart = cartRepository.findById(dto.getId()).get();
+		findCart.setQty(dto.getQty());
+		cartRepository.save(findCart);
+	} 
 	
 }

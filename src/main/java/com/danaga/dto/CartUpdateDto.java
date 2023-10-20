@@ -13,6 +13,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CartUpdateDto {
 	private Long id;
-	private int cartQty;
-	private OptionSet optionSet;
+	private int qty;
 }
