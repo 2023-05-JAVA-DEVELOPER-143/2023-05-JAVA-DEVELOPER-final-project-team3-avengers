@@ -33,11 +33,15 @@ import lombok.ToString;
 public class Board extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	private Long boardNo;
+	private Long id;
 	
 	private String title;
 	private String content;
-	private String img;
+	private String img1;
+	private String img2;
+	private String img3;
+	private String img4;
+	private String img5;
 	@ColumnDefault(value = "0")
 	private Integer isLike;
 	@ColumnDefault(value = "0")
