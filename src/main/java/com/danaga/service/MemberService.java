@@ -14,4 +14,5 @@ public interface MemberService {
 	public MemberUpdateDto updateMember(MemberUpdateDto memberUpdateDto) throws Exception;
 	public void deleteMember(String value) throws Exception;
 	public boolean isDuplicate(String value) throws Exception;
+	public boolean login(String userName, String password) throws Exception;
 }

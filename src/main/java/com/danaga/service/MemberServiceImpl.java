@@ -37,7 +37,8 @@ public class MemberServiceImpl implements MemberService {
 			throw new Exception(member.getUserName() + " 는 이미 존재하는 아이디 입니다.");
 		} else if (memberDao.existedMemberBy(member.getEmail())) {
 			throw new Exception(member.getEmail() + " 는 이미 등록된 이메일 입니다.");
-		} else if(memberDao.existedMemberBy(member.getPhoneNo()) && (memberDao.findMember(member.getPhoneNo()).getRole().equals("Guest"))) {
+		} else if (memberDao.existedMemberBy(member.getPhoneNo())
+				&& (memberDao.findMember(member.getPhoneNo()).getRole().equals("Guest"))) {
 			return memberDao.update(member);
 		} else if (memberDao.existedMemberBy(member.getPhoneNo())) {
 			throw new Exception(member.getPhoneNo() + " 는 이미 등록된 번호 입니다.");
@@ -46,7 +47,7 @@ public class MemberServiceImpl implements MemberService {
 		// 2.회원가입
 		return memberDao.insert(member);
 	}
-	
+
 	public MemberInsertGuestDto joinGuest(MemberInsertGuestDto memberInsertGuestDto) throws Exception {
 		if (memberDao.existedMemberBy(memberInsertGuestDto.getPhoneNo())) {
 			return MemberInsertGuestDto.toDto(memberDao.insert(Member.toGuestEntity(memberInsertGuestDto)));
@@ -54,14 +55,13 @@ public class MemberServiceImpl implements MemberService {
 			return MemberInsertGuestDto.toDto(memberDao.findMember(Member.toGuestEntity(memberInsertGuestDto).getPhoneNo()));
 		}
 	}
-	
 
 	public MemberUpdateDto updateMember(MemberUpdateDto memberUpdateDto) throws Exception {
 		Member originalMember = memberDao.findMember(memberUpdateDto.getUserName());
 		if (originalMember.getPhoneNo().equals(memberUpdateDto.getPhoneNo())
 				&& originalMember.getEmail().equals(memberUpdateDto.getEmail())) {
 			// 이메일 x 번호 x
-			
+
 		} else if (originalMember.getEmail().equals(memberUpdateDto.getEmail())) {
 			// 이메일 x 번호 o
 			if (memberDao.existedMemberBy(memberUpdateDto.getPhoneNo())) {
@@ -98,7 +98,10 @@ public class MemberServiceImpl implements MemberService {
 		if (findOptionalMember.isEmpty()) {
 			throw new Exception(userName + " 는 존재하지않는 아이디입니다.");
 		} else if (findOptionalMember.isPresent()) {
-			throw new Exception("패쓰워드가 일치하지않습니다.");
+			if (password.equals(findOptionalMember.get().getPassword())) {
+			} else {
+				throw new Exception("패쓰워드가 일치하지않습니다.");
+			}
 		}
 		return true;
 	}
