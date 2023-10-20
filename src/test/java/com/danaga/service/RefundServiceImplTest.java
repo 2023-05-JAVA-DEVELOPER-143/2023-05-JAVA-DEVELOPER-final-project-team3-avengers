@@ -30,7 +30,7 @@ class RefundServiceImplTest {
 	private OrderRepository orderRepository;
 
 	@Test
-	//@Disabled
+	@Disabled
 	@Transactional
 	@Rollback(false)
 	void testFindRefundByOrdersId() {
@@ -40,11 +40,11 @@ class RefundServiceImplTest {
 	}
 
 	@Test
-	 @Disabled
+	 //@Disabled
 	@Transactional
 	@Rollback(false)
 	void testsaveRefund() {
-		Optional<Orders> optionalOrders = orderRepository.findById(1L);
+		Optional<Orders> optionalOrders = orderRepository.findById(2L);
 		Orders orders = null;
 		if (optionalOrders.isPresent()) {
 			orders = optionalOrders.get();
@@ -54,6 +54,7 @@ class RefundServiceImplTest {
 
 		}
 		Refund refund = new Refund(0L, "환불사유1", "계좌번호1", orders);
+		
 		Refund findRefund = refundService.saveRefund(refund);
 		System.out.println("##################" + findRefund);
 		System.out.println("##################" + findRefund.getOrders());

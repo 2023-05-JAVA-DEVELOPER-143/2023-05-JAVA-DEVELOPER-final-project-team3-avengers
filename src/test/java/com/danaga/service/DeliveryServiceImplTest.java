@@ -22,25 +22,25 @@ class DeliveryServiceImplTest {
 	@Autowired
 	OrderRepository orderRepository; 
 	
-//	@Test
-//	//@Disabled
-//	@Transactional
-//	@Rollback(false)
-//	void testSaveDeliveryByOrdersId() {
-//		Optional<Orders> optionalOrders = orderRepository.findById(1L);
-//		Orders orders = null;
-//		if (optionalOrders.isPresent()) {
-//		    orders = optionalOrders.get();
-//		    // 이제 'orders' 객체를 사용할 수 있습니다.
-//		}
-//		
-//		
-//		Delivery delivery = new Delivery(0L, "이름1","폰넘버1", "주소1", orders);
-//		
-//		
-//		Delivery saveDelivery = deliveryService.saveDeliveryByOrdersId(delivery);
-//		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+saveDelivery);
-//	}  
+	@Test
+	//@Disabled
+	@Transactional
+	@Rollback(false)
+	void testSaveDeliveryByOrdersId() {
+		Optional<Orders> optionalOrders = orderRepository.findById(1L);
+		Orders orders = null;
+		if (optionalOrders.isPresent()) {
+		    orders = optionalOrders.get();
+		    // 이제 'orders' 객체를 사용할 수 있습니다.
+		}
+		
+		
+		Delivery delivery = new Delivery(0L, "이름1","폰넘버1", "주소1", orders);
+		
+		
+		Delivery saveDelivery = deliveryService.saveDeliveryByOrdersId(delivery);
+		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+saveDelivery);
+	}  
 	
 	
 	
