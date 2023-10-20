@@ -48,4 +48,8 @@ public class Cart extends BaseEntity {
 	 * .optionSet(cartCreateDto.getOptionset()).build(); }
 	 */
 	
+	public static Cart toEntity(CartCreateDto dto) {
+		return Cart.builder().qty(dto.getCartQty()).optionSet(dto.getOptionset()).build();
+	}
+	
 }
