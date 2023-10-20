@@ -32,10 +32,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.criteria.Order;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 @Entity
 @Data
 @NoArgsConstructor
@@ -72,5 +69,6 @@ public class Orders {
 	
 	@ManyToOne
 	@JoinColumn(name = "memberId")
+	@ToString.Exclude
 	private Member member; //주문자
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.annotations.ColumnDefault;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -45,7 +46,7 @@ public class Product extends BaseEntity {//제품의 기본 모델 정보
 	//(현재 평점* 현재 리뷰 개수+save할 리뷰의 평점)/(현재 리뷰 개수+1)
 	
 
-	@OneToMany(mappedBy = "product")
+	@OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
 	@Builder.Default
 	private List<CategorySet> categorySets = new ArrayList<>();
 	//하나의 제품은 부모카테고리, 자식카테고리 여러개를 가질 수 있다. 
@@ -55,7 +56,7 @@ public class Product extends BaseEntity {//제품의 기본 모델 정보
 //	@OneToMany(mappedBy = "product")
 //	private List<Review> reviews = new ArrayList<>();
 
-	
+	@ToString.Exclude
 	@OneToMany(mappedBy = "product")
 	@Builder.Default
 	private List<OptionSet> optionSets = new ArrayList<>();

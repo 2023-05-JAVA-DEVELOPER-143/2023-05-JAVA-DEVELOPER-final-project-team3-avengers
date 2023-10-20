@@ -26,4 +26,8 @@ public interface BoardRepository extends JpaRepository<Board, Long>{
 	//하나의 게시판에 하나의 게시물디테일
 	Board findByBoardGroup_IdAndId(Long boardGroupId, Long boardId);
 
+	//게시물 삭제
+	void deleteByBoardGroup_IdAndId(Long boardGroupId, Long boardId);
+	
+	
 }

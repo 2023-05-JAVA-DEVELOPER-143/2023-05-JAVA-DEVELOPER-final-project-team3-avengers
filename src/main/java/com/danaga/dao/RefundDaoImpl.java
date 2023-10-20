@@ -3,11 +3,12 @@ package com.danaga.dao;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.stereotype.*;
 
 import com.danaga.entity.*;
 import com.danaga.repository.*;
 
-
+@Repository
 public class RefundDaoImpl  implements RefundDao{
 
 	@Autowired
