@@ -2,6 +2,7 @@ package com.danaga.service;
 
 
 import java.util.Date;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -11,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.danaga.dto.MemberInsertGuestDto;
 import com.danaga.dto.MemberUpdateDto;
 import com.danaga.entity.Member;
-import com.danaga.repository.MemberRepository;
 
 
 @SpringBootTest
@@ -59,10 +59,18 @@ class MemberServiceImplTest {
 				.build());
 	}
 	@Test
-	//@Disabled
+	@Disabled
 	void delete() throws Exception {
 		
 	}
-	
+	@Test
+	//@Disabled
+	void isDuplicate() throws Exception {
+		memberService.isDuplicate("010-1123-3512");
+	}
+	@Test
+	void login(String userName, String password) throws Exception {
+		
+	}
 
 }
