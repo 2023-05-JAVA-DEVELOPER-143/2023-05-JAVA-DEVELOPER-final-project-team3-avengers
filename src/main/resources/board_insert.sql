@@ -4,6 +4,7 @@ insert into board_group (id,name) values(3,'FAQ');
 insert into board_group (id,name) values(4,'공지사항');
 
 
+
 insert into board (id, title, content, is_like, dis_like, create_time, update_time, member_id, img1, img2, img3, img4, img5, is_admin, read_count, board_group_id) values (1, 'Rev', 'Hyderabad Airport', 4786, 6012, '2023-06-01', '2023-08-01', 1, 'Overhold', 'Veribet', 'Cardify', 'Bigtax', 'Treeflex', 1, 6544, 1);
 insert into board (id, title, content, is_like, dis_like, create_time, update_time, member_id, img1, img2, img3, img4, img5, is_admin, read_count, board_group_id) values (2, 'Mrs', 'Kalakaket Creek AS Airport', 5590, 4296, '2023-07-26', '2023-06-27', 2, 'Namfix', 'Namfix', 'Bitwolf', 'Alphazap', 'Domainer', 1, 4039, 3);
 insert into board (id, title, content, is_like, dis_like, create_time, update_time, member_id, img1, img2, img3, img4, img5, is_admin, read_count, board_group_id) values (3, 'Rev', 'Ouango Fitini Airport', 5993, 1057, '2023-05-20', '2023-07-16', 3, 'Cookley', 'Matsoft', 'Mat Lam Tam', 'Veribet', 'It', 2, 7738, 1);
@@ -18,8 +19,8 @@ insert into board (id, title, content, is_like, dis_like, create_time, update_ti
 
 
 
-insert into like_config (id,board_id,member_id,is_like,dis_like) values(1,1,1,1,0);
-insert into like_config (id,board_id,member_id,is_like,dis_like) values(2,2,2,0,0);
-insert into like_config (id,board_id,member_id,is_like,dis_like) values(3,3,3,0.1);
+insert into like_config (id,board_id,member_id,status) values(1,1,1,1);
+insert into like_config (id,board_id,member_id,status) values(2,2,2,2);
+insert into like_config (id,board_id,member_id,status) values(3,3,3,1);
 
 

@@ -39,7 +39,7 @@ public class OptionSetSearchQuery {
 			setOrderType(OptionSetQueryData.BY_TOTAL_PRICE);
 		}
 		for(int i=0; i<searchDto.getOptionset().size();i++) {
-			////////
+			optionFilter(searchDto.getOptionset().get(i).getName(), searchDto.getOptionset().get(i).getValue());
 		}
 	}
 	public void categoryFilter(String category) {
