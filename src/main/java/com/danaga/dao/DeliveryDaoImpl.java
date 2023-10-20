@@ -12,9 +12,9 @@ import com.danaga.repository.*;
 @Repository
 public class DeliveryDaoImpl implements DeliveryDao {
 
-//	@Autowired
+	@Autowired
 	DeliveryRepository deliveryRepository;
-//	@Autowired
+		@Autowired
 	OrderRepository orderRepository;
 //	@Autowired
 	OrderStateMsg orderStateMsg;

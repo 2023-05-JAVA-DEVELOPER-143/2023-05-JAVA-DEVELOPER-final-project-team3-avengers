@@ -2,13 +2,14 @@ package com.danaga.service;
 
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
+import org.springframework.transaction.annotation.*;
 
 import com.danaga.dao.*;
 import com.danaga.dto.*;
 import com.danaga.entity.*;
 
 @Service
-public class DeliveryServiceImpl {
+public class DeliveryServiceImpl implements DeliveryService{
 
 	@Autowired
 	private DeliveryDao deliveryDao;
@@ -20,8 +21,12 @@ public class DeliveryServiceImpl {
 //		DeliveryResponseDto deliveryResponseDto = DeliveryResponseDto.toDto(getDelivery);
 //		return deliveryResponseDto;
 //	}
+	
+	
 	//배송신청
-	Delivery saveDelivery(DeliveryDto deliveryDto) {
+	@Override
+	@Transactional
+	public Delivery saveDelivery(DeliveryDto deliveryDto){
 		Delivery createdDelivery = deliveryDao.insertDelivery(Delivery.toEntity(deliveryDto));
 		return createdDelivery;
 	}
