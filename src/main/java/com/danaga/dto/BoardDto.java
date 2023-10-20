@@ -34,26 +34,34 @@ public class BoardDto {
     private Integer isAdmin;
     private Long memberId;
     private Long boardGroupId;
-    @Builder.Default
-    private List<LikeConfig> lConfigs = new ArrayList<>();
+    private List<LikeConfig> lConfigs;
     
-    public static Board toEntity(BoardDto dto,Member member, BoardGroup boardGroup) {
-    	if(boardGroup.getId()==null) {
-    		System.out.println("게시판을 선택해주세요");
-    	}
-    	if(member.getId()==null) {
-    		System.out.println("사용자가 없습니다");
-    	}
-    	if(member.getRole()=="ADMIN") {
-    		dto.setIsAdmin(1);
-    	}
-    	return Board.builder()
-    			.id(dto.getId()).title(dto.getTitle())
-    			.content(dto.getContent()).img1(dto.getImg1()).img2(dto.getImg2())
-    			.img3(dto.getImg3()).img4(dto.getImg4()).img5(dto.getImg5())
-    			.isLike(dto.getIsLike()).disLike(dto.getDisLike())
-    			.readCount(dto.getReadCount()).member(member).boardGroup(boardGroup).lConfigs(dto.getLConfigs())
-    			.build();
+    public static Board toEntity(BoardDto dto, Member member, BoardGroup boardGroup, List<LikeConfig> lConfigs) {
+        if (boardGroup.getId() == null || member.getId() == null) {
+            throw new IllegalArgumentException("게시판과 사용자를 선택해주세요");
+        }
+
+        if ("ADMIN".equals(member.getRole())) {
+            dto.setIsAdmin(1);
+        }
+
+        return Board.builder()
+            .id(dto.getId())
+            .title(dto.getTitle())
+            .content(dto.getContent())
+            .img1(dto.getImg1())
+            .img2(dto.getImg2())
+            .img3(dto.getImg3())
+            .img4(dto.getImg4())
+            .img5(dto.getImg5())
+            .isLike(dto.getIsLike())
+            .disLike(dto.getDisLike())
+            .readCount(dto.getReadCount())
+            .member(member)
+            .boardGroup(boardGroup)
+            .lConfigs(lConfigs)
+            .build();
     }
+
     
 }

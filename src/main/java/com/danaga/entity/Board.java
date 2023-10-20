@@ -92,44 +92,38 @@ public class Board extends BaseEntity {
 
   
     public void patch(Board board) {
-    	if(this.id!=board.getId()) {
-    		throw new IllegalArgumentException("수정 실패!~ 대상이 잘못됬습니다.");
-    	}
-    	if(this.getMember().getId()!=board.getMember().getId()) {
-    		throw new IllegalArgumentException("수정 실패!~ 회원이 잘못됬습니다.");
-    	}
-    	if(this.getBoardGroup().getId()!=board.getBoardGroup().getId()) {
-    		throw new IllegalArgumentException("수정 실패!~ 게시판 선택이 잘못됬습니다.");
-    	}
-    	if(this.getBoardGroup().getId()!=board.getBoardGroup().getId()) {
-    		throw new IllegalArgumentException("수정 실패!~ 게시판 선택이 잘못됬습니다.");
-    	}
-    	if(board.getLConfigs()==null) {
-    		System.out.println("상태값이 없어요!");
-    	}
-    	if(board.getTitle()!=null) {
-    		this.title=board.getTitle();
-    	}
-    	if(board.getContent()!=null) {
-    		this.content=board.getContent();
-    	}
-    	if(board.getImg1()!=null) {
-    		this.img1=board.getImg1();
-    	}
-    	if(board.getImg2()!=null) {
-    		this.img2=board.getImg2();
-    	}
-    	if(board.getImg3()!=null) {
-    		this.img3=board.getImg3();
-    	}
-    	if(board.getImg4()!=null) {
-    		this.img4=board.getImg4();
-    	}
-    	if(board.getImg5()!=null) {
-    		this.img5=board.getImg5();
-    	}
-    	
-    	
+        if (!isValidPatch(board)) {
+            throw new IllegalArgumentException("수정 실패! 대상이 잘못됐습니다.");
+        }
+
+        if (board.getTitle() != null) {
+            this.title = board.getTitle();
+        }
+        if (board.getContent() != null) {
+            this.content = board.getContent();
+        }
+        if (board.getImg1() != null) {
+            this.img1 = board.getImg1();
+        }
+        if (board.getImg2() != null) {
+            this.img2 = board.getImg2();
+        }
+        if (board.getImg3() != null) {
+            this.img3 = board.getImg3();
+        }
+        if (board.getImg4() != null) {
+            this.img4 = board.getImg4();
+        }
+        if (board.getImg5() != null) {
+            this.img5 = board.getImg5();
+        }
     }
+
+    private boolean isValidPatch(Board board) {
+        return this.id.equals(board.getId()) &&
+               this.member.getId().equals(board.getMember().getId()) &&
+               this.boardGroup.getId().equals(board.getBoardGroup().getId());
+    }
+
 
 }
