@@ -1,18 +1,22 @@
 package com.danaga.controller;
 
+
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.danaga.dto.CartCreateDto;
+import com.danaga.dto.CartDto;
 import com.danaga.entity.Cart;
 import com.danaga.entity.Member;
 import com.danaga.entity.OptionSet;
@@ -22,8 +26,6 @@ import com.danaga.repository.OptionSetRepository;
 import com.danaga.service.CartService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 	
@@ -46,9 +48,20 @@ import lombok.RequiredArgsConstructor;
 public class CartRestController {
 	private final CartService cartService;
 	
-	@GetMapping("/{memberId}")
-	public ResponseEntity<List<Cart>> cartList(HttpSession session){
-		
-		return null;  
+	
+	@Operation(summary = "카트리스트")
+	@GetMapping("/list")
+	public ResponseEntity<List<Cart>> getCartList(String username) throws Exception {
+		return ResponseEntity.status(HttpStatus.OK).body(cartService.findCartList("User1"));
 	}
+	
+	
+	
+	@Operation(summary = "카트삭제")
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Map> delete(@PathVariable(name = "id") Long id) throws Exception {
+		cartService.deleteCart(id);
+		return ResponseEntity.status(HttpStatus.OK).body(new HashMap<>());
+	}
+	
 }

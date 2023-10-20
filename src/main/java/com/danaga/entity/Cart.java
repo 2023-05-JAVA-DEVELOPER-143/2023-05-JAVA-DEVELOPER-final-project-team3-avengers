@@ -32,8 +32,9 @@ public class Cart extends BaseEntity {
 	
 	private int qty;
 	
-	@ManyToOne
+	@ManyToOne()
 	@JoinColumn(name = "memberId")
+	@ToString.Exclude
 	private Member member;
 
 	@ManyToOne
