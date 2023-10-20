@@ -67,5 +67,10 @@ public class OptionSet extends BaseEntity {
 	@ToString.Exclude
 	private List<RecentView> recentViews = new ArrayList<>();
 	
+	@Builder.Default
+	@OneToMany(mappedBy = "optionSet")
+	@ToString.Exclude
+	private List<Interest> interests = new ArrayList<>();
+	
 
 }

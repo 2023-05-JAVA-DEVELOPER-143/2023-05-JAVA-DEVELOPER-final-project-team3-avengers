@@ -22,17 +22,16 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(name = "RECENT_VIEW_UQ", columnNames = {"memberId","optionSetId"})})
 public class RecentView extends BaseEntity{//멤버아이디와 프로덕트아이디로 고유키 제약 
 	//최근 조회한 상품 
 	//30일간만 보관 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	private Long id;//복합키 설정해서 없애도 될듯? 
+	private Long id;
 	@ManyToOne
 	@JoinColumn(name = "memberId")
 	private Member member;//member FK
 	@ManyToOne
 	@JoinColumn(name = "optionSetId")
-	private OptionSet optionSet;//product FK
+	private OptionSet optionSet;//optionSet FK
 }
