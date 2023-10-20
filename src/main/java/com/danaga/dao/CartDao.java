@@ -1,6 +1,12 @@
 package com.danaga.dao;
 
+import java.util.List;
+
+import com.danaga.entity.Cart;
+
 public interface CartDao {
+
+
 
 	// 카트 리스트
 	
