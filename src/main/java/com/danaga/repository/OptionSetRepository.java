@@ -1,6 +1,7 @@
 package com.danaga.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import com.danaga.entity.OptionSet;
 import java.util.List;
@@ -30,5 +31,32 @@ public interface OptionSetRepository extends JpaRepository<OptionSet, Long> {
 //	List<OptionSet> findByStockIsNotEmptyAndProduct_NameLikeOrProduct_ModelLikeOrderByUpdateTimeDesc(String name, String model);
 //	List<OptionSet> findByStockIsNotEmptyAndProduct_NameLikeOrProduct_ModelLikeOrderByUpdateTimeAsc(String name, String model);
 //	List<OptionSet> findByAllId(Long id);
-	
+	@Query("SELECT os\r\n"
+			+ "FROM OptionSet os\r\n"
+			+ "WHERE EXISTS (\r\n"
+			+ "    SELECT 1 FROM Options o WHERE o.optionSet = os AND o.name = 'os' \r\n"
+			+ ")\r\n"
+			+ "AND EXISTS (\r\n"
+			+ "    SELECT 1 FROM Options o WHERE o.optionSet = os AND o.name = 'ram' \r\n"
+			+ ")\r\n"
+			+ "AND EXISTS (\r\n"
+			+ "    SELECT 1 FROM Options o WHERE o.optionSet = os AND o.name = 'cpu' \r\n"
+			+ ")\r\n"
+			+ "AND EXISTS (\r\n"
+			+ "    SELECT 1 FROM Options o WHERE o.optionSet = os AND o.name = 'gb' \r\n"
+			+ ")\r\n"
+			+ "AND EXISTS (\r\n"
+			+ "    SELECT 1 FROM Options o WHERE o.optionSet = os AND o.value = 'windows10' \r\n"
+			+ ")\r\n"
+			+ "AND EXISTS (\r\n"
+			+ "    SELECT 1 FROM Options o WHERE o.optionSet = os AND o.value = '16' \r\n"
+			+ ")\r\n"
+			+ "AND EXISTS (\r\n"
+			+ "    SELECT 1 FROM Options o WHERE o.optionSet = os AND o.value = 'i7' \r\n"
+			+ ")\r\n"
+			+ "AND EXISTS (\r\n"
+			+ "    SELECT 1 FROM Options o WHERE o.optionSet = os AND o.value = '512' \r\n"
+			+ ")\r\n"
+			+ "")
+	List<OptionSet> find();
 }

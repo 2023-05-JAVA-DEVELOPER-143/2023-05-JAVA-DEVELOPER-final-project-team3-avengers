@@ -11,7 +11,7 @@ class OptionSetRepositoryTest {
 	OptionSetRepository optionSetRepository;
 	@Test
 	void test() {
-		optionSetRepository.findById(1L);
+		System.out.println(optionSetRepository.find());
 	}
 
 }
