@@ -27,7 +27,7 @@ public class CartServiceImpl implements CartService{
 		return cartRepository.findByMember_UserName(memberId);
 	}
 	
-//	public void saveCart(Member member, Long optionset_id, int cartQty) throws Exception {
+//	public void saveCart(Member member, Long optionset_id) throws Exception {
 //		Cart findCart = cartRepository.findByOptionSetIdAndUserId( optionset_id, member.getMemberId());
 //		if(findCart == null) {
 //			OptionSet optionSet = optionSetRepository.findById(optionset_id).orElseThrow(() -> {
@@ -40,12 +40,6 @@ public class CartServiceImpl implements CartService{
 //		}
 //	}
 	
-	
-
-	// static boolean isDuplicateOptionset; // 카트 제품 중복체크
-
-	// boolean checkOptionSet(Long id) {
-	// }
 
 	// 제품 중복 체크 -> 수량 증가 or 카트 담기
 	// @Override
@@ -63,17 +57,13 @@ public class CartServiceImpl implements CartService{
 	/*
 	 * 카트 1개 삭제
 	 */
-//	@Override
-//	public void deleteCart(Long id) throws Exception {
-//		Optional<Cart> findCart = cartRepository.findById(id);
-//		if(findCart.isEmpty()) {
-//			throw new Exception();
-//		}
-//		cartRepository.delete(findCart.get());
-//	}
 	@Override
 	public void deleteCart(Long id) throws Exception {
-		cartDao.deleteCart(id);
+		Optional<Cart> findCart = cartRepository.findById(id);
+		if(findCart.isEmpty()) {
+			throw new Exception();
+		}
+		cartRepository.delete(findCart.get());
 	}
 
 }

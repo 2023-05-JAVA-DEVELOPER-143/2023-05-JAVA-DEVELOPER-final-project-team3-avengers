@@ -22,7 +22,7 @@ public interface CartRepository extends JpaRepository<Cart, Long>{
 	// 장바구니 수량
 	int countByMember_UserName(String memberId);
 	
-	
+	int updateCartByQty(Long id, int qty);
 	 
 
 	

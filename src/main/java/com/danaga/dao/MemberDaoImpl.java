@@ -17,7 +17,7 @@ public class MemberDaoImpl implements MemberDao {
 //	public List<Member> findMembers() {
 //		return memberRepository.findAll();
 //	}
-//
+	//
 //	public Member findMember(String value) throws Exception {
 //
 //		if (value.contains("@")) {
@@ -86,4 +86,5 @@ public class MemberDaoImpl implements MemberDao {
 //			return true;
 //		}
 //	}
+	
 }
