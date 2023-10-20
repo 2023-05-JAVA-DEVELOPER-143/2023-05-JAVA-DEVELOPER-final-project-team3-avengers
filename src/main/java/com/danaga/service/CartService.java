@@ -10,7 +10,7 @@ import jakarta.transaction.Transactional;
 public interface CartService {
 
 	// 카트 리스트
-	List<Cart> findCartList(Long memberId);
+	List<Cart> findCartList(String value)throws Exception;
 	
 	//카트 추가
 	void addCart(CartCreateDto dto,String value) throws Exception;

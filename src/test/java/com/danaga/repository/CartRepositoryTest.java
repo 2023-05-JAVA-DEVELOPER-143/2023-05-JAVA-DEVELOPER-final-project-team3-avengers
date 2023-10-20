@@ -34,6 +34,7 @@ public class CartRepositoryTest {
 		
 		
 		Cart cart = Cart.builder().qty(1).member(member).optionSet(os).build();
+		System.out.println(cart);
 		Assertions.assertThat(cart).isInstanceOf(Cart.class);
 	
 	}
