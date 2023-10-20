@@ -102,14 +102,14 @@ public class OrderDaoImpl implements OrderDao {
 
 	
 	//비회원(주문번호,회원이름,회원전화번호) 로 주문1개보기
-	@Override
-	public Orders findOrdersByOrderNoAndNameAndPhoneNo(Long orderNo, String userName, String phoneNo) {
-		// 주어진 주문 번호 (oNo), 회원 이름 (MemberName), 회원전화번호 (memberPhoneNo)를 사용하여 주문을 조회하려면
-		// 적절한 로직을 추가
-		// orderRepository를 사용하여 데이터베이스에서 주문을 조회할 수 있으며, 필요한 정보를 조건에 따라 조회
-		return orderRepository.findOrdersByOrderNoAndMember_NameAndMember_PhoneNo(orderNo, userName, phoneNo);
-
-	}
+//	@Override
+//	public Orders findOrdersByOrderNoAndNameAndPhoneNo(Long orderNo, String userName, String phoneNo) {
+//		// 주어진 주문 번호 (oNo), 회원 이름 (MemberName), 회원전화번호 (memberPhoneNo)를 사용하여 주문을 조회하려면
+//		// 적절한 로직을 추가
+//		// orderRepository를 사용하여 데이터베이스에서 주문을 조회할 수 있으며, 필요한 정보를 조건에 따라 조회
+//		return orderRepository.findOrdersByOrderNoAndMember_NameAndMember_PhoneNo(orderNo, userName, phoneNo);
+//
+//	}
 
 
 }

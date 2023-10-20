@@ -23,6 +23,6 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
 	List<Orders> findOrdersWithOrderItemByMember_UserName(String userName);
 	
 	// 비회원 : 주문 번호, 회원 이름, 회원 전화번호를 기반으로 주문 조회
-	Orders findOrdersByOrderNoAndMember_NameAndMember_PhoneNo(Long orderNo, String userName, String phoneNo);
+	//Orders findOrdersByOrderNoAndMember_NameAndMember_PhoneNo(Long orderNo, String userName, String phoneNo);
 
 }
