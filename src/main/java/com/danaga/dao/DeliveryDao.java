@@ -6,8 +6,6 @@ public interface DeliveryDao {
 	//배송신청
 	Delivery insertDelivery(Delivery delivery);// 배송정보 입력후 배송하기 눌렀을 때
 	
-
-	
 	//update는 없음
 	
 	//배송취소                           Orders의 oState가 취소로 변경된다.

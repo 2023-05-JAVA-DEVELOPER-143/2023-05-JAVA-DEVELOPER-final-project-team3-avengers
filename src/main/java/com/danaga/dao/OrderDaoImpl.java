@@ -63,13 +63,9 @@ public class OrderDaoImpl implements OrderDao {
 
 		Orders findOrder = orderRepository.findById(orders.getId()).get();
 
-		if (findOrder.getStatement().ordinal() == 3) {
-			return findOrder;
-		} else {
-
-			findOrder.setStatement(OrderStateMsg.get(findOrder.getStatement().ordinal() + 1));
-			return findOrder;
-		}
+		findOrder.setStatement(orders.getStatement());
+		
+		return findOrder;
 
 	}
 

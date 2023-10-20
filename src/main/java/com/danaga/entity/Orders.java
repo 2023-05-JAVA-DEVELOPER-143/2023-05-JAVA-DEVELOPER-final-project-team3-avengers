@@ -51,7 +51,7 @@ public class Orders {
 	@Column(length = 10)
 	private Integer price; //총주문가격
 	@Column(length = 100 )
-	@Enumerated(EnumType.ORDINAL)
+	@Enumerated(EnumType.STRING)
 	private OrderStateMsg statement; //주문상태 //notnull
 	@Column(updatable = false)
 	@CreationTimestamp
