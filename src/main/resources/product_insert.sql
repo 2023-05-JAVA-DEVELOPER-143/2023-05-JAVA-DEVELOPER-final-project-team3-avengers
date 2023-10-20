@@ -451,3 +451,4 @@ insert into interest values(sysdate, 10, 2, 3, sysdate);
 insert into interest values(sysdate, 11, 2, 9, sysdate);
 insert into interest values(sysdate, 12, 3, 1, sysdate);
 insert into interest values(sysdate, 13, 3, 6, sysdate);
+commit;
