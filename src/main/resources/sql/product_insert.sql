@@ -1,21 +1,4 @@
-//category
-insert into category (id, parent, name) values (1, 1, 'DeskTop');
-insert into category (id, parent, name) values (2, 2, 'Laptop');
-insert into category (id, parent, name) values (3, 1, 'Drywall');
-insert into category (id, parent, name) values (4, 1, 'Plumbing Gas');
-insert into category (id, parent, name) values (5, 1, 'Prefabricated Aluminum Metal CaIDpies');
-insert into category (id, parent, name) values (6, 1, 'RF Shielding');
-insert into category (id, parent, name) values (7, 1, 'Waterproofing');
-insert into category (id, parent, name) values (8, 1, 'Wall Protection');
-insert into category (id, parent, name) values (9, 1, 'Framing (Steel)');
-insert into category (id, parent, name) values (10, 2, 'Temp Fencing, Decorative Fencing and Gates');
-insert into category (id, parent, name) values (11, 2, 'Retaining and Brick Pavers');
-insert into category (id, parent, name) values (12, 2, 'Casework');
-insert into category (id, parent, name) values (13, 2, 'Soft Flooring and Base');
-insert into category (id, parent, name) values (14, 2, 'Fire Sprinkler System');
-insert into category (id, parent, name) values (15, 2, 'Granite Surfaces');
-insert into category (id, parent, name) values (19, 2, 'Casework');
-insert into category (id, parent, name) values (20, 2, 'Framing');
+
 
 //product
 insert into product (PRICE, RATING, CREATE_TIME, ID, UPDATE_TIME, BRAND, NAME, PREV_DESC, DESC_IMAGE, IMG) values (551900, 2.2, sysdate, 1, sysdate, 'Brand E', 'Ms', 'http://dummyimage.com/184x100.png/dddddd/000000', 'http://dummyimage.com/103x100.png/dddddd/000000', 'http://dummyimage.com/210x100.png/cc0000/ffffff');
@@ -99,7 +82,24 @@ insert into product (PRICE, RATING, CREATE_TIME, ID, UPDATE_TIME, BRAND, NAME, P
 insert into product (PRICE, RATING, CREATE_TIME, ID, UPDATE_TIME, BRAND, NAME, PREV_DESC, DESC_IMAGE, IMG) values (496700, 3.9, sysdate,  79, sysdate, 'Brand D', 'Dr', 'http://dummyimage.com/162x100.png/5fa2dd/ffffff', 'http://dummyimage.com/153x100.png/dddddd/000000', 'http://dummyimage.com/188x100.png/dddddd/000000');
 insert into product (PRICE, RATING, CREATE_TIME, ID, UPDATE_TIME, BRAND, NAME, PREV_DESC, DESC_IMAGE, IMG) values (372000, 1.3, sysdate, 80, sysdate, 'Brand F', 'Mr', 'http://dummyimage.com/148x100.png/5fa2dd/ffffff', 'http://dummyimage.com/224x100.png/ff4444/ffffff', 'http://dummyimage.com/109x100.png/dddddd/000000');
 
-
+//category
+insert into category (id, parent, name) values (1, 1, 'DeskTop');
+insert into category (id, parent, name) values (2, 2, 'Laptop');
+insert into category (id, parent, name) values (3, 1, 'Drywall');
+insert into category (id, parent, name) values (4, 1, 'Plumbing Gas');
+insert into category (id, parent, name) values (5, 1, 'Prefabricated Aluminum Metal CaIDpies');
+insert into category (id, parent, name) values (6, 1, 'RF Shielding');
+insert into category (id, parent, name) values (7, 1, 'Waterproofing');
+insert into category (id, parent, name) values (8, 1, 'Wall Protection');
+insert into category (id, parent, name) values (9, 1, 'Framing (Steel)');
+insert into category (id, parent, name) values (10, 2, 'Temp Fencing, Decorative Fencing and Gates');
+insert into category (id, parent, name) values (11, 2, 'Retaining and Brick Pavers');
+insert into category (id, parent, name) values (12, 2, 'Casework');
+insert into category (id, parent, name) values (13, 2, 'Soft Flooring and Base');
+insert into category (id, parent, name) values (14, 2, 'Fire Sprinkler System');
+insert into category (id, parent, name) values (15, 2, 'Granite Surfaces');
+insert into category (id, parent, name) values (19, 2, 'Casework');
+insert into category (id, parent, name) values (20, 2, 'Framing');
 //category-Set
 insert into category_set (CATEGORY_ID, ID, PRODUCT_ID) values (14, 1, 16);
 insert into category_set (CATEGORY_ID, ID, PRODUCT_ID) values (11, 2, 66);
