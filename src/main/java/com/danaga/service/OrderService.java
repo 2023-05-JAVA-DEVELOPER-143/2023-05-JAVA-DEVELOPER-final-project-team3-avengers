@@ -1,5 +1,10 @@
 package com.danaga.service;
 
-public interface OrderService {
+import com.danaga.dao.OrderDao;
 
+public interface OrderService {
+	
+
+	
+	
 }
