@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import com.danaga.dao.MemberDao;
 import com.danaga.dto.CartCreateDto;
+
 import lombok.RequiredArgsConstructor;
 import com.danaga.entity.Cart;
 import com.danaga.repository.CartRepository;
@@ -38,35 +39,6 @@ public class CartServiceImpl implements CartService {
 		}
 	}
 
-	// 카트 한개 삭제
-	
-//	public void saveCart(Member member, Long optionset_id) throws Exception {
-//		Cart findCart = cartRepository.findByOptionSetIdAndUserId( optionset_id, member.getMemberId());
-//		if(findCart == null) {
-//			OptionSet optionSet = optionSetRepository.findById(optionset_id).orElseThrow(() -> {
-//				return new Exception("상품이 없습니다");
-//			});
-//			
-//			cartRepository.save(findCart);
-//		} else {
-//			Cart cart = cartDao.create(findCart);
-//		}
-//	}
-	
-
-	// 제품 중복 체크 -> 수량 증가 or 카트 담기
-	// @Override
-	// cart -> Dto
-	/*
-	 * public void addCart(Cart cart) { // isDuplicateOptionset =
-	 * checkOptionSet(cart.getOptionSet().getId()); if (isDuplicateOptionset) { //
-	 * 장바구니에 담긴 상품 -> // cartCqy 1증가 // cart.setCartQty(cart.getCartQty()+1);
-	 * //return cartDao.addCart(cart); } //return cartDao.addCart(cart); }
-	 * 
-	 * @Override public List<Cart> getCarts(String memberId) { return
-	 * cartDao.getCarts(memberId); }
-	 */
-
 	/*
 	 * 카트 1개 삭제
 	 */
@@ -79,4 +51,14 @@ public class CartServiceImpl implements CartService {
 		}
 		cartRepository.delete(findCart.get());
 	}
+	
+	// 장바구니 수량변경 or 옵션 변경
+	@Override
+	public Cart updateCart(Cart updateCart) {
+		Cart findCart = cartRepository.findById(updateCart.getId()).get();
+		findCart.setQty(updateCart.getQty());
+		findCart.setOptionSet(updateCart.getOptionSet());
+		return findCart;
+	}
+	
 }
