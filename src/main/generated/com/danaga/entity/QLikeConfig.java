@@ -24,7 +24,11 @@ public class QLikeConfig extends EntityPathBase<LikeConfig> {
 
     public final QBoard board;
 
+    public final NumberPath<Integer> disLike = createNumber("disLike", Integer.class);
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    public final NumberPath<Integer> isLike = createNumber("isLike", Integer.class);
 
     public final QMember member;
 

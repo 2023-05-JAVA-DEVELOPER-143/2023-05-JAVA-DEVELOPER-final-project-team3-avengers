@@ -31,6 +31,8 @@ public class QOptionSet extends EntityPathBase<OptionSet> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final ListPath<Interest, QInterest> interests = this.<Interest, QInterest>createList("interests", Interest.class, QInterest.class, PathInits.DIRECT2);
+
     public final ListPath<Options, QOptions> options = this.<Options, QOptions>createList("options", Options.class, QOptions.class, PathInits.DIRECT2);
 
     public final NumberPath<Integer> orderCount = createNumber("orderCount", Integer.class);
