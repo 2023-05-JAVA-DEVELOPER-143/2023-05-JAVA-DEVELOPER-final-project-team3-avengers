@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.danaga.dao.CartDao;
 import com.danaga.dao.MemberDao;
 import com.danaga.dto.CartCreateDto;
+import com.danaga.dto.CartUpdateDto;
 
 import lombok.RequiredArgsConstructor;
 import com.danaga.entity.Cart;
@@ -50,4 +51,14 @@ public class CartServiceImpl implements CartService {
 	public void deleteCart(Long id) throws Exception {
 		cartRepository.deleteById(id);
 	}
+	
+	// 장바구니 수량변경 or 옵션 변경
+	@Override
+	public Cart updateCart(Cart updateCart) {
+		Cart findCart = cartRepository.findById(updateCart.getId()).get();
+		findCart.setQty(updateCart.getQty());
+		findCart.setOptionSet(updateCart.getOptionSet());
+		return findCart;
+	}
+	
 }
