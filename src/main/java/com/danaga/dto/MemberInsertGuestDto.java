@@ -17,12 +17,15 @@ public class MemberInsertGuestDto {
 	private Long id;
 	private String name;
 	private String phoneNo;
+	@Builder.Default
+	private String role = "Guest";
 	
 	public static MemberInsertGuestDto toDto(Member entity) {
     	return MemberInsertGuestDto.builder()
     			.id(entity.getId())
     			.name(entity.getName())
     			.phoneNo(entity.getPhoneNo())
+    			.role(entity.getRole())
     			.build();
     }
 }

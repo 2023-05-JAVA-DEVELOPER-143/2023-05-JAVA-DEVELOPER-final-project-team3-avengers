@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.danaga.dao.MemberDao;
+import com.danaga.dto.MemberInsertGuestDto;
 import com.danaga.dto.MemberUpdateDto;
 import com.danaga.entity.Member;
 import com.danaga.repository.MemberRepository;
@@ -29,12 +30,15 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	public Member joinMember(Member member) throws Exception {
+		member.setRole("Member");
 		// 1.아이디중복체크
 		if (memberDao.existedMemberBy(member.getUserName())) {
 			// 아이디중복
-			//throw new Exception(member.getUserName() + " 는 이미 존재하는 아이디 입니다.");
+			throw new Exception(member.getUserName() + " 는 이미 존재하는 아이디 입니다.");
 		} else if (memberDao.existedMemberBy(member.getEmail())) {
 			throw new Exception(member.getEmail() + " 는 이미 등록된 이메일 입니다.");
+		} else if(memberDao.existedMemberBy(member.getPhoneNo()) && (memberDao.findMember(member.getPhoneNo()).getRole().equals("Guest"))) {
+			return memberDao.update(member);
 		} else if (memberDao.existedMemberBy(member.getPhoneNo())) {
 			throw new Exception(member.getPhoneNo() + " 는 이미 등록된 번호 입니다.");
 		}
@@ -42,18 +46,45 @@ public class MemberServiceImpl implements MemberService {
 		// 2.회원가입
 		return memberDao.insert(member);
 	}
+	
+	public MemberInsertGuestDto joinGuest(MemberInsertGuestDto memberInsertGuestDto) throws Exception {
+		if (memberDao.existedMemberBy(memberInsertGuestDto.getPhoneNo())) {
+			return MemberInsertGuestDto.toDto(memberDao.insert(Member.toGuestEntity(memberInsertGuestDto)));
+		} else {
+			return MemberInsertGuestDto.toDto(memberDao.findMember(Member.toGuestEntity(memberInsertGuestDto).getPhoneNo()));
+		}
+	}
+	
 
 	public MemberUpdateDto updateMember(MemberUpdateDto memberUpdateDto) throws Exception {
-		if (memberDao.existedMemberBy(memberUpdateDto.getEmail())) {
-			throw new Exception(memberUpdateDto.getEmail() + " 는 이미 등록된 이메일 입니다.");
-		} else if (memberDao.existedMemberBy(memberUpdateDto.getPhoneNo())) {
-			throw new Exception(memberUpdateDto.getPhoneNo() + " 는 이미 등록된 번호 입니다.");
+		Member originalMember = memberDao.findMember(memberUpdateDto.getUserName());
+		if (originalMember.getPhoneNo().equals(memberUpdateDto.getPhoneNo())
+				&& originalMember.getEmail().equals(memberUpdateDto.getEmail())) {
+			// 이메일 x 번호 x
+			
+		} else if (originalMember.getEmail().equals(memberUpdateDto.getEmail())) {
+			// 이메일 x 번호 o
+			if (memberDao.existedMemberBy(memberUpdateDto.getPhoneNo())) {
+				throw new Exception(memberUpdateDto.getPhoneNo() + " 는 이미 등록된 번호 입니다.");
+			}
+		} else if (originalMember.getPhoneNo().equals(memberUpdateDto.getPhoneNo())) {
+			// 이메일 o 번호 x
+			if (memberDao.existedMemberBy(memberUpdateDto.getEmail())) {
+				throw new Exception(memberUpdateDto.getEmail() + " 는 이미 등록된 이메일 입니다.");
+			}
+		} else {
+			// 이메일 o 번호 o
+			if (memberDao.existedMemberBy(memberUpdateDto.getEmail())) {
+				throw new Exception(memberUpdateDto.getEmail() + " 는 이미 등록된 이메일 입니다.");
+			} else if (memberDao.existedMemberBy(memberUpdateDto.getPhoneNo())) {
+				throw new Exception(memberUpdateDto.getPhoneNo() + " 는 이미 등록된 번호 입니다.");
+			}
 		}
 		return MemberUpdateDto.toDto(memberDao.insert(Member.toUpdateEntity(memberUpdateDto)));
 	}
 
-	public void deleteMember(String userName) throws Exception {
-		memberDao.delete(userName);
+	public void deleteMember(String value) throws Exception {
+		memberDao.delete(value);
 	}
 
 	// 중복체크
@@ -62,6 +93,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	public boolean login(String userName, String password) throws Exception {
+		// 비회원 세션 카트에서 로그인하면 세션 카트를 로그인한 멤버의 카트DB에 담는다
 		Optional<Member> findOptionalMember = memberRepository.findByUserName(userName);
 		if (findOptionalMember.isEmpty()) {
 			throw new Exception(userName + " 는 존재하지않는 아이디입니다.");
