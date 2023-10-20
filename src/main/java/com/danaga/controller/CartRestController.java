@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.danaga.dto.CartCreateDto;
@@ -35,15 +36,15 @@ public class CartRestController {
 	private final OptionSetRepository optionSetRepository;
 	private final CartService cartService;
 	
-	@Operation(summary = "카트담기")
-	@PostMapping("/test")
-	public ResponseEntity<String> create(CartCreateDto cartCreateDto)throws Exception {
-		String username = "User7";   //(String) httpSession.getAttribute("sUserId");
-		OptionSet optionSet = optionSetRepository.findById(2L).get();
-		Member findMember = memberRepository.findByUserName(username).orElseThrow(() -> new Exception("아이디읍다"));
-		cartService.addCart(cartCreateDto, findMember.getUserName());
-		return ResponseEntity.status(HttpStatus.OK).body("아이템:");
-	}
+//	@Operation(summary = "카트담기")
+//	@PostMapping("/test")
+//	public ResponseEntity<Cart> create(CartCreateDto cartCreateDto)throws Exception {
+//		String username = "User7";   //(String) httpSession.getAttribute("sUserId");
+//		OptionSet optionSet = optionSetRepository.findById(2L).get();
+//		Member findMember = memberRepository.findByUserName(username).orElseThrow(() -> new Exception("아이디읍다"));
+//		cartService.addCart(cartCreateDto, findMember.getUserName());
+//		return ResponseEntity.status(HttpStatus.OK).body(null)
+//	}
 	
 	
 	
