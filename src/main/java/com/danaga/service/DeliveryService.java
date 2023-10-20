@@ -9,7 +9,8 @@ import com.danaga.entity.*;
 @Service
 public interface DeliveryService {
 
-	Delivery saveDelivery(DeliveryDto deliveryDto); 
+	Delivery saveDeliveryByOrdersId(Delivery delivery); 
 	
+	Delivery findDeliveryByOrdersId(Long id);
 //	void deleteDelivery(Long de_no) throws Exception;
 }
