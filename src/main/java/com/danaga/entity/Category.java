@@ -19,6 +19,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @Builder
@@ -33,14 +34,17 @@ public class Category {//셀프 참조하는 오너테이블, 카테고리셋과
 	
 	@JoinColumn(name="parent", nullable = true)
 	@ManyToOne
+	@ToString.Exclude
 	private Category parent; //부모 카테고리
 	
 	@OneToMany(mappedBy = "parent")
 	@Builder.Default
+	@ToString.Exclude
 	private List<Category> childTypes= new ArrayList(); //자식 카테고리들
 	
 	@OneToMany(mappedBy = "category")
 	@Builder.Default
+	@ToString.Exclude
 	private List<CategorySet> categorySets = new ArrayList<>();
 	//다대다 맵핑을 위한 categorySet과 관계 설정
 }
