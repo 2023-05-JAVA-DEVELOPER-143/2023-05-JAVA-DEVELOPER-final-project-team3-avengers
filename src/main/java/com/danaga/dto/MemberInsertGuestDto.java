@@ -17,7 +17,8 @@ public class MemberInsertGuestDto {
 	private Long id;
 	private String name;
 	private String phoneNo;
-	private String role;
+	@Builder.Default
+	private String role = "Guest";
 	
 	public static MemberInsertGuestDto toDto(Member entity) {
     	return MemberInsertGuestDto.builder()
