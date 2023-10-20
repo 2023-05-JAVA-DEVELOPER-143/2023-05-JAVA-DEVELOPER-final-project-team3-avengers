@@ -21,18 +21,18 @@ import io.swagger.v3.oas.annotations.Operation;
 public class StatisticRestController {
 	@Autowired
 	private StatisticService statisticService;
-//	@Operation(summary = "admin : 전체 통계 호출")
-//	@GetMapping
-//	public ResponseEntity<List<Statistic>> getStatisticList() {
-//		List<Statistic> statistics = statisticService.Statistics();
-//		return ResponseEntity.status(HttpStatus.OK).body(statistics);
-//	}
+	@Operation(summary = "admin : 전체 통계 호출")
+	@GetMapping("/list")
+	public ResponseEntity<List<Statistic>> getStatisticListAll() {
+		List<Statistic> statistics = statisticService.Statistics();
+		return ResponseEntity.status(HttpStatus.OK).body(statistics);
+	}
 	@Operation(summary = "admin : 전체 통계 호출")
 	@GetMapping
 	public ModelAndView getStatisticList() {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("admin");
-		modelAndView.addObject(statisticService.Statistics());
+		modelAndView.addObject("statisticList",statisticService.Statistics());
 		return modelAndView;
 	}
 	@Operation(summary = "admin : yyyymmdd 통계 업데이트")
