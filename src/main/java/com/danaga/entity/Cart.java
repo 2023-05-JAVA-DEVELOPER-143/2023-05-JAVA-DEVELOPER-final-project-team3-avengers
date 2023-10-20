@@ -4,6 +4,7 @@ package com.danaga.entity;
 import com.danaga.dto.CartCreateDto;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -31,8 +32,9 @@ public class Cart extends BaseEntity {
 	private Long id;
 
 	private int qty;
-	@ManyToOne
+	@ManyToOne()
 	@JoinColumn(name = "memberId")
+	@ToString.Exclude
 	private Member member;
 
 	@ManyToOne

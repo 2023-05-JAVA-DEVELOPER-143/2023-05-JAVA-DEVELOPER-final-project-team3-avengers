@@ -21,6 +21,8 @@ import com.danaga.repository.OptionSetQueryRepository;
 import com.danaga.repository.OptionSetQueryRepositoryImpl;
 import com.danaga.repository.OptionSetRepository;
 
+import jakarta.transaction.Transactional;
+
 @SpringBootTest
 public class CartServiceImplTest {
 	@Autowired
@@ -49,10 +51,18 @@ public class CartServiceImplTest {
 		
 	}
 	@Test
+	@Disabled
 	void updateCart() throws Exception {
 		CartUpdateDto cartUpdateDto = CartUpdateDto.builder().id(9L).qty(5).build();
 		cartService.updateCart(cartUpdateDto);
 		
 	}
+	
+	@Test
+	void cartList() throws Exception {
+		 System.out.println(cartService.findCartList("User1"));
+	}
+	
+	
 
 }

@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.danaga.dto.MemberInsertGuestDto;
 import com.danaga.entity.Member;
 import com.danaga.repository.MemberRepository;
 
