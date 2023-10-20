@@ -12,6 +12,6 @@ public interface MemberService {
 	public Member joinMember(Member member) throws Exception;
 	public MemberInsertGuestDto joinGuest(MemberInsertGuestDto memberInsertGuestDto) throws Exception;
 	public MemberUpdateDto updateMember(MemberUpdateDto memberUpdateDto) throws Exception;
-	public void deleteMember(String memberId) throws Exception;
+	public void deleteMember(String value) throws Exception;
 	public boolean isDuplicate(String value) throws Exception;
 }
