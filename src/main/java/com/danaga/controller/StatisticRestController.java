@@ -48,4 +48,16 @@ public class StatisticRestController {
 		List<Statistic> statistics = statisticService.updateAll();
 		return ResponseEntity.status(HttpStatus.OK).body(statistics);
 	}
+	@Operation(summary = "admin : YYYYMM월 데이터")
+	@GetMapping("/month/{month}")
+	public ResponseEntity<List<Statistic>> searchMonth(@PathVariable(value = "month") String month) {
+		List<Statistic> statistics = statisticService.monthlyStatistic(month);
+		return ResponseEntity.status(HttpStatus.OK).body(statistics);
+	}
+	@Operation(summary = "admin : 이번달 데이터")
+	@GetMapping("/this")
+	public ResponseEntity<List<Statistic>> thisMonth() {
+		List<Statistic> statistics = statisticService.thisMonthStatistic();
+		return ResponseEntity.status(HttpStatus.OK).body(statistics);
+	}
 }

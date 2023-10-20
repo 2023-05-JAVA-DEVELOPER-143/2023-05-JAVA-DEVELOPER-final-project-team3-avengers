@@ -1,6 +1,7 @@
 package com.danaga.repository;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,5 +26,11 @@ public interface StatisticRepository extends JpaRepository<Statistic, Date>{
 	// N일 작성된 게시글 수 완료
 	@Query(value = "select nvl(count(id),0) from board where to_char(create_time,'YYYYMMDD') = :findDate", nativeQuery = true)
 	Long countNewBoardsOn(@Param("findDate") String findDate);
+	
+	//최근 7일간의 통계 기록
+	List<Statistic> findTop7ByOrderByIdDesc();
+	
+	// YYYYMM월의 기록
+	List<Statistic> findByIdStartsWith(String id);
 
 }

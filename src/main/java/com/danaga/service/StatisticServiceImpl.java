@@ -1,5 +1,7 @@
 package com.danaga.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +44,27 @@ public class StatisticServiceImpl implements StatisticService{
 			updateAt(findDate);
 		}
 		statisticList = statisticRepository.findAll();
+		return statisticList;
+	}
+	
+	//최근 7일 통계
+	@Override
+	public List<Statistic> latest7DaysStatistic() {
+		List<Statistic> statisticList = statisticRepository.findTop7ByOrderByIdDesc();
+		return statisticList;
+	}
+	
+	//YYYYMM월 기록
+	@Override
+	public List<Statistic> monthlyStatistic(String month) {
+		List<Statistic> statisticList = statisticRepository.findByIdStartsWith(month);
+		return statisticList;
+	}
+	
+	//이번 달 기록
+	@Override
+	public List<Statistic> thisMonthStatistic() {
+		List<Statistic> statisticList = statisticRepository.findByIdStartsWith(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMM")));
 		return statisticList;
 	}
 	
