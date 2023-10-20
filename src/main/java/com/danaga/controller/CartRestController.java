@@ -26,32 +26,29 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
-@RequestMapping("/cart")
+	
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.danaga.entity.Cart;
+import com.danaga.service.CartService;
+
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+
 @RestController
+@RequestMapping("/cart")
 @RequiredArgsConstructor
 public class CartRestController {
-
-	private final MemberRepository memberRepository;
-	private final CartRepository cartRepository;
-	private final OptionSetRepository optionSetRepository;
 	private final CartService cartService;
 	
-//	@Operation(summary = "카트담기")
-//	@PostMapping("/test")
-//	public ResponseEntity<Cart> create(CartCreateDto cartCreateDto)throws Exception {
-//		String username = "User7";   //(String) httpSession.getAttribute("sUserId");
-//		OptionSet optionSet = optionSetRepository.findById(2L).get();
-//		Member findMember = memberRepository.findByUserName(username).orElseThrow(() -> new Exception("아이디읍다"));
-//		cartService.addCart(cartCreateDto, findMember.getUserName());
-//		return ResponseEntity.status(HttpStatus.OK).body(null)
-//	}
-	
-	
-	
-//	@Operation(summary = "카트삭제")
-//	@DeleteMapping
-//	public ResponseEntity<T> delete(@PathVariable(name = "id") Long id) {
-//		return ResponseEntity.status(HttpStatus.OK).body(cartService.deleteCart(id));
-//	}
-	
+	@GetMapping("/{memberId}")
+	public ResponseEntity<List<Cart>> cartList(HttpSession session){
+		
+		return null;  
+	}
 }

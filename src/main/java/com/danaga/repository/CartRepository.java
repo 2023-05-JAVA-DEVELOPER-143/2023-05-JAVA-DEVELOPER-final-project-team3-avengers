@@ -15,7 +15,7 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
 	Cart findByOptionSetIdAndMemberId(Long optionSetId, Long memberId);
 
 	// 장바구니 수량
-	int countByMember_UserName(String memberId);
+	int countByMemberId(Long memberId);
 	
 	 
 

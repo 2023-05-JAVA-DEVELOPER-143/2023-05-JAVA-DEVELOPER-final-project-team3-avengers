@@ -37,6 +37,8 @@ public class CartServiceImpl implements CartService {
 		} else {
 			findCart.setQty(findCart.getQty() + dto.getQty());
 			cartRepository.save(findCart);
+			findCart.setQty(findCart.getQty() + dto.getQty());
+			cartRepository.save(findCart);
 		}
 	}
 
@@ -47,23 +49,13 @@ public class CartServiceImpl implements CartService {
 	public void deleteCart(Long id) throws Exception {
 		cartRepository.deleteById(id);
 	}
-	
-	
-	// 장바구니 수량 변경
+
+	// 장바구니 수량변경
+	@Override
 	public void updateCart(CartUpdateDto dto) {
 		Cart findCart = cartRepository.findById(dto.getId()).get();
 		findCart.setQty(dto.getQty());
 		cartRepository.save(findCart);
-		
 	}
-	
-	// 장바구니 수량변경 or 옵션 변경
-	@Override
-	public Cart updateCart(Cart updateCart) {
-		Cart findCart = cartRepository.findById(updateCart.getId()).get();
-		findCart.setQty(updateCart.getQty());
-		findCart.setOptionSet(updateCart.getOptionSet());
-		return findCart;
-	}
-	
+
 }

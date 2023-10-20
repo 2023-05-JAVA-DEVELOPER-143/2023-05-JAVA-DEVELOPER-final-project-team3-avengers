@@ -9,7 +9,7 @@ import jakarta.transaction.Transactional;
 
 @Transactional
 public interface CartService {
-
+	
 	// 카트 리스트
 	List<Cart> findCartList(String value)throws Exception;
 	
@@ -19,10 +19,8 @@ public interface CartService {
 	// 카트 1개 삭제
 	void deleteCart(Long id) throws Exception;
 	
-	// 장바구니 수량변경 or 옵션 변경
-	Cart updateCart(Cart updateCart);
+	// 장바구니 수량변경 
+	void updateCart(CartUpdateDto dto);
 	
-	// 카트 수량 변경
-	void updateCart(CartUpdateDto cartUpdateDto) throws Exception;
 	
 }
