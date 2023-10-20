@@ -32,8 +32,13 @@ class OptionSetRepositoryTest {
 	}
 	
 	@Test
+	@Disabled
 	void test2() {
 		System.out.println(optionSetRepository.findByInterests_MemberId(1L));
+	}
+	@Test
+	void test3() {
+		System.out.println(optionSetRepository.findByProductId(1L));
 	}
 
 }

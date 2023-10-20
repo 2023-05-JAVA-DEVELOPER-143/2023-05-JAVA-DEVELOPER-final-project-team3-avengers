@@ -24,3 +24,4 @@ insert into like_config (id,board_id,member_id,status) values(2,2,2,2);
 insert into like_config (id,board_id,member_id,status) values(3,3,3,1);
 
 
+commit;
