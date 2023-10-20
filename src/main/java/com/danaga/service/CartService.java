@@ -22,4 +22,7 @@ public interface CartService {
 	// 장바구니 수량변경 or 옵션 변경
 	Cart updateCart(Cart updateCart);
 	
+	// 카트 수량 변경
+	void updateCart(CartUpdateDto cartUpdateDto) throws Exception;
+	
 }
