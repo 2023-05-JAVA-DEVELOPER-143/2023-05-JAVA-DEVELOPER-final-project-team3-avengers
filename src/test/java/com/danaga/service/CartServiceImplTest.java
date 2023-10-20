@@ -65,26 +65,26 @@ public class CartServiceImplTest {
 	 */
 
 	// ok
-	@Test
-<<<<<<< HEAD
-	
-	void 수량변경() {
-		CartUpdateDto dto = CartUpdateDto.builder().id(9L).qty(100).build();
-		cs.updateCart(dto);
-=======
-	@Disabled
-	void updateCart() throws Exception {
-		CartUpdateDto cartUpdateDto = CartUpdateDto.builder().id(9L).qty(5).build();
-		cartService.updateCart(cartUpdateDto);
-		
->>>>>>> refs/remotes/origin/feture/bj7
-	}
-	
-	@Test
-	void cartList() throws Exception {
-		 System.out.println(cartService.findCartList("User1"));
-	}
-	
+//	@Test
+//<<<<<<< HEAD
+//	
+//	void 수량변경() {
+//		CartUpdateDto dto = CartUpdateDto.builder().id(9L).qty(100).build();
+//		cs.updateCart(dto);
+//=======
+//	@Disabled
+//	void updateCart() throws Exception {
+//		CartUpdateDto cartUpdateDto = CartUpdateDto.builder().id(9L).qty(5).build();
+//		cartService.updateCart(cartUpdateDto);
+//		
+//>>>>>>> refs/remotes/origin/feture/bj7
+//	}
+//	
+//	@Test
+//	void cartList() throws Exception {
+//		 System.out.println(cartService.findCartList("User1"));
+//	}
+//	
 	
 
 	void 카트리스트() throws Exception{
