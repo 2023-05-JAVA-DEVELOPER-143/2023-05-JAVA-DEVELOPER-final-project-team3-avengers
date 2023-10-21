@@ -41,7 +41,7 @@ class MemberServiceImplTest {
 				.build());
 	}
 	@Test
-	@Disabled
+	//@Disabled
 	void joinGuest() throws Exception {
 		memberService.joinGuest(MemberInsertGuestDto.builder()
 				.name("유저11")
@@ -83,7 +83,7 @@ class MemberServiceImplTest {
 		memberService.isDuplicate("010-1123-3512");
 	}
 	@Test
-	//@Disabled
+	@Disabled
 	void login() throws Exception {
 		System.out.println(memberService.login("User1", "password1"));
 	}
