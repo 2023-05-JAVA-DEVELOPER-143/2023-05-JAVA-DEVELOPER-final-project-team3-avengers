@@ -16,6 +16,9 @@ public interface OrderDao {
 	  
 //	  public Orders insert(Orders order);
 	  
+	// 주문 save 
+	  public Orders save(Orders orders);
+	
 	  
 	//  주문상태업데이트(특정주문)
 	  
