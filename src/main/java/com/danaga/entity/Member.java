@@ -24,6 +24,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity(name = "member")
 @Data
@@ -77,31 +78,37 @@ public class Member {
 	// 관계설정
 
 	// Orders
+	@ToString.Exclude
 	@OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	@Builder.Default
 	private List<Orders> orderList = new ArrayList<>();
 
 	// Cart
+	@ToString.Exclude
 	@OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	@Builder.Default
 	private List<Cart> cartList = new ArrayList<>();
 
 	// Interest
+	@ToString.Exclude
 	@OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	@Builder.Default
 	private List<Interest> interestList = new ArrayList<>();
 
 	// RecnetView
+	@ToString.Exclude
 	@OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	@Builder.Default
 	private List<RecentView> recentViewList = new ArrayList<>();
 
 	// Board
+	@ToString.Exclude
 	@OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
 	@Builder.Default
 	private List<Board> boardList = new ArrayList<>();
 
 	// LikeConfig
+	@ToString.Exclude
 	@OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
 	@Builder.Default
 	private List<LikeConfig> lConfigs = new ArrayList<>();

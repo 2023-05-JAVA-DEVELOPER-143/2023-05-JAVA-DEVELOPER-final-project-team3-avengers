@@ -12,6 +12,7 @@ import com.danaga.dao.DeliveryDao;
 import com.danaga.dao.MemberDao;
 import com.danaga.dao.OptionSetDao;
 import com.danaga.dao.OrderDao;
+import com.danaga.dto.MemberInsertGuestDto;
 import com.danaga.dto.OrdersDto;
 import com.danaga.entity.Cart;
 import com.danaga.entity.Delivery;
@@ -37,13 +38,29 @@ public class OrderServiceImpl implements OrderService{
 	private final DeliveryDao deliveryDao;
 	private final CartRepository cartRepository;
 	private final OrderDao orderDao;
+	private final MemberRepository memberRepository;
 	
 	
 	/*
 	 * 상품에서 직접주문
 	 */
 	@Transactional
-	public Orders memberProductOrderSave(OrdersDto ordersDto)throws Exception {
+	public Orders memberProductOrderSave(OrdersDto ordersDto,String oName,String oPhoneNumber)throws Exception {
+		
+//		if(memberRepository.findByPhoneNo(oPhoneNumber).isEmpty()) {
+//			MemberInsertGuestDto member = MemberInsertGuestDto.builder()
+//								.name(oName)
+//								.phoneNo(oPhoneNumber)
+//								.role("Guest")
+//								.build();
+//			System.out.println(member+"((((((((((((((((((((((((((((((((((((((((((((((");
+//			MemberInsertGuestDto member2= memberService.joinGuest(member);
+//			System.out.println(member2+")))))))))))))))))))))))))))))))))))))))))))))))))");
+//			Member guestMember= memberService.getMemberBy(member2.getPhoneNo());
+//			ordersDto.setUserName(guestMember.getUserName());
+//			
+//		
+//		}
 		
 		OptionSet optionSet= optionSetDao.findById(ordersDto.getOptionSetId());
 		OrderItem orderItem = OrderItem.builder()
@@ -63,9 +80,9 @@ public class OrderServiceImpl implements OrderService{
 						.build();		
 		
 		Delivery delivery = Delivery.builder()
-									.name(ordersDto.getName())
-									.phoneNumber(ordersDto.getPhoneNumber())
-									.address(ordersDto.getAddress())
+									.name(ordersDto.getDelivaryName())
+									.phoneNumber(ordersDto.getDelivaryPhoneNumber())
+									.address(ordersDto.getDelivaryAddress())
 									.orders(orders)
 									.build();
 		
@@ -75,13 +92,14 @@ public class OrderServiceImpl implements OrderService{
 		orderItem.setOrders(orders);
 		orderItemRepository.save(orderItem);
 		Orders saveOrders = orderDao.save(orders);
-		
+
 		
 		return saveOrders;
 	}
 	/*
 	 * cart에서 주문
 	 */
+	@Transactional
 	public Orders memberCartOrderSave(OrdersDto ordersDto)throws Exception {
 		Member member= memberService.getMemberBy(ordersDto.getUserName());
 		List<Cart> carList = cartRepository.findByMemberId(member.getId());
@@ -96,6 +114,7 @@ public class OrderServiceImpl implements OrderService{
 			orderItemList.add(orderItem);
 			o_tot_price += orderItem.getQty() * orderItem.getOptionSet().getTotalPrice();
 			oi_tot_count += orderItem.getQty();
+			
 		}
 		String o_desc = orderItemList.get(0).getOptionSet().getProduct().getName()+"외" +(oi_tot_count-1) + "개";
 		if(oi_tot_count==1) {
@@ -108,21 +127,21 @@ public class OrderServiceImpl implements OrderService{
 										.description(o_desc)
 										.member(member)
 										.build();
-		
 		Delivery delivery = Delivery.builder()
-				.name(ordersDto.getName())
-				.phoneNumber(ordersDto.getPhoneNumber())
-				.address(ordersDto.getAddress())
+				.name(ordersDto.getDelivaryName())
+				.phoneNumber(ordersDto.getDelivaryPhoneNumber())
+				.address(ordersDto.getDelivaryAddress())
 				.orders(orders)
 				.build();
 		
 		Delivery saveDelivery= deliveryDao.insertDelivery(delivery);
 		orders.setDelivery(saveDelivery);
-		
+		for (OrderItem orderItem : orderItemList) {
+			orderItem.setOrders(orders);
+			orderItemRepository.save(orderItem);
+		}
 		Orders saveOrder= orderDao.save(orders);
-		
-		cartRepository.deleteById(member.getId());
-		
+
 		return saveOrder;
 	}
 	/*
@@ -132,24 +151,33 @@ public class OrderServiceImpl implements OrderService{
 		
 		return null;
 	}
-	
-	
-	public Orders guestSave(Orders orders) {
-
-		return null;
-	}
-	
 	/*
 	 * 주문목록
 	 */
-	public List<Orders> orderList(String userName){
-		return null;
+	public List<Orders> memberOrderList(String userName){
+		return orderDao.findOrdersByMember_UserName(userName);
 	}
 	
 	/*
 	 * 주문+주문아이템 목록
 	 */
-	public List<Orders> orderListWithOrderItem(Long Id) {
-		return null;
+	public List<Orders> memberOrderListWithOrderItem(String userName) {
+		return orderDao.findOrdersWithOrderItemByMember_UserName(userName);
+
+		/*
+		 * 세션객체를 사용한 선택주문,상품에서 직접주문
+		 */
+//		public int create(Order order, String[] cart_item_noStr_array) throws Exception {
+//			return null;
+//		}
+
+		/*
+		 * 세션객체를 사용한 장바구니전체주문
+		 */
+//		public int create(Order order) throws Exception {
+//			return null;
+//		}
+//	
+	
 	}
 }
