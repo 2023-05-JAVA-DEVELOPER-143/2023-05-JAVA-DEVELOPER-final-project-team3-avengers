@@ -82,7 +82,8 @@ public class OrderServiceImpl implements OrderService{
 	/*
 	 * cart에서 주문
 	 */
-	public Orders memberCartSave(Member member,OrdersDto ordersDto) {
+	public Orders memberCartOrderSave(OrdersDto ordersDto)throws Exception {
+		Member member= memberService.getMemberBy(ordersDto.getUserName());
 		List<Cart> carList = cartRepository.findByMemberId(member.getId());
 		ArrayList<OrderItem> orderItemList = new ArrayList<OrderItem>();
 		int o_tot_price =0;
@@ -118,14 +119,17 @@ public class OrderServiceImpl implements OrderService{
 		Delivery saveDelivery= deliveryDao.insertDelivery(delivery);
 		orders.setDelivery(saveDelivery);
 		
-		
 		Orders saveOrder= orderDao.save(orders);
+		
+		cartRepository.deleteById(member.getId());
+		
 		return saveOrder;
 	}
 	/*
 	 * cart에서 선택주문
 	 */
-	public Orders memberSave(Orders orders, String[] cart_item_noStr_array) {
+	public Orders memberCartSelectOrderSave(Orders orders, String[] cart_item_noStr_array) {
+		
 		return null;
 	}
 	

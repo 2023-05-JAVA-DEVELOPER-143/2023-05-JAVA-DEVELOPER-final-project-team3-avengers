@@ -9,6 +9,7 @@ import org.springframework.data.domain.jaxb.SpringDataJaxb.OrderDto;
 import org.springframework.test.annotation.Rollback;
 
 import com.danaga.dto.OrdersDto;
+import com.danaga.entity.Cart;
 import com.danaga.entity.Delivery;
 import com.danaga.entity.Orders;
 import com.danaga.repository.DeliveryRepository;
@@ -27,6 +28,8 @@ class OrderServiceImplTest {
 	OrderItemRepository orderItemRepository;
 	@Autowired
 	DeliveryRepository deliveryRepository;
+	@Autowired
+	CartService cartService;
 	@Transactional
 	@Rollback(false)
 	@Test
@@ -44,10 +47,24 @@ class OrderServiceImplTest {
 		
 		orderService.memberProductOrderSave(ordersDto);
 	}
-
+	@Transactional
+	@Rollback(false)
 	@Test
-	void testMemberSave() {
+	void testMemberCartOrderSave()throws Exception {
 		
+					
+		
+		Orders orders= Orders.builder()
+				  .member(memberService.getMemberBy("User2"))
+				  .orderItems(orderItemRepository.findAll())
+				  .delivery(Delivery.builder().name("testname")
+						  					  .phoneNumber("010-1111-1111")
+						  					  .address("서울시 개봉")
+						  					  .build())
+				  .build();
+		
+		OrdersDto ordersDto = OrdersDto.orderDto(orders);
+		orderService.memberCartOrderSave(ordersDto);
 	}
 //
 //	@Test

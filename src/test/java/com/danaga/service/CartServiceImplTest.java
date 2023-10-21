@@ -49,10 +49,10 @@ public class CartServiceImplTest {
 
 	// ok
 	@Test
-	@Disabled
+	//@Disabled
 	void addCart() throws Exception {
 		CartCreateDto createDto = CartCreateDto.builder().qty(3).optionset(oq.findById(1L).get()).build();
-		cs.addCart(createDto, "User7");
+		cs.addCart(createDto, "User2");
 		
 	}
 	/*
