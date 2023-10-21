@@ -17,12 +17,12 @@ import com.danaga.entity.OptionSet;
 import com.danaga.entity.Product;
 import com.danaga.repository.CartRepository;
 import com.danaga.repository.MemberRepository;
-import com.danaga.repository.OptionSetQueryRepository;
+import com.danaga.repository.product.OptionSetQueryRepository;
+import com.danaga.repository.product.OptionSetRepository;
 import com.danaga.dto.CartCreateDto;
 import com.danaga.dto.CartUpdateDto;
 import com.danaga.entity.Cart;
 import com.danaga.entity.OptionSet;
-import com.danaga.repository.OptionSetRepository;
 
 import jakarta.transaction.Transactional;
 

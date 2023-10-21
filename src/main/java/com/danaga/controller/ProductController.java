@@ -14,19 +14,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.danaga.dto.OptionSetDto;
-import com.danaga.dto.ProductDto;
 import com.danaga.dto.ResponseDto;
+import com.danaga.dto.product.ProductDto;
 import com.danaga.entity.OptionSet;
 import com.danaga.entity.Product;
-import com.danaga.service.ProductService;
 
 @RequestMapping("/product")
 @Controller
 public class ProductController {
-	@Autowired
-	private ProductService productService;
-	
-	//List<ProductDto> dtos = entities.stream().map(ProductDto::new).collect(Collectors.toList());
-		
+
 }
