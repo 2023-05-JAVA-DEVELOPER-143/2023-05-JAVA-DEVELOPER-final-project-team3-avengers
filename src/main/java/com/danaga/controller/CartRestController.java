@@ -22,7 +22,7 @@ import com.danaga.entity.Member;
 import com.danaga.entity.OptionSet;
 import com.danaga.repository.CartRepository;
 import com.danaga.repository.MemberRepository;
-import com.danaga.repository.OptionSetRepository;
+import com.danaga.repository.product.OptionSetRepository;
 import com.danaga.service.CartService;
 
 import io.swagger.v3.oas.annotations.Operation;

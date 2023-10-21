@@ -8,7 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.danaga.dto.QueryStringDataDto;
+import com.danaga.dto.product.QueryStringDataDto;
+import com.danaga.repository.product.OptionSetQueryRepository;
+import com.danaga.repository.product.OptionSetRepository;
 @SpringBootTest
 class OptionSetRepositoryTest {
 
@@ -34,7 +36,7 @@ class OptionSetRepositoryTest {
 	@Test
 	@Disabled
 	void test2() {
-		System.out.println(optionSetRepository.findByInterests_MemberId(1L));
+		//System.out.println(optionSetRepository.findByInterests_MemberId(1L));
 	}
 	@Test
 	void test3() {

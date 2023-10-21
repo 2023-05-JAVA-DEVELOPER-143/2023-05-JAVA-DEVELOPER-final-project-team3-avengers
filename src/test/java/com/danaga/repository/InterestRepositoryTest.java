@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
-import com.danaga.dto.InterestDto;
+import com.danaga.dto.product.InterestDto;
+import com.danaga.repository.product.InterestRepository;
 
 import jakarta.transaction.Transactional;
 @SpringBootTest
