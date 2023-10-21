@@ -10,4 +10,9 @@ public interface OptionSetRepository extends JpaRepository<OptionSet, Long>{
 	List<OptionSet> findByInterests_MemberId(Long id);
 	
 	List<OptionSet> findByProductId(Long id);
+	
+	void deleteAllByProductId(Long productId);
+	
+	List<OptionSet> findAllByRecentViews_MemberId(Long memberId);
+	List<OptionSet> findAllByInterests_MemberId(Long memberId);
 }
