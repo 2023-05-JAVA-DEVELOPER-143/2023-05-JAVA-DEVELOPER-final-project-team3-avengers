@@ -65,6 +65,7 @@ public class Orders {
 	
 	@OneToMany(mappedBy = "orders" )
 	@Builder.Default
+	@ToString.Exclude
 	private List<OrderItem> orderItems = new ArrayList<>(); //주문상품목록
 	
 	@ManyToOne

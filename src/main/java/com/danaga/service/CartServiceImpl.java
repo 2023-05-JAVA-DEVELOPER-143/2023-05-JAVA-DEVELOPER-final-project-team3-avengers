@@ -37,7 +37,7 @@ public class CartServiceImpl implements CartService {
 		} else {
 			findCart.setQty(findCart.getQty() + dto.getQty());
 			cartRepository.save(findCart);
-			findCart.setQty(findCart.getQty() + dto.getQty());
+			findCart.setQty(findCart.getQty() + dto.getQty()); //이거 뭐죠?? ㅋㅋ
 			cartRepository.save(findCart);
 		}
 	}

@@ -23,9 +23,9 @@ public class OrdersDto {
 	private String userName;
 	private Long optionSetId;
 	private Integer orderItem_qty;
-	private String name;
-	private String phoneNumber;
-	private String address;
+	private String delivaryName;
+	private String delivaryPhoneNumber;
+	private String delivaryAddress;
 	
 	public static OrdersDto orderDto(Orders entity) {
 		
@@ -33,9 +33,9 @@ public class OrdersDto {
 						.userName(entity.getMember().getUserName())
 						.optionSetId(entity.getOrderItems().get(0).getOptionSet().getId())
 						.orderItem_qty(entity.getOrderItems().get(0).getQty())
-						.name(entity.getDelivery().getName())
-						.phoneNumber(entity.getDelivery().getPhoneNumber())
-						.address(entity.getDelivery().getAddress())
+						.delivaryName(entity.getDelivery().getName())
+						.delivaryPhoneNumber(entity.getDelivery().getPhoneNumber())
+						.delivaryAddress(entity.getDelivery().getAddress())
 						.build();
 	}
 	

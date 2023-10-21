@@ -12,6 +12,8 @@ import com.danaga.dto.MemberUpdateDto;
 import com.danaga.entity.Member;
 import com.danaga.repository.MemberRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class MemberServiceImpl implements MemberService {
 
@@ -47,9 +49,9 @@ public class MemberServiceImpl implements MemberService {
 		// 2.회원가입
 		return memberDao.insert(member);
 	}
-
+	@Transactional
 	public MemberInsertGuestDto joinGuest(MemberInsertGuestDto memberInsertGuestDto) throws Exception {
-		if (memberDao.existedMemberBy(memberInsertGuestDto.getPhoneNo())) {
+		if (!memberDao.existedMemberBy(memberInsertGuestDto.getPhoneNo())) {
 			return MemberInsertGuestDto.toDto(memberDao.insert(Member.toGuestEntity(memberInsertGuestDto)));
 		} else {
 			return MemberInsertGuestDto.toDto(memberDao.findMember(Member.toGuestEntity(memberInsertGuestDto).getPhoneNo()));

@@ -27,11 +27,12 @@ public class OrderItem {
 	@Column(length = 10)
 	private Integer qty;
 
-	
+@ToString.Exclude	
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "orderId")
 	private Orders orders;
 	
+@ToString.Exclude	
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "optionSetId")
 	private OptionSet optionSet;

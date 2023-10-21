@@ -88,7 +88,7 @@ public class OrderDaoImpl implements OrderDao {
 	
 	//Id로 주문+주문아이템 전체(특정사용자)
 	@Override
-	public List<Orders> findOrderWithOrderByMember_UserName(String userName) {
+	public List<Orders> findOrdersWithOrderItemByMember_UserName(String userName) {
 		
 		return orderRepository.findOrdersWithOrderItemByMember_UserName(userName);
 	}
