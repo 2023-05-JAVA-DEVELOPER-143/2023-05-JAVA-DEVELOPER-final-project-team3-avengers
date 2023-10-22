@@ -24,7 +24,7 @@ public interface OptionSetService {
 
 		ResponseDto<?> uploadProduct(uploadProductDto dto);
 		
-		
+		ResponseDto<?> findById(Long optionSetId);
 		ResponseDto<?> showOptionNameValues(Long categoryId);
 		
 		ResponseDto<?> displayHitProducts(Long optionSetId);

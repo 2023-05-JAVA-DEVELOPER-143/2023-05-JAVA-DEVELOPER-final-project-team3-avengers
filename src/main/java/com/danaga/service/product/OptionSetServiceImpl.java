@@ -39,6 +39,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 	private final OptionsDao optionDao;
 	private final ProductDao productDao;
 	private final CategoryDao categoryDao;
+	private final CategoryService categoryService;
 
 	// 프로덕트 삭제해서 옵션셋도 같이 삭제되게
 	@Override
@@ -132,7 +133,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 		// 일단 최하위 카테고리인지 확인하고
 		@Override
 		public ResponseDto<?> showOptionNameValues(Long categoryId) {
-			if (categoryDao.findById(categoryId).getChildTypes().size() == 0) {
+			if (categoryService.isYoungest(categoryId)) {
 				List<OptionNamesOnly> optionNames = optionDao.findOptionNamesByCategoryId(categoryId);
 				List<OptionValuesOnly> optionValues = optionDao.findOptionValuesByCategoryId(categoryId);
 				List<String> optionNameStrings = optionNames.stream().map(OptionNamesOnly::getName)
@@ -176,7 +177,15 @@ public class OptionSetServiceImpl implements OptionSetService {
 			data.add(createdOptionSet);
 			return ResponseDto.<OptionSet>builder().data(data).build();
 		}
-	
+		
+		//옵션셋 아이디로 옵션셋 찾기 디테일 들어갈때사용
+		@Override
+		public ResponseDto<?> findById(Long optionSetId) {
+			OptionSet optionSet=optionSetDao.findById(optionSetId);
+			List<OptionSet> data = new ArrayList<>();
+			data.add(optionSet);
+			return ResponseDto.<OptionSet>builder().data(data).build();
+		}
 	/////////////////////////////////////////////////////////
 		//카테고리도 바꿀수 있게 
 	@Override

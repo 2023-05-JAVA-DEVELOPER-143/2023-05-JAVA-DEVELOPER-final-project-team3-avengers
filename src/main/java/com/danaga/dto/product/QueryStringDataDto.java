@@ -23,4 +23,5 @@ public class QueryStringDataDto {
 	private int maxPrice=Integer.MAX_VALUE;
 	private Optional<String> nameKeyword;
 	private Optional<String> category;
+	
 }
