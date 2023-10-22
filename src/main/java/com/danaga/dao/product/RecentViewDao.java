@@ -7,7 +7,7 @@ import com.danaga.entity.OptionSet;
 import com.danaga.entity.RecentView;
 
 public interface RecentViewDao {
-	void delete(RecentViewDto dto);
+	void delete(RecentView entity);
 	void deleteAll(Long memberId);
-	RecentViewDto save(RecentViewDto dto);
+	RecentView save(RecentView entity);
 }

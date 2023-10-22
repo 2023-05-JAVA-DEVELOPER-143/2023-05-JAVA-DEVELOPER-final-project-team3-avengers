@@ -10,7 +10,7 @@ public interface CategoryService {
 	//최상위 카테고리들만 조회
 	ResponseDto<?> AncestorCategories();
 	
-	//카테고리 선택하면 그 카테고리의 모든 상위, 직계자식카테고리만 조회 
+	//카테고리 선택하면 그 카테고리의 직계자식카테고리만 조회 
 	ResponseDto<?> categoryFamily(Long id);
 	
 	//카테고리 추가

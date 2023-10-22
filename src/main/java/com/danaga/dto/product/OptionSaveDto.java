@@ -29,6 +29,7 @@ public class OptionSaveDto {
 				.build();
 	}
 	public OptionSaveDto(Options entity){
+		this.id=entity.getId();
 		this.name=entity.getName();
 		this.value=entity.getValue();
 		this.extraPrice=entity.getExtraPrice();

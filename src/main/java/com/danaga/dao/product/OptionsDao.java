@@ -23,6 +23,7 @@ public interface OptionsDao {
 	void deleteAllByOptionSetId(Long optionSetId);
 	
 	void deleteById(Long id);
+	Options update(OptionSaveDto dto);
 	
 	
 }

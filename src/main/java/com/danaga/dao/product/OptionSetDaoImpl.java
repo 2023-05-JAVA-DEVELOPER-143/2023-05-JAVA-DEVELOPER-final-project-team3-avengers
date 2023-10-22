@@ -69,6 +69,7 @@ public class OptionSetDaoImpl implements OptionSetDao{
 	}
 	@Override
 	public OptionSet updateStock(OptionSetUpdateDto dto) {
+		//존재하는 optionset인지 검증
 		OptionSet origin = repository.findById(dto.getId()).get();
 		origin.setStock(dto.getStock());
 		return repository.save(origin);

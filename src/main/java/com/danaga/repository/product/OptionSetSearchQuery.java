@@ -28,8 +28,9 @@ public class OptionSetSearchQuery {
 		
 		this.searchQuery="SELECT os "
 				+ "FROM OptionSet os "
-				+ " join fetch os.product p"
-				+ OptionSetQueryData.JOIN_CATEGORY 
+				+ " join fetch os.product p "
+				+ " join fetch p.categorySets cs  "
+				+ " join fetch cs.category c " 
 				+ " WHERE os.stock >0 ";
 		});
 		if(searchDto.getCategory().isEmpty()) {
@@ -79,7 +80,7 @@ public class OptionSetSearchQuery {
 		}
 	}
 	public void categoryFilter(String category) {
-		String category_filter = "AND cs.category.name = :categoryFilter ";
+		String category_filter = "AND c.name = :categoryFilter ";
 		category_filter = category_filter.replace(":categoryFilter", "'"+category+"'");
 		this.searchQuery+=category_filter;
 	}

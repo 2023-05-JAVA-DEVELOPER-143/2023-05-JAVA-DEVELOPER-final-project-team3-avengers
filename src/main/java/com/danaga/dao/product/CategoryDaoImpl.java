@@ -42,10 +42,10 @@ public class CategoryDaoImpl implements CategoryDao{
 	}
 	@Override
 	public List<Category> findByParentEmpty() {
-		return repository.findByParentNotNull();
+		return repository.findByParentNull();
 	}
 	@Override
-	public Category findByOptionSetId(Long optionSetId) {
+	public List<Category> findByOptionSetId(Long optionSetId) {
 		//optionset_id로 카테고리 찾기 
 		return repository.findByCategorySets_Product_OptionSets_Id(optionSetId);
 	}

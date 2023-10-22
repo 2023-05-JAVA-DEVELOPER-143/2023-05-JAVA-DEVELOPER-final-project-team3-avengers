@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class uploadProductDto {
+public class UploadProductDto {
 	private ProductSaveDto product;
 	private List<OptionSaveDto> options;
 	private OptionSetCreateDto optionSet;

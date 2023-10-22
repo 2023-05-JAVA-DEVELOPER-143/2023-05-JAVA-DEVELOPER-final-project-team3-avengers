@@ -17,6 +17,7 @@ import com.danaga.dto.product.RecentViewDto;
 import com.danaga.entity.OptionSet;
 import com.danaga.entity.Options;
 import com.danaga.entity.Product;
+import com.danaga.entity.RecentView;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,9 +30,9 @@ public class RecentViewServiceImpl implements RecentViewService{
 	
 	//product detail 조회시 recentView 추가 
 	public ResponseDto<?> addRecentView(RecentViewDto dto){
-		RecentViewDto savedDto = recentViewDao.save(dto);
+		RecentView savedEntity = recentViewDao.save(dto.toEntity(dto));
 		List<RecentViewDto> data = new ArrayList<RecentViewDto>();
-		data.add(savedDto);
+		data.add(new RecentViewDto(savedEntity));
 		return ResponseDto.<RecentViewDto>builder().data(data).build();
 	}
 	
@@ -44,7 +45,7 @@ public class RecentViewServiceImpl implements RecentViewService{
 	
 	//최근본상품 하나 삭제 
 	public ResponseDto<?> removeRecentView(RecentViewDto dto){
-		recentViewDao.delete(dto);
+		recentViewDao.delete(dto.toEntity(dto));
 		List<OptionSet> data = optionSetDao.findAllByRecentView_MemberId(dto.getMemberId());
 		return ResponseDto.<OptionSet>builder().data(data).build();
 	}
