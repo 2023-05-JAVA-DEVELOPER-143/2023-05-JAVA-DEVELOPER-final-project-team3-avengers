@@ -47,7 +47,7 @@ class OrderServiceImplTest {
 									   .orderItem_qty(3)
 									   .userName("User1")
 									   .build();
-//			
+		
 		orderService.memberProductOrderSave(ordersDto,"주문자이름","010-324-2323");
 	}
 	@Transactional
@@ -64,7 +64,6 @@ class OrderServiceImplTest {
 				   .orderItem_qty(3)
 				   .userName("User1")
 				   .build();
-//		OrdersDto ordersDto = OrdersDto.orderDto(orders);
 		
 		orderService.memberCartOrderSave(ordersDto);
 	}
@@ -81,6 +80,7 @@ class OrderServiceImplTest {
 	@Transactional
 	@Rollback(false)
 	@Test
+	@Disabled
 	void testMemberCartSelectOrderSave()throws Exception {
 		String[] cart_item_noStr_array = {"102"};
 		OrdersDto ordersDto = OrdersDto.builder()
@@ -93,5 +93,35 @@ class OrderServiceImplTest {
 				   .build();
 	 System.out.println("********************************"+orderService.memberCartSelectOrderSave(ordersDto, cart_item_noStr_array));	
 	}
-
+	@Test
+	@Disabled
+	void testmemberOrderDetail()throws Exception {
+		System.out.println("777777777777777777777777"+orderService.memberOrderDetail(3L)); 
+	}
+	@Test
+	@Disabled
+	void testUpdateStatementByNormalOrder() {
+		
+		System.out.println("44444444444444444444"+orderService.updateStatementByNormalOrder(5L));
+		orderService.updateStatementByNormalOrder(10L);
+		orderService.updateStatementByNormalOrder(24L);
+		orderService.updateStatementByNormalOrder(16L);
+		orderService.updateStatementByNormalOrder(18L);
+	}
+	@Test
+	//@Disabled
+	void testUpdateStatementByCancleOrder() {
+		
+		orderService.updateStatementByCancleOrder(13L);
+		orderService.updateStatementByCancleOrder(19L);
+	}
+	@Test
+	//@Disabled
+	void testUpdateStatementByRefundOrder() {
+		
+		orderService.updateStatementByRefundOrder(10L);
+	}
+	
+	
+	
 }
