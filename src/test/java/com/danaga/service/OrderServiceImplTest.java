@@ -39,17 +39,6 @@ class OrderServiceImplTest {
 		
 		System.out.println("0000000000000000000000000000000000000");
 		
-//		Orders orders= Orders.builder()
-//			  .member(memberService.getMemberBy("User1"))
-//			  .orderItems(orderItemRepository.findAll())
-//			  .delivery(Delivery.builder().name("name")
-//					  					  .phoneNumber("010-0000-0000")
-//					  					  .address("서울시 신림")
-//					  					  .build())
-//			  .build();
-//		System.out.println("******************************************"+orders.getOrderItems());
-//		OrdersDto ordersDto= OrdersDto.builder().build();
-//		
 		OrdersDto ordersDto = OrdersDto.builder()
 									   .delivaryAddress("dd")
 									   .delivaryName("dd")
@@ -66,16 +55,7 @@ class OrderServiceImplTest {
 	@Test
 	@Disabled
 	void testMemberCartOrderSave()throws Exception {
-		
-//		Orders orders= Orders.builder()
-//				  .member(memberService.getMemberBy("User2"))
-//				  .orderItems(orderItemRepository.findAll())
-//				  .delivery(Delivery.builder().name("testname")
-//						  					  .phoneNumber("010-1111-1111")
-//						  					  .address("서울시 개봉")
-//						  					  .build())
-//				  .build();
-		
+
 		OrdersDto ordersDto = OrdersDto.builder()
 				   .delivaryAddress("dd")
 				   .delivaryName("dd")
@@ -88,26 +68,30 @@ class OrderServiceImplTest {
 		
 		orderService.memberCartOrderSave(ordersDto);
 	}
-
+	@Transactional
+	@Rollback(false)
+	@Disabled
 	@Test
-	
 	void testMemberOrderList() {
-		
-		
 		
 		System.out.println("-----------------------------"+orderService.memberOrderList("User1"));
 		
 	}
 
+	@Transactional
+	@Rollback(false)
 	@Test
-	void testMemberOrderListWithOrderItem() {
-		
-		System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++"+orderService.memberOrderListWithOrderItem("User1")); 
+	void testMemberCartSelectOrderSave()throws Exception {
+		String[] cart_item_noStr_array = {"102"};
+		OrdersDto ordersDto = OrdersDto.builder()
+				   .delivaryAddress("ff")
+				   .delivaryName("ff")
+				   .delivaryPhoneNumber("22")
+				   .optionSetId(20L)
+				   .orderItem_qty(3)
+				   .userName("User2")
+				   .build();
+	 System.out.println("********************************"+orderService.memberCartSelectOrderSave(ordersDto, cart_item_noStr_array));	
 	}
-//
-//	@Test
-//	void testOrderListWithOrderItem() {
-//		fail("Not yet implemented");
-//	}
 
 }

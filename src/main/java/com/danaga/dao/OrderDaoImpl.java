@@ -86,12 +86,6 @@ public class OrderDaoImpl implements OrderDao {
 
 	}
 	
-	//Id로 주문+주문아이템 전체(특정사용자)
-	@Override
-	public List<Orders> findOrdersWithOrderItemByMember_UserName(String userName) {
-		
-		return orderRepository.findOrdersWithOrderItemByMember_UserName(userName);
-	}
 
 	//주문 번호로 1개보기(주문상세리스트)
 	//주문번호는 id+10000이므로 받을때 id-10000으로 받아야함 --컨트롤러에서!!

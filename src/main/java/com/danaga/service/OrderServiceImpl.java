@@ -147,23 +147,54 @@ public class OrderServiceImpl implements OrderService{
 	/*
 	 * cart에서 선택주문
 	 */
-	public Orders memberCartSelectOrderSave(Orders orders, String[] cart_item_noStr_array) {
-		
-		return null;
+	@Transactional
+	public Orders memberCartSelectOrderSave(OrdersDto ordersDto, String[] cart_item_noStr_array)throws Exception {
+		Member member= memberService.getMemberBy(ordersDto.getUserName());
+		ArrayList<OrderItem> orderItemList = new ArrayList<>();
+		int o_tot_price =0;
+		int oi_tot_count = 0;
+		for (int i = 0; i < cart_item_noStr_array.length; i++) {
+			Cart cart = cartRepository.findById(Long.parseLong(cart_item_noStr_array[i])).get();
+			OrderItem orderItem = OrderItem.builder().qty(cart.getQty()).optionSet(cart.getOptionSet()).build();
+			orderItemList.add(orderItem);
+			o_tot_price += orderItem.getQty() * orderItem.getOptionSet().getTotalPrice();
+			oi_tot_count += orderItem.getQty();
+		}
+		String o_desc = orderItemList.get(0).getOptionSet().getProduct().getName()+ "외" +(oi_tot_count-1) +"개";
+		if(oi_tot_count==1) {
+			o_desc = orderItemList.get(0).getOptionSet().getProduct().getName();
+		}
+		Orders orders = Orders.builder()
+				.statement(OrderStateMsg.입금대기중)
+				.orderItems(orderItemList)
+				.price(o_tot_price)
+				.description(o_desc)
+				.member(member)
+				.build();
+		Delivery delivery = Delivery.builder()
+		.name(ordersDto.getDelivaryName())
+		.phoneNumber(ordersDto.getDelivaryPhoneNumber())
+		.address(ordersDto.getDelivaryAddress())
+		.orders(orders)
+		.build();
+		Delivery saveDelivery= deliveryDao.insertDelivery(delivery);
+		orders.setDelivery(saveDelivery);
+		for (OrderItem orderItem : orderItemList) {
+			orderItem.setOrders(orders);
+			orderItemRepository.save(orderItem);
+		}
+		Orders saveOrder= orderDao.save(orders);
+
+		return saveOrder;
 	}
 	/*
-	 * 주문목록
+	 * 주문+주문아이템 목록
 	 */
+	@Transactional
 	public List<Orders> memberOrderList(String userName){
 		return orderDao.findOrdersByMember_UserName(userName);
 	}
 	
-	/*
-	 * 주문+주문아이템 목록
-	 */
-	public List<Orders> memberOrderListWithOrderItem(String userName) {
-		return orderDao.findOrdersWithOrderItemByMember_UserName(userName);
-
 		/*
 		 * 세션객체를 사용한 선택주문,상품에서 직접주문
 		 */
@@ -179,5 +210,5 @@ public class OrderServiceImpl implements OrderService{
 //		}
 //	
 	
-	}
+	
 }

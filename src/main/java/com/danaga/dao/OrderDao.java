@@ -30,10 +30,6 @@ public interface OrderDao {
 	  public List<Orders> findOrdersByMember_UserName(String userName);
 	  
 	  
-	//  주문+주문아이템 전체(특정사용자)
-		
-		public List<Orders> findOrdersWithOrderItemByMember_UserName(String userName);
-	  
 	//  주문1개보기(주문상세리스트)
 	  
 	  public Orders findOrdersById(Long id);

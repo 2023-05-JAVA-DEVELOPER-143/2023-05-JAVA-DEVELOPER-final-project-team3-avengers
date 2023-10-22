@@ -22,6 +22,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -63,9 +64,8 @@ public class Orders {
 	@OneToOne(mappedBy = "orders")
 	private Refund refund; //환불
 	
-	@OneToMany(mappedBy = "orders" )
+	@OneToMany(mappedBy = "orders" ,fetch = FetchType.EAGER)
 	@Builder.Default
-	@ToString.Exclude
 	private List<OrderItem> orderItems = new ArrayList<>(); //주문상품목록
 	
 	@ManyToOne
