@@ -1,6 +1,7 @@
 package com.danaga.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,98 +25,123 @@ public class BoardService {
 	@Autowired
 	private BoardRepository bRepository;
 	@Autowired
-	private MemberRepository mRepsitory;
+	private MemberRepository mRepository;
 	@Autowired
 	private BoardGroupRepository bgRepository;
 	@Autowired
 	private LikeConfigRepository lcRepository;
+
+	// 게시물별 출력
+	public List<LikeConfig> getConfigs() {
+		return lcRepository.findAll();
+	}
+
+	public List<BoardDto> boards(Long boardGroupId) {
+		return bRepository.findByBoardGroupIdOrderByCreateTimeDesc(boardGroupId).stream().map(board -> BoardDto.createBoardDto(board)).collect(Collectors.toList());
+	}
+
+	public BoardDto boardDetail(Long id) {
+		Board target=bRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("대상이없습니다."));
+		target.readCountUp(target);
+		bRepository.save(target);
+		BoardDto temp= BoardDto.createBoardDto(target);
+		return temp;
+	}
 	
-	//게시물별 출력
-	public List<Board> findWhichBoards(Long boardGroupId){
-		return bRepository.findByBoardGroupIdOrderByCreateTime(boardGroupId);
-	}
-	//특정게시판의 특정게시물 읽기
-	public Board boardDetail(Long boardGroupId, Long boardId) {
-		return bRepository.findByBoardGroup_IdAndId(boardGroupId, boardId);
-	}
-	//생성
-	public Board createBoard(BoardDto dto) {
-		Member member = mRepsitory.findById(dto.getMemberId()).get();
-		BoardGroup boardGroup = bgRepository.findById(dto.getBoardGroupId()).get(); 
-		if(dto.getId()==null) {
-			System.out.println("생성가능!");
-			Board target = BoardDto.toEntity(dto,member,boardGroup);
-			return bRepository.save(target);
-		}else {
-			System.out.println("생성불가");
-			return null;
+
+	// 생성
+	@Transactional
+	public BoardDto createBoard(BoardDto dto,List<LikeConfig> configs) {
+		// 게시글 조회 및 예외처리
+		Member memberT = mRepository.findById(dto.getMemberId())
+				.orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+		BoardGroup boardGroupT = bgRepository.findById(dto.getBoardGroupId())
+				.orElseThrow(() -> new IllegalArgumentException("게시판을 찾을 수 없습니다."));
+		
+		if (dto.getId() != null) {
+			throw new IllegalArgumentException("이미 존재하는 게시물ID입니다.");
 		}
+		// 게시글 엔티티 생성
+		Board board = Board.createBoard(dto, memberT, boardGroupT, configs);
+
+		// 게시글 엔티티를 DB에 저장
+		Board created = bRepository.save(board);
+
+		return BoardDto.createBoardDto(board);
 	}
-	//좋아요
-	public Board upIsLike(Long boardId,Long boardGroupId,Long memberId, Long likeConfigId) {
+
+	// 좋아요
+	@Transactional
+	public BoardDto upIsLike(Long boardId, Long boardGroupId, Long memberId, Long likeConfigId) {
 		Board target = bRepository.findByBoardGroup_IdAndId(boardGroupId, boardId);
-		if(target==null) {
-			System.out.println("해당게시물이 존재하지않습니다.");
+		if(target.getId()==null) {
+			throw new IllegalArgumentException("존재하지 않는 게시물입니다.");
 		}
-		Member member = mRepsitory.findById(memberId).get();
-		LikeConfig config= lcRepository.findById(likeConfigId).get();
-		if(config.getIsLike()==0) {
+		Member member = mRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("접근이 잘못됬어요(회원정보없음)"));
+		
+		LikeConfig config = lcRepository.findByBoard_IdAndMember_id(boardId, memberId);
+		if (config.getIsLike() == 0) {
 			config.setIsLike(1);
-			target.setIsLike(target.getIsLike()+1);
-			return bRepository.save(target);
-		}else {
+			target.setIsLike(target.getIsLike() + 1);
+			bRepository.save(target);
+			BoardDto updated= BoardDto.createBoardDto(target);
+			return updated;
+		} else {
 			System.out.println("이미 좋아요를 눌렀습니다.");
 			return null;
 		}
-		
+
 	}
-	//싫어요
-	public Board upDisLike(Long boardId,Long boardGroupId,Long memberId, Long likeConfigId) {
+
+	// 싫어요
+	@Transactional
+	public BoardDto upDisLike(Long boardId, Long boardGroupId, Long memberId, Long likeConfigId) {
 		Board target = bRepository.findByBoardGroup_IdAndId(boardGroupId, boardId);
-		Member member = mRepsitory.findById(memberId).get();
-		LikeConfig config= lcRepository.findById(likeConfigId).get();
-		if(target==null) {
-			System.out.println("해당게시물이 존재하지않습니다.");
+		if(target.getId()==null) {
+			throw new IllegalArgumentException("존재하지 않는 게시물입니다.");
 		}
-		if(member.getId() ==null) {
-			System.out.println("존재하지않는 회원입니다.");
-		}
-		if(config.getId() ==null) {
-			System.out.println("존재하지 않는 상태입니다.");
-		}
+		Member member = mRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("접근이 잘못됬어요(회원정보없음)"));
 		
-		if(config.getIsLike()==0) {
-			config.setIsLike(1);
-			target.setDisLike(target.getDisLike()+1);
-			return bRepository.save(target);
-		}else {
-			System.out.println("이미 싫어요를 눌렀습니다.");
+		LikeConfig config = lcRepository.findByBoard_IdAndMember_id(boardId, memberId);
+		if (config.getDisLike() == 0) {
+			config.setDisLike(1);
+			target.setDisLike(target.getDisLike() + 1);
+			bRepository.save(target);
+			BoardDto updated= BoardDto.createBoardDto(target);
+			return updated;
+		} else {
+			System.out.println("이미 좋아요를 눌렀습니다.");
 			return null;
 		}
-		
+
 	}
-	//게시물 삭제
-	public void delete(Long boardGroupId,Long boardId) {
-		Board target = bRepository.findByBoardGroup_IdAndId(boardGroupId, boardId);
-		if(target !=null) {
-			System.out.println(target+" 이 ");
-			bRepository.deleteByBoardGroup_IdAndId(boardGroupId, boardId);
-			System.out.println("삭제되었어요");
-		}
+
+	// 게시물수정
+	@Transactional
+	public BoardDto update(BoardDto dto) {
+		// 타겟 게시물 조회 및 예외처리
+		Board target = bRepository.findById(dto.getId()).orElseThrow(() -> new IllegalArgumentException("대상이없습니다."));
 		
-	}
-	
-	//게시물수정
-	public Board update(BoardDto dto,Member member ,BoardGroup group) {
-		
-		Board board = dto.toEntity(dto, member, group);
-		Board target = bRepository.findById(dto.getId()).get();
-		
-		if(target==null || dto.getId().equals(board.getId())) {
-			return null;
-		}
-		target.patch(board);
+		// 댓글 수정
+		target.patch(dto);
+
+		// DB로 갱신
 		Board updated = bRepository.save(target);
-		return updated;
+
+		// 게시물 엔티티를 DTO로 변환 및 반환
+		return BoardDto.createBoardDto(updated);
+	}
+
+	// 게시물 삭제
+	@Transactional
+	public BoardDto delete(BoardDto dto) {
+		// 게시물 조회 및 예외처리
+		Board target = bRepository.findById(dto.getId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시물입니다."));
+		
+		// 게시물 DB에서 삭제
+		bRepository.delete(target);
+
+		// 삭제된 댓글을 dto로 반환
+		return BoardDto.createBoardDto(target);
 	}
 }

@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+            href="../css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div th:if="${msg}" class="alert alert-primary alert-dismissable">
+    <span th:text="${msg}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+
+<div class="container" style="max-width: 600px">
+    <div class="py-5 text-center">
+        <h2>상품 목록</h2>
+    </div>
+    <hr class="my-4">
+    <div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>게시물번호</th>
+                <th>제목</th>
+                <th>내용</th>
+                <th>작성자</th>
+                <th>    작성일자    </th>
+                <th>  조회수</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="list : ${boardList}">
+                <td><a href="show.html" th:href="@{/board/{id}(id=${list.id})/show}" th:text="${list.id}">회원id</a></td>
+                <td><a href="show.html" th:href="@{|/board/${list.id}/show|}" th:text="${list.title}">상품명</a></td>
+                <td th:text="${list.content}">10000</td>
+                <td th:text="${list.nickname}">10</td>
+                <td>
+					<span th:if="${list.updateTime != null}"  th:text="${#temporals.format(list.updateTime, 'yyyy-MM-dd HH:mm')}"></span>
+					<span th:unless="${list.updateTime != null}" th:text="${#temporals.format(list.createTime, 'yyyy-MM-dd HH:mm')}"></span>
+				</td>
+                <td th:text="${list.readCount}">10</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div> <!-- /container -->
+
+</body>
+</html>

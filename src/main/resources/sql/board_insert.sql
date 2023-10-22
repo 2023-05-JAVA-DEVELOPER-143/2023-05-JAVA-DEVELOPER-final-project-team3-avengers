@@ -18,8 +18,8 @@ insert into board (id, title, content, is_like, dis_like, create_time, update_ti
 
 
 
-insert into like_config (id,board_id,member_id,is_like,dis_like) values(1,1,1,1,0);
+insert into like_config (id,board_id,member_id,is_like,dis_like) values(1,1,1,0,0);
 insert into like_config (id,board_id,member_id,is_like,dis_like) values(2,2,2,0,0);
-insert into like_config (id,board_id,member_id,is_like,dis_like) values(3,3,3,0.1);
+insert into like_config (id,board_id,member_id,is_like,dis_like) values(3,3,3,0,0);
 
 

@@ -2,6 +2,8 @@ package com.danaga.entity;
 
 import org.hibernate.annotations.ColumnDefault;
 
+import com.danaga.dto.LikeConfigDto;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -46,5 +48,19 @@ public class LikeConfig {
     @JoinColumn(name = "member_id")
     @ToString.Exclude
     private Member member;
+    
+    public static LikeConfig createConfig(LikeConfigDto dto,Board board, Member meber) {
+    	return LikeConfig.builder().id(dto.getId()).isLike(dto.getIsLike()).disLike(dto.getDisLike()).board(board).member(meber).build();
+    }
+    public void patch(LikeConfigDto dto) {
+    	if(dto.getBoardId()==null) {
+    		throw new IllegalArgumentException("존재하지않는 게시물입니다.");
+    	}
+    	if(dto.getMemberId()==null) {
+    		throw new IllegalArgumentException("존재하지않는 회원입니다.");
+    	}
+    	this.isLike=dto.getIsLike();
+    	this.disLike=dto.getDisLike();
+    }
     
 }

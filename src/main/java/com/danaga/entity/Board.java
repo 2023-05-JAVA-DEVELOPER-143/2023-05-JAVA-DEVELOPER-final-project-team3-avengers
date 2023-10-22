@@ -16,12 +16,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -90,46 +88,62 @@ public class Board extends BaseEntity {
 		
 	 */
 
+    public static Board createBoard(BoardDto dto,Member member, BoardGroup boardGroup,List<LikeConfig> configs) {
+    	if(boardGroup.getId()==null) {
+    		System.out.println("게시판을 선택해주세요");
+    	}
+    	if(member.getId()==null) {
+    		System.out.println("사용자가 없습니다");
+    	}
+    	if(member.getRole().equals("ADMIN")) {
+    		dto.setIsAdmin(2);
+    	}
+    	return Board.builder()
+    			.id(dto.getId()).title(dto.getTitle())
+    			.content(dto.getContent()).img1(dto.getImg1()).img2(dto.getImg2())
+    			.img3(dto.getImg3()).img4(dto.getImg4()).img5(dto.getImg5())
+    			.isLike(dto.getIsLike()).disLike(dto.getDisLike())
+    			.readCount(dto.getReadCount()).member(member).boardGroup(boardGroup).lConfigs(configs)
+    			.build();
+    }
   
-    public void patch(Board board) {
-    	if(this.id!=board.getId()) {
+    public void patch(BoardDto dto) {
+    	if(this.id!=dto.getId()) {
     		throw new IllegalArgumentException("수정 실패!~ 대상이 잘못됬습니다.");
     	}
-    	if(this.getMember().getId()!=board.getMember().getId()) {
+    	if(this.getMember().getId()!=dto.getMemberId()) {
     		throw new IllegalArgumentException("수정 실패!~ 회원이 잘못됬습니다.");
     	}
-    	if(this.getBoardGroup().getId()!=board.getBoardGroup().getId()) {
+    	if(this.getBoardGroup().getId()!=dto.getBoardGroupId()) {
     		throw new IllegalArgumentException("수정 실패!~ 게시판 선택이 잘못됬습니다.");
     	}
-    	if(this.getBoardGroup().getId()!=board.getBoardGroup().getId()) {
-    		throw new IllegalArgumentException("수정 실패!~ 게시판 선택이 잘못됬습니다.");
-    	}
-    	if(board.getLConfigs()==null) {
+    	if(dto.getLConfigs()==null) {
     		System.out.println("상태값이 없어요!");
     	}
-    	if(board.getTitle()!=null) {
-    		this.title=board.getTitle();
+    	if(dto.getTitle()!=null) {
+    		this.title=dto.getTitle();
     	}
-    	if(board.getContent()!=null) {
-    		this.content=board.getContent();
+    	if(dto.getContent()!=null) {
+    		this.content=dto.getContent();
     	}
-    	if(board.getImg1()!=null) {
-    		this.img1=board.getImg1();
+    	if(dto.getImg1()!=null) {
+    		this.img1=dto.getImg1();
     	}
-    	if(board.getImg2()!=null) {
-    		this.img2=board.getImg2();
+    	if(dto.getImg2()!=null) {
+    		this.img2=dto.getImg2();
     	}
-    	if(board.getImg3()!=null) {
-    		this.img3=board.getImg3();
+    	if(dto.getImg3()!=null) {
+    		this.img3=dto.getImg3();
     	}
-    	if(board.getImg4()!=null) {
-    		this.img4=board.getImg4();
+    	if(dto.getImg4()!=null) {
+    		this.img4=dto.getImg4();
     	}
-    	if(board.getImg5()!=null) {
-    		this.img5=board.getImg5();
+    	if(dto.getImg5()!=null) {
+    		this.img5=dto.getImg5();
     	}
-    	
-    	
     }
 
+    public void readCountUp(Board board) {
+    	board.readCount++;
+    }
 }
