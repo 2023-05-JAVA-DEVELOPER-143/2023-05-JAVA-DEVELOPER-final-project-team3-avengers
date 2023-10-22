@@ -7,10 +7,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class UploadProductDto {
 	private ProductSaveDto product;
 	private List<OptionSaveDto> options;
