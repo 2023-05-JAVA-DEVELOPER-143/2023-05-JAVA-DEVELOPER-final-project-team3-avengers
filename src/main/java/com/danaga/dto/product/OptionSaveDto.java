@@ -28,4 +28,11 @@ public class OptionSaveDto {
 				.optionSet(OptionSet.builder().id(optionSetId).build())
 				.build();
 	}
+	public OptionSaveDto(Options entity){
+		this.name=entity.getName();
+		this.value=entity.getValue();
+		this.extraPrice=entity.getExtraPrice();
+		this.optionSetId=entity.getOptionSet().getId();
+				
+	}
 }
