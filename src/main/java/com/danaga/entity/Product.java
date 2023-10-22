@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.annotations.ColumnDefault;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -42,7 +43,8 @@ public class Product extends BaseEntity {//제품의 기본 모델 정보
 	private String img;//제품 이미지
 	
 	@ColumnDefault(value = "0.0")
-	private Double rating;//평점 리뷰가 등록될 때마다 매번 갱신
+	@Builder.Default
+	private Double rating=0.0;//평점 리뷰가 등록될 때마다 매번 갱신
 	//(현재 평점* 현재 리뷰 개수+save할 리뷰의 평점)/(현재 리뷰 개수+1)
 	
 
@@ -57,7 +59,7 @@ public class Product extends BaseEntity {//제품의 기본 모델 정보
 //	private List<Review> reviews = new ArrayList<>();
 
 	@ToString.Exclude
-	@OneToMany(mappedBy = "product")
+	@OneToMany(mappedBy = "product",cascade = {CascadeType.REMOVE,CascadeType.PERSIST},orphanRemoval = true)
 	@Builder.Default
 	private List<OptionSet> optionSets = new ArrayList<>();
 	

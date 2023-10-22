@@ -18,5 +18,5 @@ public interface CategoryDao {
 	
 	List<Category> findByParentEmpty();
 	
-	Category findByOptionSetId(Long optionSetId);
+	List<Category> findByOptionSetId(Long optionSetId);
 }

@@ -11,6 +11,7 @@ import com.danaga.dto.ResponseDto;
 import com.danaga.dto.product.InterestDto;
 import com.danaga.entity.OptionSet;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
@@ -23,6 +24,7 @@ public class InterestServiceImpl implements InterestService {
 	//제품에서 하트 누르면 관심제품 추가
 	//제품에서 하트 누르면 관심제품 삭제
 	@Override
+	@Transactional
 	public ResponseDto<?> clickHeart(InterestDto dto) {
 		if(interestDao.isInterested(dto)) {
 			interestDao.delete(dto);

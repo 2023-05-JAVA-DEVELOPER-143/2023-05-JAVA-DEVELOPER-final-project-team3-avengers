@@ -19,7 +19,9 @@ public class QueryStringDataDto {
 	private Optional<String> orderType;
 	private Optional<String> brand;
 	private Optional<List<Options>> optionset;
+	@Builder.Default
 	private int minPrice=0;
+	@Builder.Default
 	private int maxPrice=Integer.MAX_VALUE;
 	private Optional<String> nameKeyword;
 	private Optional<String> category;

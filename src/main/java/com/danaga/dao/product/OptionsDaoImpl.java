@@ -58,5 +58,13 @@ public class OptionsDaoImpl implements OptionsDao{
 	public void deleteById(Long id) {
 		optionsRepository.deleteById(id);
 	}
+	@Override
+	public Options update(OptionSaveDto dto) {
+		Options origin = optionsRepository.findById(dto.getId()).get();
+		origin.setExtraPrice(dto.getExtraPrice());
+		origin.setName(dto.getName());
+		origin.setValue(dto.getValue());
+		return optionsRepository.save(origin);
+	}
 
 }

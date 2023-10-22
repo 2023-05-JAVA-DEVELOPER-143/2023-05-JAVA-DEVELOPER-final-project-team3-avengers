@@ -14,11 +14,12 @@ import com.danaga.dao.product.ProductDao;
 import com.danaga.dto.ResponseDto;
 import com.danaga.dto.product.OptionNameValueDto;
 import com.danaga.dto.product.OptionSaveDto;
+import com.danaga.dto.product.OptionSetCreateDto;
 import com.danaga.dto.product.OptionSetUpdateDto;
 import com.danaga.dto.product.ProductSaveDto;
 import com.danaga.dto.product.ProductUpdateDto;
 import com.danaga.dto.product.QueryStringDataDto;
-import com.danaga.dto.product.uploadProductDto;
+import com.danaga.dto.product.UploadProductDto;
 import com.danaga.entity.Category;
 import com.danaga.entity.OptionSet;
 import com.danaga.entity.Options;
@@ -43,14 +44,19 @@ public class OptionSetServiceImpl implements OptionSetService {
 
 	// 프로덕트 삭제해서 옵션셋도 같이 삭제되게
 	@Override
+	@Transactional
 	public ResponseDto<?> deleteProduct(Long productId, QueryStringDataDto dataDto) {
 		productDao.deleteById(productId);
 		List<OptionSet> optionSetList = optionSetDao.findByFilter(dataDto);
+		//기존 전체 프로덕트 리스트 화면에서 삭제 눌렀을때
+		//삭제 누른당시 리스트의 검색 조건을 그대로 가져와서 
+		//삭제 후에도 같은 검색 조건으로 리스트 다시 갱신하게 
 		return ResponseDto.<OptionSet>builder().data(optionSetList).build();
 	}
 
 	// 옵션셋 삭제시 옵션들도 삭제
 	@Override
+	@Transactional
 	public ResponseDto<?> deleteOptionSet(Long optionSetId, QueryStringDataDto dataDto) {
 		optionSetDao.deleteById(optionSetId);
 		List<OptionSet> optionSetList = optionSetDao.findByFilter(dataDto);
@@ -59,12 +65,12 @@ public class OptionSetServiceImpl implements OptionSetService {
 
 	// 옵션 삭제하고 옵션이 붙어있던 오리진 옵션셋 반환
 	@Override
+	@Transactional
 	public ResponseDto<?> deleteOption(Long optionId) {
 		optionDao.deleteById(optionId);
-		OptionSet originOptionSet = optionSetDao.findByOptionId(optionId);
-		List<OptionSet> optionSet = new ArrayList<>();
-		optionSet.add(originOptionSet);
-		return ResponseDto.<OptionSet>builder().data(optionSet).build();
+		List<String> msg = new ArrayList<>();
+		msg.add("삭제되었습니다.");
+		return ResponseDto.<String>builder().data(msg).build();//그냥 "msg"를 반환하는게
 	}
 
 	// 오더하면 옵션셋 재고 -1, 환불하거나 취소하면 +1
@@ -97,11 +103,17 @@ public class OptionSetServiceImpl implements OptionSetService {
 
 	// 같은 카테고리 인기상품
 	@Override
+	@Transactional
 	public ResponseDto<?> displayHitProducts(Long optionSetId) {
-		Category findCategory = categoryDao.findByOptionSetId(optionSetId);
+		List<Category> findCategory = categoryDao.findByOptionSetId(optionSetId);
 		String orderType = OptionSetQueryData.BY_VIEW_COUNT;
 		List<OptionSet> searchResult = optionSetDao.findByFilter(QueryStringDataDto.builder()
-				.orderType(Optional.of(orderType)).category(Optional.of(findCategory.getName())).build());
+				.orderType(Optional.of(orderType))
+				.category(Optional.of(findCategory.get(findCategory.size()-1).getName()))
+				.brand(Optional.empty())
+				.nameKeyword(Optional.empty())
+				.optionset(Optional.empty())
+				.build());
 		return ResponseDto.<OptionSet>builder().data(searchResult).build();
 	}
 
@@ -119,6 +131,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 	// 프로덕트 아이디로 옵션셋 찾기
 	// 품절옵션은 일단 표시하고 프론트에서 표시
 	@Override
+	@Transactional
 	public ResponseDto<?> showOtherOptionSets(Long optionSetId) {
 		Product product = productDao.findByOptionSetId(optionSetId);
 		List<OptionSet> findOptionSets = optionSetDao.findAllByProductId(product.getId());
@@ -132,6 +145,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 	// 최하위 카테고리 선택하고 나면 어떤 옵션 필터들 있는지 옵션 명과 옵션값 나열
 		// 일단 최하위 카테고리인지 확인하고
 		@Override
+		@Transactional
 		public ResponseDto<?> showOptionNameValues(Long categoryId) {
 			if (categoryService.isYoungest(categoryId)) {
 				List<OptionNamesOnly> optionNames = optionDao.findOptionNamesByCategoryId(categoryId);
@@ -152,9 +166,9 @@ public class OptionSetServiceImpl implements OptionSetService {
 		
 		//option update
 		@Override
+		@Transactional
 		public ResponseDto<?> update(OptionSaveDto dto) {
-			Options origin = optionDao.findById(dto.getId());
-			Options created = optionDao.save(new OptionSaveDto(origin));
+			Options created = optionDao.update(dto);
 			List<Options> data = new ArrayList<>();
 			data.add(created);
 			return ResponseDto.<Options>builder().data(data).build();
@@ -165,14 +179,17 @@ public class OptionSetServiceImpl implements OptionSetService {
 		// 프로덕트, 옵션, 옵션셋, 추가
 		@Override
 		@Transactional
-		public ResponseDto<?> uploadProduct(uploadProductDto dto) {
+		public ResponseDto<?> uploadProduct(UploadProductDto dto) {
 			Product createdProduct = productDao.create(dto.getProduct());
 			OptionSet createdOptionSet = optionSetDao.create(dto.getOptionSet());
 			createdOptionSet.setProduct(createdProduct);
+			int productPrice = createdProduct.getPrice();
 			for(OptionSaveDto option : dto.getOptions()) {
 				Options createdOption = optionDao.save(option);
+				productPrice+=option.getExtraPrice();
 				createdOption.setOptionSet(createdOptionSet);
 			}
+			createdOptionSet.setTotalPrice(productPrice);
 			List<OptionSet> data = new ArrayList<>();
 			data.add(createdOptionSet);
 			return ResponseDto.<OptionSet>builder().data(data).build();

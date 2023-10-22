@@ -13,6 +13,6 @@ public interface RecentViewRepository extends JpaRepository<RecentView, Long>{
 	
 	void deleteByMemberId(Long memberId);
 	
-	RecentViewDto save(RecentViewDto dto);
+	RecentView save(RecentView entity);
 	
 }

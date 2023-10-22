@@ -7,6 +7,4 @@ public class OptionSetQueryData {
 	public static final String BY_CREATE_TIME = "os.createTime desc";
 	public static final String BY_RATING = "p.rating desc";
 
-	public static final String NONE = "";
-	public static final String JOIN_CATEGORY = " join fetch categorySet cs ";
 }

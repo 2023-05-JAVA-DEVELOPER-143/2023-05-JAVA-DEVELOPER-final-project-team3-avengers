@@ -18,8 +18,8 @@ public class RecentViewDaoImpl implements RecentViewDao{
 	
 	//나의 최근본 상품 하나 선택 삭제
 	@Override
-	public void delete(RecentViewDto dto) {
-		repository.deleteByMemberIdAndOptionSetId(dto.getMemberId(),dto.getOptionSetId());
+	public void delete(RecentView entity) {
+		repository.deleteByMemberIdAndOptionSetId(entity.getMember().getId(),entity.getOptionSet().getId());
 	}
 	//나의 최근본 상품 전체 삭제
 	@Override
@@ -29,8 +29,8 @@ public class RecentViewDaoImpl implements RecentViewDao{
 
 	//recentView 추가
 	@Override
-	public RecentViewDto save(RecentViewDto dto) {
-		return repository.save(dto);
+	public RecentView save(RecentView entity) {
+		return repository.save(entity);
 	}
 	
 }

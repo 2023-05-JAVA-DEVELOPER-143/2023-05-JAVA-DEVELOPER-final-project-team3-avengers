@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.annotations.ColumnDefault;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -38,11 +39,13 @@ public class OptionSet extends BaseEntity {
 
 	private Integer stock;//재고
 	@ColumnDefault(value = "0")
-	private Integer viewCount;//조회수
+	@Builder.Default
+	private Integer viewCount=0;//조회수
 	@ColumnDefault(value = "0")
-	private Integer orderCount;//주문수
+	@Builder.Default
+	private Integer orderCount=0;//주문수
 
-	@OneToMany(mappedBy = "optionSet", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "optionSet", fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE,CascadeType.PERSIST},orphanRemoval = true)
 	@Builder.Default
 	private List<Options> options = new ArrayList<>();//옵션들을 가진다.
 
@@ -50,25 +53,25 @@ public class OptionSet extends BaseEntity {
 	@JoinColumn(name = "productId")
 	private Product product;//프로덕트FK
 
-	@OneToMany(mappedBy = "optionSet")
+	@OneToMany(mappedBy = "optionSet",cascade = CascadeType.REMOVE,orphanRemoval = true)
 	@Builder.Default
 	@ToString.Exclude
 	private List<OrderItem> orderItems = new ArrayList<>();
 	//오더아이템List 
 
-	@OneToMany(mappedBy = "optionSet")
+	@OneToMany(mappedBy = "optionSet",cascade = CascadeType.REMOVE,orphanRemoval = true)
 	@Builder.Default 
 	@ToString.Exclude
 	private List<Cart> carts = new ArrayList<>();
 	//카트아이템List
 	
 	@Builder.Default
-	@OneToMany(mappedBy = "optionSet")
+	@OneToMany(mappedBy = "optionSet",cascade = CascadeType.REMOVE,orphanRemoval = true)
 	@ToString.Exclude
 	private List<RecentView> recentViews = new ArrayList<>();
 	
 	@Builder.Default
-	@OneToMany(mappedBy = "optionSet")
+	@OneToMany(mappedBy = "optionSet",cascade = CascadeType.REMOVE,orphanRemoval = true)
 	@ToString.Exclude
 	private List<Interest> interests = new ArrayList<>();
 	
