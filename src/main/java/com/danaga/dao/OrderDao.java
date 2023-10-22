@@ -26,6 +26,8 @@ public interface OrderDao {
 	  Orders updateStatementByCancleOrder(Long orderNo);
 	  // 3.환불주문
 	  Orders updateStatementByRefundOrder(Long orderNo);
+	  // 4.상태리셋
+	  Orders updateStatementByResetOrder(Long orderNo);
 	  
 	//  주문전체(특정사용자)
 	  
@@ -39,4 +41,5 @@ public interface OrderDao {
 	  
 	  Orders findOrdersByIdAndNameAndPhoneNo(Long orderNo, String userName,String phoneNo)throws Exception;
 	
+	  
 }

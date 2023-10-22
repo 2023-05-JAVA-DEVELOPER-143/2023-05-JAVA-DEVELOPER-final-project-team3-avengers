@@ -64,6 +64,7 @@ public class OrderDaoImpl implements OrderDao {
 	
 	
 	//주문상태업데이트
+	// 1.정상주문
 	@Override
 	public Orders updateStatementByNormalOrder(Long orderNo) {
 
@@ -76,7 +77,7 @@ public class OrderDaoImpl implements OrderDao {
 		}
 		return findOrder;
 	}
-	
+	// 2.취소주문
 	public Orders updateStatementByCancleOrder(Long orderNo) {
 
 		Orders findOrder = orderRepository.findById(orderNo).get();
@@ -86,7 +87,7 @@ public class OrderDaoImpl implements OrderDao {
 		}
 		return findOrder;
 	}
-	
+	// 3.환불주문
 	public Orders updateStatementByRefundOrder(Long orderNo) {
 
 		Orders findOrder = orderRepository.findById(orderNo).get();
@@ -99,8 +100,12 @@ public class OrderDaoImpl implements OrderDao {
 		
 		return findOrder;
 	}
-	
-	
+	// 4.상태리셋
+	public Orders updateStatementByResetOrder(Long orderNo) {
+		Orders findOrder = orderRepository.findById(orderNo).get();
+		findOrder.setStatement(OrderStateMsg.입금대기중);
+		return findOrder;
+	}
 	
 	
 

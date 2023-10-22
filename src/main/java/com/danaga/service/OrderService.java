@@ -37,4 +37,5 @@ public interface OrderService {
 	  Orders updateStatementByCancleOrder(Long orderNo);
 	  // 3.환불주문
 	  Orders updateStatementByRefundOrder(Long orderNo);
+	  Orders updateStatementByResetOrder(Long orderNo);
 }

@@ -230,6 +230,15 @@ public class OrderServiceImpl implements OrderService{
 		orderDao.save(updateOrder);
 		return updateOrder;
 	}
+	/*
+	 * 4.상태리셋
+	 */
+	@Override
+	public Orders updateStatementByResetOrder(Long orderNo) {
+		Orders updateOrder= orderDao.updateStatementByResetOrder(orderNo);
+		orderDao.save(updateOrder);
+		return updateOrder;
+	}
 	
 	
 	
