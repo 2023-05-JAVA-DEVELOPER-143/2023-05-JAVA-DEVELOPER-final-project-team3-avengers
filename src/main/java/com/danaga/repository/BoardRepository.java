@@ -21,7 +21,7 @@ public interface BoardRepository extends JpaRepository<Board, Long>{
 				ex ) pk :1 + status:2 = 유저OO의 0번 게시물에 좋아요누른상태 
 	 */
 	//게시판 별로 게시물 리스트 뽑아주기.
-	List<Board> findByBoardGroupIdOrderByCreateTime(Long boardGroupId);
+	List<Board> findByBoardGroupIdOrderByCreateTimeDesc(Long boardGroupId);
 
 	//하나의 게시판에 하나의 게시물디테일
 	Board findByBoardGroup_IdAndId(Long boardGroupId, Long boardId);
