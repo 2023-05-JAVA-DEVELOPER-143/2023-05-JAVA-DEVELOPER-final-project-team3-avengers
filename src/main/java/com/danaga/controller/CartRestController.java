@@ -48,7 +48,7 @@ import lombok.RequiredArgsConstructor;
 public class CartRestController {
 	private final CartService cartService;
 	
-	
+	/*
 	@Operation(summary = "카트리스트")
 	@GetMapping("/list")
 	public ResponseEntity<List<Cart>> getCartList(String username) throws Exception {
@@ -63,5 +63,5 @@ public class CartRestController {
 		cartService.deleteCart(id);
 		return ResponseEntity.status(HttpStatus.OK).body(new HashMap<>());
 	}
-	
+	*/
 }
