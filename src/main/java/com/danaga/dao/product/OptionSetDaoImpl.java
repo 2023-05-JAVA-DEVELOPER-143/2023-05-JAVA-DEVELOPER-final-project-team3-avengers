@@ -2,6 +2,7 @@ package com.danaga.dao.product;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -91,7 +92,7 @@ public class OptionSetDaoImpl implements OptionSetDao{
 		OptionSet origin = repository.findById(dto.getId()).get();
 		int productPrice = origin.getTotalPrice();
 		int totalPrice = productPrice;
-		List<Options> options = dto.getOptions();
+		List<Options> options = dto.getOptions().stream().map(t -> t.toEntity()).collect(Collectors.toList());
 		for (int i = 0; i < options.size(); i++) {
 			totalPrice+=options.get(i).getExtraPrice();
 		}

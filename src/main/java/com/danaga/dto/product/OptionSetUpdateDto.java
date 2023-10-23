@@ -1,5 +1,6 @@
 package com.danaga.dto.product;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.danaga.entity.OptionSet;
@@ -17,10 +18,28 @@ import lombok.NoArgsConstructor;
 public class OptionSetUpdateDto {
 	private Long id;
 	private Integer stock;
-	private List<Options> options;
+	@Builder.Default
+	private List<OptionDto> options=new ArrayList<>();
 	public OptionSetUpdateDto(OptionSet createdOptionSet) {
 		this.id = createdOptionSet.getId();
 		this.stock = createdOptionSet.getStock();
-		this.options = createdOptionSet.getOptions();
+		List<Options> list = createdOptionSet.getOptions();
+		List<OptionDto> optionDtos = new ArrayList<>();
+		for (int i=0; i<list.size();i++) {
+			optionDtos.add(new OptionDto(list.get(i)));
+		}
+		options = optionDtos;
+	}
+	public OptionSet toEntity() {
+		List<Options> optionsEntityList = new ArrayList<>();
+		
+		for (int i = 0; i < options.size(); i++) {
+			optionsEntityList.add(options.get(i).toEntity());
+		}
+		return OptionSet.builder()
+				.id(id)
+				.stock(stock)
+				.options(optionsEntityList)
+				.build();
 	}
 }

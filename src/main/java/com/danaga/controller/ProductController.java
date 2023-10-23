@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.danaga.dto.ResponseDto;
 import com.danaga.dto.product.ProductDto;
@@ -35,7 +37,7 @@ import com.danaga.service.product.RecentViewService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
-@RequestMapping("/product")
+
 @Controller
 @RequiredArgsConstructor
 public class ProductController {
@@ -49,8 +51,8 @@ public class ProductController {
 	// product detail 조회시 recentView 추가
 
 	//전체상품 
-	@GetMapping
-	public String searchProduct(@ModelAttribute Model model) {
+	@GetMapping("/product")
+	public ModelAndView searchProduct(@ModelAttribute Model model) {
 		try {
 			//검색 메인화면에 최상위 카테고리 선택할수 있게 표시
 			ResponseDto<?> categoryResponseDto = categoryService.AncestorCategories();
@@ -67,20 +69,21 @@ public class ProductController {
 			
 			model.addAttribute("productList",productList);
 			model.addAttribute("ancestorCategory",ancestorCategories);
-			
-			return "/product.html";
+			ModelAndView modelAndView = new ModelAndView();
+			modelAndView.setViewName("product/product");
+			return modelAndView;
 		} catch (Exception e) {
 			// error페이지, 페이지내 에러 메세지 넘겨주기
 			e.printStackTrace();
 			model.addAttribute("errorMsg", e.getMessage());
-			return "/exception";
+			return null;
 		}
 	}
 	//대분류 카테고리를 선택하고 검색메인화면으로 들어간 경우
 	
 
 	//제품디테일 
-	@GetMapping(value = "/{optionSetId}")
+	@GetMapping(value = "/product-detail/{optionSetId}")
 	public String productDetail(HttpSession session, @PathVariable Long optionSetId, @ModelAttribute Model model) {
 		try {
 			OptionSet findOptionSet = (OptionSet) service.findById(optionSetId).getData().get(0);
@@ -99,12 +102,12 @@ public class ProductController {
 			}//최근본상품에 추가
 			model.addAttribute("findOptionSet",findOptionSet);
 			model.addAttribute("hitProducts",hitProducts);
-			return "/product-detail.html";
+			return "product/product-detail";
 		} catch (Exception e) {
 			// error페이지, 페이지내 에러 메세지 넘겨주기
 			e.printStackTrace();
 			model.addAttribute("errorMsg", e.getMessage());
-			return "/exception";
+			return "redirect:exception";
 		}
 	}
 

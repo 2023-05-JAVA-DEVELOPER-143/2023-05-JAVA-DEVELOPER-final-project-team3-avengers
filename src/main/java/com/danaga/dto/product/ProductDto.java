@@ -35,7 +35,8 @@ public class ProductDto {
 	private Integer stock;
 	private Long osId;
 	@Builder.Default
-	private List<Options> optionSet = new ArrayList<>();
+	private List<OptionDto> optionSet = new ArrayList<>();
+	
 
 //	public ProductDto(final Product product, final OptionSet optionSet, 
 //			List<Options> options) {// 처리한 후 다시 유저한테 보내는 entity를 dto로 바꿔서 보내줌

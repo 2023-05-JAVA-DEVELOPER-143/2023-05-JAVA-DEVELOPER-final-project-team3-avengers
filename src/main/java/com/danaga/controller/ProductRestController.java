@@ -29,7 +29,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/productx")
 @RequiredArgsConstructor
 public class ProductRestController {
 
@@ -94,7 +94,7 @@ public class ProductRestController {
 	}
 	
 	//조건에 해당하는 리스트 전체 조회 
-	@GetMapping("/")
+	@PostMapping()
 	public ResponseEntity<?> searchResult(@RequestBody QueryStringDataDto filterDto){
 		try {
 			ResponseDto<?> response =service.searchProducts(filterDto);

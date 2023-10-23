@@ -1,8 +1,10 @@
 package com.danaga.dto.product;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.danaga.entity.OptionSet;
 import com.danaga.entity.Options;
 
 import lombok.AllArgsConstructor;
@@ -18,7 +20,7 @@ public class QueryStringDataDto {
 	
 	private Optional<String> orderType;
 	private Optional<String> brand;
-	private Optional<List<Options>> optionset;
+	private Optional<List<OptionDto>> optionset;
 	@Builder.Default
 	private int minPrice=0;
 	@Builder.Default

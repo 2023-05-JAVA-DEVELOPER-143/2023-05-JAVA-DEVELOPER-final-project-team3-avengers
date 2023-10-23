@@ -16,4 +16,11 @@ public class IndexController {
 		return modelAndView;
 	}
 	
+	@GetMapping("/test")
+	public ModelAndView index2() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("product/product");
+		return modelAndView;
+	}
+	
 }
