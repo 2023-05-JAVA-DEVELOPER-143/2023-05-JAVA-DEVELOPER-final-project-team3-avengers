@@ -45,12 +45,9 @@ public class Refund {
 	
     public static Refund toEntity(RefundDto dto) {
     	return Refund.builder()
-    			.id(dto.getId())
     			.description(dto.getDescription())
     			.acNo(dto.getAcNo())
     			.build(); 
-    	
-    	
     }
 
 }

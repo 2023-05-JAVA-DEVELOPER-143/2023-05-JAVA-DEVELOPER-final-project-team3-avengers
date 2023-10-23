@@ -22,7 +22,9 @@ public class DeliveryDaoImpl implements DeliveryDao {
 
 
 	@Override
-	public Delivery insertDelivery(Delivery delivery) {
+	public Delivery insertDelivery(Delivery delivery, Long orderId) {
+		Orders orders = orderRepository.findById(orderId).get();
+		delivery.setOrders(orders);
 		Delivery insertDelivery = deliveryRepository.save(delivery);
 		return insertDelivery;
 	}

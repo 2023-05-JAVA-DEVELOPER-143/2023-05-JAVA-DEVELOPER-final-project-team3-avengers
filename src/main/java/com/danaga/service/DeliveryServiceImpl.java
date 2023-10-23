@@ -18,35 +18,27 @@ public class DeliveryServiceImpl implements DeliveryService{
 	@Autowired 
 	private DeliveryRepository deliveryRepository;
 	
-	
-	
-	//배송번호로 배송내역찾기
-//	public DeliveryResponseDto  getDeliveryById(Long id) {
-//		Delivery getDelivery = deliveryDao.selectDelivery(id);
-//		DeliveryResponseDto deliveryResponseDto = DeliveryResponseDto.toDto(getDelivery);
-//		return deliveryResponseDto;
-//	}
-	
-	
+
 	//배송신청
 	@Override
 	@Transactional
-	public Delivery saveDeliveryByOrdersId(Delivery delivery) {
-		Delivery createdDelivery = deliveryDao.insertDelivery(delivery);
-		return createdDelivery;
+	public DeliveryResponseDto saveDeliveryByOrdersId(DeliveryDto deliveryDto, Long orderId) {
+		Delivery delivery = Delivery.toEntity(deliveryDto);	
+		Delivery createdDelivery = deliveryDao.insertDelivery(delivery, orderId);
+		return DeliveryResponseDto.toDto(createdDelivery);
 	}
 	
 	//배송확인
 	@Override
 	@Transactional
-	public Delivery findDeliveryByOrdersId(Long id) {
+	public DeliveryResponseDto findDeliveryByOrdersId(Long id) throws Exception {
 		Delivery findDelivery = deliveryRepository.findDeliveryByOrdersId(id);
-		if (findDelivery.getOrders() != null) {
+		if (findDelivery.getOrders() != null) {//order가 존재하면
 		    System.out.println("@@@@@@@@@@@@" + findDelivery.getOrders());
 		} else {
-		    System.out.println("@@@@@@@@@@@@ Orders is null");
+			throw new Exception("해당하는 주문내역이 없습니다.");
 		}
-		return findDelivery;
+		return DeliveryResponseDto.toDto(findDelivery);
 	}
 	
 }

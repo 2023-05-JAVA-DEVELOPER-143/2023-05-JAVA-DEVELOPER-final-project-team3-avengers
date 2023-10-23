@@ -27,19 +27,16 @@ class DeliveryServiceImplTest {
 	@Transactional
 	@Rollback(false)
 	void testSaveDeliveryByOrdersId() {
-		Optional<Orders> optionalOrders = orderRepository.findById(1L);
-		Orders orders = null;
-		if (optionalOrders.isPresent()) {
-		    orders = optionalOrders.get();
-		    // 이제 'orders' 객체를 사용할 수 있습니다.
-		}
-		
-		
-		Delivery delivery = new Delivery(0L, "이름1","폰넘버1", "주소1", orders);
-		
-		
-		Delivery saveDelivery = deliveryService.saveDeliveryByOrdersId(delivery);
-		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+saveDelivery);
+		String name = "이름1";
+		String phoneNumber = "폰넘버1";
+		String address = "주소1";
+		DeliveryDto deliveryDto = new DeliveryDto();
+		deliveryDto.setAddress(address);
+		deliveryDto.setName(name);
+		deliveryDto.setPhoneNumber(phoneNumber);
+		Long orderId = 1L;
+		DeliveryResponseDto saveDeliveryResponseDto = deliveryService.saveDeliveryByOrdersId(deliveryDto, orderId);
+		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+saveDeliveryResponseDto);
 	}  
 	
 	
@@ -52,9 +49,9 @@ class DeliveryServiceImplTest {
 	//@Disabled
 	@Transactional
 	@Rollback(false)
-	void testFindDeliveryByOrdersId() {
-		Delivery findDelivery = deliveryService.findDeliveryByOrdersId(1L);
-		System.out.println("##################"+findDelivery.getOrders());
+	void testFindDeliveryByOrdersId() throws Exception{
+		DeliveryResponseDto findDeliveryResponseDto = deliveryService.findDeliveryByOrdersId(150L);
+		System.out.println("##################"+findDeliveryResponseDto);
 	}
 
 }
