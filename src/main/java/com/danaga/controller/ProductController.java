@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.danaga.dto.ResponseDto;
@@ -68,20 +69,20 @@ public class ProductController {
 			model.addAttribute("productList",productList);
 			model.addAttribute("ancestorCategory",ancestorCategories);
 			
-			return "/product.html";
+			return "product";
 		} catch (Exception e) {
 			// error페이지, 페이지내 에러 메세지 넘겨주기
 			e.printStackTrace();
 			model.addAttribute("errorMsg", e.getMessage());
-			return "/exception";
+			return "redirect:exception.html";
 		}
 	}
 	//대분류 카테고리를 선택하고 검색메인화면으로 들어간 경우
 	
 
 	//제품디테일 
-	@GetMapping(value = "/{optionSetId}")
-	public String productDetail(HttpSession session, @PathVariable Long optionSetId, @ModelAttribute Model model) {
+	@GetMapping(value = "product_detail",params = "optionSetId")
+	public String productDetail(HttpSession session, @RequestParam Long optionSetId, @ModelAttribute Model model) {
 		try {
 			OptionSet findOptionSet = (OptionSet) service.findById(optionSetId).getData().get(0);
 			//해당 옵션셋 찾아서 뿌리기
@@ -99,12 +100,40 @@ public class ProductController {
 			}//최근본상품에 추가
 			model.addAttribute("findOptionSet",findOptionSet);
 			model.addAttribute("hitProducts",hitProducts);
-			return "/product-detail.html";
+			return "product-detail";
 		} catch (Exception e) {
 			// error페이지, 페이지내 에러 메세지 넘겨주기
 			e.printStackTrace();
 			model.addAttribute("errorMsg", e.getMessage());
-			return "/exception";
+			return "redirect:exception.html";
+		}
+	}
+	//제품디테일 파라메터 없을때 내용 수정 필요
+	@GetMapping(value = "product_detail",params = "!optionSetId")
+	public String noProductDetail(HttpSession session, @RequestParam Long optionSetId, @ModelAttribute Model model) {
+		try {
+			OptionSet findOptionSet = (OptionSet) service.findById(optionSetId).getData().get(0);
+			//해당 옵션셋 찾아서 뿌리기
+			service.updateViewCount(optionSetId);
+			//디테일 들어갈때 조회수도 증가
+			List<OptionSet> hitProducts = (List<OptionSet>) service.displayHitProducts(optionSetId).getData();
+			//같은 카테고리의 히트상품도 표시
+			if(session.getAttribute("sUserId")!=null) {//로그인유저일시
+				String username =(String)session.getAttribute("sUserId");
+				Long memberId = memberService.findIdByUsername(username);
+				recentViewService.addRecentView(RecentViewDto.builder()
+						.memberId(memberId)
+						.optionSetId(optionSetId)
+						.build());
+			}//최근본상품에 추가
+			model.addAttribute("findOptionSet",findOptionSet);
+			model.addAttribute("hitProducts",hitProducts);
+			return "product-detail";
+		} catch (Exception e) {
+			// error페이지, 페이지내 에러 메세지 넘겨주기
+			e.printStackTrace();
+			model.addAttribute("errorMsg", e.getMessage());
+			return "redirect:exception.html";
 		}
 	}
 
