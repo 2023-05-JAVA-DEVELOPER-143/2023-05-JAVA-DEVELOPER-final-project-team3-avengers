@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.danaga.dto.CartCreateDto;
-import com.danaga.dto.CartDto;
-import com.danaga.dto.CartUpdateDto;
+import com.danaga.dto.CartUpdateResponseDto;
+import com.danaga.dto.CartUpdateQtyDto;
 import com.danaga.service.CartService;
 import com.danaga.service.MemberService;
 
@@ -54,7 +54,8 @@ public class CartController {
 				// fUserCarts.get(i) == CartCreateDto, add메쏘드 실행하면 수량 체크 -> 업데이트 or 인서트
 				cartService.addCart(fUserCarts.get(i), sUserId);
 				fUserCarts.clear();
-				session.setAttribute("fUserCarts", fUserCarts); // 장바구니에서 로그인 유저 장바구니로 옮기고 session 장바구니 초기화
+				session.setAttribute("fUserCarts", fUserCarts);
+				// 장바구니에서 로그인 유저 장바구니로 옮기고 session 장바구니 초기화
 				countCarts(session);
 			}
 		} // 여기서 나오는 경우 == 비회원 ..........
@@ -68,6 +69,7 @@ public class CartController {
 			countCarts(session);
 		}
 		return "redirect:/cart/popup";
+
 	}
 
 	@GetMapping()
@@ -93,9 +95,9 @@ public class CartController {
 	}
 
 	// 장바구니 삭제
-	@DeleteMapping("/{id}")
+	@DeleteMapping
 	// id == 회원일시 cartId , 비회원일시 장바구니에 담긴 옵션셋 아이디
-	public String deleteCart(HttpSession session,@PathVariable Long id) throws Exception {
+	public String deleteCart(HttpSession session, @PathVariable Long id) throws Exception {
 		// Long id == 회원일시 카트 pk , 비회원 일시 optionsetId
 		sUserId = (String) session.getAttribute("sUserId");
 		if (isLogin(sUserId)) {
@@ -116,7 +118,7 @@ public class CartController {
 	}
 
 	// 장바구니 전체삭제
-	@DeleteMapping
+	// @DeleteMapping
 	public void deleteAllCart(HttpSession session) throws Exception {
 		sUserId = (String) session.getAttribute("sUserId");
 		if (isLogin(sUserId)) {
@@ -127,27 +129,15 @@ public class CartController {
 		session.invalidate();
 		countCarts(session);
 	}
+	// 수량 변경
 	@PutMapping
-	public void updateCart(HttpSession session,@RequestBody CartUpdateDto dto) throws Exception {
+	public void updateCart(HttpSession session, @RequestBody CartUpdateQtyDto dto) throws Exception {
 		sUserId = (String) session.getAttribute("sUserId");
 		fUserCarts = (List<CartCreateDto>) session.getAttribute("fUserCarts");
-		if(isLogin(sUserId)) {
-			//cartService.updateCart(dto, sUserId);
-			countCarts(session);
+		if (isLogin(sUserId)) {
 		}
-		
-		
-		/*
-		 * for (int i = 0; i <fUserCarts.size(); i++) {
-		 * if(fUserCarts.get(i).getOptionset().getOptions()==dto.getOptions()) {
-		 * 
-		 * }
-		 * 
-		 * }
-		 */
-	
 	}
-	
+
 	/******************* 컨트롤러 메쏘드 내부에서 필요한 메쏘드 ****************************/
 	// 로그인 체크
 	boolean isLogin(String id) throws Exception {
@@ -169,14 +159,14 @@ public class CartController {
 		}
 
 	}
-	
-	void countCarts(HttpSession session) throws Exception{
-		String sUserId =(String) session.getAttribute("sUserId");
-		if(isLogin(sUserId)) {
+
+	void countCarts(HttpSession session) throws Exception {
+		String sUserId = (String) session.getAttribute("sUserId");
+		if (isLogin(sUserId)) {
 			session.setAttribute("countCarts", cartService.countCarts(sUserId));
 		} // 비회원 일시 장바구니 리스트의 사이즈
-		fUserCarts=(List<CartCreateDto>)session.getAttribute("fUserCarts");
+		fUserCarts = (List<CartCreateDto>) session.getAttribute("fUserCarts");
 		session.setAttribute("countCarts", fUserCarts.size());
 	};
-	
+
 }
