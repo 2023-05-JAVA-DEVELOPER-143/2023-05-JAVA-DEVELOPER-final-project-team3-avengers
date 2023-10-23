@@ -14,8 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CartUpdateDto {
+public class CartUpdateQtyDto {
 	private Long id;
 	private int qty;
-	private OptionSet optionSet;
 }

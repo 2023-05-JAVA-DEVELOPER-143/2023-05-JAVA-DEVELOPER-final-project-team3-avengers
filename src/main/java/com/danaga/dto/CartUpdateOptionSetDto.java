@@ -9,9 +9,7 @@ import lombok.Data;
 @Data
 @Builder
 
-public class CartInsertDto {
-
-	private int cartQty;
-	private Member member;
+public class CartUpdateOptionSetDto {
+	private Long id;
 	private OptionSet optionSet;
 }
