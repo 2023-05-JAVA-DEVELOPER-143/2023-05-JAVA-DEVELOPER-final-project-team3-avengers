@@ -27,9 +27,7 @@ public class MyProductController {
 	public String deleteAllwishs(HttpSession session, Model model) {
 		try {
 			String username = (String) session.getAttribute("sUserId");
-			Member loginMember;
-			loginMember = memberService.getMemberBy(username);
-			Long memberId = loginMember.getId();
+			Long memberId = memberService.findIdByUsername(username);
 			// 로그인체크해서 로그인한 멤버 id 찾기
 			interestService.emptyMyInterestingList(memberId);
 			return "/member/wishlist";
@@ -45,9 +43,7 @@ public class MyProductController {
 	public String deleteViewRecords(HttpSession session, Model model) {
 		try {
 			String username = (String) session.getAttribute("sUserId");
-			Member loginMember;
-			loginMember = memberService.getMemberBy(username);
-			Long memberId = loginMember.getId();
+			Long memberId = memberService.findIdByUsername(username);
 			// 로그인체크해서 로그인한 멤버 id 찾기
 			recentViewService.removeMyRecentViews(memberId);
 			return "/member/recentViews";
@@ -64,9 +60,7 @@ public class MyProductController {
 	public String myWishList(Model model, HttpSession session) {
 		try {
 			String username = (String) session.getAttribute("sUserId");
-			Member loginMember;
-			loginMember = memberService.getMemberBy(username);
-			Long memberId = loginMember.getId();
+			Long memberId = memberService.findIdByUsername(username);
 			// 로그인체크해서 로그인한 멤버 id 찾기
 			model.addAttribute("wish", interestService.myInterestingList(memberId));
 			// 찾은 id로 그 멤버의 위시리스트 찾아서 wish속성으로 model에 저장하고 member/wishlist url로 포워딩
@@ -85,9 +79,7 @@ public class MyProductController {
 	public String myRecentViews(Model model, HttpSession session) {
 		try {
 			String username = (String) session.getAttribute("sUserId");
-			Member loginMember;
-			loginMember = memberService.getMemberBy(username);
-			Long memberId = loginMember.getId();
+			Long memberId = memberService.findIdByUsername(username);
 			// 로그인체크해서 로그인한 멤버 id 찾기
 			model.addAttribute("myViews", recentViewService.myAllRecentViews(memberId));
 			// myViews 속성에 나의 최근 본 상품 리스트 담기

@@ -44,8 +44,7 @@ public class ProductRestController {
 		try {
 			//만약 로그인유저가 아니라면 그냥 아무것도 안하고 리턴하는 처리 추가 필요
 			String username=(String)session.getAttribute("sUserId");
-			Member loginMember = memberService.getMemberBy(username);
-			Long memberId = loginMember.getId();
+			Long memberId = memberService.findIdByUsername(username);
 			ResponseDto<?> response =interestService.clickHeart(InterestDto.builder()
 					.memberId(memberId)
 					.optionSetId(optionSetId)
@@ -61,8 +60,7 @@ public class ProductRestController {
 	public ResponseEntity<?> untapHeartInDetail(HttpSession session,@PathVariable Long optionSetId){
 		try {
 			String username=(String)session.getAttribute("sUserId");
-			Member loginMember = memberService.getMemberBy(username);
-			Long memberId = loginMember.getId();
+			Long memberId = memberService.findIdByUsername(username);
 			ResponseDto<?> response =interestService.clickHeart(InterestDto.builder()
 					.memberId(memberId)
 					.optionSetId(optionSetId)

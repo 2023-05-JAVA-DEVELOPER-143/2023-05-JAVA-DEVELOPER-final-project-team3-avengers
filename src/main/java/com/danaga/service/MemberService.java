@@ -17,4 +17,5 @@ public interface MemberService {
 	public boolean isDuplicate(String value) throws Exception;
 	public boolean login(String userName, String password) throws Exception;
 	public void updateGrade(Member member, int gradePoint);
+	Long findIdByUsername(String username) throws Exception;
 }

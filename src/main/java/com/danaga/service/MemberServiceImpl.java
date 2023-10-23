@@ -145,4 +145,8 @@ public class MemberServiceImpl implements MemberService {
 		memberRepository.save(member);
 
 	}
+	@Override
+	public Long findIdByUsername(String username) throws Exception {
+		return memberDao.findMember(username).getId();
+	}
 }

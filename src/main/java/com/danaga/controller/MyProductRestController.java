@@ -35,8 +35,7 @@ public class MyProductRestController {
 	public ResponseEntity<?> tappedHeart(@PathVariable Long optionSetId,HttpSession session ){
 		try {
 		String username = (String)session.getAttribute("sUserId");
-		Member loginMember = memberService.getMemberBy(username);
-		Long memberId = loginMember.getId();
+		Long memberId = memberService.findIdByUsername(username);
 		//memberId 찾기 
 		ResponseDto<?> response = interestService.clickHeart(InterestDto.builder()
 				.memberId(memberId)
@@ -52,8 +51,7 @@ public class MyProductRestController {
 	public ResponseEntity<?> untappedHeart(@PathVariable Long optionSetId, HttpSession session){
 		try {
 			String username = (String)session.getAttribute("sUserId");
-			Member loginMember = memberService.getMemberBy(username);
-			Long memberId = loginMember.getId();
+			Long memberId = memberService.findIdByUsername(username);
 			//memberId 찾기 
 			ResponseDto<?> response = interestService.clickHeart(InterestDto.builder()
 					.memberId(memberId)
@@ -69,8 +67,7 @@ public class MyProductRestController {
 	public ResponseEntity<?> removeViewRecord(@PathVariable Long optionSetId, HttpSession session){
 		try {
 			String username = (String)session.getAttribute("sUserId");
-			Member loginMember = memberService.getMemberBy(username);
-			Long memberId = loginMember.getId();
+			Long memberId = memberService.findIdByUsername(username);
 			//memberId 찾기 
 			ResponseDto<?> response = recentViewService.removeRecentView(
 						RecentViewDto.builder()

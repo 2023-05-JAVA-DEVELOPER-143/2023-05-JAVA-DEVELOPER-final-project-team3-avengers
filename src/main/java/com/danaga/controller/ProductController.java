@@ -91,8 +91,7 @@ public class ProductController {
 			//같은 카테고리의 히트상품도 표시
 			if(session.getAttribute("sUserId")!=null) {//로그인유저일시
 				String username =(String)session.getAttribute("sUserId");
-				Member loginMember = memberService.getMemberBy(username);
-				Long memberId = loginMember.getId();
+				Long memberId = memberService.findIdByUsername(username);
 			recentViewService.addRecentView(RecentViewDto.builder()
 					.memberId(memberId)
 					.optionSetId(optionSetId)
