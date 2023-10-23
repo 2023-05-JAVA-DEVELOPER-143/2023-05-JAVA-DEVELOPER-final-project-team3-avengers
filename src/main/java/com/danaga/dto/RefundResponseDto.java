@@ -1,8 +1,13 @@
 package com.danaga.dto;
 
+import org.springframework.beans.factory.annotation.*;
+
 import com.danaga.entity.*;
+import com.danaga.repository.*;
 
 import lombok.*;
+
+
 
 @Data
 @NoArgsConstructor
@@ -10,14 +15,21 @@ import lombok.*;
 @ToString
 @Builder
 public class RefundResponseDto {
+	
+	@Autowired
+	OrderRepository orderRepository;
+	
 	private Long id;
 	private String description;
 	private String acNo;
+	private Long orderId;
+	
 	public static RefundResponseDto toDto(Refund entity) {
 		return RefundResponseDto.builder()
 				.id(entity.getId())
 				.description(entity.getDescription())
 				.acNo(entity.getAcNo())
+				.orderId(entity.getOrders().getId())
 				.build();
 	}
 }

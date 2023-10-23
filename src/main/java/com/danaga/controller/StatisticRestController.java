@@ -71,20 +71,20 @@ public class StatisticRestController {
 	@GetMapping("/admin_product_list")
 	public ModelAndView adminProductList() {
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("/admin_product_list");
+		modelAndView.setViewName("admin/admin_product_list");
 		return modelAndView;
 	}
 	@Operation(summary = "admin : 회원리스트 출력")
 	@GetMapping("/admin_member_list")
 	public ModelAndView adminMemberList() {
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("/admin_member_list");
+		modelAndView.setViewName("admin/admin_member_list");
 		return modelAndView;
 	}
 	@GetMapping("/admin_board_list")
 	public ModelAndView adminBoardList() {
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("/admin_board_list");
+		modelAndView.setViewName("admin/admin_board_list");
 		return modelAndView;
 	}
 }

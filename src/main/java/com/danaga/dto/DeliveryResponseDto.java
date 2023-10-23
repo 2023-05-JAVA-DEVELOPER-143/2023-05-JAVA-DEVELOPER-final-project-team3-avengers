@@ -16,6 +16,7 @@ public class DeliveryResponseDto {
 	private String name;	
 	private String phoneNumber;    
 	private String address;	 
+	private Long orderId;
 
 	public static DeliveryResponseDto toDto(Delivery entity) {
 		return DeliveryResponseDto.builder()
@@ -23,6 +24,7 @@ public class DeliveryResponseDto {
 				.name(entity.getName())
 				.phoneNumber(entity.getPhoneNumber())
 				.address(entity.getAddress())
+				.orderId(entity.getOrders().getId())
 				.build();
 	}
 }
