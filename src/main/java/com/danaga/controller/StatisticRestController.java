@@ -38,7 +38,7 @@ public class StatisticRestController {
 	@GetMapping
 	public ModelAndView getStatisticList() {
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("admin");
+		modelAndView.setViewName("admin/admin");
 		modelAndView.addObject("statisticList",statisticService.Statistics());
 		return modelAndView;
 	}
@@ -79,7 +79,6 @@ public class StatisticRestController {
 	public ModelAndView adminMemberList() {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("/admin_member_list");
-		modelAndView.addObject("memberList",memberService.members());
 		return modelAndView;
 	}
 	@GetMapping("/admin_board_list")
