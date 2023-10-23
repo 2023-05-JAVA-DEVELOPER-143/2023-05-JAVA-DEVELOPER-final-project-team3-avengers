@@ -17,6 +17,6 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
 	// 장바구니 수량
 	int countByMemberId(Long memberId);
 	
-	 
+	void deleteByMemberId(Long memberId);
 
 }

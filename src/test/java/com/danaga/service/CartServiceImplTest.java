@@ -67,7 +67,7 @@ public class CartServiceImplTest {
 	
 	void 수량변경() {
 		CartUpdateDto dto = CartUpdateDto.builder().id(9L).qty(100).build();
-		cs.updateCart(dto);
+		//cs.updateCart(dto);
 	}
 
 	void 카트리스트() throws Exception{
