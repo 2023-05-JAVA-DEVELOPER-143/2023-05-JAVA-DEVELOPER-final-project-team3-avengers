@@ -64,16 +64,50 @@ public class OrderDaoImpl implements OrderDao {
 	
 	
 	//주문상태업데이트
+	// 1.정상주문
 	@Override
-	public Orders updateOrdersByStatement(Orders orders) {
+	public Orders updateStatementByNormalOrder(Long orderNo) {
 
-		Orders findOrder = orderRepository.findById(orders.getId()).get();
+		Orders findOrder = orderRepository.findById(orderNo).get();
+		
+		if(findOrder.getStatement()==OrderStateMsg.입금대기중) {
+			findOrder.setStatement(OrderStateMsg.배송중);
+		}else if(findOrder.getStatement()==OrderStateMsg.배송중) {
+			findOrder.setStatement(OrderStateMsg.배송완료);
+		}
+		return findOrder;
+	}
+	// 2.취소주문
+	public Orders updateStatementByCancleOrder(Long orderNo) {
 
-		findOrder.setStatement(orders.getStatement());
+		Orders findOrder = orderRepository.findById(orderNo).get();
+		
+		if(findOrder.getStatement()==OrderStateMsg.입금대기중) {
+			findOrder.setStatement(OrderStateMsg.취소);
+		}
+		return findOrder;
+	}
+	// 3.환불주문
+	public Orders updateStatementByRefundOrder(Long orderNo) {
+
+		Orders findOrder = orderRepository.findById(orderNo).get();
+		
+		if(findOrder.getStatement()==OrderStateMsg.배송완료) {
+			findOrder.setStatement(OrderStateMsg.환불대기중);
+		}else if(findOrder.getStatement()==OrderStateMsg.환불대기중) {
+			findOrder.setStatement(OrderStateMsg.환불완료);
+		}
 		
 		return findOrder;
-
 	}
+	// 4.상태리셋
+	public Orders updateStatementByResetOrder(Long orderNo) {
+		Orders findOrder = orderRepository.findById(orderNo).get();
+		findOrder.setStatement(OrderStateMsg.입금대기중);
+		return findOrder;
+	}
+	
+	
 
 	//Id로 주문전체(특정사용자)
 	
@@ -86,32 +120,28 @@ public class OrderDaoImpl implements OrderDao {
 
 	}
 	
-	//Id로 주문+주문아이템 전체(특정사용자)
-	@Override
-	public List<Orders> findOrdersWithOrderItemByMember_UserName(String userName) {
-		
-		return orderRepository.findOrdersWithOrderItemByMember_UserName(userName);
-	}
 
 	//주문 번호로 1개보기(주문상세리스트)
 	//주문번호는 id+10000이므로 받을때 id-10000으로 받아야함 --컨트롤러에서!!
 	@Override
-	public Orders findOrdersById(Long id) {
-		// 주어진 주문 번호 (oNo)를 사용하여 해당 주문을 조회하려면 적절한 로직을 추가
-		// orderRepository를 사용하여 데이터베이스에서 주문을 조회
-		return orderRepository.findById(id).get();
+	public Orders findById(Long id)throws Exception {
+		Orders ordersDetail= orderRepository.findById(id).get();
+		if(ordersDetail!=null) {
+			return ordersDetail;
+		}else {
+			throw new Exception("일치하는 주문번호가 없습니다.");
+		}
 	}
 
-	
+
 	//비회원(주문번호,회원이름,회원전화번호) 로 주문1개보기
-//	@Override
-//	public Orders findOrdersByOrderNoAndNameAndPhoneNo(Long orderNo, String userName, String phoneNo) {
-//		// 주어진 주문 번호 (oNo), 회원 이름 (MemberName), 회원전화번호 (memberPhoneNo)를 사용하여 주문을 조회하려면
-//		// 적절한 로직을 추가
-//		// orderRepository를 사용하여 데이터베이스에서 주문을 조회할 수 있으며, 필요한 정보를 조건에 따라 조회
-//		return orderRepository.findOrdersByOrderNoAndMember_NameAndMember_PhoneNo(orderNo, userName, phoneNo);
-//
-//	}
+	@Override
+	public Orders findOrdersByIdAndNameAndPhoneNo(Long orderNo, String userName, String phoneNo){
+		
+		Orders guestFindOrder= orderRepository.findOrdersByIdAndMember_NameAndMember_PhoneNo(orderNo, userName, phoneNo);
+		 
+		 return guestFindOrder;
+	}
 
 
 }

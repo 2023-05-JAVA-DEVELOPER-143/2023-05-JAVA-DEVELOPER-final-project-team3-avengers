@@ -17,31 +17,29 @@ public interface OrderDao {
 //	  public Orders insert(Orders order);
 	  
 	// 주문 save 
-	  public Orders save(Orders orders);
+	  Orders save(Orders orders);
 	
-	  
 	//  주문상태업데이트(특정주문)
-	  
-	  public Orders updateOrdersByStatement(Orders orders);
-	  
+	  // 1.정상주문
+	  Orders updateStatementByNormalOrder(Long orderNo);
+	  // 2.취소주문
+	  Orders updateStatementByCancleOrder(Long orderNo);
+	  // 3.환불주문
+	  Orders updateStatementByRefundOrder(Long orderNo);
+	  // 4.상태리셋
+	  Orders updateStatementByResetOrder(Long orderNo);
 	  
 	//  주문전체(특정사용자)
 	  
-	  public List<Orders> findOrdersByMember_UserName(String userName);
-	  
-	  
-	//  주문+주문아이템 전체(특정사용자)
-		
-		public List<Orders> findOrdersWithOrderItemByMember_UserName(String userName);
+	  List<Orders> findOrdersByMember_UserName(String userName);
 	  
 	//  주문1개보기(주문상세리스트)
 	  
-	  public Orders findOrdersById(Long id);
-	  
+	  Orders findById(Long id)throws Exception;
 	  
 	//  비회원 주문1개보기(주문상세리스트)
 	  
-//	  public Orders findOrdersByOrderNoAndNameAndPhoneNo(Long orderNo, String
-//	  userName,String phoneNo);
+	  Orders findOrdersByIdAndNameAndPhoneNo(Long orderNo, String userName,String phoneNo)throws Exception;
 	
+	  
 }

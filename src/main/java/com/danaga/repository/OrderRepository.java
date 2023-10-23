@@ -1,5 +1,6 @@
 package com.danaga.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,11 +19,11 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
 	
 	//  주문전체(특정사용자)
 	List<Orders> findOrdersByMember_UserName(String userName);
-
-	// 주문+주문아이템 전체(특정사용자)
-	List<Orders> findOrdersWithOrderItemByMember_UserName(String userName);
 	
+//	//  주문이 일정시간경과되면 자동삭제(지금은 임의로 보여주기위해 3분으로 지정)
+//	void deleteByCreatedAtBefore(LocalDateTime timeAgo);
+
 	// 비회원 : 주문 번호, 회원 이름, 회원 전화번호를 기반으로 주문 조회
-	//Orders findOrdersByOrderNoAndMember_NameAndMember_PhoneNo(Long orderNo, String userName, String phoneNo);
+	Orders findOrdersByIdAndMember_NameAndMember_PhoneNo(Long orderNo, String userName, String phoneNo);
 
 }
