@@ -69,7 +69,7 @@ class OrderServiceImplTest {
 	}
 	@Transactional
 	@Rollback(false)
-	@Disabled
+	//@Disabled
 	@Test
 	void testMemberOrderList() {
 		
@@ -109,14 +109,14 @@ class OrderServiceImplTest {
 		orderService.updateStatementByNormalOrder(18L);
 	}
 	@Test
-	//@Disabled
+	@Disabled
 	void testUpdateStatementByCancleOrder() {
 		
 		orderService.updateStatementByCancleOrder(13L);
 		orderService.updateStatementByCancleOrder(19L);
 	}
 	@Test
-	//@Disabled
+	@Disabled
 	void testUpdateStatementByRefundOrder() {
 		
 		orderService.updateStatementByRefundOrder(10L);
