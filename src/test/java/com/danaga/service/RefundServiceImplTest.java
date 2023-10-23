@@ -44,12 +44,11 @@ class RefundServiceImplTest {
 	@Transactional
 	@Rollback(false)
 	void testsaveRefund() {
+		String description = "환불사유16";
+		String acNo = "환불계좌번호16";
+		Long orderId = 16L;
 		
-		String description = "환불사유1";
-		String acNo = "환불계좌번호";
-		Long orderId = 1L;
-		
-		RefundDto refundDto = new RefundDto();
+		RefundDto refundDto = new RefundDto();/////////////////
 		refundDto.setAcNo(acNo);
 		refundDto.setDescription(description);
 		RefundResponseDto refundResponseDto = refundService.saveRefund(refundDto, orderId);
