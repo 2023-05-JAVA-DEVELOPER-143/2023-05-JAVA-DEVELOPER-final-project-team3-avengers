@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -36,7 +37,7 @@ public class StatisticRestController {
 		return modelAndView;
 	}
 	@Operation(summary = "admin : yyyymmdd 통계 업데이트")
-	@GetMapping("/{date}")
+	@PostMapping("/{date}")
 	public ResponseEntity<List<Statistic>> manualUpdate(@PathVariable(value = "date") String findDate) {
 		statisticService.updateAt(findDate);
 		List<Statistic> statistics = statisticService.Statistics();
