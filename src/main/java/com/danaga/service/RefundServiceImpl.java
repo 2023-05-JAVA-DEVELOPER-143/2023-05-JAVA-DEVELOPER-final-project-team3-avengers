@@ -20,6 +20,7 @@ public class RefundServiceImpl implements RefundService {
 	private RefundRepository refundRepository;
 	@Autowired
 	private OrderRepository orderRepository;
+	
 
 
 //	// 환불요청 확인하기.메인페이지에서 환불목록창 따로 파서 나오게
@@ -34,8 +35,7 @@ public class RefundServiceImpl implements RefundService {
 	@Transactional
 	public RefundResponseDto saveRefund(RefundDto refundDto, Long orderId) {
 		Refund refund = Refund.toEntity(refundDto);
-		Orders orders = orderRepository.findById(orderId).get();
-		refund.setOrders(orders);
+		refundDao.insertRefund(refund, orderId);
 		RefundResponseDto refundResponseDto = RefundResponseDto.toDto(refund);
 		return refundResponseDto;
 	}
