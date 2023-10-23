@@ -49,6 +49,7 @@ public class LikeConfig {
     @ToString.Exclude
     private Member member;
     
+    
     public static LikeConfig createConfig(LikeConfigDto dto,Board board, Member meber) {
     	return LikeConfig.builder().id(dto.getId()).isLike(dto.getIsLike()).disLike(dto.getDisLike()).board(board).member(meber).build();
     }

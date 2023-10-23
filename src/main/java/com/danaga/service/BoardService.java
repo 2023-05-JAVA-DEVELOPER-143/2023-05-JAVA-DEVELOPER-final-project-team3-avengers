@@ -90,7 +90,6 @@ public class BoardService {
 			System.out.println("이미 좋아요를 눌렀습니다.");
 			return null;
 		}
-
 	}
 
 	// 싫어요
@@ -136,6 +135,8 @@ public class BoardService {
 	@Transactional
 	public BoardDto delete(BoardDto dto) {
 		// 게시물 조회 및 예외처리
+		lcRepository.deleteByBoard_Id(dto.getId());
+		
 		Board target = bRepository.findById(dto.getId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시물입니다."));
 		
 		// 게시물 DB에서 삭제
