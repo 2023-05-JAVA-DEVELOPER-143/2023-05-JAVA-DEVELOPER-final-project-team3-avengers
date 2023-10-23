@@ -4,7 +4,7 @@ import com.danaga.entity.*;
 
 public interface DeliveryDao {
 	//배송신청
-	Delivery insertDelivery(Delivery delivery);// 배송정보 입력후 배송하기 눌렀을 때
+	Delivery insertDelivery(Delivery delivery, Long orderId);// 배송정보 입력후 배송하기 눌렀을 때
 	
 	//update는 없음
 	

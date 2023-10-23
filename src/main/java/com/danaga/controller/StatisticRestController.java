@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.danaga.entity.Member;
 import com.danaga.entity.Statistic;
+import com.danaga.service.MemberService;
 import com.danaga.service.StatisticService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,6 +24,10 @@ import io.swagger.v3.oas.annotations.Operation;
 public class StatisticRestController {
 	@Autowired
 	private StatisticService statisticService;
+	
+	@Autowired
+	private MemberService memberService;
+	
 	@Operation(summary = "admin : 전체 통계 호출")
 	@GetMapping("/list")
 	public ResponseEntity<List<Statistic>> getStatisticListAll() {
@@ -32,7 +38,7 @@ public class StatisticRestController {
 	@GetMapping
 	public ModelAndView getStatisticList() {
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("admin");
+		modelAndView.setViewName("admin/admin");
 		modelAndView.addObject("statisticList",statisticService.Statistics());
 		return modelAndView;
 	}
@@ -60,5 +66,25 @@ public class StatisticRestController {
 	public ResponseEntity<List<Statistic>> thisMonth() {
 		List<Statistic> statistics = statisticService.thisMonthStatistic();
 		return ResponseEntity.status(HttpStatus.OK).body(statistics);
+	}
+	
+	@GetMapping("/admin_product_list")
+	public ModelAndView adminProductList() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("/admin_product_list");
+		return modelAndView;
+	}
+	@Operation(summary = "admin : 회원리스트 출력")
+	@GetMapping("/admin_member_list")
+	public ModelAndView adminMemberList() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("/admin_member_list");
+		return modelAndView;
+	}
+	@GetMapping("/admin_board_list")
+	public ModelAndView adminBoardList() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("/admin_board_list");
+		return modelAndView;
 	}
 }

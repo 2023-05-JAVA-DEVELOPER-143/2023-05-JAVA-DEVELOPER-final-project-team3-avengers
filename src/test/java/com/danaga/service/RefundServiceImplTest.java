@@ -33,10 +33,10 @@ class RefundServiceImplTest {
 	@Disabled
 	@Transactional
 	@Rollback(false)
-	void testFindRefundByOrdersId() {
-		Refund findRefund = refundService.findRefundByOrdersId(1L);
-		System.out.println("##################" + findRefund);
-		System.out.println("##################" + findRefund.getOrders());
+	void testFindRefundByOrdersId() throws Exception{
+		Long orderId = 1L;
+		RefundResponseDto refundResponseDto = refundService.findRefundByOrdersId(orderId);
+		System.out.println("##################" + refundResponseDto);
 	}
 
 	@Test
@@ -44,19 +44,14 @@ class RefundServiceImplTest {
 	@Transactional
 	@Rollback(false)
 	void testsaveRefund() {
-		Optional<Orders> optionalOrders = orderRepository.findById(2L);
-		Orders orders = null;
-		if (optionalOrders.isPresent()) {
-			orders = optionalOrders.get();
-			System.out.println("이제 orders 객체를 사용할 수 있습니다");
-		} else {
-			System.out.println("주문이 존재하지 않을 경우");
-
-		}
-		Refund refund = new Refund(0L, "환불사유1", "계좌번호1", orders);
 		
-		Refund findRefund = refundService.saveRefund(refund);
-		System.out.println("##################" + findRefund);
-		System.out.println("##################" + findRefund.getOrders());
+		String description = "환불사유1";
+		String acNo = "환불계좌번호";
+		Long orderId = 1L;
+		
+		RefundDto refundDto = new RefundDto();
+		refundDto.setAcNo(acNo);
+		refundDto.setDescription(description);
+		RefundResponseDto refundResponseDto = refundService.saveRefund(refundDto, orderId);
 	}
 }
