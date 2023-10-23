@@ -10,6 +10,9 @@ import com.danaga.dao.MemberDao;
 import com.danaga.dto.MemberInsertGuestDto;
 import com.danaga.dto.MemberUpdateDto;
 import com.danaga.entity.Member;
+import com.danaga.exception.PasswordMismatchException;
+import com.danaga.exception.ExistedMemberException;
+import com.danaga.exception.MemberNotFoundException;
 import com.danaga.repository.MemberRepository;
 
 import jakarta.transaction.Transactional;
@@ -23,7 +26,7 @@ public class MemberServiceImpl implements MemberService {
 	@Autowired
 	private MemberRepository memberRepository;
 
-	public List<Member> members() {
+	public List<Member> getMembers() {
 		return memberDao.findMembers();
 	}
 
@@ -31,24 +34,25 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.findMember(value);
 	}
 
-	public Member joinMember(Member member) throws Exception {
-		member.setRole("Member");
+	public Member joinMember(Member member) throws Exception, ExistedMemberException {
 		// 1.아이디중복체크
 		if (memberDao.existedMemberBy(member.getUserName())) {
 			// 아이디중복
-			throw new Exception(member.getUserName() + " 는 이미 존재하는 아이디 입니다.");
+			throw new ExistedMemberException(member.getUserName() + " 는 이미 존재하는 아이디 입니다.");
 		} else if (memberDao.existedMemberBy(member.getEmail())) {
-			throw new Exception(member.getEmail() + " 는 이미 등록된 이메일 입니다.");
+			throw new ExistedMemberException(member.getEmail() + " 는 이미 등록된 이메일 입니다.");
 		} else if (memberDao.existedMemberBy(member.getPhoneNo())
 				&& (memberDao.findMember(member.getPhoneNo()).getRole().equals("Guest"))) {
+			member.setRole("Member");
 			return memberDao.update(member);
 		} else if (memberDao.existedMemberBy(member.getPhoneNo())) {
-			throw new Exception(member.getPhoneNo() + " 는 이미 등록된 번호 입니다.");
+			throw new ExistedMemberException(member.getPhoneNo() + " 는 이미 등록된 번호 입니다.");
 		}
 		// 아이디안중복
 		// 2.회원가입
 		return memberDao.insert(member);
 	}
+
 	@Transactional
 	public MemberInsertGuestDto joinGuest(MemberInsertGuestDto memberInsertGuestDto) throws Exception {
 		if (!memberDao.existedMemberBy(memberInsertGuestDto.getPhoneNo())) {
@@ -58,7 +62,7 @@ public class MemberServiceImpl implements MemberService {
 		}
 	}
 
-	public MemberUpdateDto updateMember(MemberUpdateDto memberUpdateDto) throws Exception {
+	public MemberUpdateDto updateMember(MemberUpdateDto memberUpdateDto) throws Exception, ExistedMemberException {
 		Member originalMember = memberDao.findMember(memberUpdateDto.getUserName());
 		if (originalMember.getPhoneNo().equals(memberUpdateDto.getPhoneNo())
 				&& originalMember.getEmail().equals(memberUpdateDto.getEmail())) {
@@ -67,19 +71,19 @@ public class MemberServiceImpl implements MemberService {
 		} else if (originalMember.getEmail().equals(memberUpdateDto.getEmail())) {
 			// 이메일 x 번호 o
 			if (memberDao.existedMemberBy(memberUpdateDto.getPhoneNo())) {
-				throw new Exception(memberUpdateDto.getPhoneNo() + " 는 이미 등록된 번호 입니다.");
+				throw new ExistedMemberException(memberUpdateDto.getPhoneNo() + " 는 이미 등록된 번호 입니다.");
 			}
 		} else if (originalMember.getPhoneNo().equals(memberUpdateDto.getPhoneNo())) {
 			// 이메일 o 번호 x
 			if (memberDao.existedMemberBy(memberUpdateDto.getEmail())) {
-				throw new Exception(memberUpdateDto.getEmail() + " 는 이미 등록된 이메일 입니다.");
+				throw new ExistedMemberException(memberUpdateDto.getEmail() + " 는 이미 등록된 이메일 입니다.");
 			}
 		} else {
 			// 이메일 o 번호 o
 			if (memberDao.existedMemberBy(memberUpdateDto.getEmail())) {
-				throw new Exception(memberUpdateDto.getEmail() + " 는 이미 등록된 이메일 입니다.");
+				throw new ExistedMemberException(memberUpdateDto.getEmail() + " 는 이미 등록된 이메일 입니다.");
 			} else if (memberDao.existedMemberBy(memberUpdateDto.getPhoneNo())) {
-				throw new Exception(memberUpdateDto.getPhoneNo() + " 는 이미 등록된 번호 입니다.");
+				throw new ExistedMemberException(memberUpdateDto.getPhoneNo() + " 는 이미 등록된 번호 입니다.");
 			}
 		}
 		return MemberUpdateDto.toDto(memberDao.insert(Member.toUpdateEntity(memberUpdateDto)));
@@ -95,16 +99,43 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	public boolean login(String userName, String password) throws Exception {
-		// 비회원 세션 카트에서 로그인하면 세션 카트를 로그인한 멤버의 카트DB에 담는다
+		// 비회원 세션 카트에서 로그인하면 세션 카트를 로그인한 멤버의 카트DB에 담게 구현?
 		Optional<Member> findOptionalMember = memberRepository.findByUserName(userName);
 		if (findOptionalMember.isEmpty()) {
-			throw new Exception(userName + " 는 존재하지않는 아이디입니다.");
+			throw new MemberNotFoundException(userName + " 는 존재하지않는 아이디입니다.");
 		} else if (findOptionalMember.isPresent()) {
 			if (password.equals(findOptionalMember.get().getPassword())) {
 			} else {
-				throw new Exception("패쓰워드가 일치하지않습니다.");
+				throw new PasswordMismatchException("패쓰워드가 일치하지않습니다.");
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public void updateGrade(Member member, int gradePoint) {
+		member.setGradePoint(member.getGradePoint() + gradePoint);
+		if (member.getGradePoint() <= 1000) {
+			/* Rookie Bronze, Silver, Gold, Platinum, Diamond 결제 가격의 1%가 등급 포인트로 쌓임
+			등급 점수   Rookie : 0 ~ 1000
+			Bronze : 1001 ~ 5000
+			Silver : 5001 ~ 10000
+			Gold : 10001 ~ 20000
+			Platinum : 20001 ~ 35000
+			Diamond : 35001 ~  */
+			member.setGrade("Rookie");
+		} else if (member.getGradePoint() > 1000 && member.getGradePoint() <= 5000) {
+			member.setGrade("Silver");
+		} else if (member.getGradePoint() > 5000 && member.getGradePoint() <= 10000) {
+			member.setGrade("Gold");
+		} else if (member.getGradePoint() > 10000 && member.getGradePoint() <= 20000) {
+			member.setGrade("Platinum");
+		} else if (member.getGradePoint() > 20000 && member.getGradePoint() <= 35000) {
+			member.setGrade("Gold");
+		} else if (member.getGradePoint() > 35000) {
+			member.setGrade("Diamond");
+		}
+		memberRepository.save(member);
+
 	}
 }
