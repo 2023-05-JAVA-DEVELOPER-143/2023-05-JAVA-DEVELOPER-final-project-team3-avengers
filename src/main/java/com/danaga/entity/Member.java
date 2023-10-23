@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.danaga.dto.MemberInsertGuestDto;
+import com.danaga.dto.MemberResponseDto;
 import com.danaga.dto.MemberUpdateDto;
 
 import jakarta.persistence.CascadeType;
@@ -64,6 +65,14 @@ public class Member {
 										Diamond : 35001 ~  */
 	@Builder.Default
 	private Integer gradePoint = 0;
+
+	public static Member toResponseEntity(MemberResponseDto memberResponseDto) {
+		return Member.builder().id(memberResponseDto.getId()).userName(memberResponseDto.getUserName())
+				.password(memberResponseDto.getPassword()).email(memberResponseDto.getEmail()).nickname(memberResponseDto.getNickname())
+				.address(memberResponseDto.getAddress()).phoneNo(memberResponseDto.getPhoneNo()).joinDate(memberResponseDto.getJoinDate())
+				.role(memberResponseDto.getRole()).grade(memberResponseDto.getGrade()).gradePoint(memberResponseDto.getGradePoint())
+				.build();
+	}
 
 	public static Member toUpdateEntity(MemberUpdateDto memberUpdateDto) {
 		return Member.builder().id(memberUpdateDto.getId()).userName(memberUpdateDto.getUserName()).password(memberUpdateDto.getPassword())
