@@ -3,13 +3,14 @@ package com.danaga.service;
 import java.util.List;
 
 import com.danaga.dto.MemberInsertGuestDto;
+import com.danaga.dto.MemberResponseDto;
 import com.danaga.dto.MemberUpdateDto;
 import com.danaga.entity.Member;
 
 public interface MemberService {
-	public List<Member> getMembers();
-	public Member getMemberBy(String value) throws Exception;
-	public Member joinMember(Member member) throws Exception;
+	public List<MemberResponseDto> getMembers();
+	public MemberResponseDto getMemberBy(String value) throws Exception;
+	public MemberResponseDto joinMember(MemberResponseDto memberResponseDto) throws Exception;
 	public MemberInsertGuestDto joinGuest(MemberInsertGuestDto memberInsertGuestDto) throws Exception;
 	public MemberUpdateDto updateMember(MemberUpdateDto memberUpdateDto) throws Exception;
 	public void deleteMember(String value) throws Exception;

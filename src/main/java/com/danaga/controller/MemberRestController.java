@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.danaga.dto.MemberResponseDto;
 import com.danaga.dto.MemberUpdateDto;
 import com.danaga.entity.Member;
 import com.danaga.memberResponse.MemberResponse;
@@ -33,14 +34,14 @@ public class MemberRestController {
 	private MemberService memberService;
 
 	@PostMapping("/login")
-	public ResponseEntity<MemberResponse> member_login_action(@RequestBody Member member, HttpSession session) throws Exception {
-		memberService.login(member.getUserName(), member.getPassword());
-		session.setAttribute("sUserId", member.getUserName());
+	public ResponseEntity<MemberResponse> member_login_action(@RequestBody MemberResponseDto memberResponseDto, HttpSession session) throws Exception {
+		memberService.login(memberResponseDto.getUserName(), memberResponseDto.getPassword());
+		session.setAttribute("sUserId", memberResponseDto.getUserName());
 
 		MemberResponse response = new MemberResponse();
 		response.setStatus(MemberResponseStatusCode.LOGIN_SUCCESS);
 		response.setMessage(MemberResponseMessage.LOGIN_SUCCESS);
-		response.setData(member);
+		response.setData(memberResponseDto);
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
@@ -48,13 +49,13 @@ public class MemberRestController {
 	}
 
 	@PostMapping("/join")
-	public ResponseEntity<MemberResponse> member_join_action(@RequestBody Member member) throws Exception {
-		memberService.joinMember(member);
+	public ResponseEntity<MemberResponse> member_join_action(@RequestBody MemberResponseDto memberResponseDto) throws Exception {
+		memberService.joinMember(memberResponseDto);
 
 		MemberResponse response = new MemberResponse();
 		response.setStatus(MemberResponseStatusCode.CREATED_USER);
 		response.setMessage(MemberResponseMessage.CREATED_USER);
-		response.setData(member);
+		response.setData(memberResponseDto);
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.CREATED);
@@ -77,7 +78,7 @@ public class MemberRestController {
 
 	@GetMapping("/list")
 	public ResponseEntity<MemberResponse> member_list() {
-		List<Member> memberList = memberService.getMembers();
+		List<MemberResponseDto> memberList = memberService.getMembers();
 		MemberResponse response = new MemberResponse();
 		response.setStatus(MemberResponseStatusCode.READ_USER);
 		response.setMessage(MemberResponseMessage.READ_USER);
@@ -87,10 +88,10 @@ public class MemberRestController {
 		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
 	}
-
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<MemberResponse> member_info(@PathVariable(name = "id") String id) throws Exception {
-		Member loginUser = memberService.getMemberBy(id);
+		MemberResponseDto loginUser = memberService.getMemberBy(id);
 		MemberResponse response = new MemberResponse();
 		response.setStatus(MemberResponseStatusCode.READ_USER);
 		response.setMessage(MemberResponseMessage.READ_USER);
