@@ -8,18 +8,24 @@ import com.danaga.dto.CartUpdateDto;
 
 import lombok.RequiredArgsConstructor;
 import com.danaga.entity.Cart;
+import com.danaga.entity.OptionSet;
 import com.danaga.repository.CartRepository;
+
+import groovyjarjarantlr4.v4.parse.ANTLRParser.exceptionGroup_return;
 
 @Service
 @RequiredArgsConstructor
 public class CartServiceImpl implements CartService {
 	private final MemberDao memberDao;
 	private final CartRepository cartRepository;
+	//private final OptionSetDao optionSetDao;
 
+	
+	
 	// 유저 카트 리스트
 	@Override
-	public List<Cart> findCartList(String value) throws Exception {
-		Long memberId = memberDao.findMember(value).getId();
+	public List<Cart> findCartList(String sUserId) throws Exception {
+		Long memberId = findMemberId(sUserId);
 		return cartRepository.findByMemberId(memberId);
 	}
 
@@ -49,13 +55,27 @@ public class CartServiceImpl implements CartService {
 	public void deleteCart(Long id) throws Exception {
 		cartRepository.deleteById(id);
 	}
-
-	// 장바구니 수량변경
+	
 	@Override
-	public void updateCart(CartUpdateDto dto) {
-		Cart findCart = cartRepository.findById(dto.getId()).get();
-		findCart.setQty(dto.getQty());
-		cartRepository.save(findCart);
+	public void deleteByMemberId(Long memberId) {
+		cartRepository.deleteByMemberId(memberId);
 	}
 
+	// 카트 전체삭제 [세션(Controller) -> sUserId -> memberId -> delete ]
+	public void deleteCarts(String sUserId) throws Exception {
+		Long memberId = findMemberId(sUserId);
+		cartRepository.deleteByMemberId(memberId);
+	};
+	
+	// 헤더영역 장바구니 아이콘에 몇개 담긴지 숫자 표시 
+	@Override
+	public int countCarts(String sUserId) throws Exception {
+		Long memberId = findMemberId(sUserId);
+		return cartRepository.countByMemberId(memberId);
+	}
+	
+	
+	Long findMemberId(String sUserId) throws Exception{
+		return memberDao.findMember(sUserId).getId();
+	};
 }

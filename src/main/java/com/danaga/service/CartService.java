@@ -20,7 +20,12 @@ public interface CartService {
 	void deleteCart(Long id) throws Exception;
 	
 	// 장바구니 수량변경 
-	void updateCart(CartUpdateDto dto);
+	//void updateCart(CartUpdateDto dto,String value);
 	
+	// 멤버 아이디로 카트삭제 [전체 삭제]
+	void deleteCarts(String sUserId) throws Exception;
 	
+	int countCarts(String value)throws Exception;
+	
+	void deleteByMemberId(Long memberId);
 }
