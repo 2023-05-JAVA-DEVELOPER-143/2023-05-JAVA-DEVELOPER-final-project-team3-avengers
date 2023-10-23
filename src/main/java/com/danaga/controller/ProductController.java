@@ -68,7 +68,7 @@ public class ProductController {
 			model.addAttribute("productList",productList);
 			model.addAttribute("ancestorCategory",ancestorCategories);
 			
-			return "/product";
+			return "/product.html";
 		} catch (Exception e) {
 			// error페이지, 페이지내 에러 메세지 넘겨주기
 			e.printStackTrace();
@@ -100,7 +100,7 @@ public class ProductController {
 			}//최근본상품에 추가
 			model.addAttribute("findOptionSet",findOptionSet);
 			model.addAttribute("hitProducts",hitProducts);
-			return "/product/{optionSetId}";
+			return "/product-detail.html";
 		} catch (Exception e) {
 			// error페이지, 페이지내 에러 메세지 넘겨주기
 			e.printStackTrace();
