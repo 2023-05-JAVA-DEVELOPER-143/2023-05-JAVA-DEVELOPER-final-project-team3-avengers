@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
+<head >
     <meta charset="utf-8">
     <link th:href="@{/css/bootstrap.min.css}"
             href="../css/bootstrap.min.css" rel="stylesheet">
@@ -14,9 +14,12 @@
 
 <div class="container" style="max-width: 600px">
     <div class="py-5 text-center">
-        <h2>상품 목록</h2>
+        <h2>글 목록</h2>
     </div>
     <hr class="my-4">
+	<div class="col">
+    	<a th:href="@{/board/create/{boardGroupId}(boardGroupId=${boardList.get(0).boardGroupId})}" class="w-100 btn btn-primary btn-lg" th:text="글쓰기"></a>
+	</div>
     <div>
         <table class="table">
             <thead>

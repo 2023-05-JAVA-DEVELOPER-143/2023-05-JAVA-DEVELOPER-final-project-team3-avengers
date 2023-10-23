@@ -54,6 +54,13 @@
 		        th:onclick="|location.href='@{/board/{id}/edit(id=${board.id})}'|"
 		        type="button">게시글 수정</button>
         </div>
+        
+        <div class="col">
+            <button class="w-100 btn btn-primary btn-lg"
+		        onclick="location.href='list.html'"
+		        th:onclick="|location.href='@{/board/{id}/delete(id=${board.id})}'|"
+		        type="button">게시글 삭제</button>
+        </div>
         <div class="col">
             <button class="w-100 btn btn-secondary btn-lg"
 		        onclick="location.href='list.html'"
