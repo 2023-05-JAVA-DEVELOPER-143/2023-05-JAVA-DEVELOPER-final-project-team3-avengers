@@ -1,32 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="utf-8">
-    <title>다나가닷컴
-    </title>
-    <!-- SEO Meta Tags-->
-    <meta name="description" content="Unishop - Universal E-Commerce Template">
-    <meta name="keywords" content="shop, e-commerce, modern, flat style, responsive, online store, business, mobile, blog, bootstrap 4, html5, css3, jquery, js, gallery, slider, touch, creative, clean">
-    <meta name="author" content="Rokaux">
-    <!-- Mobile Specific Meta Tag-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <!-- Favicon and Apple Icons-->
-    <link rel="icon" type="image/x-icon" href="/bootstrap/favicon.ico">
-    <link rel="icon" type="image/png" href="/bootstrap/favicon.png">
-    <link rel="apple-touch-icon" href="/bootstrap/touch-icon-iphone.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/bootstrap/touch-icon-ipad.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/bootstrap/touch-icon-iphone-retina.png">
-    <link rel="apple-touch-icon" sizes="167x167" href="/bootstrap/touch-icon-ipad-retina.png">
-    <!-- Vendor Styles including: Bootstrap, Font Icons, Plugins, etc.-->
-    <link rel="stylesheet" media="screen" href="/bootstrap/css/vendor.min.css">
-    <!-- Main Template Styles-->
-    <link id="mainStyles" rel="stylesheet" media="screen" href="/bootstrap/css/styles.min.css">
-    <!-- Modernizr-->
-    <script src="/bootstrap/js/modernizr.min.js"></script>
-  </head>
   <!-- Body-->
+	  <!-- Header -->
+    <div th:insert="include_common :: header"></div>
   <body>
-    <div th:insert="classpath:/templates/include_common.html :: header"></div>
     <!-- Off-Canvas Wrapper-->
     <div class="offcanvas-wrapper">
       <!-- Page Content-->
