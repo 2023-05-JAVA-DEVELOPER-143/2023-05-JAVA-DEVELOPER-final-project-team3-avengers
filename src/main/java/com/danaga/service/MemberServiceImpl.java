@@ -1,5 +1,6 @@
 package com.danaga.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.danaga.dao.MemberDao;
 import com.danaga.dto.MemberInsertGuestDto;
+import com.danaga.dto.MemberResponseDto;
 import com.danaga.dto.MemberUpdateDto;
 import com.danaga.entity.Member;
 import com.danaga.exception.PasswordMismatchException;
@@ -26,31 +28,36 @@ public class MemberServiceImpl implements MemberService {
 	@Autowired
 	private MemberRepository memberRepository;
 
-	public List<Member> getMembers() {
-		return memberDao.findMembers();
+	public List<MemberResponseDto> getMembers() {
+		List<Member> members = memberDao.findMembers();
+		List<MemberResponseDto> responseMembers = new ArrayList<>();
+		for (Member member : members) {
+			responseMembers.add(MemberResponseDto.toDto(member));
+		}
+		return responseMembers;
 	}
 
-	public Member getMemberBy(String value) throws Exception {
-		return memberDao.findMember(value);
+	public MemberResponseDto getMemberBy(String value) throws Exception {
+		return MemberResponseDto.toDto(memberDao.findMember(value));
 	}
-
-	public Member joinMember(Member member) throws Exception, ExistedMemberException {
+	@Transactional
+	public MemberResponseDto joinMember(MemberResponseDto memberResponseDto) throws Exception, ExistedMemberException {
 		// 1.아이디중복체크
-		if (memberDao.existedMemberBy(member.getUserName())) {
+		if (memberDao.existedMemberBy(memberResponseDto.getUserName())) {
 			// 아이디중복
-			throw new ExistedMemberException(member.getUserName() + " 는 이미 존재하는 아이디 입니다.");
-		} else if (memberDao.existedMemberBy(member.getEmail())) {
-			throw new ExistedMemberException(member.getEmail() + " 는 이미 등록된 이메일 입니다.");
-		} else if (memberDao.existedMemberBy(member.getPhoneNo())
-				&& (memberDao.findMember(member.getPhoneNo()).getRole().equals("Guest"))) {
-			member.setRole("Member");
-			return memberDao.update(member);
-		} else if (memberDao.existedMemberBy(member.getPhoneNo())) {
-			throw new ExistedMemberException(member.getPhoneNo() + " 는 이미 등록된 번호 입니다.");
+			throw new ExistedMemberException(memberResponseDto.getUserName() + " 는 이미 존재하는 아이디 입니다.");
+		} else if (memberDao.existedMemberBy(memberResponseDto.getEmail())) {
+			throw new ExistedMemberException(memberResponseDto.getEmail() + " 는 이미 등록된 이메일 입니다.");
+		} else if (memberDao.existedMemberBy(memberResponseDto.getPhoneNo())
+				&& (memberDao.findMember(memberResponseDto.getPhoneNo()).getRole().equals("Guest"))) {
+			memberResponseDto.setRole("Member");
+			return MemberResponseDto.toDto((memberDao.update(Member.toResponseEntity(memberResponseDto))));
+		} else if (memberDao.existedMemberBy(memberResponseDto.getPhoneNo())) {
+			throw new ExistedMemberException(memberResponseDto.getPhoneNo() + " 는 이미 등록된 번호 입니다.");
 		}
 		// 아이디안중복
 		// 2.회원가입
-		return memberDao.insert(member);
+		return MemberResponseDto.toDto(memberDao.insert(Member.toResponseEntity(memberResponseDto)));
 	}
 
 	@Transactional
@@ -61,7 +68,7 @@ public class MemberServiceImpl implements MemberService {
 			return MemberInsertGuestDto.toDto(memberDao.findMember(Member.toGuestEntity(memberInsertGuestDto).getPhoneNo()));
 		}
 	}
-
+	@Transactional
 	public MemberUpdateDto updateMember(MemberUpdateDto memberUpdateDto) throws Exception, ExistedMemberException {
 		Member originalMember = memberDao.findMember(memberUpdateDto.getUserName());
 		if (originalMember.getPhoneNo().equals(memberUpdateDto.getPhoneNo())
@@ -88,7 +95,7 @@ public class MemberServiceImpl implements MemberService {
 		}
 		return MemberUpdateDto.toDto(memberDao.insert(Member.toUpdateEntity(memberUpdateDto)));
 	}
-
+	@Transactional
 	public void deleteMember(String value) throws Exception {
 		memberDao.delete(value);
 	}
@@ -111,7 +118,7 @@ public class MemberServiceImpl implements MemberService {
 		}
 		return true;
 	}
-
+	@Transactional
 	@Override
 	public void updateGrade(Member member, int gradePoint) {
 		member.setGradePoint(member.getGradePoint() + gradePoint);
