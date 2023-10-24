@@ -101,10 +101,14 @@ public class OrderServiceImpl implements OrderService {
 	@Transactional
 	public Orders memberCartOrderSave(OrdersDto ordersDto) throws Exception {
 		
-		
-		
-		
-		
+		OrdersDto ordersInsertDto= ordersDto.builder()
+				 .description(ordersDto.getDescription())
+				 .price(ordersDto.getPrice())
+				 .stateMsg(OrderStateMsg.입금대기중)
+				 .createDate(ordersDto.getCreateDate())
+				 .build();
+
+		Orders orders= orderDao.save(Orders.toResponseEntity(ordersInsertDto));
 		
 		
 		
