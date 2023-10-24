@@ -4,6 +4,7 @@ import com.danaga.dto.ResponseDto;
 import com.danaga.dto.product.OptionNameValueDto;
 import com.danaga.dto.product.OptionSaveDto;
 import com.danaga.dto.product.OptionSetUpdateDto;
+import com.danaga.dto.product.ProductDto;
 import com.danaga.dto.product.ProductSaveDto;
 import com.danaga.dto.product.ProductUpdateDto;
 import com.danaga.dto.product.QueryStringDataDto;
@@ -28,9 +29,9 @@ public interface OptionSetService {
 		ResponseDto<?> findById(Long optionSetId);
 		ResponseDto<?> showOptionNameValues(Long categoryId);
 		
-		ResponseDto<OptionSet> displayHitProducts(Long optionSetId);
+		ResponseDto<ProductDto> displayHitProducts(Long optionSetId);
 		
-		ResponseDto<OptionSet> searchProducts(QueryStringDataDto dto);
+		ResponseDto<ProductDto> searchProducts(QueryStringDataDto dto);
 		
 		ResponseDto<?> showOtherOptionSets(Long optionSetId);
 		

@@ -18,14 +18,13 @@ import lombok.NoArgsConstructor;
 @Builder
 public class QueryStringDataDto {
 	
-	private Optional<String> orderType;
-	private Optional<String> brand;
-	private Optional<List<OptionDto>> optionset;
+	private String orderType;
+	private String brand;
 	@Builder.Default
-	private int minPrice=0;
-	@Builder.Default
-	private int maxPrice=Integer.MAX_VALUE;
-	private Optional<String> nameKeyword;
-	private Optional<String> category;
+	private List<OptionDto> optionset=new ArrayList();
+	private Integer minPrice;
+	private Integer maxPrice;
+	private String nameKeyword;
+	private String category;
 	
 }
