@@ -32,7 +32,7 @@ public class OrdersDto {
 	private Integer price;
 	private OrderStateMsg stateMsg;
 	private LocalDateTime createDate;
-
+	private Long memberId;
 	
 	public static OrdersDto orderDto(Orders entity) {
 
@@ -41,7 +41,7 @@ public class OrdersDto {
 						.description(entity.getDescription())
 						.price(entity.getPrice())
 						.stateMsg(entity.getStatement())
-						.createDate(entity.getCreateDate())
+						.memberId(entity.getMember().getId())
 						.build();
 	}
 	

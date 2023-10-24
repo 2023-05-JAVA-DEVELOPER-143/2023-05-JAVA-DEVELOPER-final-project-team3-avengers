@@ -57,7 +57,8 @@ public class OrderDaoImpl implements OrderDao {
 //	}
 	
 	//주문SAVE
-	public Orders save(Orders orders) {
+	public Orders save(Orders orders, String sUserId) {
+		orders.setMember(memberRepository.findByUserName(sUserId).get());
 		return orderRepository.save(orders);
 	}
 	
