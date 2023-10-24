@@ -17,7 +17,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.danaga.config.OrderStateMsg;
-import com.danaga.dto.OrdersDto;
+import com.danaga.dto.*;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -59,7 +59,7 @@ public class Orders {
 	@CreationTimestamp
 	private LocalDateTime createDate; //주문날짜
 
-	@OneToOne(mappedBy = "orders")
+	@OneToOne(mappedBy = "orders", cascade = jakarta.persistence.CascadeType.PERSIST)
 	private Delivery delivery; //배송
 	
 	@OneToOne(mappedBy = "orders")

@@ -3,6 +3,18 @@
 <!-- Body-->
 <!-- Header -->
 <div th:insert="include_common :: header"></div>
+
+<style>
+.row {
+	display: flex;
+}
+
+.col {
+	flex: 1;
+	border: 1px solid black;
+	padding: 10px;
+}
+</style>
 <body>
 	<!-- Off-Canvas Wrapper-->
 	<div class="offcanvas-wrapper">
@@ -16,17 +28,51 @@
 			<div class="container padding-bottom-3x mb-2">
 				<div class="row">
 					<div class="col-lg-4"></div>
-					<div class="col-lg-8">
+					<div class="col-lg-6">
 						<div class="padding-top-2x mt-2 hidden-lg-up"></div>
+
+						<h6 class="text-muted text-normal text-uppercase padding-top-2x"
+							style="margin-left: 150px;">환불 하기</h6>
+						<hr class="margin-bottom-1x">
+						<div class="table-responsive"
+							style="margin-left: -150px; width: 120%;">
+							<table class="table">
+								<thead class="thead-inverse">
+									<tr>
+										<th style="width: 500px; white-space: nowrap;">주문 번호</th>
+										<th style="width: 500px; white-space: nowrap;">주문 상세번호</th>
+										<th style="width: 500px; white-space: nowrap;">주문 날짜</th>
+										<th style="width: 500px; white-space: nowrap;">상품 갯수</th>
+										<th style="width: 500px; white-space: nowrap;">총 가격</th>
+										<th style="width: 500px; white-space: nowrap;">현재 주문 상태</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<th scope="row" style="width: 500px;">112</th>
+										<td style="width: 500px; white-space: nowrap;">좋은 컴퓨터 외
+											5개</td>
+										<td style="width: 500px; white-space: nowrap;">2023.10.15</td>
+										<td style="width: 500px; white-space: nowrap;">15개</td>
+										<td style="width: 500px; white-space: nowrap;">13,000,000원</td>
+										<td style="width: 500px; white-space: nowrap;">배송완료</td>
+									</tr>
+
+								</tbody>
+							</table>
+						</div>
+
+
+
 						<form class="row">
 							<div class="col-md-6">
 								<div class="form-group">
-									<label for="account-fn">환불 사유</label> <br> <input
-										class="form-control" type="text" id="account-fn" value="환불사유"
-										required>
+									<label for="account-fn">환불 사유</label>  
+									<input class="form-control" type="text" id="account-fn" value="환불사유" required>
 								</div>
 							</div>
 						</form>
+
 						<form class="row">
 							<div class="col-md-6">
 								<div class="form-group">
@@ -37,15 +83,25 @@
 							</div>
 						</form>
 
-
-
+							
+						
+						<!-- 네, 아니오 버튼 추가 -->
+						<div class="row">
+							<div class="col-md-6 text-right">
+								<button type="button" class="btn btn-secondary ml-8">네</button>
+								<button type="button" class="btn btn-secondary mr-8">아니오</button>
+							</div>
+						</div>
 					</div>
+
+
 				</div>
 			</div>
+	</div>
 
 
-		</section>
-		<div th:insert="include_common :: footer"></div>
+	</section>
+	<div th:insert="include_common :: footer"></div>
 	</div>
 
 
