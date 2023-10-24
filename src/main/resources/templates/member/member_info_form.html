@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- Body-->
+<!-- Header -->
+<div th:insert="include_common :: header"></div>
+<body>
+	<!-- Off-Canvas Wrapper-->
+	<div class="offcanvas-wrapper">
+		<!-- Page Content-->
+		<!-- Main Slider-->
+		<section class="hero-slider"
+			style="background-image: url(img/hero-slider/main-bg.jpg);">
+			<div class="page-title">
+				<div class="container">
+					<div class="column">
+						<h1>내 정보</h1>
+					</div>
+				</div>
+			</div>
+			<!-- Page Content-->
+			<div class="container padding-bottom-3x mb-2">
+				<div class="row">
+					<div class="col-lg-4">
+						<aside class="user-info-wrapper">
+              <div class="user-cover" style="background-image: url(img/account/user-cover-img.jpg);">
+                <div class="info-label" data-toggle="tooltip"><i class="icon-medal"></i>Silver&nbsp;<span>6000points</span></div>
+              </div>
+              <div class="user-info">
+                <div class="user-data">
+                  <h1>다나카</h1>
+                </div>
+              </div>
+            </aside>
+						<nav class="list-group">
+							<a class="list-group-item with-badge" href="account-orders.html"><i
+								class="icon-bag"></i>주문 목록<span
+								class="badge badge-primary badge-pill">6</span></a><a
+								class="list-group-item active" href="account-profile.html"><i
+								class="icon-head"></i>내 정보</a><a
+								class="list-group-item with-badge" href="account-wishlist.html"><i
+								class="icon-heart"></i>관심 상품<span
+								class="badge badge-primary badge-pill">3</span></a>
+						</nav>
+					</div>
+					<div class="col-lg-8">
+						<div class="padding-top-2x mt-2 hidden-lg-up"></div>
+						<form class="row">
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label for="reg-email">E-mail 주소</label> <input
+										class="form-control" type="email" id="reg-email" disabled>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label for="reg-phone">휴대폰 번호</label> <input
+										class="form-control" type="text" id="reg-phone" disabled>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label for="reg-nickname">닉네임</label> <input
+										class="form-control" type="text" id="reg-nickname" required>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label for="reg-birthday">생년월일</label> <input
+										class="form-control" type="text" id="reg-birthday" required>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label for="reg-pass">비밀번호</label> <input class="form-control"
+										type="password" id="reg-pass" required>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label for="reg-pass-confirm">비밀번호 확인</label> <input
+										class="form-control" type="password" id="reg-pass-confirm"
+										required>
+								</div>
+							</div>
+							<div class="col-12">
+								<hr class="mt-2 mb-3">
+								<div
+									class="d-flex flex-wrap justify-content-between align-items-center">
+									<div class="custom-control custom-checkbox d-block"></div>
+									<button class="btn btn-primary margin-right-none" type="button"
+										data-toast data-toast-position="topRight"
+										data-toast-type="success" data-toast-icon="icon-circle-check"
+										data-toast-title="Success!"
+										data-toast-message="Your profile updated successfuly.">수정하기</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</section>
+		<div th:insert="include_common :: footer"></div>
+	</div>
+
+
+	<!-- Back To Top Button-->
+	<a class="scroll-to-top-btn" href="#"><i class="icon-arrow-up"></i></a>
+	<!-- Backdrop-->
+	<div class="site-backdrop"></div>
+	<!-- JavaScript (jQuery) libraries, plugins and custom scripts-->
+	<script src="/bootstrap/js/vendor.min.js"></script>
+	<script src="/bootstrap/js/scripts.min.js"></script>
+</body>
+</html>

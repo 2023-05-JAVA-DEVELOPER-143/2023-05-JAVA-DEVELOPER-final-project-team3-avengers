@@ -8,8 +8,9 @@ import lombok.*;
 @ToString
 @Builder
 public class RefundDto {
-	private Long id;
+
 	private String description;
+    
 	private String acNo;
 	
 }

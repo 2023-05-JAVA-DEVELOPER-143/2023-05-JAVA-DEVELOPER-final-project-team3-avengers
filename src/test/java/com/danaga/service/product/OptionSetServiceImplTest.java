@@ -62,20 +62,20 @@ class OptionSetServiceImplTest {
 	void testDeleteOption() {
 		System.out.println(service.deleteOption(1L));
 	}
-
-	@Test
-	@Transactional
-	@Rollback(false)
-	@Disabled
-	void testUpdateStock() {
-		List<Options> list =new ArrayList<Options>();
-		list.add(Options.builder().build());
-		System.out.println(service.updateStock(OptionSetUpdateDto.builder()
-				.id(11L)
-				.stock(999)
-				.options(list)
-				.build()));
-	}
+//
+//	@Test
+//	@Transactional
+//	@Rollback(false)
+//	@Disabled
+//	void testUpdateStock() {
+//		List<Options> list =new ArrayList<Options>();
+//		list.add(Options.builder().build());
+//		System.out.println(service.updateStock(OptionSetUpdateDto.builder()
+//				.id(11L)
+//				.stock(999)
+//				.options(list)
+//				.build()));
+//	}
 
 	@Test
 	@Transactional

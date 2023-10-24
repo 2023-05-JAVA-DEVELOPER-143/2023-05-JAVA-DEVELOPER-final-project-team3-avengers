@@ -6,8 +6,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.jaxb.SpringDataJaxb.OrderDto;
 
+import com.danaga.config.OrderStateMsg;
+import com.danaga.entity.OrderItem;
 import com.danaga.entity.Orders;
 
 import jakarta.persistence.criteria.Order;
@@ -20,22 +23,25 @@ import lombok.*;
 @Builder
 
 public class OrdersDto {
-	private String userName;
-	private Long optionSetId;
-	private Integer orderItem_qty;
-	private String delivaryName;
-	private String delivaryPhoneNumber;
-	private String delivaryAddress;
+	
+	@Autowired
+	OrderItemDto orderItemDto;
+	
+	private Long id;
+	private String description;
+	private Integer price;
+	private OrderStateMsg stateMsg;
+	private LocalDateTime createDate;
+	private Long memberId;
 	
 	public static OrdersDto orderDto(Orders entity) {
-		
+
 		return OrdersDto.builder()
-						.userName(entity.getMember().getUserName())
-						.optionSetId(entity.getOrderItems().get(0).getOptionSet().getId())
-						.orderItem_qty(entity.getOrderItems().get(0).getQty())
-						.delivaryName(entity.getDelivery().getName())
-						.delivaryPhoneNumber(entity.getDelivery().getPhoneNumber())
-						.delivaryAddress(entity.getDelivery().getAddress())
+						.id(entity.getId())
+						.description(entity.getDescription())
+						.price(entity.getPrice())
+						.stateMsg(entity.getStatement())
+						.memberId(entity.getMember().getId())
 						.build();
 	}
 	

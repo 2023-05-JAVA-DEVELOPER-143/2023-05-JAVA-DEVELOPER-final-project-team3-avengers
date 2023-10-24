@@ -35,13 +35,13 @@ public class Delivery {
 	 
 
 	
-//    public static Delivery toEntity(DeliveryDto dto) {
-//    	return Delivery.builder()
-//    			.name(dto.getName())
-//    			.phoneNumber(dto.getPhoneNumber())
-//    			.address(dto.getAddress())
-//    			.build(); 
-//    	
-//    	
-//    }
+    public static Delivery toEntity(DeliveryDto dto) {
+    	return Delivery.builder()
+    			.name(dto.getName())
+    			.phoneNumber(dto.getPhoneNumber())
+    			.address(dto.getAddress())
+    			.build(); 
+    	
+    	
+    }
 }

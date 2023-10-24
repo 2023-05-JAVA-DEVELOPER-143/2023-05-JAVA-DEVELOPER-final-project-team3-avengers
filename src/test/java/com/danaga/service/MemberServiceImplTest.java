@@ -25,21 +25,21 @@ class MemberServiceImplTest {
 	@Autowired
 	MemberRepository memberRepository;
 	
-	@Test
-	@Disabled
-	void joinMember() throws Exception {
-		memberService.joinMember(Member.builder()
-				.userName("USER11")
-				.password("password11")
-				.email("agdslfkj@naver.com")
-				.name("유저11")
-				.nickname("닉네임11")
-				.address("주소11")
-				.birthday(new Date("2023/10/15"))
-				.phoneNo("010-1123-3512")
-				.role("Member")
-				.build());
-	}
+//	@Test
+//	@Disabled
+//	void joinMember() throws Exception {
+//		memberService.joinMember(Member.builder()
+//				.userName("USER11")
+//				.password("password11")
+//				.email("agdslfkj@naver.com")
+//				.name("유저11")
+//				.nickname("닉네임11")
+//				.address("주소11")
+//				.birthday(new Date("2023/10/15"))
+//				.phoneNo("010-1123-3512")
+//				.role("Member")
+//				.build());
+//	}
 	@Test
 	//@Disabled
 	void joinGuest() throws Exception {

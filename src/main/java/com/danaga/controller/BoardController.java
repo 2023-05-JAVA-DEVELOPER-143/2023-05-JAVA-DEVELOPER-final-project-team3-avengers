@@ -29,8 +29,7 @@ public class BoardController {
 	private BoardService bService;
 	@Autowired
 	private LikeConfigService lcService; 
-	@Autowired
-	private MemberServiceImpl mService;
+	
 	@GetMapping("/list/{boardGroupId}")
 	public String list(@PathVariable Long boardGroupId,Model model) {
 		List<BoardDto>boardList=bService.boards(boardGroupId);
@@ -38,9 +37,11 @@ public class BoardController {
 		model.addAttribute("boardList",boardList);
 		return "board/list";
 	}
-	@GetMapping("/create_form")
-	public String createForm() {
-		return "create_form";
+	@GetMapping("/create/{boardGroupId}")
+	public String createForm(@PathVariable Long boardGroupId ,Model model) {
+		Long boardGroupId1=boardGroupId;
+		model.addAttribute("boardGroupId",boardGroupId1);
+		return "board/create_form";
 	}
 	
 	@PostMapping("/create")
@@ -87,6 +88,7 @@ public class BoardController {
 			rttr.addFlashAttribute("msg","삭제가 완료 되어따~!"); 
 		}
 		//3. 결과페이지로 리다이렉트한다.
-		return "redirect:/board/list";
+		return "redirect:/board/list/"+target.getBoardGroupId();
 	}
+	
 }

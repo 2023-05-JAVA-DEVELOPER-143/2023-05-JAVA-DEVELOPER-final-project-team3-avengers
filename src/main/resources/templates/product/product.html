@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
   <head>
-    <meta charset="utf-8">
-    <title>Shop List No Sidebar
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Shop List 
     </title>
     <!-- SEO Meta Tags-->
     <meta name="description" content="Unishop - Universal E-Commerce Template">
@@ -11,18 +11,18 @@
     <!-- Mobile Specific Meta Tag-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <!-- Favicon and Apple Icons-->
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="apple-touch-icon" href="touch-icon-iphone.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="touch-icon-ipad.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="touch-icon-iphone-retina.png">
-    <link rel="apple-touch-icon" sizes="167x167" href="touch-icon-ipad-retina.png">
+    <link rel="icon" type="image/x-icon" href="/bootstrap/favicon.ico">
+    <link rel="icon" type="image/png" href="/bootstrap/favicon.png">
+    <link rel="apple-touch-icon" href="/bootstrap/touch-icon-iphone.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/bootstrap/touch-icon-ipad.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/bootstrap/touch-icon-iphone-retina.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="/bootstrap/touch-icon-ipad-retina.png">
     <!-- Vendor Styles including: Bootstrap, Font Icons, Plugins, etc.-->
-    <link rel="stylesheet" media="screen" href="css/vendor.min.css">
+    <link rel="stylesheet" media="screen" href="/bootstrap/css/vendor.min.css">
     <!-- Main Template Styles-->
-    <link id="mainStyles" rel="stylesheet" media="screen" href="css/styles.min.css">
+    <link id="mainStyles" rel="stylesheet" media="screen" href="/bootstrap/css/styles.min.css">
     <!-- Modernizr-->
-    <script src="js/modernizr.min.js"></script>
+    <script src="/bootstrap/js/modernizr.min.js"></script>
   </head>
   <!-- Body-->
   <body>
@@ -575,11 +575,11 @@
                 <div class="shop-view"><a class="grid-view" href="shop-grid-ns.html"><span></span><span></span><span></span></a><a class="list-view active" href="shop-list-ns.html"><span></span><span></span><span></span></a></div>
               </div>
             </div>
-            <!-- Product-->
-            <div class="product-card product-list"><a class="product-thumb" href="shop-single.html">
+            <!-- Product 반복-->
+            <div class="product-card product-list"><a class="product-thumb" href="product-detail.html">
                 <div class="product-badge text-danger">50% Off</div><img src="img/shop/products/01.jpg" alt="Product"></a>
               <div class="product-info">
-                <h3 class="product-title"><a href="shop-single.html">Unionbay Park</a></h3>
+                <h3 class="product-title"><a href="product-detail.html">Unionbay Park</a></h3>
                 <h4 class="product-price">
                   <del>$99.99</del>$49.99
                 </h4>
@@ -590,70 +590,7 @@
                 </div>
               </div>
             </div>
-            <!-- Product-->
-            <div class="product-card product-list"><a class="product-thumb" href="shop-single.html"><img src="img/shop/products/02.jpg" alt="Product"></a>
-              <div class="product-info">
-                <h3 class="product-title"><a href="shop-single.html">Cole Haan Crossbody</a></h3>
-                <h4 class="product-price">$200.00</h4>
-                <p class="hidden-xs-down">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempore odit officiis illo perferendis deserunt, ipsam dolor ad dolorem eaque veritatis harum facilis aliquid id doloribus incidunt quam beatae, soluta magni alori sedum quanto.</p>
-                <div class="product-buttons">
-                  <button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip" title="Whishlist"><i class="icon-heart"></i></button>
-                  <button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success" data-toast-position="topRight" data-toast-icon="icon-circle-check" data-toast-title="Product" data-toast-message="successfuly added to cart!">Add to Cart</button>
-                </div>
-              </div>
-            </div>
-            <!-- Product-->
-            <div class="product-card product-list"><a class="product-thumb" href="shop-single.html">
-                  <div class="rating-stars"><i class="icon-star filled"></i><i class="icon-star filled"></i><i class="icon-star filled"></i><i class="icon-star filled"></i><i class="icon-star"></i>
-                  </div><img src="img/shop/products/03.jpg" alt="Product"></a>
-              <div class="product-info">
-                <h3 class="product-title"><a href="shop-single.html">Oakley Kickback</a></h3>
-                <h4 class="product-price">$155.00</h4>
-                <p class="hidden-xs-down">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempore odit officiis illo perferendis deserunt, ipsam dolor ad dolorem eaque veritatis harum facilis aliquid id doloribus incidunt quam beatae, soluta magni alori sedum quanto.</p>
-                <div class="product-buttons">
-                  <button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip" title="Whishlist"><i class="icon-heart"></i></button>
-                  <button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success" data-toast-position="topRight" data-toast-icon="icon-circle-check" data-toast-title="Product" data-toast-message="successfuly added to cart!">Add to Cart</button>
-                </div>
-              </div>
-            </div>
-            <!-- Product-->
-            <div class="product-card product-list"><a class="product-thumb" href="shop-single.html"><img src="img/shop/products/04.jpg" alt="Product"></a>
-              <div class="product-info">
-                <h3 class="product-title"><a href="shop-single.html">Waist Leather Belt</a></h3>
-                <h4 class="product-price">$47.00</h4>
-                <p class="hidden-xs-down">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempore odit officiis illo perferendis deserunt, ipsam dolor ad dolorem eaque veritatis harum facilis aliquid id doloribus incidunt quam beatae, soluta magni alori sedum quanto.</p>
-                <div class="product-buttons">
-                  <button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip" title="Whishlist"><i class="icon-heart"></i></button>
-                  <button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success" data-toast-position="topRight" data-toast-icon="icon-circle-check" data-toast-title="Product" data-toast-message="successfuly added to cart!">Add to Cart</button>
-                </div>
-              </div>
-            </div>
-            <!-- Product-->
-            <div class="product-card product-list"><a class="product-thumb" href="shop-single.html">
-                <div class="product-badge text-muted">Out of stock</div><img src="img/shop/products/10.jpg" alt="Product"></a>
-              <div class="product-info">
-                <h3 class="product-title"><a href="shop-single.html">Daily Fabric Cap</a></h3>
-                <h4 class="product-price">$31.99</h4>
-                <p class="hidden-xs-down">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempore odit officiis illo perferendis deserunt, ipsam dolor ad dolorem eaque veritatis harum facilis aliquid id doloribus incidunt quam beatae, soluta magni alori sedum quanto.</p>
-                <div class="product-buttons">
-                  <button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip" title="Whishlist"><i class="icon-heart"></i></button><a class="btn btn-outline-secondary btn-sm" href="shop-single.html">View Details</a>
-                </div>
-              </div>
-            </div>
-            <!-- Product-->
-            <div class="product-card product-list"><a class="product-thumb" href="shop-single.html">
-                  <div class="rating-stars"><i class="icon-star filled"></i><i class="icon-star filled"></i><i class="icon-star filled"></i><i class="icon-star filled"></i><i class="icon-star filled"></i>
-                  </div><img src="img/shop/products/11.jpg" alt="Product"></a>
-              <div class="product-info">
-                <h3 class="product-title"><a href="shop-single.html">Top-Sider Fathom</a></h3>
-                <h4 class="product-price">$90.00</h4>
-                <p class="hidden-xs-down">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempore odit officiis illo perferendis deserunt, ipsam dolor ad dolorem eaque veritatis harum facilis aliquid id doloribus incidunt quam beatae, soluta magni alori sedum quanto.</p>
-                <div class="product-buttons">
-                  <button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip" title="Whishlist"><i class="icon-heart"></i></button>
-                  <button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success" data-toast-position="topRight" data-toast-icon="icon-circle-check" data-toast-title="Product" data-toast-message="successfuly added to cart!">Add to Cart</button>
-                </div>
-              </div>
-            </div>
+            
             <div class="pt-2">
               <!-- Pagination-->
               <nav class="pagination">
@@ -756,7 +693,7 @@
     <!-- Backdrop-->
     <div class="site-backdrop"></div>
     <!-- JavaScript (jQuery) libraries, plugins and custom scripts-->
-    <script src="js/vendor.min.js"></script>
-    <script src="js/scripts.min.js"></script>
+    <script src="/bootstrap/js/vendor.min.js"></script>
+    <script src="/bootstrap/js/scripts.min.js"></script>
   </body>
 </html>

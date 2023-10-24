@@ -36,4 +36,10 @@ public class OrderItem {
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "optionSetId")
 	private OptionSet optionSet;
+
+	public static OrderItem toResponseEntity(OrderItemDto orderItemDto) {
+		return OrderItem.builder()
+						.qty(orderItemDto.getQty())
+						.build();
+	}
 }

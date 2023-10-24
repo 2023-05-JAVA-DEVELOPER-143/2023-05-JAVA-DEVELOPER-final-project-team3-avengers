@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.danaga.dao.OrderDao;
 import com.danaga.dto.OrdersDto;
+import com.danaga.entity.Delivery;
 import com.danaga.entity.Member;
 import com.danaga.entity.Orders;
 
@@ -15,7 +16,7 @@ public interface OrderService {
 	/*
 	 * cart에서 주문
 	 */
-	Orders memberCartOrderSave(OrdersDto ordersDto)throws Exception;
+	public Orders memberCartOrderSave(OrdersDto ordersDto, String sUserId,Delivery delivery) throws Exception;
 	/*
 	 * cart에서 선택주문
 	 */
@@ -32,10 +33,10 @@ public interface OrderService {
 	
    //  주문상태업데이트(특정주문)
 	  // 1.정상주문
-	  Orders updateStatementByNormalOrder(Long orderNo);
+	  Orders updateStatementByNormalOrder(Long orderNo,String sUserId);
 	  // 2.취소주문
-	  Orders updateStatementByCancleOrder(Long orderNo);
+	  Orders updateStatementByCancleOrder(Long orderNo,String sUserId);
 	  // 3.환불주문
-	  Orders updateStatementByRefundOrder(Long orderNo);
-	  Orders updateStatementByResetOrder(Long orderNo);
+	  Orders updateStatementByRefundOrder(Long orderNo,String sUserId);
+	  Orders updateStatementByResetOrder(Long orderNo,String sUserId);
 }

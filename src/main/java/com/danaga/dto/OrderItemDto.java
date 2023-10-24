@@ -13,17 +13,17 @@ import lombok.*;
 @ToString
 @Builder
 public class OrderItemDto {
-	private Long oiNo;
-	private Integer oiQty;
-	private Long oNo;
+	private Long id;
+	private Integer qty;
+	private Long orderId;
 	private Long optionSetId;
 	
-//	public static OrderItemDto toDto(OrderItem entity) {
-//		return OrderItemDto.builder()
-//				.oNo(entity.getOrders().getONo())
-//				.oiNo(entity.getOiNo())
-//				.oiQty(entity.getOiQty())
-//				.optionSetId(entity.getOptionSet().getId())
-//				.build();
-//	}
+	public static OrderItemDto toDto(OrderItem entity) {
+		return OrderItemDto.builder()
+							.id(entity.getId())
+							.qty(entity.getQty())
+							.orderId(entity.getOrders().getId())
+							.optionSetId(entity.getOptionSet().getId())
+							.build();
+	}
 }

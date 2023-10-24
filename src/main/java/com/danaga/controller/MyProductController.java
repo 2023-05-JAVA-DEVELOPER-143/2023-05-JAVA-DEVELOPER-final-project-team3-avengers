@@ -30,12 +30,12 @@ public class MyProductController {
 			Long memberId = memberService.findIdByUsername(username);
 			// 로그인체크해서 로그인한 멤버 id 찾기
 			interestService.emptyMyInterestingList(memberId);
-			return "/member/wishlist";
+			return "product/wishlist";
 		} catch (Exception e) {
 			// error페이지, 페이지내 에러 메세지 넘겨주기
 			e.printStackTrace();
 			model.addAttribute("errorMsg", e.getMessage());
-			return "/exception";
+			return "redirect:exception.html";
 		}
 	}
 	// 나의 최근본 상품 전체 삭제
@@ -46,12 +46,12 @@ public class MyProductController {
 			Long memberId = memberService.findIdByUsername(username);
 			// 로그인체크해서 로그인한 멤버 id 찾기
 			recentViewService.removeMyRecentViews(memberId);
-			return "/member/recentViews";
+			return "product/recentViews";
 		} catch (Exception e) {
 			// error페이지, 페이지내 에러 메세지 넘겨주기
 			e.printStackTrace();
 			model.addAttribute("errorMsg", e.getMessage());
-			return "/exception";
+			return "redirect:exception.html";
 		}
 	}
 	
@@ -65,12 +65,12 @@ public class MyProductController {
 			model.addAttribute("wish", interestService.myInterestingList(memberId));
 			// 찾은 id로 그 멤버의 위시리스트 찾아서 wish속성으로 model에 저장하고 member/wishlist url로 포워딩
 			// member/wishlist 페이지에서 wish리스트 데이터 받아서 뿌리기
-			return "/member/wishlist";
+			return "product/wishlist";
 		} catch (Exception e) {
 			// error페이지, 페이지내 에러 메세지 넘겨주기
 			e.printStackTrace();
 			model.addAttribute("errorMsg", e.getMessage());
-			return "/exception";
+			return "redirect:exception.html";
 		}
 	}
 
@@ -83,12 +83,12 @@ public class MyProductController {
 			// 로그인체크해서 로그인한 멤버 id 찾기
 			model.addAttribute("myViews", recentViewService.myAllRecentViews(memberId));
 			// myViews 속성에 나의 최근 본 상품 리스트 담기
-			return "/member/recentViews";
+			return "product/recentViews";
 		} catch (Exception e) {
 			// error페이지, 페이지내 에러 메세지 넘겨주기
 			e.printStackTrace();
 			model.addAttribute("errorMsg", e.getMessage());
-			return "/exception";
+			return "redirect:exception.html";
 		}
 	}
 
