@@ -17,7 +17,7 @@
 <div class="page-title">
   <div class="container">
     <div class="column">
-      <h1>My Wishlist</h1>
+      <h1>Recent View</h1>
     </div>
     <div class="column">
       <ul class="breadcrumbs">
@@ -27,7 +27,7 @@
         <li><a href="account-orders.html">Account</a>
         </li>
         <li class="separator">&nbsp;</li>
-        <li>My Wishlist</li>
+        <li>Recent View</li>
       </ul>
     </div>
   </div>
@@ -57,26 +57,26 @@
           <thead>
             <tr>
               <th>Product Name</th><!--제목-->
-              <th class="text-center"><a class="btn btn-sm btn-outline-danger" href="#">Clear Wishlist</a></th><!--전체삭제버튼-->
+              <th class="text-center"><a class="btn btn-sm btn-outline-danger" href="#">Clear RecentView</a></th><!--전체삭제버튼-->
             </tr>
           </thead>
           <tbody>
-            <tr th:each="${optionset}"><!--상품 반복-->
+            <tr th:each="view:${myViews}"><!--상품 반복-->
               <td>
                 <div class="product-item"><a class="product-thumb" href="product-detail.html" th:href="product-detail.html"><img src="img/shop/cart/01.jpg" alt="Product"  th:attr="src=@{/images/gtvglogo.png},title=#{optionset.product.img},alt=#{optionset.product.img}"></a>
                   <div class="product-info">
-                    <h4 class="product-title" th:text="${product.name}"><a href="product-detail.html" th:href="product-detail.html">ProductName</a></h4>
-                    <div class="text-lg text-medium text-muted" th:text="${optionset.totalprice}">totalprice</div>
-                    <div th:each="${options}">Options:
-                      <div class="d-inline text-success" th:text="${options.name}:${options.value}">option Name&Value</div>
-                      <div class="d-inline text-success" th:text="${optionset.updatetime}">등록일</div>
-                      <div class="d-inline text-success" th:text="${optionset.review.size}">리뷰수</div>
+                    <h4 class="product-title" th:text="${view.optionSet.product.name}"><a href="product-detail.html" th:href="product-detail.html">ProductName</a></h4>
+                    <div class="text-lg text-medium text-muted" th:text="${view.optionSet.totalPrice}">totalprice</div>
+                    <div th:each="option:${view.optionSet.options}">Options:
+                      <div class="d-inline text-success" th:text="${option.name}:${option.value}">option Name&Value</div>
+                      <div class="d-inline text-success" th:text="${optionSet.updateTime}">등록일</div>
+                      <div class="d-inline text-success" th:text="${optionSet.review.size}">리뷰수</div>
                       <i class="icon-heart">::before</i>
                     </div>
                   </div>
                 </div>
               </td>
-              <td class="text-center"><a class="remove-from-cart" href="#" data-toggle="tooltip" title="Remove item"><i class="icon-heart"></i></a></td>
+              <td class="text-center"><a class="remove-from-cart" href="#" data-toggle="tooltip" title="Remove item"><i class="icon-cross"></i></a></td>
             </tr><!--상품반복 끝-->
           </tbody>
         </table>

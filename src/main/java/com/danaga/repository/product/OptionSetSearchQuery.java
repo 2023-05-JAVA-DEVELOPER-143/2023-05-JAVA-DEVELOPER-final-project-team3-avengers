@@ -3,7 +3,9 @@ package com.danaga.repository.product;
 import java.util.Iterator;
 import java.util.List;
 
+import com.danaga.dto.product.OptionDto;
 import com.danaga.dto.product.QueryStringDataDto;
+import com.danaga.entity.Category;
 import com.danaga.entity.Options;
 
 public class OptionSetSearchQuery {
@@ -23,8 +25,8 @@ public class OptionSetSearchQuery {
 		setOrderType(OptionSetQueryData.BY_ORDER_COUNT);//default 설정
 	}
 	public OptionSetSearchQuery(QueryStringDataDto searchDto) {
-		searchDto.getCategory().ifPresent((category)->{
-			
+		if(searchDto.getCategory()!=null) {
+		String category=searchDto.getCategory();
 		
 		this.searchQuery="SELECT os "
 				+ "FROM OptionSet os "
@@ -32,35 +34,32 @@ public class OptionSetSearchQuery {
 				+ " join fetch p.categorySets cs  "
 				+ " join fetch cs.category c " 
 				+ " WHERE os.stock >0 ";
-		});
-		if(searchDto.getCategory().isEmpty()) {
+		categoryFilter(category);
+		}else {
 			this.searchQuery="SELECT os "
 					+ "FROM OptionSet os "
 					+ " join fetch os.product p"
 					+ " WHERE os.stock >0 ";
 		}
-		searchDto.getOptionset().ifPresent((optionset)->{
+		if(searchDto.getOptionset()!=null) {
+			List<OptionDto> optionset = searchDto.getOptionset();
 			for(int i=0; i<optionset.size();i++) {
 				optionFilter(optionset.get(i).getName(), optionset.get(i).getValue());
 			}
-		});
+		}
+		if(searchDto.getNameKeyword()!=null) {
+			nameKeyword(searchDto.getNameKeyword());
+		}
+		if(searchDto.getBrand()!=null) {
+			brandFilter(searchDto.getBrand());
+		}
+		if(searchDto.getMinPrice()!=null&&searchDto.getMaxPrice()!=null) {
+			priceRange(searchDto.getMinPrice(), searchDto.getMaxPrice());
+		}
 		
-		searchDto.getCategory().ifPresent((category)->{
-			categoryFilter(category);
-		});
-		searchDto.getNameKeyword().ifPresent((name)->{
-			nameKeyword(name);
-		});
-		searchDto.getBrand().ifPresent((brand)->{
-			brandFilter(brand);
-		});
-		
-		int minPrice = searchDto.getMinPrice();
-		int maxPrice = searchDto.getMaxPrice();
-		
-		priceRange(minPrice, maxPrice);
 		this.searchQuery+= " Order By :orderType ";
-		searchDto.getOrderType().ifPresent((orderType)->{
+		if(searchDto.getOrderType()!=null) {
+			String orderType=searchDto.getOrderType();
 			if(orderType.equals("판매순")) {
 				setOrderType(OptionSetQueryData.BY_ORDER_COUNT);
 			}else if(orderType.equals("조회순")) {
@@ -74,8 +73,7 @@ public class OptionSetSearchQuery {
 			}else {//default
 				setOrderType(OptionSetQueryData.BY_ORDER_COUNT);
 			}
-		});
-		if(searchDto.getOrderType().isEmpty()) {
+		}else{
 			setOrderType(OptionSetQueryData.BY_ORDER_COUNT);
 		}
 	}
@@ -90,7 +88,7 @@ public class OptionSetSearchQuery {
 		this.searchQuery+=brand_filter;
 	}
 	public void optionFilter(String optionName,String optionValue) {
-		String option_filter = "AND EXISTS ( SELECT 1 FROM Options o WHERE o.optionSet = os AND o.name = :optionName AND o.value = optionValue )";
+		String option_filter = "AND EXISTS ( SELECT 1 FROM Options o WHERE o.optionSet = os AND o.name = :optionName AND o.value = :optionValue )";
 		option_filter = option_filter.replace(":optionName", "'"+optionName+"'");
 		option_filter = option_filter.replace(":optionValue", "'"+optionValue+"'");
 		this.searchQuery+=option_filter;

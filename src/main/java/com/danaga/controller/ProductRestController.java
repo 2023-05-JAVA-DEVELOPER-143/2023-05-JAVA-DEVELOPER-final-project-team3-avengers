@@ -29,7 +29,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/productx")
+@RequestMapping("/product")
 @RequiredArgsConstructor
 public class ProductRestController {
 
@@ -40,13 +40,14 @@ public class ProductRestController {
 	
 	//제품디테일에서 하트 누르면 관심제품 추가
 	@PostMapping("/heart/{optionSetId}")
+//	@LoginCheck
 	public ResponseEntity<?> tapHeartInDetail(HttpSession session,@PathVariable Long optionSetId){
 		try {
 			//만약 로그인유저가 아니라면 그냥 아무것도 안하고 리턴하는 처리 추가 필요
-			String username=(String)session.getAttribute("sUserId");
-			Long memberId = memberService.findIdByUsername(username);
+//			String username=(String)session.getAttribute("sUserId");
+//			Long memberId = memberService.findIdByUsername(username);
 			ResponseDto<?> response =interestService.clickHeart(InterestDto.builder()
-					.memberId(memberId)
+					.memberId(1L)//임시//원래는 memberId
 					.optionSetId(optionSetId)
 					.build());
 			return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -57,12 +58,13 @@ public class ProductRestController {
 
 	//제품디테일에서 하트 누르면 관심제품 삭제
 	@DeleteMapping("/heart/{optionSetId}")
+//	@LoginCheck
 	public ResponseEntity<?> untapHeartInDetail(HttpSession session,@PathVariable Long optionSetId){
 		try {
-			String username=(String)session.getAttribute("sUserId");
-			Long memberId = memberService.findIdByUsername(username);
-			ResponseDto<?> response =interestService.clickHeart(InterestDto.builder()
-					.memberId(memberId)
+//			String username=(String)session.getAttribute("sUserId");
+//			Long memberId = memberService.findIdByUsername(username);
+			ResponseDto<?> response =interestService.deleteHeart(InterestDto.builder()
+					.memberId(1L)//임시//원래는 memberId
 					.optionSetId(optionSetId)
 					.build());
 			return ResponseEntity.status(HttpStatus.OK).body(response);

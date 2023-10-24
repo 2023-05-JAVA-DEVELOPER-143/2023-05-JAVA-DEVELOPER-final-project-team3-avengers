@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
+import com.danaga.dto.product.OptionDto;
 import com.danaga.dto.product.OptionSaveDto;
 import com.danaga.dto.product.OptionSetCreateDto;
 import com.danaga.dto.product.OptionSetUpdateDto;
@@ -29,14 +30,10 @@ class OptionSetServiceImplTest {
 	@Test
 	@Transactional
 	@Rollback(false)
-//	@Disabled//아직 
+	@Disabled//아직
 	void testDeleteProduct() {
 		System.out.println(service.deleteProduct(8L, QueryStringDataDto.builder()
-				.brand(Optional.of("Brand E"))
-				.category(Optional.empty())
-				.nameKeyword(Optional.empty())
-				.optionset(Optional.empty())
-				.orderType(Optional.of(OptionSetQueryData.BY_ORDER_COUNT))
+				.orderType(OptionSetQueryData.BY_ORDER_COUNT)
 				.build()));
 	}
 
@@ -46,12 +43,6 @@ class OptionSetServiceImplTest {
 	@Disabled
 	void testDeleteOptionSet() {
 		System.out.println(service.deleteOptionSet(2L, QueryStringDataDto.builder()
-				.brand(Optional.of("Brand E"))
-				.category(Optional.empty())
-				.nameKeyword(Optional.empty())
-				.optionset(Optional.empty())
-				.maxPrice(10000000)
-				.orderType(Optional.of(OptionSetQueryData.BY_ORDER_COUNT))
 				.build()));
 	}
 
@@ -62,20 +53,21 @@ class OptionSetServiceImplTest {
 	void testDeleteOption() {
 		System.out.println(service.deleteOption(1L));
 	}
-//
-//	@Test
-//	@Transactional
-//	@Rollback(false)
-//	@Disabled
-//	void testUpdateStock() {
-//		List<Options> list =new ArrayList<Options>();
-//		list.add(Options.builder().build());
-//		System.out.println(service.updateStock(OptionSetUpdateDto.builder()
-//				.id(11L)
-//				.stock(999)
-//				.options(list)
-//				.build()));
-//	}
+
+
+	@Test
+	@Transactional
+	@Rollback(false)
+	@Disabled
+	void testUpdateStock() {
+		List<OptionDto> list =new ArrayList<OptionDto>();
+		list.add(OptionDto.builder().build());
+		System.out.println(service.updateStock(OptionSetUpdateDto.builder()
+				.id(11L)
+				.stock(999)
+				.options(list)
+				.build()));
+	}
 
 	@Test
 	@Transactional
@@ -100,15 +92,10 @@ class OptionSetServiceImplTest {
 	}
 
 	@Test
-	@Disabled
+//	@Disabled
 	void testSearchProducts() {
 		System.out.println(service.searchProducts(QueryStringDataDto.builder()
-				.brand(Optional.of("Brand E"))
-				.category(Optional.empty())
-				.nameKeyword(Optional.empty())
-				.optionset(Optional.empty())
-				.maxPrice(10000000)
-				.orderType(Optional.of(OptionSetQueryData.BY_ORDER_COUNT))
+				.orderType(OptionSetQueryData.BY_ORDER_COUNT)
 				.build()));
 	}
 
