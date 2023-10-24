@@ -13,16 +13,9 @@ import com.danaga.dao.CartDao;
 import com.danaga.dao.DeliveryDao;
 import com.danaga.dao.MemberDao;
 import com.danaga.dao.OrderDao;
-import com.danaga.dto.CartCreateDto;
-import com.danaga.dto.MemberInsertGuestDto;
 import com.danaga.dao.product.OptionSetDao;
-import com.danaga.dto.OrdersDto;
-import com.danaga.entity.Cart;
-import com.danaga.entity.Delivery;
-import com.danaga.entity.Member;
-import com.danaga.entity.OptionSet;
-import com.danaga.entity.OrderItem;
-import com.danaga.entity.Orders;
+import com.danaga.dto.*;
+import com.danaga.entity.*;
 import com.danaga.repository.CartRepository;
 import com.danaga.repository.MemberRepository;
 import com.danaga.repository.OrderItemRepository;
@@ -45,7 +38,7 @@ public class OrderServiceImpl implements OrderService {
 	private final OptionSetDao optionSetDao;
 	private final DeliveryDao deliveryDao;
 	private final OrderDao orderDao;
-
+	private final OrderRepository orderRepository;
 //	private final OrderRepository orderRepository;
 
 	private final MemberRepository memberRepository;
@@ -54,121 +47,169 @@ public class OrderServiceImpl implements OrderService {
 	 * 상품에서 직접주문
 	 */
 	@Transactional
-	public Orders memberProductOrderSave(OrdersDto ordersDto, String oName, String oPhoneNumber) throws Exception {
+	public OrdersResponseDto memberProductOrderSave(OrdersDto ordersDto,Long optionSetId, String oName, String oPhoneNumber) throws Exception {
 
 //		if(memberRepository.findByPhoneNo(oPhoneNumber).isEmpty()) {
-//			MemberInsertGuestDto member = MemberInsertGuestDto.builder()
+//			MemberInsertGuestDto memberInsertGuestDto = MemberInsertGuestDto.builder()
 //								.name(oName)
 //								.phoneNo(oPhoneNumber)
 //								.role("Guest")
 //								.build();
-//			System.out.println(member+"((((((((((((((((((((((((((((((((((((((((((((((");
-//			MemberInsertGuestDto member2= memberService.joinGuest(member);
-//			System.out.println(member2+")))))))))))))))))))))))))))))))))))))))))))))))))");
-//			Member guestMember= memberService.getMemberBy(member2.getPhoneNo());
-//			ordersDto.setUserName(guestMember.getUserName());
+//			Member member = Member.toGuestEntity(memberInsertGuestDto);
 //			
-//		
+//			
+//			System.out.println(member+"((((((((((((((((((((((((((((((((((((((((((((((");
+//			MemberInsertGuestDto member2= memberService.joinGuest(memberInsertGuestDto);
+//			System.out.println(member2+")))))))))))))))))))))))))))))))))))))))))))))))))");
+//			MemberResponseDto guestMember= memberService.getMemberBy(member2.getPhoneNo());
+//			ordersDto.setUserName(guestMember.getUserName());
+//
 //		}
 
-		OptionSet optionSet = optionSetDao.findById(ordersDto.getOptionSetId());
-		OrderItem orderItem = OrderItem.builder().qty(ordersDto.getOrderItem_qty()).optionSet(optionSet).build();
+		OptionSet optionSet = optionSetDao.findById(optionSetId);// 상품 찾고
+		System.out.println("@@@@@@@@@@@@@@@optionSet = "+optionSet);
+		OrderItem orderItem = OrderItem.builder()
+										.qty(ordersDto.getOrderItem_qty())
+										.optionSet(optionSet)
+										.build();//orderItem찾음
+		System.out.println("@@@@@@@@@@@@@@@미완성 orderItem: "+orderItem);
+		
+		
+		
 		List<OrderItem> orderItemList = new ArrayList<OrderItem>();
-		orderItemList.add(orderItem);
-		Member member = memberService.getMemberBy(ordersDto.getUserName());
+		
+		
+		orderItemList.add(orderItem);//상품에서 직접 주문하는거니까 orderItem하나만 들어간다
+		System.out.println("@@@@@@@@@@@@@@@orderItemList = "+orderItemList);
+		
+		MemberResponseDto memberResponseDto = memberService.getMemberBy(ordersDto.getUserName());
+		System.out.println("@@@@@@@@@@@@@@@memberResponseDto = "+memberResponseDto);
+		
+		Member memberEntity = Member.toResponseEntity(memberResponseDto);
+		System.out.println("@@@@@@@@@@@@@@@memberEntity= "+memberEntity);
 
-		Orders orders = Orders.builder().statement(OrderStateMsg.입금대기중).orderItems(orderItemList)
-				.price(orderItemList.get(0).getQty() * orderItemList.get(0).getOptionSet().getTotalPrice())
-				.description(orderItemList.get(0).getOptionSet().getProduct().getName()).member(member).build();
-
-		Delivery delivery = Delivery.builder().name(ordersDto.getDelivaryName())
-				.phoneNumber(ordersDto.getDelivaryPhoneNumber()).address(ordersDto.getDelivaryAddress()).orders(orders)
+		Delivery delivery = Delivery.builder()
+				.name(ordersDto.getDelivaryName())
+				.phoneNumber(ordersDto.getDelivaryPhoneNumber())
+				.address(ordersDto.getDelivaryAddress())
 				.build();
+		System.out.println("@@@@@@@@@@@@@@@delivery= "+delivery);
+		
+		
+		Refund refund = new Refund();
+		Orders orders = new Orders();
+		orders.setRefund(refund);
+		orders = Orders.builder()
+							  .statement(OrderStateMsg.입금대기중)
+							  .orderItems(orderItemList)
+							  .price(orderItemList.get(0).getQty() * orderItemList.get(0).getOptionSet().getTotalPrice())
+							  .description(orderItemList.get(0).getOptionSet().getProduct().getName())
+							  .delivery(delivery)
+//							  .refund(refund)
+							  .member(memberEntity).build();
+		System.out.println("@@@@@@@@@@@@@@@미완성 orders= "+orders);
 
-		Delivery saveDelivery = deliveryDao.insertDelivery(delivery);
+		
 
-		orders.setDelivery(saveDelivery);
+
+		delivery.setOrders(orders);
+		
+		orders.setDelivery(delivery);
+
+		System.out.println("@@@@@@@@@@@@@@@완성 orders= "+orders);
+//		Delivery saveDelivery = deliveryDao.insertDelivery(delivery,orderId );
 		orderItem.setOrders(orders);
+		
 		orderItemRepository.save(orderItem);
+		System.out.println("@@@@@@@@@@@@@@@완성 orderItem: "+orderItem);
+
 		Orders saveOrders = orderDao.save(orders);
-
-		return saveOrders;
+		
+		OrdersResponseDto ordersResponseDto = OrdersResponseDto.OrdersResponseDto(saveOrders);
+		System.out.println("@@@@@@@@@@@@@@@ordersResponseDto = "+ordersResponseDto);
+		
+		
+		return ordersResponseDto;
 	}
 
-	/*
-	 * cart에서 주문(회원)
-	 */
-	@Transactional
-	public Orders memberCartOrderSave(OrdersDto ordersDto) throws Exception {
-		Member member = memberService.getMemberBy(ordersDto.getUserName());
-		List<Cart> carList = cartRepository.findByMemberId(member.getId());
-		ArrayList<OrderItem> orderItemList = new ArrayList<OrderItem>();
-		int o_tot_price = 0;
-		int oi_tot_count = 0;
-		for (Cart cart : carList) {
-			OrderItem orderItem = OrderItem.builder().qty(cart.getQty()).optionSet(cart.getOptionSet()).build();
-			orderItemList.add(orderItem);
-			o_tot_price += orderItem.getQty() * orderItem.getOptionSet().getTotalPrice();
-			oi_tot_count += orderItem.getQty();
+	
+	
+	
+	
+//	/*
+//	 * cart에서 주문(회원)
+//	 */
+//	@Transactional
+//	public Orders memberCartOrderSave(OrdersDto ordersDto) throws Exception {
+//		Member member = memberService.getMemberBy(ordersDto.getUserName());
+//		List<Cart> carList = cartRepository.findByMemberId(member.getId());
+//		ArrayList<OrderItem> orderItemList = new ArrayList<OrderItem>();
+//		int o_tot_price = 0;
+//		int oi_tot_count = 0;
+//		for (Cart cart : carList) {
+//			OrderItem orderItem = OrderItem.builder().qty(cart.getQty()).optionSet(cart.getOptionSet()).build();
+//			orderItemList.add(orderItem);
+//			o_tot_price += orderItem.getQty() * orderItem.getOptionSet().getTotalPrice();
+//			oi_tot_count += orderItem.getQty();
+//
+//		}
+//		String o_desc = orderItemList.get(0).getOptionSet().getProduct().getName() + "외" + (oi_tot_count - 1) + "개";
+//		if (oi_tot_count == 1) {
+//			o_desc = orderItemList.get(0).getOptionSet().getProduct().getName();
+//		}
+//		Orders orders = Orders.builder().statement(OrderStateMsg.입금대기중).orderItems(orderItemList).price(o_tot_price)
+//				.description(o_desc).member(member).build();
+//		Delivery delivery = Delivery.builder().name(ordersDto.getDelivaryName())
+//				.phoneNumber(ordersDto.getDelivaryPhoneNumber()).address(ordersDto.getDelivaryAddress()).orders(orders)
+//				.build();
+//
+//		Delivery saveDelivery = deliveryDao.insertDelivery(delivery);
+//		orders.setDelivery(saveDelivery);
+//		for (OrderItem orderItem : orderItemList) {
+//			orderItem.setOrders(orders);
+//			orderItemRepository.save(orderItem);
+//		}
+//		Orders saveOrder = orderDao.save(orders);
+//
+//		return saveOrder;
+//	}
 
-		}
-		String o_desc = orderItemList.get(0).getOptionSet().getProduct().getName() + "외" + (oi_tot_count - 1) + "개";
-		if (oi_tot_count == 1) {
-			o_desc = orderItemList.get(0).getOptionSet().getProduct().getName();
-		}
-		Orders orders = Orders.builder().statement(OrderStateMsg.입금대기중).orderItems(orderItemList).price(o_tot_price)
-				.description(o_desc).member(member).build();
-		Delivery delivery = Delivery.builder().name(ordersDto.getDelivaryName())
-				.phoneNumber(ordersDto.getDelivaryPhoneNumber()).address(ordersDto.getDelivaryAddress()).orders(orders)
-				.build();
-
-		Delivery saveDelivery = deliveryDao.insertDelivery(delivery);
-		orders.setDelivery(saveDelivery);
-		for (OrderItem orderItem : orderItemList) {
-			orderItem.setOrders(orders);
-			orderItemRepository.save(orderItem);
-		}
-		Orders saveOrder = orderDao.save(orders);
-
-		return saveOrder;
-	}
-
-	/*
-	 * cart에서 선택주문(회원)
-	 */
-
-	@Transactional
-	public Orders memberCartSelectOrderSave(OrdersDto ordersDto, String[] cart_item_noStr_array) throws Exception {
-		Member member = memberService.getMemberBy(ordersDto.getUserName());
-		ArrayList<OrderItem> orderItemList = new ArrayList<>();
-		int o_tot_price = 0;
-		int oi_tot_count = 0;
-		for (int i = 0; i < cart_item_noStr_array.length; i++) {
-			Cart cart = cartRepository.findById(Long.parseLong(cart_item_noStr_array[i])).get();
-			OrderItem orderItem = OrderItem.builder().qty(cart.getQty()).optionSet(cart.getOptionSet()).build();
-			orderItemList.add(orderItem);
-			o_tot_price += orderItem.getQty() * orderItem.getOptionSet().getTotalPrice();
-			oi_tot_count += orderItem.getQty();
-		}
-		String o_desc = orderItemList.get(0).getOptionSet().getProduct().getName() + "외" + (oi_tot_count - 1) + "개";
-		if (oi_tot_count == 1) {
-			o_desc = orderItemList.get(0).getOptionSet().getProduct().getName();
-		}
-		Orders orders = Orders.builder().statement(OrderStateMsg.입금대기중).orderItems(orderItemList).price(o_tot_price)
-				.description(o_desc).member(member).build();
-		Delivery delivery = Delivery.builder().name(ordersDto.getDelivaryName())
-				.phoneNumber(ordersDto.getDelivaryPhoneNumber()).address(ordersDto.getDelivaryAddress()).orders(orders)
-				.build();
-		Delivery saveDelivery = deliveryDao.insertDelivery(delivery);
-		orders.setDelivery(saveDelivery);
-		for (OrderItem orderItem : orderItemList) {
-			orderItem.setOrders(orders);
-			orderItemRepository.save(orderItem);
-		}
-		Orders saveOrder = orderDao.save(orders);
-
-		return saveOrder;
-	}
+//	/*
+//	 * cart에서 선택주문(회원)
+//	 */
+//
+//	@Transactional
+//	public Orders memberCartSelectOrderSave(OrdersDto ordersDto, String[] cart_item_noStr_array) throws Exception {
+//		Member member = memberService.getMemberBy(ordersDto.getUserName());
+//		ArrayList<OrderItem> orderItemList = new ArrayList<>();
+//		int o_tot_price = 0;
+//		int oi_tot_count = 0;
+//		for (int i = 0; i < cart_item_noStr_array.length; i++) {
+//			Cart cart = cartRepository.findById(Long.parseLong(cart_item_noStr_array[i])).get();
+//			OrderItem orderItem = OrderItem.builder().qty(cart.getQty()).optionSet(cart.getOptionSet()).build();
+//			orderItemList.add(orderItem);
+//			o_tot_price += orderItem.getQty() * orderItem.getOptionSet().getTotalPrice();
+//			oi_tot_count += orderItem.getQty();
+//		}
+//		String o_desc = orderItemList.get(0).getOptionSet().getProduct().getName() + "외" + (oi_tot_count - 1) + "개";
+//		if (oi_tot_count == 1) {
+//			o_desc = orderItemList.get(0).getOptionSet().getProduct().getName();
+//		}
+//		Orders orders = Orders.builder().statement(OrderStateMsg.입금대기중).orderItems(orderItemList).price(o_tot_price)
+//				.description(o_desc).member(member).build();
+//		Delivery delivery = Delivery.builder().name(ordersDto.getDelivaryName())
+//				.phoneNumber(ordersDto.getDelivaryPhoneNumber()).address(ordersDto.getDelivaryAddress()).orders(orders)
+//				.build();
+//		Delivery saveDelivery = deliveryDao.insertDelivery(delivery);
+//		orders.setDelivery(saveDelivery);
+//		for (OrderItem orderItem : orderItemList) {
+//			orderItem.setOrders(orders);
+//			orderItemRepository.save(orderItem);
+//		}
+//		Orders saveOrder = orderDao.save(orders);
+//
+//		return saveOrder;
+//	}
 
 	public Orders memberCartSelectOrderSave(Orders orders, String[] cart_item_noStr_array) {
 
@@ -181,7 +222,7 @@ public class OrderServiceImpl implements OrderService {
 	 */
 
 	@Transactional
-	public List<Orders> memberOrderList(String userName){
+
 
 	public List<Orders> memberOrderList(String userName) {
 
@@ -272,4 +313,3 @@ public class OrderServiceImpl implements OrderService {
 
 	}
 
-}

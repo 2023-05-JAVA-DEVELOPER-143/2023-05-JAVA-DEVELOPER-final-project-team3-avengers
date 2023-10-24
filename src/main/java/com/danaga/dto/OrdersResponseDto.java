@@ -19,17 +19,19 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 
-public class OrdersDto {
+public class OrdersResponseDto {
 	private String userName;
+	private Long optionSetId;
 	private Integer orderItem_qty;
 	private String delivaryName;
 	private String delivaryPhoneNumber;
 	private String delivaryAddress;
 	
-	public static OrdersDto orderDto(Orders entity) {
+	public static OrdersResponseDto OrdersResponseDto(Orders entity) {
 		
-		return OrdersDto.builder()
+		return OrdersResponseDto.builder()
 						.userName(entity.getMember().getUserName())
+						.optionSetId(entity.getOrderItems().get(0).getOptionSet().getId())
 						.orderItem_qty(entity.getOrderItems().get(0).getQty())
 						.delivaryName(entity.getDelivery().getName())
 						.delivaryPhoneNumber(entity.getDelivery().getPhoneNumber())
