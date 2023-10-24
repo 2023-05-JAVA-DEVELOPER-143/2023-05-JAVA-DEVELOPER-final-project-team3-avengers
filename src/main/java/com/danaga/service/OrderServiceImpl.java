@@ -44,7 +44,6 @@ public class OrderServiceImpl implements OrderService {
 	private final OptionSetDao optionSetDao;
 	private final DeliveryDao deliveryDao;
 	private final OrderDao orderDao;
-	private final OrdersOptionSetDto ordersOptionSetDto;
 	private final CartService cartService;
 	
 

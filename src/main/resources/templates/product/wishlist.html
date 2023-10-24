@@ -54,21 +54,21 @@
 						</div>
 					</aside>
 					<nav class="list-group">
-						<a class="list-group-item with-badge" href="account-orders.html"><i
-							class="icon-bag"></i>Orders<span
-							class="badge badge-primary badge-pill">6</span></a><a
-							class="list-group-item" href="account-profile.html"><i
-							class="icon-head"></i>Profile</a><a class="list-group-item"
-							href="account-address.html"><i class="icon-map"></i>Addresses</a><a
-							class="list-group-item with-badge active"
-							href="wishlistver2.html" th:href="wishlistver2.html"><i
-							class="icon-heart"></i>Wishlist<span
-							class="badge badge-primary badge-pill"
-							th:text="${optionset.size}">optionset.size</span></a><a
-							class="list-group-item with-badge" href="recentviewver2.html"
-							th:href="recentviewver2.html"><i class="icon-tag"></i>최근 본 상품<span
-							class="badge badge-primary badge-pill"
-							th:text="${recentviews.size}">recentview.size</span></a>
+						<a class="list-group-item with-badge" href="account-orders.html">
+              <i class="icon-bag"></i>Orders<span	class="badge badge-primary badge-pill">6</span>
+            </a>
+            <a class="list-group-item" href="account-profile.html">
+              <i class="icon-head"></i>Profile
+            </a>
+            <a class="list-group-item" href="account-address.html">
+              <i class="icon-map"></i>Addresses
+            </a>
+            <a class="list-group-item with-badge active" href="wishlist.html" th:href="@{/wishlist.html}">
+              <i class="icon-heart"></i>Wishlist<span	class="badge badge-primary badge-pill" th:text="">optionset.size</span>
+            </a>
+            <a class="list-group-item with-badge" href="recent_view.html" th:href="@{/recent_view.html}">
+              <i class="icon-tag"></i>최근 본 상품<span	class="badge badge-primary badge-pill" th:text="">recentview.size</span>
+            </a>
 					</nav>
 				</div>
 				<div class="col-lg-8">
@@ -92,9 +92,11 @@
 									<td>
 										<div class="product-card-component" th:include="product_component :: product-card-component"></div>
 									</td>
-									<td class="text-center"><a class="remove-from-cart"
-										href="#" data-toggle="tooltip" title="Remove item"><i
-											class="icon-heart"></i></a></td>
+									<td class="text-center">
+                    <a class="remove-from-cart"	href="#" data-toggle="tooltip" title="Remove item">
+                      <i class="icon-heart"></i>
+                    </a>
+                  </td>
 								</tr>
 								<!--상품반복 끝-->
 							</tbody>
@@ -102,10 +104,8 @@
 					</div>
 					<hr class="mb-4">
 					<div class="custom-control custom-checkbox">
-						<input class="custom-control-input" type="checkbox" id="inform_me"
-							checked> <label class="custom-control-label"
-							for="inform_me">Inform me when item from my wishlist is
-							available</label>
+						<input class="custom-control-input" type="checkbox" id="inform_me" checked> 
+            <label class="custom-control-label" for="inform_me">Inform me when item from my wishlist is available</label>
 					</div>
 				</div>
 			</div>
