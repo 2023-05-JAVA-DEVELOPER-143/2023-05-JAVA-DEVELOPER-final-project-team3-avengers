@@ -4,12 +4,15 @@ package com.danaga.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.builder.ToStringExclude;
 import org.hibernate.annotations.ColumnDefault;
 
 import com.danaga.dto.BoardDto;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -45,15 +48,18 @@ public class Board extends BaseEntity {
     private String img4;
     private String img5;
     @ColumnDefault(value = "0")
+    @Column(name = "is_like",nullable = false)
     private Integer isLike;
     @ColumnDefault(value = "0")
+    @Column(name = "dis_like",nullable = false)
     private Integer disLike;
     @ColumnDefault(value = "0")
+    @Column(name = "read_count",nullable = false)
     private Integer readCount;
     private Integer isAdmin;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "member_id") 
+    @ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id",nullable = false) 
     @ToString.Exclude
     @Builder.Default
     private Member member = new Member();
@@ -64,6 +70,11 @@ public class Board extends BaseEntity {
     @Builder.Default
     private BoardGroup boardGroup = new BoardGroup();
 
+    @OneToMany(mappedBy = "board" ,fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
+    @Builder.Default
+    @ToString.Exclude
+    private List<Comments> comments = new ArrayList<>();
+    
     @OneToMany(mappedBy = "board")
     @Builder.Default
     @ToString.Exclude
@@ -143,7 +154,9 @@ public class Board extends BaseEntity {
     	}
     }
 
+    
     public void readCountUp(Board board) {
     	board.readCount++;
     }
+   
 }

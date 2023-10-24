@@ -82,7 +82,7 @@ public class BoardService {
 		LikeConfig config = lcRepository.findByBoard_IdAndMember_id(boardId, memberId);
 		if (config.getIsLike() == 0) {
 			config.setIsLike(1);
-			target.setIsLike(target.getIsLike() + 1);
+			target.setIsLike(target.getIsLike()+1);
 			bRepository.save(target);
 			BoardDto updated= BoardDto.createBoardDto(target);
 			return updated;
