@@ -88,7 +88,7 @@ public class MemberRestController {
 		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
 	}
-	
+	@LoginCheck
 	@GetMapping("/{id}")
 	public ResponseEntity<MemberResponse> member_info(@PathVariable(name = "id") String id) throws Exception {
 		MemberResponseDto loginUser = memberService.getMemberBy(id);
@@ -101,7 +101,7 @@ public class MemberRestController {
 		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
 	}
-
+	@LoginCheck
 	@DeleteMapping("/{id}")
 	public ResponseEntity<MemberResponse> member_delete(@PathVariable(name = "id") String id, HttpSession session) throws Exception {
 		memberService.deleteMember(id);

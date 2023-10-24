@@ -42,9 +42,9 @@ public class MemberServiceImpl implements MemberService {
 	}
 	@Transactional
 	public MemberResponseDto joinMember(MemberResponseDto memberResponseDto) throws Exception, ExistedMemberException {
-		// 1.아이디중복체크
+		// 1.중복체크
 		if (memberDao.existedMemberBy(memberResponseDto.getUserName())) {
-			// 아이디중복
+			// 중복
 			throw new ExistedMemberException(memberResponseDto.getUserName() + " 는 이미 존재하는 아이디 입니다.");
 		} else if (memberDao.existedMemberBy(memberResponseDto.getEmail())) {
 			throw new ExistedMemberException(memberResponseDto.getEmail() + " 는 이미 등록된 이메일 입니다.");
@@ -54,8 +54,10 @@ public class MemberServiceImpl implements MemberService {
 			return MemberResponseDto.toDto((memberDao.update(Member.toResponseEntity(memberResponseDto))));
 		} else if (memberDao.existedMemberBy(memberResponseDto.getPhoneNo())) {
 			throw new ExistedMemberException(memberResponseDto.getPhoneNo() + " 는 이미 등록된 번호 입니다.");
+		} else if (memberRepository.findByNickname(memberResponseDto.getNickname()).isPresent()) {
+			throw new ExistedMemberException(memberResponseDto.getNickname() + "는 사용중인 닉네임 입니다.");
 		}
-		// 아이디안중복
+		// 안중복
 		// 2.회원가입
 		return MemberResponseDto.toDto(memberDao.insert(Member.toResponseEntity(memberResponseDto)));
 	}
@@ -85,15 +87,9 @@ public class MemberServiceImpl implements MemberService {
 			if (memberDao.existedMemberBy(memberUpdateDto.getEmail())) {
 				throw new ExistedMemberException(memberUpdateDto.getEmail() + " 는 이미 등록된 이메일 입니다.");
 			}
-		} else {
-			// 이메일 o 번호 o
-			if (memberDao.existedMemberBy(memberUpdateDto.getEmail())) {
-				throw new ExistedMemberException(memberUpdateDto.getEmail() + " 는 이미 등록된 이메일 입니다.");
-			} else if (memberDao.existedMemberBy(memberUpdateDto.getPhoneNo())) {
-				throw new ExistedMemberException(memberUpdateDto.getPhoneNo() + " 는 이미 등록된 번호 입니다.");
-			}
 		}
-		return MemberUpdateDto.toDto(memberDao.insert(Member.toUpdateEntity(memberUpdateDto)));
+		//Member updatedMember = Member.toUpdateEntity(memberUpdateDto);
+		return MemberUpdateDto.toDto(memberDao.update(Member.toUpdateEntity(memberUpdateDto)));
 	}
 	@Transactional
 	public void deleteMember(String value) throws Exception {

@@ -37,6 +37,7 @@ public class MemberDaoImpl implements MemberDao {
 			throw new MemberNotFoundException("해당 아이디로 찾을 수 없습니다");
 		}
 	}
+	
 
 	public Member insert(Member member) {
 		return memberRepository.save(member);
@@ -73,20 +74,18 @@ public class MemberDaoImpl implements MemberDao {
 	public boolean existedMemberBy(String value) throws Exception {
 		if (value.contains("@")) {
 			if (memberRepository.findByEmail(value).isPresent()) {
-				return false;
+				return true;
 			}
-			return true;
 		} else if (value.contains("-")) {
 			if (memberRepository.findByPhoneNo(value).isPresent()) {
-				return false;
+				return true;
 			}
-			return true;
 		} else {
 			if (memberRepository.findByUserName(value).isPresent()) {
-				return false;
+				return true;
 			}
-			return true;
 		}
+		return false;
 	}
 
 }

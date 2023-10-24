@@ -1,6 +1,7 @@
 package com.danaga.dto;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -26,6 +27,7 @@ public class MemberResponseDto {
 	private String address;
 	private String phoneNo;
 	private LocalDateTime joinDate;
+	private Date birthday;
 	private String role;
 	private String grade;
 	private Integer gradePoint;
@@ -40,6 +42,7 @@ public class MemberResponseDto {
     			.address(entity.getAddress())
     			.phoneNo(entity.getPhoneNo())
     			.joinDate(entity.getJoinDate())
+    			.birthday(entity.getBirthday())
     			.role(entity.getRole())
     			.grade(entity.getGrade())
     			.gradePoint(entity.getGradePoint())
