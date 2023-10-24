@@ -55,9 +55,9 @@ public class ProductController {
 	public ModelAndView searchProduct(@ModelAttribute Model model) {
 		try {
 			//검색 메인화면에 최상위 카테고리 선택할수 있게 표시
-			ResponseDto<?> categoryResponseDto = categoryService.AncestorCategories();
-			List<Category> ancestorCategories = (List<Category>) categoryResponseDto.getData();
-			ResponseDto<?> responseDto = service.searchProducts(//주문수로 전체상품 정렬하여 조회
+			ResponseDto<Category> categoryResponseDto = categoryService.AncestorCategories();
+			List<Category> ancestorCategories = categoryResponseDto.getData();
+			ResponseDto<OptionSet> responseDto = service.searchProducts(//주문수로 전체상품 정렬하여 조회
 					QueryStringDataDto.builder()
 					.orderType(Optional.of(OptionSetQueryData.BY_ORDER_COUNT))
 					.brand(Optional.empty())
@@ -65,7 +65,7 @@ public class ProductController {
 					.nameKeyword(Optional.empty())
 					.category(Optional.empty())
 					.build());
-			List<OptionSet> productList = (List<OptionSet>) responseDto.getData();
+			List<OptionSet> productList = responseDto.getData();
 			
 			model.addAttribute("productList",productList);
 			model.addAttribute("ancestorCategory",ancestorCategories);
@@ -90,7 +90,7 @@ public class ProductController {
 			//해당 옵션셋 찾아서 뿌리기
 			service.updateViewCount(optionSetId);
 			//디테일 들어갈때 조회수도 증가
-			List<OptionSet> hitProducts = (List<OptionSet>) service.displayHitProducts(optionSetId).getData();
+			List<OptionSet> hitProducts = service.displayHitProducts(optionSetId).getData();
 			//같은 카테고리의 히트상품도 표시
 			if(session.getAttribute("sUserId")!=null) {//로그인유저일시
 				String username =(String)session.getAttribute("sUserId");
@@ -118,7 +118,7 @@ public class ProductController {
 			//해당 옵션셋 찾아서 뿌리기
 			service.updateViewCount(optionSetId);
 			//디테일 들어갈때 조회수도 증가
-			List<OptionSet> hitProducts = (List<OptionSet>) service.displayHitProducts(optionSetId).getData();
+			List<OptionSet> hitProducts = service.displayHitProducts(optionSetId).getData();
 			//같은 카테고리의 히트상품도 표시
 			if(session.getAttribute("sUserId")!=null) {//로그인유저일시
 				String username =(String)session.getAttribute("sUserId");

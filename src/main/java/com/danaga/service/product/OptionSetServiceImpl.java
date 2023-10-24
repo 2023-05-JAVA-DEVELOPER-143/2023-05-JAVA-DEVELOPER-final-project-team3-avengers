@@ -104,7 +104,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 	// 같은 카테고리 인기상품
 	@Override
 	@Transactional
-	public ResponseDto<?> displayHitProducts(Long optionSetId) {
+	public ResponseDto<OptionSet> displayHitProducts(Long optionSetId) {
 		List<Category> findCategory = categoryDao.findByOptionSetId(optionSetId);
 		String orderType = OptionSetQueryData.BY_VIEW_COUNT;
 		List<OptionSet> searchResult = optionSetDao.findByFilter(QueryStringDataDto.builder()
@@ -120,7 +120,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 	// 카테고리에 해당하는 리스트 전체 조회
 	// 조건에 해당하는 리스트 전체 조회
 	@Override
-	public ResponseDto<?> searchProducts(QueryStringDataDto dto) {
+	public ResponseDto<OptionSet> searchProducts(QueryStringDataDto dto) {
 		List<OptionSet> data = optionSetDao.findByFilter(dto);
 		return ResponseDto.<OptionSet>builder().data(data).build();
 	}
