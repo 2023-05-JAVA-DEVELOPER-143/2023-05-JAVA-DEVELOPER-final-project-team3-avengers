@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.danaga.dto.MemberResponseDto;
 import com.danaga.dto.MemberUpdateDto;
-import com.danaga.entity.Member;
 import com.danaga.memberResponse.MemberResponse;
 import com.danaga.memberResponse.MemberResponseMessage;
 import com.danaga.memberResponse.MemberResponseStatusCode;
@@ -37,7 +36,7 @@ public class MemberRestController {
 	public ResponseEntity<MemberResponse> member_login_action(@RequestBody MemberResponseDto memberResponseDto, HttpSession session) throws Exception {
 		memberService.login(memberResponseDto.getUserName(), memberResponseDto.getPassword());
 		session.setAttribute("sUserId", memberResponseDto.getUserName());
-
+		
 		MemberResponse response = new MemberResponse();
 		response.setStatus(MemberResponseStatusCode.LOGIN_SUCCESS);
 		response.setMessage(MemberResponseMessage.LOGIN_SUCCESS);
@@ -64,8 +63,8 @@ public class MemberRestController {
 	@LoginCheck
 	@PutMapping("/{id}")
 	public ResponseEntity<MemberResponse> member_modify_action(@PathVariable(name = "id") String id,
-			@RequestBody MemberUpdateDto memberUpdateDto) throws Exception {
-		MemberUpdateDto updatedMember = memberService.updateMember(memberUpdateDto);
+			@RequestBody MemberResponseDto memberResponseDto) throws Exception {
+		MemberUpdateDto updatedMember = memberService.updateMember(memberResponseDto);
 
 		MemberResponse response = new MemberResponse();
 		response.setStatus(MemberResponseStatusCode.UPDATE_USER);

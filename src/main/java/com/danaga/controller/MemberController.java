@@ -2,10 +2,13 @@ package com.danaga.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.danaga.service.MemberService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/member")
@@ -28,7 +31,9 @@ public class MemberController {
 		return "member/member_find_password_form";
 	}
 	@GetMapping("/info_form")
-	public String member_info_form() {
+	public String member_info_form(HttpServletRequest request,Model model) throws Exception {
+		String sUserId=(String)request.getSession().getAttribute("sUserId");
+		model.addAttribute("loginUser", memberService.getMemberBy(sUserId));
 		return "member/member_info_form";
 	}
 	
