@@ -1,0 +1,28 @@
+                    <div th:fragment="product-card-component" th:remove="tag">
+						<div class="product-card product-list" th:each="productDto : ${productList}">
+							<a class="product-thumb" href="product_detail.html" th:href="@{/product_detail.html}">
+								<img src="/bootstrap/img/shop/products/01.jpg" alt="Product" th:src="@{${productDto.pImage}}">
+							</a>
+							<div class="product-info">
+								<h3 class="product-title">
+									<a href="product_detail.html" th:href="@{/product_detail.html}" th:text="${productDto.name}">상품명</a>
+								</h3>
+								<h4 class="product-price" th:text="${productDto.totalPrice}">$34.99</h4>
+								<div th:each="option : ${productDto.optionSet}">Options:
+									<div class="d-inline text-success" th:text="${option.name + ':' + option.value}">option Name&Value</div>
+									<div class="d-inline text-success" th:text="${productDto.updateTime}">등록일</div>
+									<div class="d-inline text-success" th:text="${productDto.review.size}">리뷰수</div>
+									<i class="icon-heart"></i>
+								</div>
+								<div class="product-buttons">
+									<button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip" title="Whishlist">
+										<i class="icon-heart"></i>
+									</button>
+									<button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success" data-toast-position="topRight"
+										data-toast-icon="icon-circle-check" data-toast-title="Product" data-toast-message="successfuly added to cart!">
+										Add to Cart
+									</button>
+								</div>
+							</div>
+						</div>
+                    </div>
