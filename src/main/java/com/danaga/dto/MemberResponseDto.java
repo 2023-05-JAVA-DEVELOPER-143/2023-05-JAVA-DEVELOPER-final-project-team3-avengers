@@ -23,6 +23,7 @@ public class MemberResponseDto {
 	private String userName;
 	private String password;
 	private String email;
+	private String name;
 	private String nickname;
 	private String address;
 	private String phoneNo;
@@ -38,6 +39,7 @@ public class MemberResponseDto {
     			.userName(entity.getUserName())
     			.password(entity.getPassword())
     			.email(entity.getEmail())
+    			.name(entity.getName())
     			.nickname(entity.getNickname())
     			.address(entity.getAddress())
     			.phoneNo(entity.getPhoneNo())

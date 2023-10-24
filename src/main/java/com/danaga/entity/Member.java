@@ -68,7 +68,7 @@ public class Member {
 
 	public static Member toResponseEntity(MemberResponseDto memberResponseDto) {
 		return Member.builder().id(memberResponseDto.getId()).userName(memberResponseDto.getUserName())
-				.password(memberResponseDto.getPassword()).email(memberResponseDto.getEmail()).nickname(memberResponseDto.getNickname())
+				.password(memberResponseDto.getPassword()).email(memberResponseDto.getEmail()).name(memberResponseDto.getName()).nickname(memberResponseDto.getNickname())
 				.address(memberResponseDto.getAddress()).phoneNo(memberResponseDto.getPhoneNo()).joinDate(memberResponseDto.getJoinDate())
 				.role(memberResponseDto.getRole()).grade(memberResponseDto.getGrade()).gradePoint(memberResponseDto.getGradePoint())
 				.build();
