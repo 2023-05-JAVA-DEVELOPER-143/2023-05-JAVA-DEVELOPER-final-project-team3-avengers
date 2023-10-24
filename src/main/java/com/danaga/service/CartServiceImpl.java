@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import com.danaga.dao.MemberDao;
 import com.danaga.dto.CartCreateDto;
 import com.danaga.dto.CartUpdateOptionSetDto;
-import com.danaga.dto.CartUpdateQtyDto;
+import com.danaga.dto.CartDto;
 import com.danaga.dto.CartUpdateResponseDto;
 
 import lombok.RequiredArgsConstructor;
@@ -16,6 +16,8 @@ import com.danaga.repository.CartRepository;
 
 import groovyjarjarantlr4.v4.parse.ANTLRParser.exceptionGroup_return;
 
+
+/*****************************************************************************************/
 @Service
 @RequiredArgsConstructor
 public class CartServiceImpl implements CartService {
@@ -44,20 +46,25 @@ public class CartServiceImpl implements CartService {
 		} else {
 			findCart.setQty(findCart.getQty() + dto.getQty());
 			cartRepository.save(findCart);
-			findCart.setQty(findCart.getQty() + dto.getQty()); // 이거 뭐죠?? ㅋㅋ
-			cartRepository.save(findCart);
 		}
 	}
 
 	// 제품 수량 변경
 	@Override
-	public CartUpdateResponseDto updateCartQty(CartUpdateQtyDto dto) {
-		Cart findCart = cartRepository.findById(dto.getId()).get();
+	public CartDto updateCartQty(CartDto dto,String value) throws Exception {
+		Long memberId = memberDao.findMember(value).getId();
+		Cart findCart = cartRepository.findByOptionSetIdAndMemberId(dto.getId(),memberId);
 		findCart.setQty(dto.getQty());
 		cartRepository.save(findCart);
-		return CartUpdateResponseDto.builder().optionSet(findCart.getOptionSet()).qty(findCart.getQty()).build();
+		return CartDto.builder().id(findCart.getId()).qty(dto.getQty()).build();
 	}
 
+	@Override
+	public Cart findCart(Long id) {
+		return cartRepository.findById(id).get();
+	}
+	
+	
 	// 옵션셋 변경
 	@Override
 	public List<CartUpdateResponseDto> updateCartOptionSet(CartUpdateOptionSetDto dto) {
@@ -107,8 +114,12 @@ public class CartServiceImpl implements CartService {
 	 * 카트 1개 삭제
 	 */
 	@Override
-	public void deleteCart(Long id) throws Exception {
-		cartRepository.deleteById(id);
+	public void deleteCart(Long optionSetId,String value) throws Exception {
+		Long memberId = memberDao.findMember(value).getId();
+		// 삭제할 카트
+		Cart findCart = cartRepository.findByOptionSetIdAndMemberId(optionSetId,memberId);
+		// 찾은 카트의 Id로 삭제
+		cartRepository.deleteById(findCart.getId());
 	}
 
 	// 카트 전체삭제 [세션(Controller) -> sUserId -> memberId -> delete ]
@@ -127,4 +138,7 @@ public class CartServiceImpl implements CartService {
 	Long findMemberId(String sUserId) throws Exception {
 		return memberDao.findMember(sUserId).getId();
 	};
+
+
 }
+/*****************************************************************************************/

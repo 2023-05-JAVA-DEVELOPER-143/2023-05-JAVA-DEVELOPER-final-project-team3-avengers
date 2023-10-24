@@ -11,7 +11,7 @@ import com.danaga.dao.CartDao;
 import com.danaga.dao.MemberDao;
 import com.danaga.dto.CartCreateDto;
 import com.danaga.dto.CartUpdateOptionSetDto;
-import com.danaga.dto.CartUpdateQtyDto;
+import com.danaga.dto.CartDto;
 import com.danaga.entity.Cart;
 import com.danaga.entity.Member;
 import com.danaga.entity.OptionSet;
@@ -21,7 +21,7 @@ import com.danaga.repository.MemberRepository;
 import com.danaga.repository.product.OptionSetQueryRepository;
 import com.danaga.repository.product.OptionSetRepository;
 import com.danaga.dto.CartCreateDto;
-import com.danaga.dto.CartUpdateQtyDto;
+import com.danaga.dto.CartDto;
 import com.danaga.entity.Cart;
 import com.danaga.entity.OptionSet;
 
@@ -44,7 +44,7 @@ public class CartServiceImplTest {
 	@Test
 	@Disabled
 	void 카트수량변경() throws Exception {
-		cs.updateCartQty(CartUpdateQtyDto.builder().id(3L).qty(1).build());
+		cs.updateCartQty(CartDto.builder().id(1L).qty(5).build(),"User1");
 		//cs.updateCartQty(CartUpdateQtyDto.builder().id(4L).qty(30).build());
 		//cs.updateCartQty(CartUpdateQtyDto.builder().id(5L).qty(30).build());
 		//cs.updateCartQty(CartUpdateQtyDto.builder().id(6L).qty(30).build());
@@ -53,7 +53,7 @@ public class CartServiceImplTest {
 	}
 
 	@Test
-	//@Disabled
+	@Disabled
 	void 카트옵션변경() throws Exception {
 		// 중복 옵션 X + 장바구니 수량 1  ok
 		// 중복 옵션 X + 장바구니 수량 >=2 ok 
@@ -67,7 +67,8 @@ public class CartServiceImplTest {
 	@Test
 	@Disabled
 	void 카트삭제() throws Exception {
-		cs.deleteCart(1L);
+		String testValue ="User5";
+		cs.deleteCart(3L,testValue);
 	}
 
 	// ok
@@ -76,7 +77,6 @@ public class CartServiceImplTest {
 	void addCart() throws Exception {
 		CartCreateDto createDto = CartCreateDto.builder().qty(3).optionset(or.findById(1L).get()).build();
 		cs.addCart(createDto, "User2");
-
 	}
 	/*
 	 * @Test void updateCart() throws Exception { CartUpdateDto cartUpdateDto =
@@ -111,7 +111,7 @@ public class CartServiceImplTest {
 
 	@Test
 	void 수량파악() throws Exception {
-		CartUpdateQtyDto dto = CartUpdateQtyDto.builder().id(9L).qty(100).build();
+		CartDto dto = CartDto.builder().id(9L).qty(100).build();
 		String value = "User1";
 		System.out.println(cs.countCarts(value));
 	}

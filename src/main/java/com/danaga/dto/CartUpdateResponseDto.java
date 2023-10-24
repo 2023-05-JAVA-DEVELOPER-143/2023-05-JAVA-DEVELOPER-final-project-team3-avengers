@@ -15,12 +15,6 @@ import com.danaga.entity.Cart;
 @Builder
 public class CartUpdateResponseDto {
 	private Long id;
-	private int qty;
-	private OptionSet optionSet;
-	private Member member;
+	private Integer qty;
 
-	public static CartUpdateResponseDto toDto(Cart cart) {
-		return CartUpdateResponseDto.builder().id(cart.getId()).qty(cart.getQty()).member(cart.getMember())
-				.optionSet(cart.getOptionSet()).build();
-	}
 }

@@ -7,6 +7,9 @@ import com.danaga.dto.MemberResponseDto;
 import com.danaga.dto.MemberUpdateDto;
 import com.danaga.entity.Member;
 
+import jakarta.transaction.Transactional;
+
+@Transactional
 public interface MemberService {
 	public List<MemberResponseDto> getMembers();
 	public MemberResponseDto getMemberBy(String value) throws Exception;

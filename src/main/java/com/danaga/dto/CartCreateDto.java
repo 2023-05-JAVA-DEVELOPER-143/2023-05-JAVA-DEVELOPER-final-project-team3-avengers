@@ -13,5 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CartCreateDto {
 	private int qty;
-	private OptionSet optionset;
+	private OptionSet optionSet;
+	
+
 }

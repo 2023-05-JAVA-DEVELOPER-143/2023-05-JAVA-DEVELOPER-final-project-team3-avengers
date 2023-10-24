@@ -14,4 +14,5 @@ public interface InterestService {
 	ResponseDto<?> myInterestingList(Long memberId);
 	//나의 관심상품 전체 삭제
 	ResponseDto<?> emptyMyInterestingList(Long memberId);
+	ResponseDto<?> deleteHeart(InterestDto dto);
 }

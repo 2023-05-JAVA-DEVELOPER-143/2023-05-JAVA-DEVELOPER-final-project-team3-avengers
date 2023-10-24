@@ -1,6 +1,5 @@
 package com.danaga.entity;
 
-
 import com.danaga.dto.CartCreateDto;
 
 import jakarta.persistence.Entity;
@@ -29,9 +28,9 @@ public class Cart extends BaseEntity {
 	@SequenceGenerator(name = "cart_cart_no_seq", sequenceName = "cart_cart_no_seq", initialValue = 1, allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
-	
-	private int qty;
-	
+
+	private Integer qty;
+
 	@ManyToOne()
 	@JoinColumn(name = "memberId")
 	@ToString.Exclude
@@ -40,9 +39,5 @@ public class Cart extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "optionSetId")
 	private OptionSet optionSet;
-
-	public static Cart toEntity(CartCreateDto dto) {
-		return Cart.builder().qty(dto.getQty()).optionSet(dto.getOptionset()).build();
-	}
 
 }
