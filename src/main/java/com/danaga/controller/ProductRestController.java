@@ -85,7 +85,7 @@ public class ProductRestController {
 	}
 	
 	//최하위 선택시 선택가능한 옵션명, 옵션값 반환
-	@GetMapping("/category/{categoryId}/options")
+	@GetMapping("/category/options/{categoryId}")
 	public ResponseEntity<?> showOptionFilter(@PathVariable Long categoryId){
 		try {
 			ResponseDto<?> response =service.showOptionNameValues(categoryId);

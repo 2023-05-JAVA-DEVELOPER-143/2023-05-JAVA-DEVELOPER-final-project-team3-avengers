@@ -33,44 +33,11 @@
 		<!-- Page Content-->
 		<div class="container padding-bottom-3x mb-2">
 			<div class="row">
-				<div class="col-lg-4">
-					<aside class="user-info-wrapper">
-						<div class="user-cover"
-							style="background-image: url(img/account/user-cover-img.jpg);">
-							<div class="info-label" data-toggle="tooltip"
-								title="You currently have 290 Reward Points to spend">
-								<i class="icon-medal"></i>290 points
-							</div>
-						</div>
-						<div class="user-info">
-							<div class="user-avatar">
-								<a class="edit-avatar" href="#"></a><img
-									src="img/account/user-ava.jpg" alt="User">
-							</div>
-							<div class="user-data">
-								<h4>Daniel Adams</h4>
-								<span>Joined February 06, 2017</span>
-							</div>
-						</div>
-					</aside>
-					<nav class="list-group">
-						<a class="list-group-item with-badge" href="account-orders.html"><i
-							class="icon-bag"></i>Orders<span
-							class="badge badge-primary badge-pill">6</span></a><a
-							class="list-group-item" href="account-profile.html"><i
-							class="icon-head"></i>Profile</a><a class="list-group-item"
-							href="account-address.html"><i class="icon-map"></i>Addresses</a><a
-							class="list-group-item with-badge active"
-							href="wishlistver2.html" th:href="wishlistver2.html"><i
-							class="icon-heart"></i>Wishlist<span
-							class="badge badge-primary badge-pill"
-							th:text="${optionset.size}">optionset.size</span></a><a
-							class="list-group-item with-badge" href="recentviewver2.html"
-							th:href="recentviewver2.html"><i class="icon-tag"></i>최근 본 상품<span
-							class="badge badge-primary badge-pill"
-							th:text="${recentviews.size}">recentview.size</span></a>
-					</nav>
-				</div>
+				
+				<!--profile component-->
+				<div th:insert="mypage_component :: profile-component"></div>
+				<!--profile component 끝-->
+				
 				<div class="col-lg-8">
 					<div class="padding-top-2x mt-2 hidden-lg-up"></div>
 					<!-- Wishlist Table-->
@@ -87,8 +54,8 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr th:each="view:${myViews}">
-									<!--상품 반복-->
+								<!--상품 반복-->
+								<tr>
 									<td>
 										<div class="product-card-component"
 											th:include="product_component :: product-card-component"></div>

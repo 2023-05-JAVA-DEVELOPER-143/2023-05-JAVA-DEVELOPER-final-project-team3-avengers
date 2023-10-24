@@ -34,7 +34,7 @@ public class MyProductRestController {
 	private final RecentViewService recentViewService;
 	private final MemberService memberService;
 	//관심상품에서 하트 누르면 관심제품 추가
-	@PostMapping(value="/interest/{optionSetId}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@PostMapping(value="/wishlist/{optionSetId}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@Operation(summary = "관심제품 추가")
 //	@LoginCheck
 	public ResponseEntity<?> tappedHeart(@PathVariable Long optionSetId,HttpSession session ){
@@ -52,7 +52,7 @@ public class MyProductRestController {
 		}
 	}
 	//관심상품에서 하트 누르면 관심제품 삭제
-	@DeleteMapping(value="/interest/{optionSetId}",produces = "application/json;charset=UTF-8")
+	@DeleteMapping(value="/wishlist/{optionSetId}",produces = "application/json;charset=UTF-8")
 //	@LoginCheck
 	public ResponseEntity<?> untappedHeart(@PathVariable Long optionSetId, HttpSession session){
 		try {
@@ -69,7 +69,7 @@ public class MyProductRestController {
 		}
 	}
 	//나의 최근본 상품 하나 삭제 
-	@DeleteMapping(value="/recentViews/{optionSetId}",produces = "application/json;charset=UTF-8")
+	@DeleteMapping(value="/recentView/{optionSetId}",produces = "application/json;charset=UTF-8")
 //	@LoginCheck
 	public ResponseEntity<?> removeViewRecord(@PathVariable Long optionSetId, HttpSession session){
 		try {

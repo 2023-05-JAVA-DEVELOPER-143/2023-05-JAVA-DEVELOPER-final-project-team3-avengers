@@ -21,7 +21,11 @@
 					<div class="shop-toolbar padding-bottom-1x mb-2">
 						
 						<div class="view_opt">
-							<div><!--카테고리,옵션 선택자-->
+							<div>
+							<!--카테고리,옵션 선택자-->
+							<div th:insert="filter :: filter">
+							</div>
+							<!--카테고리,옵션 선택자 끝-->
 								<div class="price_opt">
 									<!-- prod_price_selector -->
 									<span class="prod_price_selector">
