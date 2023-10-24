@@ -17,6 +17,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.danaga.config.OrderStateMsg;
+import com.danaga.dto.OrdersDto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -72,4 +73,13 @@ public class Orders {
 	@JoinColumn(name = "memberId")
 	@ToString.Exclude
 	private Member member; //주문자
+	
+	public static Orders toResponseEntity(OrdersDto ordersDto) {
+		return Orders.builder()
+					 .description(ordersDto.getDescription())
+					 .price(ordersDto.getPrice())
+					 .statement(ordersDto.getStateMsg())
+					 .build();
+		
+	}
 }
