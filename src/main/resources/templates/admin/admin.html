@@ -26,7 +26,7 @@
 
 	<!-- Page Wrapper -->
 	<div id="wrapper">
-		
+
 		<!-- Sidebar Start -->
 		<div th:insert="admin/admin_include::nav"></div>
 		<!-- Sidebar End -->
@@ -43,14 +43,14 @@
 
 					<!-- Page Heading -->
 					<div class="d-sm-flex align-items-center justify-content-between mb-4" style="margin-top: 20px;">
-						<h1 class="h3 mb-0 text-gray-800 font-weight-bold">2023년 10월 통계</h1>
+						<h1 class="h3 mb-0 text-gray-800 font-weight-bold"
+							th:text="${#calendars.format(#calendars.createNow(),'yyyy년 MM월') + ' 통계'}">2023년 10월 통계</h1>
 						<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
 								class="fas fa-download fa-sm text-white-50"></i> 실시간 업데이트</a>
 					</div>
 
 					<!-- Content Row -->
 					<div class="row">
-
 						<!-- Earnings (Monthly) Card Example -->
 						<div class="col-xl-3 col-md-6 mb-4">
 							<div class="card border-left-primary shadow h-100 py-2">
@@ -59,8 +59,17 @@
 										<div class="col mr-2">
 											<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
 												이번 달 판매량</div>
-											<div class="h5 mb-0 font-weight-bold text-gray-800">1,541</div>
-											<span class="mr-2 d-none d-lg-inline text-gray-600 small font-weight-bold"> (오늘 ▲ 210)</span>
+											<div class="h5 mb-0 font-weight-bold text-gray-800"
+												th:text="${#numbers.formatDecimal(#aggregates.sum(statisticList.![dailySalesTotQty]),1,'COMMA',0,'POINT')+'건'}">
+												1,541</div>
+											<span class="mr-2 d-none d-lg-inline text-gray-600 small font-weight-bold"
+												th:each="data : ${statisticList}"
+												th:if="${data.id eq #dates.format(#dates.createNow(), 'yyyyMMdd')}">
+												<span th:if="${data.dailySalesTotQty > 0}"
+													th:text="'(금일 현재 ' + ${data.dailySalesTotQty + '명 &uarr;)'}"></span>
+												<span th:unless="${data.dailySalesTotQty > 0}"
+													th:text="(금일 현재 0명)"></span>
+											</span>
 										</div>
 										<div class="col-auto">
 											<i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -78,8 +87,17 @@
 										<div class="col mr-2">
 											<div class="text-xs font-weight-bold text-success text-uppercase mb-1">
 												이번 달 판매수익</div>
-											<div class="h5 mb-0 font-weight-bold text-gray-800">52,155,540원</div>
-											<span class="mr-2 d-none d-lg-inline text-gray-600 small font-weight-bold"> (오늘 ▲ 5,500,000원)</span>
+											<div class="h5 mb-0 font-weight-bold text-gray-800"
+												th:text="${#numbers.formatDecimal(#aggregates.sum(statisticList.![dailySalesRevenue]),1,'COMMA',0,'POINT')+'원'}">
+												52,155,540원</div>
+											<span class="mr-2 d-none d-lg-inline text-gray-600 small font-weight-bold"
+												th:each="data : ${statisticList}"
+												th:if="${data.id eq #dates.format(#dates.createNow(), 'yyyyMMdd')}">
+												<span th:if="${data.dailySalesRevenue > 0}"
+													th:text="'(금일 현재 ' + ${data.dailySalesRevenue + '원 &uarr;)'}"></span>
+												<span th:unless="${data.dailySalesRevenue > 0}"
+													th:text="(금일 현재 0원)"></span>
+											</span>
 										</div>
 										<div class="col-auto">
 											<i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -99,7 +117,9 @@
 												이번 달 신규회원</div>
 											<div class="row no-gutters align-items-center">
 												<div class="col-auto">
-													<div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50명</div>
+													<div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"
+														th:text="${#numbers.formatDecimal(#aggregates.sum(statisticList.![dailyNewMember]),1,'COMMA',0,'POINT')+'명'}">
+														50명</div>
 												</div>
 												<div class="col">
 													<div class="progress progress-sm mr-2">
@@ -109,7 +129,14 @@
 													</div>
 												</div>
 											</div>
-											<span class="mr-2 d-none d-lg-inline text-gray-600 small font-weight-bold"> (오늘 ▲ 1명)</span>
+												<span class="mr-2 d-none d-lg-inline text-gray-600 small font-weight-bold"
+												th:each="data : ${statisticList}"
+												th:if="${data.id eq #dates.format(#dates.createNow(), 'yyyyMMdd')}">
+												<span th:if="${data.dailyNewMember > 0}"
+													th:text="'(금일 현재 ' + ${data.dailyNewMember + '명 &uarr;)'}"></span>
+												<span th:unless="${data.dailyNewMember > 0}"
+													th:text="(금일 현재 0명)"></span>
+											</span>
 										</div>
 										<div class="col-auto">
 											<i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
@@ -127,8 +154,16 @@
 										<div class="col mr-2">
 											<div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
 												이번 달 게시글 수</div>
-											<div class="h5 mb-0 font-weight-bold text-gray-800">180</div>
-											<span class="mr-2 d-none d-lg-inline text-gray-600 small font-weight-bold"> (오늘 ▲ 35)</span>
+											<div class="h5 mb-0 font-weight-bold text-gray-800"
+												th:text="${#numbers.formatDecimal(#aggregates.sum(statisticList.![dailyBoardInquiry]),1,'COMMA',0,'POINT')+'개'}">180</div>
+											<span class="mr-2 d-none d-lg-inline text-gray-600 small font-weight-bold"
+												th:each="data : ${statisticList}"
+												th:if="${data.id eq #dates.format(#dates.createNow(), 'yyyyMMdd')}">
+												<span th:if="${data.dailyBoardInquiry > 0}"
+													th:text="'(금일 현재 ' + ${data.dailyBoardInquiry + '개 &uarr;)'}"></span>
+												<span th:unless="${data.dailyBoardInquiry > 0}"
+													th:text="(금일 현재 0개)"></span>
+											</span>
 										</div>
 										<div class="col-auto">
 											<i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -142,6 +177,16 @@
 					<!-- Content Row -->
 					<div class="d-sm-flex align-items-center justify-content-between mb-4" style="margin-top: 20px;">
 						<h1 class="h4 mb-0 text-gray-600 ">최근 7일 데이터 추이</h1>
+						<div class="dropdown mb-4">
+							<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								기간선택
+							</button>
+							<div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton">
+								<a class="dropdown-item" href="#">2023년 월별</a>
+								<a class="dropdown-item" href="#">최근 7일 일별</a>
+							</div>
+						</div>
 					</div>
 
 					<div class="row">
@@ -161,7 +206,7 @@
 								</div>
 							</div>
 						</div>
-					
+
 						<!-- Area Chart2 -->
 						<div class="col-xl-6 col-lg-6">
 							<div class="card shadow mb-4">
@@ -178,7 +223,7 @@
 								</div>
 							</div>
 						</div>
-						
+
 						<!-- Area Chart3 -->
 						<div class="col-xl-6 col-lg-6">
 							<div class="card shadow mb-4">
@@ -195,7 +240,7 @@
 								</div>
 							</div>
 						</div>
-						
+
 						<!-- Area Chart4 -->
 						<div class="col-xl-6 col-lg-6">
 							<div class="card shadow mb-4">
@@ -212,8 +257,8 @@
 								</div>
 							</div>
 						</div>
-						
-						
+
+
 					</div>
 
 					<!-- End of Main Content -->
