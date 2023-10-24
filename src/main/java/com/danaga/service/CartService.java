@@ -4,11 +4,11 @@ import java.util.List;
 
 import com.danaga.dto.CartCreateDto;
 import com.danaga.dto.CartUpdateOptionSetDto;
-import com.danaga.dto.CartUpdateQtyDto;
+import com.danaga.dto.CartDto;
 import com.danaga.dto.CartUpdateResponseDto;
 import com.danaga.entity.Cart;
 import jakarta.transaction.Transactional;
-
+/*****************************************************************************************/
 @Transactional
 public interface CartService {
 
@@ -19,7 +19,7 @@ public interface CartService {
 	void addCart(CartCreateDto dto, String value) throws Exception;
 
 	// 카트 1개 삭제
-	void deleteCart(Long id) throws Exception;
+	void deleteCart(Long optionSetId,String value) throws Exception;
 
 	// 멤버 아이디로 카트삭제 [전체 삭제]
 	void deleteCarts(String sUserId) throws Exception;
@@ -28,9 +28,13 @@ public interface CartService {
 	int countCarts(String value) throws Exception;
 
 	// 장바구니 수량 변경
-	CartUpdateResponseDto updateCartQty(CartUpdateQtyDto dto);
+	CartDto updateCartQty(CartDto dto,String value) throws Exception;
 
 	// 장바구니 옵션 변경
 	List<CartUpdateResponseDto> updateCartOptionSet(CartUpdateOptionSetDto dto);
+	
+	// 장바구니 pk로 장바구니찾기
+	Cart findCart(Long id);
 
 }
+/*****************************************************************************************/
