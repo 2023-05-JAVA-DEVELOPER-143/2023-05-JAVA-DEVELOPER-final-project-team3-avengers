@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <!-- Body-->
+	  <!-- Header -->
+    <div th:insert="include_common :: header"></div>
+  <body>
+    <!-- Off-Canvas Wrapper-->
+    <div class="offcanvas-wrapper">
+      <!-- Page Content-->
+     
+     
+        
+
+
+
+
+
+        
+        여기를 채워주시면 됩니다
+        
+
+
+
+
+
+
+
+
+
+
+
+ <!-- Page Title-->
+      <div class="page-title">
+        <div class="container">
+          <div class="column">
+            <h1>제품 상세보기</h1>
+          </div>
+          <div class="column">
+            <ul class="breadcrumbs">
+              <li><a href="index.html">Home</a>
+              </li>
+              <li class="separator">&nbsp;</li>
+              <li><a href="shop-grid-ls.html">Shop</a>
+              </li>
+              <li class="separator">&nbsp;</li>
+              <li>제품 상세보기</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- Page Content-->
+      <div class="container padding-bottom-3x mb-1">
+        <div class="row">
+          <!-- Poduct Gallery-->
+          <div class="col-md-6">
+            <div class="product-gallery">
+              <div class="gallery-wrapper">
+              </div>
+              <div class="product-carousel owl-carousel gallery-wrapper">
+                <div class="gallery-item" data-hash="one"><a href="img/shop/single/01.jpg" data-size="1000x667" th:href="${product.img}"><img src="img/shop/single/01.jpg" alt="Product" th:attr="src=@{/images/gtvglogo.png},title=#{logo},alt=#{logo}"></a></div>
+              </div>
+            </div>
+          </div>
+          <!-- Product Info-->
+          <div class="col-md-6">
+            <div class="padding-top-2x mt-2 hidden-md-up"></div><!--별점 -->
+              <div class="rating-stars" th:each="rating"><i class="icon-star filled"></i><i class="icon-star"></i>
+              </div><span class="text-muted align-middle" th:text="${rating}|${reviews.size}">&nbsp;&nbsp;4.2 | 3 customer reviews</span>
+            <h2 class="padding-top-1x text-normal" th:text="${productName}">Product Name</h2><span class="h2 d-block" th:text="${optionset.totalPrice}">
+              <del class="text-muted text-normal" th:text="${optionset.totalPrice}/{member.grade}">상품 원래 가격</del>&nbsp; 멤버등급할인된가격</span>
+            <p th:text="${options}">상품 옵션들 나열</p>
+            <div class="row margin-top-1x">
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label for="size">다른 옵션 보기</label>
+                  <select class="form-control" id="size" th:each="${optionsetlist}">
+                    <option>Chooze options</option>
+                    <option th:text="${optionset}">11.5</option>
+                    <option th:text="${optionset}">11</option>
+                    <option th:text="${optionset}">10.5</option>
+                    <option th:text="${optionset}">10</option>
+                    <option th:text="${optionset}">9.5</option>
+                    <option th:text="${optionset}">9</option>
+                    <option th:text="${optionset}">8.5</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="form-group">
+                  <label for="quantity">Quantity</label>
+                  <select class="form-control" id="quantity">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <hr class="mb-3">
+            <div class="d-flex flex-wrap justify-content-between">
+              <div class="sp-buttons mt-2 mb-2">
+                <button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip" title="Whishlist"><i class="icon-heart"></i></button>
+                <button class="btn btn-primary" data-toast data-toast-type="success" data-toast-position="topRight" data-toast-icon="icon-circle-check" data-toast-title="Product" data-toast-message="successfuly added to cart!"><i class="icon-bag"></i> Add to Cart</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Product Tabs-->
+        <div class="row padding-top-3x mb-3">
+          <div class="col-lg-10 offset-lg-1">
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item"><a class="nav-link active" href="#description" data-toggle="tab" role="tab">Description</a></li>
+              <li class="nav-item"><a class="nav-link" href="#reviews" data-toggle="tab" role="tab">Reviews (3)</a></li>
+            </ul>
+            <div class="tab-content">
+              <div class="tab-pane fade show active" id="description" role="tabpanel">
+                <img src="img/reviews/01.jpg" alt="Review author" th:attr="src=@{/images/gtvglogo.png},title=#{logo},alt=#{logo}"><!--상품설명이미지-->
+              </div>
+              <div class="tab-pane fade" id="reviews" role="tabpanel" th:each="${reviews}">
+                <!-- Review-->
+                <div class="comment">
+                  <div class="comment-author-ava"><img src="img/reviews/01.jpg" alt="Review author" th:attr="src=@{/images/gtvglogo.png},title=#{logo},alt=#{logo}"></div>
+                  <div class="comment-body">
+                    <div class="comment-header d-flex flex-wrap justify-content-between">
+                      <h4 class="comment-title" th:text="${review.title}">리뷰제목</h4>
+                      <div class="mb-2">
+                          <div class="rating-stars" th:each="${review.rating}"><i class="icon-star filled"></i><i class="icon-star"></i>
+                          </div>
+                      </div>
+                    </div>
+                    <p class="comment-text" th:text="${review.content}">리뷰내용</p>
+                    <div class="comment-footer"><span class="comment-meta" th:text="${review.writer}">작성자</span></div>
+                  </div>
+                </div>
+                <!-- Review Form-->
+                <h5 class="mb-30 padding-top-1x">Leave Review</h5>
+                <form class="row" method="post">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label for="review_name">Your Name</label>
+                      <input class="form-control form-control-rounded" type="text" id="review_name" required>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label for="review_email">Your Email</label>
+                      <input class="form-control form-control-rounded" type="email" id="review_email" required>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label for="review_subject">Subject</label>
+                      <input class="form-control form-control-rounded" type="text" id="review_subject" required>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label for="review_rating">Rating</label>
+                      <select class="form-control form-control-rounded" id="review_rating">
+                        <option>5 Stars</option>
+                        <option>4 Stars</option>
+                        <option>3 Stars</option>
+                        <option>2 Stars</option>
+                        <option>1 Star</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-group">
+                      <label for="review_text">Review </label>
+                      <textarea class="form-control form-control-rounded" id="review_text" rows="8" required></textarea>
+                    </div>
+                  </div>
+                  <div class="col-12 text-right">
+                    <button class="btn btn-outline-primary" type="submit">Submit Review</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Related Products Carousel-->
+        <h3 class="text-center padding-top-2x mt-2 padding-bottom-1x">You May Also Like</h3>
+        <!-- Carousel-->
+        <div class="owl-carousel" data-owl-carousel="{ &quot;nav&quot;: false, &quot;dots&quot;: true, &quot;margin&quot;: 30, &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;576&quot;:{&quot;items&quot;:2},&quot;768&quot;:{&quot;items&quot;:3},&quot;991&quot;:{&quot;items&quot;:4},&quot;1200&quot;:{&quot;items&quot;:4}} }" th:each="${optionsetlist}">
+          <!-- Product-->
+          <div class="grid-item">
+            <div class="product-card">
+              <a class="product-thumb" href="product-detail.html" th:href="product-detail.html"><img src="img/shop/products/09.jpg" alt="Product" th:attr="src=@{/images/gtvglogo.png},title=#{logo},alt=#{logo}"></a>
+              <h3 class="product-title" th:text="${productname}"><a href="product-detail.html">상품명</a></h3>
+              <h4 class="product-price" th:text="${optionset.totalprice}/grade">
+                <del th:text="${optionset.totalprice}">$44.95</del>$34.99
+              </h4>
+              <div class="product-buttons">
+                <button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip" title="Whishlist"><i class="icon-heart"></i></button>
+                <button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success" data-toast-position="topRight" data-toast-icon="icon-circle-check" data-toast-title="Product" data-toast-message="successfuly added to cart!">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+<!--컨텐츠 끝-->
+
+
+
+
+
+        
+     
+      <div th:insert="include_common :: footer"></div>
+    </div>
+    
+    
+    <!-- Back To Top Button-->
+    <a class="scroll-to-top-btn" href="#"><i class="icon-arrow-up"></i></a>
+    <!-- Backdrop-->
+    <div class="site-backdrop"></div>
+    <!-- JavaScript (jQuery) libraries, plugins and custom scripts-->
+    <script src="/bootstrap/js/vendor.min.js"></script>
+    <script src="/bootstrap/js/scripts.min.js"></script>
+  </body>
+</html>

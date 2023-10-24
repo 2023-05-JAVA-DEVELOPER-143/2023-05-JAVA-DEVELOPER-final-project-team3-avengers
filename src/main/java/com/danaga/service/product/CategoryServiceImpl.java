@@ -21,7 +21,7 @@ public class CategoryServiceImpl implements CategoryService{
 	
 	//최상위 카테고리만 조회
 	@Override
-	public ResponseDto<?> AncestorCategories() {
+	public ResponseDto<Category> AncestorCategories() {
 		List<Category> data = categoryDao.findByParentEmpty();
 		return ResponseDto.<Category>builder().data(data).build();
 	}

@@ -19,7 +19,7 @@ import lombok.ToString;
 
 @Entity(name = "CommentLikeConfig") 
 @Table(name = "comment_like_config", uniqueConstraints = {
-    @UniqueConstraint(name = "comment_like_config_uq", columnNames = {"board_id", "writer"})
+//    @UniqueConstraint(name = "comment_like_config_uq", columnNames = {"board_id", "writer"})
 })
 @ToString
 @NoArgsConstructor
@@ -29,8 +29,10 @@ import lombok.ToString;
 public class CommentLikeConfig {
 	
 	@Id
-	@SequenceGenerator(name = "comment_like_config_id_seq", sequenceName = "comment_like_config_id_seq", initialValue = 1, allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "like_config_id_seq")
+//	@SequenceGenerator(name = "comment_like_config_id_seq", sequenceName = "comment_like_config_id_seq", initialValue = 1, allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE
+//	, generator = "like_config_id_seq"
+	)
 	private Long id;
 	
 	@ColumnDefault(value = "0")
