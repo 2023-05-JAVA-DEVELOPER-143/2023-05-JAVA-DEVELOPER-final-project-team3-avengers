@@ -71,25 +71,15 @@ public class MemberServiceImpl implements MemberService {
 		}
 	}
 	@Transactional
-	public MemberUpdateDto updateMember(MemberUpdateDto memberUpdateDto) throws Exception, ExistedMemberException {
-		Member originalMember = memberDao.findMember(memberUpdateDto.getUserName());
-		if (originalMember.getPhoneNo().equals(memberUpdateDto.getPhoneNo())
-				&& originalMember.getEmail().equals(memberUpdateDto.getEmail())) {
-			// 이메일 x 번호 x
-
-		} else if (originalMember.getEmail().equals(memberUpdateDto.getEmail())) {
-			// 이메일 x 번호 o
-			if (memberDao.existedMemberBy(memberUpdateDto.getPhoneNo())) {
-				throw new ExistedMemberException(memberUpdateDto.getPhoneNo() + " 는 이미 등록된 번호 입니다.");
-			}
-		} else if (originalMember.getPhoneNo().equals(memberUpdateDto.getPhoneNo())) {
-			// 이메일 o 번호 x
-			if (memberDao.existedMemberBy(memberUpdateDto.getEmail())) {
-				throw new ExistedMemberException(memberUpdateDto.getEmail() + " 는 이미 등록된 이메일 입니다.");
-			}
+	public MemberUpdateDto updateMember(MemberResponseDto memberResponseDto) throws Exception, ExistedMemberException {
+		Member originalMember = memberDao.findMember(memberResponseDto.getUserName());
+		if (originalMember.getNickname().equals(memberResponseDto.getNickname())) {
+			
+		} else if(memberRepository.findByNickname(memberResponseDto.getNickname()).isPresent()) {
+			throw new ExistedMemberException(memberResponseDto.getNickname()+"는 사용중인 닉네임 입니다.");
 		}
 		//Member updatedMember = Member.toUpdateEntity(memberUpdateDto);
-		return MemberUpdateDto.toDto(memberDao.update(Member.toUpdateEntity(memberUpdateDto)));
+		return MemberUpdateDto.toDto(memberDao.update(Member.toResponseEntity(memberResponseDto)));
 	}
 	@Transactional
 	public void deleteMember(String value) throws Exception {
@@ -116,7 +106,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 	@Transactional
 	@Override
-	public void updateGrade(Member member, int gradePoint) {
+	public void updateGrade(Member member, int gradePoint) throws Exception {
 		member.setGradePoint(member.getGradePoint() + gradePoint);
 		if (member.getGradePoint() <= 1000) {
 			/* Rookie Bronze, Silver, Gold, Platinum, Diamond 결제 가격의 1%가 등급 포인트로 쌓임
@@ -138,7 +128,7 @@ public class MemberServiceImpl implements MemberService {
 		} else if (member.getGradePoint() > 35000) {
 			member.setGrade("Diamond");
 		}
-		memberRepository.save(member);
+		memberDao.update(member);
 
 	}
 	@Override
