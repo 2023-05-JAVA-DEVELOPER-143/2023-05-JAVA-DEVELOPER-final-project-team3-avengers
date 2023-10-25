@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.danaga.dto.BoardDto;
+import com.danaga.dto.LikeConfigDto;
 import com.danaga.entity.Board;
 import com.danaga.entity.BoardGroup;
 import com.danaga.entity.LikeConfig;
@@ -31,11 +32,15 @@ public class BoardService {
 	@Autowired
 	private LikeConfigRepository lcRepository;
 
-	// 게시물별 출력
+	
 	public List<LikeConfig> getConfigs() {
 		return lcRepository.findAll();
 	}
 
+	public List<BoardDto> getIsAdmin(){
+		return bRepository.findByIsAdmin(2).stream().map(board -> BoardDto.createBoardDto(board)).collect(Collectors.toList());
+	}
+	// 게시물별 출력
 	public List<BoardDto> boards(Long boardGroupId) {
 		return bRepository.findByBoardGroupIdOrderByCreateTimeDesc(boardGroupId).stream().map(board -> BoardDto.createBoardDto(board)).collect(Collectors.toList());
 	}
@@ -51,7 +56,7 @@ public class BoardService {
 
 	// 생성
 	@Transactional
-	public BoardDto createBoard(BoardDto dto,List<LikeConfig> configs) {
+	public BoardDto createBoard(BoardDto dto) {
 		// 게시글 조회 및 예외처리
 		Member memberT = mRepository.findById(dto.getMemberId())
 				.orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
@@ -62,7 +67,7 @@ public class BoardService {
 			throw new IllegalArgumentException("이미 존재하는 게시물ID입니다.");
 		}
 		// 게시글 엔티티 생성
-		Board board = Board.createBoard(dto, memberT, boardGroupT, configs);
+		Board board = BoardDto.toEntity(dto,memberT,boardGroupT);
 
 		// 게시글 엔티티를 DB에 저장
 		Board created = bRepository.save(board);
@@ -72,17 +77,15 @@ public class BoardService {
 
 	// 좋아요
 	@Transactional
-	public BoardDto upIsLike(Long boardId, Long boardGroupId, Long memberId, Long likeConfigId) {
-		Board target = bRepository.findByBoardGroup_IdAndId(boardGroupId, boardId);
-		if(target.getId()==null) {
-			throw new IllegalArgumentException("존재하지 않는 게시물입니다.");
-		}
-		Member member = mRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("접근이 잘못됬어요(회원정보없음)"));
+	public BoardDto upIsLike(Long boardId,Long memberId) {
+		Board target = bRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다.(대상게시글이 없음)"));
+		
+		Member member = mRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다.(회원정보없음)"));
 		
 		LikeConfig config = lcRepository.findByBoard_IdAndMember_id(boardId, memberId);
 		if (config.getIsLike() == 0) {
 			config.setIsLike(1);
-			target.setIsLike(target.getIsLike() + 1);
+			target.setIsLike(target.getIsLike()+1);
 			bRepository.save(target);
 			BoardDto updated= BoardDto.createBoardDto(target);
 			return updated;
@@ -134,9 +137,9 @@ public class BoardService {
 	// 게시물 삭제
 	@Transactional
 	public BoardDto delete(BoardDto dto) {
-		// 게시물 조회 및 예외처리
+		//config상태 삭제
 		lcRepository.deleteByBoard_Id(dto.getId());
-		
+		// 게시물 조회 및 예외처리
 		Board target = bRepository.findById(dto.getId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시물입니다."));
 		
 		// 게시물 DB에서 삭제

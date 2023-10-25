@@ -14,8 +14,8 @@ public interface MemberService {
 	public List<MemberResponseDto> getMembers();
 	public MemberResponseDto getMemberBy(String value) throws Exception;
 	public MemberResponseDto joinMember(MemberResponseDto memberResponseDto) throws Exception;
-	public MemberInsertGuestDto joinGuest(MemberInsertGuestDto memberInsertGuestDto) throws Exception;
-	public MemberUpdateDto updateMember(MemberResponseDto memberResponseDto) throws Exception;
+	public MemberResponseDto joinGuest(MemberInsertGuestDto memberInsertGuestDto) throws Exception;
+	public MemberResponseDto updateMember(MemberUpdateDto memberUpdateDto) throws Exception;
 	public void deleteMember(String value) throws Exception;
 	public boolean isDuplicate(String value) throws Exception;
 	public boolean login(String userName, String password) throws Exception;

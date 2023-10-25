@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.danaga.dto.MemberResponseDto;
 import com.danaga.dto.MemberUpdateDto;
+import com.danaga.exception.ExistedMemberException;
+import com.danaga.exception.MemberNotFoundException;
+import com.danaga.exception.PasswordMismatchException;
 import com.danaga.memberResponse.MemberResponse;
 import com.danaga.memberResponse.MemberResponseMessage;
 import com.danaga.memberResponse.MemberResponseStatusCode;
@@ -44,7 +48,19 @@ public class MemberRestController {
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
+	}
+	
+	@LoginCheck
+	@GetMapping("/logout")
+	public ResponseEntity<MemberResponse> user_logout_action(HttpSession session) throws Exception {
+		session.invalidate();
+		MemberResponse response = new MemberResponse();
+		response.setStatus(MemberResponseStatusCode.LOGOUT_USER);
+		response.setMessage(MemberResponseMessage.LOGOUT_USER);
 
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
 	}
 
 	@PostMapping("/join")
@@ -62,9 +78,9 @@ public class MemberRestController {
 
 	@LoginCheck
 	@PutMapping("/{id}")
-	public ResponseEntity<MemberResponse> member_modify_action(@PathVariable(name = "id") String id,
-			@RequestBody MemberResponseDto memberResponseDto) throws Exception {
-		MemberUpdateDto updatedMember = memberService.updateMember(memberResponseDto);
+	public ResponseEntity<MemberResponse> member_modify_action(
+			@RequestBody MemberUpdateDto memberUpdateDto) throws Exception {
+		MemberResponseDto updatedMember = memberService.updateMember(memberUpdateDto);
 
 		MemberResponse response = new MemberResponse();
 		response.setStatus(MemberResponseStatusCode.UPDATE_USER);
@@ -95,7 +111,7 @@ public class MemberRestController {
 		response.setStatus(MemberResponseStatusCode.READ_USER);
 		response.setMessage(MemberResponseMessage.READ_USER);
 		response.setData(loginUser);
-
+		
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
@@ -109,9 +125,43 @@ public class MemberRestController {
 		MemberResponse response = new MemberResponse();
 		response.setStatus(MemberResponseStatusCode.DELETE_USER);
 		response.setMessage(MemberResponseMessage.DELETE_USER);
-
+		
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
 	}
+	
+	@ExceptionHandler(value = ExistedMemberException.class)
+	public ResponseEntity<MemberResponse> user_existed_exception_handler(ExistedMemberException e) throws Exception {
+		MemberResponse response = new MemberResponse();
+		response.setStatus(MemberResponseStatusCode.CREATE_FAIL_EXISTED_USER);
+		response.setMessage(MemberResponseMessage.CREATE_FAIL_EXISTED_USER);
+		response.setData(e.getData());
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
+	}
+
+	@ExceptionHandler(value = MemberNotFoundException.class)
+	public ResponseEntity<MemberResponse> user_not_found_exception_handler(MemberNotFoundException e) throws Exception {
+		MemberResponse response = new MemberResponse();
+		response.setStatus(MemberResponseStatusCode.LOGIN_FAIL_NOT_FOUND_USER);
+		response.setMessage(MemberResponseMessage.LOGIN_FAIL_NOT_FOUND_USER);
+		response.setData(e.getData());
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
+	}
+
+	@ExceptionHandler(value = PasswordMismatchException.class)
+	public ResponseEntity<MemberResponse> user_password_mismatch_handler(PasswordMismatchException e) throws Exception {
+		MemberResponse response = new MemberResponse();
+		response.setStatus(MemberResponseStatusCode.LOGIN_FAIL_PASSWORD_MISMATCH_USER);
+		response.setMessage(MemberResponseMessage.LOGIN_FAIL_PASSWORD_MISMATCH_USER);
+		response.setData(e.getData());
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
+	}
+
 }

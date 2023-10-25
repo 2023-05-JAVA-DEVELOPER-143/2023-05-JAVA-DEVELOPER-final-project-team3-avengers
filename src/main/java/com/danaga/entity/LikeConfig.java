@@ -50,8 +50,8 @@ public class LikeConfig {
     private Member member;
     
     
-    public static LikeConfig createConfig(LikeConfigDto dto,Board board, Member meber) {
-    	return LikeConfig.builder().id(dto.getId()).isLike(dto.getIsLike()).disLike(dto.getDisLike()).board(board).member(meber).build();
+    public static LikeConfig createConfig(LikeConfigDto dto,Board board, Member member) {
+    	return LikeConfig.builder().id(dto.getId()).isLike(dto.getIsLike()).disLike(dto.getDisLike()).board(board).member(member).build();
     }
     public void patch(LikeConfigDto dto) {
     	if(dto.getBoardId()==null) {

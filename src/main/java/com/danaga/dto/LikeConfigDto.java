@@ -21,10 +21,9 @@ public class LikeConfigDto {
 	private Long BoardId;
 	private Long MemberId;
 	
-	public static LikeConfigDto createConfigDto(BoardDto config) {
-		if(config ==null) {
-			return null;
-		}
-		return LikeConfigDto.builder().isLike(config.getIsLike()).disLike(config.getDisLike()).BoardId(config.getId()).MemberId(config.getMemberId()).build();
+	public static LikeConfigDto createConfigDto(LikeConfig config) {
+		
+		return LikeConfigDto.builder()
+				.id(config.getId()).isLike(config.getIsLike()).disLike(config.getDisLike()).BoardId(config.getId()).MemberId(config.getMember().getId()).build();
 	}
 }
