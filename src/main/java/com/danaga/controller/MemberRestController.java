@@ -62,9 +62,9 @@ public class MemberRestController {
 
 	@LoginCheck
 	@PutMapping("/{id}")
-	public ResponseEntity<MemberResponse> member_modify_action(@PathVariable(name = "id") String id,
-			@RequestBody MemberResponseDto memberResponseDto) throws Exception {
-		MemberUpdateDto updatedMember = memberService.updateMember(memberResponseDto);
+	public ResponseEntity<MemberResponse> member_modify_action(
+			@RequestBody MemberUpdateDto memberUpdateDto) throws Exception {
+		MemberResponseDto updatedMember = memberService.updateMember(memberUpdateDto);
 
 		MemberResponse response = new MemberResponse();
 		response.setStatus(MemberResponseStatusCode.UPDATE_USER);

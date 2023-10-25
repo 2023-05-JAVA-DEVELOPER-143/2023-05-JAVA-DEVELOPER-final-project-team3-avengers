@@ -63,23 +63,24 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Transactional
-	public MemberInsertGuestDto joinGuest(MemberInsertGuestDto memberInsertGuestDto) throws Exception {
+	public MemberResponseDto joinGuest(MemberInsertGuestDto memberInsertGuestDto) throws Exception {
 		if (!memberDao.existedMemberBy(memberInsertGuestDto.getPhoneNo())) {
-			return MemberInsertGuestDto.toDto(memberDao.insert(Member.toGuestEntity(memberInsertGuestDto)));
+			return MemberResponseDto.toDto(memberDao.insert(Member.toGuestEntity(memberInsertGuestDto)));
 		} else {
-			return MemberInsertGuestDto.toDto(memberDao.findMember(Member.toGuestEntity(memberInsertGuestDto).getPhoneNo()));
+			return MemberResponseDto.toDto(memberDao.findMember(Member.toGuestEntity(memberInsertGuestDto).getPhoneNo()));
 		}
 	}
 	@Transactional
-	public MemberUpdateDto updateMember(MemberResponseDto memberResponseDto) throws Exception, ExistedMemberException {
-		Member originalMember = memberDao.findMember(memberResponseDto.getUserName());
-		if (originalMember.getNickname().equals(memberResponseDto.getNickname())) {
+	public MemberResponseDto updateMember(MemberUpdateDto memberUpdateDto) throws Exception, ExistedMemberException {
+		Member originalMember = memberRepository.findById(memberUpdateDto.getId()).get();
+		Member member = Member.builder().id(memberUpdateDto.getId()).password(memberUpdateDto.getPassword()).nickname(memberUpdateDto.getNickname()).address(memberUpdateDto.getAddress()).build();
+		if (originalMember.getNickname().equals(member.getNickname())) {
 			
-		} else if(memberRepository.findByNickname(memberResponseDto.getNickname()).isPresent()) {
-			throw new ExistedMemberException(memberResponseDto.getNickname()+"는 사용중인 닉네임 입니다.");
+		} else if(memberRepository.findByNickname(member.getNickname()).isPresent()) {
+			throw new ExistedMemberException(member.getNickname()+"는 사용중인 닉네임 입니다.");
 		}
 		//Member updatedMember = Member.toUpdateEntity(memberUpdateDto);
-		return MemberUpdateDto.toDto(memberDao.update(Member.toResponseEntity(memberResponseDto)));
+		return MemberResponseDto.toDto(memberDao.update(member));
 	}
 	@Transactional
 	public void deleteMember(String value) throws Exception {
