@@ -2,7 +2,6 @@ package com.danaga.service;
 
 import java.util.List;
 
-import com.danaga.dto.CartCreateDto;
 import com.danaga.dto.CartUpdateOptionSetDto;
 import com.danaga.dto.CartDto;
 import com.danaga.dto.CartUpdateResponseDto;

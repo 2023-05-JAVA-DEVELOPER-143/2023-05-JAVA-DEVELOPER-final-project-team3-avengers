@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.danaga.dao.CartDao;
 import com.danaga.dao.MemberDao;
-import com.danaga.dto.CartCreateDto;
 import com.danaga.dto.CartUpdateOptionSetDto;
 import com.danaga.dto.CartDto;
 import com.danaga.entity.Cart;
@@ -20,7 +19,6 @@ import com.danaga.repository.CartRepository;
 import com.danaga.repository.MemberRepository;
 import com.danaga.repository.product.OptionSetQueryRepository;
 import com.danaga.repository.product.OptionSetRepository;
-import com.danaga.dto.CartCreateDto;
 import com.danaga.dto.CartDto;
 import com.danaga.entity.Cart;
 import com.danaga.entity.OptionSet;

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.danaga.dao.product.OptionSetDao;
-import com.danaga.dto.CartCreateDto;
 import com.danaga.dto.CartDto;
 import com.danaga.entity.Cart;
 import com.danaga.service.CartService;
@@ -106,15 +105,14 @@ public class CartRestController {
 	@Operation(summary = "카트리스트 보기")
 	@GetMapping
 	public ResponseEntity<Long> findCarts(HttpSession session) throws Exception {
-		sUserId = (String) session.getAttribute("sUserId");
-
+//		sUserId = (String) session.getAttribute("sUserId");
+		sUserId = "User1";
 		if (sUserId != null) {
 			List<Cart> carts = cartService.findCartList(sUserId);
 			return ResponseEntity.status(HttpStatus.OK).body(carts.get(0).getId());
 		}
 		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
 		return ResponseEntity.status(HttpStatus.OK).body(fUserCarts.get(0).getId());
-
 	}
 	
 	
