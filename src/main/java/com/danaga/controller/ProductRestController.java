@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -96,7 +97,7 @@ public class ProductRestController {
 	}
 	
 	//조건에 해당하는 리스트 전체 조회 
-	@PostMapping()
+	@PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> searchResult(@RequestBody QueryStringDataDto filterDto){
 		try {
 			ResponseDto<?> response =service.searchProducts(filterDto);

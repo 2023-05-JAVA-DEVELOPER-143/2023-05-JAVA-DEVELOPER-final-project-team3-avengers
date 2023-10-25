@@ -29,5 +29,5 @@ public interface BoardRepository extends JpaRepository<Board, Long>{
 	//게시물 삭제
 	void deleteByBoardGroup_IdAndId(Long boardGroupId, Long boardId);
 	
-	
+	List<Board> findByIsAdmin(Integer isAdmin);
 }

@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.danaga.entity.Board;
+import com.danaga.entity.BoardGroup;
 import com.danaga.entity.LikeConfig;
+import com.danaga.entity.Member;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,7 +44,9 @@ public class BoardDto {
     
     
     public static BoardDto createBoardDto(Board board) {
-    	
+    	if(board.getMember().getRole().equals("ADMIN")) {
+    		board.setIsAdmin(2);
+    	}
     	return BoardDto.builder()
     			.id(board.getId()).title(board.getTitle()).content(board.getContent()).img1(board.getImg1())
     			.img2(board.getImg2()).img3(board.getImg3()).img4(board.getImg4()).img5(board.getImg5())
@@ -51,5 +55,16 @@ public class BoardDto {
     			.memberId(board.getMember().getId()).boardGroupId(board.getBoardGroup().getId()).lConfigs(board.getLConfigs())
     			.build();
     }
+
+
+	public static Board toEntity(BoardDto dto, Member memberT, BoardGroup boardGroupT) {
+		
+		return Board.builder()
+				.id(dto.getId()).title(dto.getTitle()).content(dto.getContent()).img1(dto.getImg1())
+    			.img2(dto.getImg2()).img3(dto.getImg3()).img4(dto.getImg4()).img5(dto.getImg5())
+    			.isLike(dto.getIsLike()).disLike(dto.getDisLike()).readCount(dto.getReadCount())
+    			.member(memberT).boardGroup(boardGroupT)
+    			.build();
+	}
     
 }

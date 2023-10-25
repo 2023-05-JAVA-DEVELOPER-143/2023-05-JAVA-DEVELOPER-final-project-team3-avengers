@@ -8,11 +8,6 @@
 	<div class="offcanvas-wrapper">
 		<!-- Page Content-->
 
-
-
-
-		여기를 채워주시면 됩니다
-
 		<!-- Page Title-->
 		<div class="page-title">
 			<div class="container">
@@ -34,6 +29,7 @@
 		<div class="container padding-bottom-3x mb-2">
 			<div class="row">
 
+
 				<!--profile component-->
 				<div th:insert="mypage_component :: profile-component"></div>
 				<!--profile component 끝-->
@@ -43,6 +39,7 @@
 				<div class="col-lg-8">
 					<div class="padding-top-2x mt-2 hidden-lg-up"></div>
 					<div class="table-responsive wishlist-table margin-bottom-none">
+
 						<table class="table">
 							<thead>
 								<tr>
@@ -54,27 +51,24 @@
 									<!--전체삭제버튼-->
 								</tr>
 							</thead>
-							<tbody>
-								<!--상품 반복-->
-								<tr>
-									<td>
-										<div class="product-card-component" th:include="product_component :: product-card-component"></div>
-									</td>
-									<td class="text-center">
-                    <a class="remove-from-cart"	href="#" data-toggle="tooltip" title="Remove item">
-                      <i class="icon-heart"></i>
-                    </a>
-                  </td>
-								</tr>
-								<!--상품반복 끝-->
-							</tbody>
+							<!--상품 반복-->
+
+							<!-- 하위 태그들은 size==1이면 빈상자 이미지로 대체-->
+							<tbody class="product-card-component"
+								th:include="myProduct-component :: myProduct-product-card"></tbody>
+
+							<!--상품반복 끝-->
 						</table>
+
 					</div>
-					<hr class="mb-4">
-					<div class="custom-control custom-checkbox">
-						<input class="custom-control-input" type="checkbox" id="inform_me" checked> 
-            <label class="custom-control-label" for="inform_me">Inform me when item from my wishlist is available</label>
-					</div>
+				</div>
+				<hr class="mb-4">
+				<div class="custom-control custom-checkbox">
+					<input class="custom-control-input" type="checkbox" id="inform_me"
+						checked> <label class="custom-control-label"
+						for="inform_me">Inform me when item from my wishlist is
+						available</label>
+
 				</div>
 			</div>
 		</div>
@@ -92,6 +86,7 @@
 
 		<div th:insert="include_common :: footer"></div>
 	</div>
+
 
 
 	<!-- Back To Top Button-->
