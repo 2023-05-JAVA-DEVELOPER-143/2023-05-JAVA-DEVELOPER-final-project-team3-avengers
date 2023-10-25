@@ -2,6 +2,7 @@ package com.danaga.service.product;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -21,15 +22,15 @@ public class CategoryServiceImpl implements CategoryService{
 	
 	//최상위 카테고리만 조회
 	@Override
-	public ResponseDto<Category> AncestorCategories() {
-		List<Category> data = categoryDao.findByParentEmpty();
-		return ResponseDto.<Category>builder().data(data).build();
+	public ResponseDto<CategoryDto> AncestorCategories() {
+		List<CategoryDto> data = categoryDao.findByParentEmpty().stream().map(t->new CategoryDto(t)).collect(Collectors.toList());
+		return ResponseDto.<CategoryDto>builder().data(data).build();
 	}
 	//카테고리의 상위, 자식들 조회
 	@Override
 	public ResponseDto<?> categoryFamily(Long id) {
-		List<Category> data = categoryDao.findChildTypesByParentId(id);
-		return ResponseDto.<Category>builder().data(data).build();
+		List<CategoryDto> data = categoryDao.findChildTypesByParentId(id).stream().map(t->new CategoryDto(t)).collect(Collectors.toList());
+		return ResponseDto.<CategoryDto>builder().data(data).build();
 	}
 
 	//카테고리 생성

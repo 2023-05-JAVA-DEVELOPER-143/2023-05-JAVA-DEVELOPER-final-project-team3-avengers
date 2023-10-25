@@ -8,7 +8,7 @@ import com.danaga.entity.Category;
 
 public interface CategoryService {
 	//최상위 카테고리들만 조회
-	ResponseDto<Category> AncestorCategories();
+	ResponseDto<CategoryDto> AncestorCategories();
 	
 	//카테고리 선택하면 그 카테고리의 직계자식카테고리만 조회 
 	ResponseDto<?> categoryFamily(Long id);

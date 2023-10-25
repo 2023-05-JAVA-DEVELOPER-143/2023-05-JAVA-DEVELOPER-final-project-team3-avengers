@@ -3,6 +3,7 @@ package com.danaga.dto.product;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.danaga.entity.Category;
 import com.danaga.entity.CategorySet;
@@ -22,7 +23,6 @@ import lombok.NoArgsConstructor;
 public class ProductDto {
 	private String brand;
 	private String name;
-	private Integer price;
 	private Double rating;
 	private LocalDateTime updateTime;
 	private String descImage;
@@ -33,32 +33,22 @@ public class ProductDto {
 //	@Builder.Default
 //	private List<Category> categorySet=new ArrayList<>();
 	private Integer stock;
+	private Integer totalPrice;
 	private Long osId;
 	@Builder.Default
 	private List<OptionDto> optionSet = new ArrayList<>();
 	
-
-//	public ProductDto(final Product product, final OptionSet optionSet, 
-//			List<Options> options) {// 처리한 후 다시 유저한테 보내는 entity를 dto로 바꿔서 보내줌
-//		this.brand = product.getBrand();
-//		this.name = product.getName();
-//		this.descImage = product.getDescImage();
-//		this.pImage = product.getPImage();
-//		this.prevDesc = product.getPrevDesc();
-//		this.rating = product.getRating();
-//		this.updateTime = optionSet.getUpdateTime();
-//		this.stock = optionSet.getStock();
-//		this.osId = optionSet.getId();
-//		//this.reviews = reviews;
-//		this.optionSet = options;
-//		this.price = product.getPrice();
-//		for (int i = 0; i < options.size(); i++) {
-//			price += options.get(i).getExtraPrice();
-//		}
-//	}
-
-	public static Product toEntity(final ProductDto dto) {// dto로 요청을 받아서 entity로 바꿔 서비스 처리하고
-		return Product.builder().build();
-
+	public ProductDto(OptionSet entity) {
+		this.brand=entity.getProduct().getBrand();
+		this.name=entity.getProduct().getName();
+		this.rating=entity.getProduct().getRating();
+		this.updateTime=entity.getUpdateTime();
+		this.descImage=entity.getProduct().getDescImage();
+		this.prevDesc=entity.getProduct().getPrevDesc();
+		this.pImage=entity.getProduct().getImg();
+		this.stock=entity.getStock();
+		this.totalPrice=entity.getTotalPrice();
+		this.osId=entity.getId();
+		this.optionSet = entity.getOptions().stream().map(t -> new OptionDto(t)).collect(Collectors.toList());
 	}
 }

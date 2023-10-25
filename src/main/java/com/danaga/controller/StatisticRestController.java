@@ -67,7 +67,12 @@ public class StatisticRestController {
 		List<Statistic> statistics = statisticService.thisMonthStatistic();
 		return ResponseEntity.status(HttpStatus.OK).body(statistics);
 	}
-	
+	@GetMapping("/admin_product_insert")
+	public ModelAndView adminProductInsert() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("admin/admin_product_insert");
+		return modelAndView;
+	}
 	@GetMapping("/admin_product_list")
 	public ModelAndView adminProductList() {
 		ModelAndView modelAndView = new ModelAndView();
@@ -87,4 +92,5 @@ public class StatisticRestController {
 		modelAndView.setViewName("admin/admin_board_list");
 		return modelAndView;
 	}
+	
 }

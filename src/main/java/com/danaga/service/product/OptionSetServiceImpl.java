@@ -16,6 +16,7 @@ import com.danaga.dto.product.OptionNameValueDto;
 import com.danaga.dto.product.OptionSaveDto;
 import com.danaga.dto.product.OptionSetCreateDto;
 import com.danaga.dto.product.OptionSetUpdateDto;
+import com.danaga.dto.product.ProductDto;
 import com.danaga.dto.product.ProductSaveDto;
 import com.danaga.dto.product.ProductUpdateDto;
 import com.danaga.dto.product.QueryStringDataDto;
@@ -47,11 +48,11 @@ public class OptionSetServiceImpl implements OptionSetService {
 	@Transactional
 	public ResponseDto<?> deleteProduct(Long productId, QueryStringDataDto dataDto) {
 		productDao.deleteById(productId);
-		List<OptionSet> optionSetList = optionSetDao.findByFilter(dataDto);
+		List<ProductDto> optionSetList = optionSetDao.findByFilter(dataDto).stream().map(t -> new ProductDto(t)).collect(Collectors.toList());
 		//기존 전체 프로덕트 리스트 화면에서 삭제 눌렀을때
 		//삭제 누른당시 리스트의 검색 조건을 그대로 가져와서 
 		//삭제 후에도 같은 검색 조건으로 리스트 다시 갱신하게 
-		return ResponseDto.<OptionSet>builder().data(optionSetList).build();
+		return ResponseDto.<ProductDto>builder().data(optionSetList).build();
 	}
 
 	// 옵션셋 삭제시 옵션들도 삭제
@@ -59,8 +60,8 @@ public class OptionSetServiceImpl implements OptionSetService {
 	@Transactional
 	public ResponseDto<?> deleteOptionSet(Long optionSetId, QueryStringDataDto dataDto) {
 		optionSetDao.deleteById(optionSetId);
-		List<OptionSet> optionSetList = optionSetDao.findByFilter(dataDto);
-		return ResponseDto.<OptionSet>builder().data(optionSetList).build();
+		List<ProductDto> optionSetList = optionSetDao.findByFilter(dataDto).stream().map(t -> new ProductDto(t)).collect(Collectors.toList());;
+		return ResponseDto.<ProductDto>builder().data(optionSetList).build();
 	}
 
 	// 옵션 삭제하고 옵션이 붙어있던 오리진 옵션셋 반환
@@ -78,51 +79,48 @@ public class OptionSetServiceImpl implements OptionSetService {
 	@Override
 	public ResponseDto<?> updateStock(OptionSetUpdateDto dto) {
 		OptionSet optionset = optionSetDao.updateStock(dto);
-		List<OptionSet> data = new ArrayList<>();
-		data.add(optionset);
-		return ResponseDto.<OptionSet>builder().data(data).build();
+		List<ProductDto> data = new ArrayList<>();
+		data.add(new ProductDto(optionset));
+		return ResponseDto.<ProductDto>builder().data(data).build();
 	}
 
 	// 주문했을때 주문수 업뎃, +,-는 컨트롤러에서 get+1
 	@Override
 	public ResponseDto<?> updateOrderCount(Long optionSetId, Integer orderCount) {
 		OptionSet optionset = optionSetDao.updateOrderCount(optionSetId, orderCount);
-		List<OptionSet> data = new ArrayList<>();
-		data.add(optionset);
-		return ResponseDto.<OptionSet>builder().data(data).build();
+		List<ProductDto> data = new ArrayList<>();
+		data.add(new ProductDto(optionset));
+		return ResponseDto.<ProductDto>builder().data(data).build();
 	}
 
 	// 클릭했을때 조회수 업뎃
 	@Override
 	public ResponseDto<?> updateViewCount(Long optionSetId) {
 		OptionSet optionset = optionSetDao.updateViewCount(optionSetId);
-		List<OptionSet> data = new ArrayList<>();
-		data.add(optionset);
-		return ResponseDto.<OptionSet>builder().data(data).build();
+		List<ProductDto> data = new ArrayList<>();
+		data.add(new ProductDto(optionset));
+		return ResponseDto.<ProductDto>builder().data(data).build();
 	}
 
 	// 같은 카테고리 인기상품
 	@Override
 	@Transactional
-	public ResponseDto<OptionSet> displayHitProducts(Long optionSetId) {
+	public ResponseDto<ProductDto> displayHitProducts(Long optionSetId) {
 		List<Category> findCategory = categoryDao.findByOptionSetId(optionSetId);
 		String orderType = OptionSetQueryData.BY_VIEW_COUNT;
-		List<OptionSet> searchResult = optionSetDao.findByFilter(QueryStringDataDto.builder()
-				.orderType(Optional.of(orderType))
-				.category(Optional.of(findCategory.get(findCategory.size()-1).getName()))
-				.brand(Optional.empty())
-				.nameKeyword(Optional.empty())
-				.optionset(Optional.empty())
-				.build());
-		return ResponseDto.<OptionSet>builder().data(searchResult).build();
+		List<ProductDto> searchResult = optionSetDao.findByFilter(QueryStringDataDto.builder()
+				.orderType(orderType)
+				.category(findCategory.get(findCategory.size()-1).getName())
+				.build()).stream().map(t -> new ProductDto(t)).collect(Collectors.toList());;
+		return ResponseDto.<ProductDto>builder().data(searchResult).build();
 	}
 
 	// 카테고리에 해당하는 리스트 전체 조회
 	// 조건에 해당하는 리스트 전체 조회
 	@Override
-	public ResponseDto<OptionSet> searchProducts(QueryStringDataDto dto) {
-		List<OptionSet> data = optionSetDao.findByFilter(dto);
-		return ResponseDto.<OptionSet>builder().data(data).build();
+	public ResponseDto<ProductDto> searchProducts(QueryStringDataDto dto) {
+		List<ProductDto> data = optionSetDao.findByFilter(dto).stream().map(t -> new ProductDto(t)).collect(Collectors.toList());;
+		return ResponseDto.<ProductDto>builder().data(data).build();
 	}
 
 	// 장바구니에서 옵션 변경하려면
@@ -134,12 +132,12 @@ public class OptionSetServiceImpl implements OptionSetService {
 	@Transactional
 	public ResponseDto<?> showOtherOptionSets(Long optionSetId) {
 		Product product = productDao.findByOptionSetId(optionSetId);
-		List<OptionSet> findOptionSets = optionSetDao.findAllByProductId(product.getId());
-		for (OptionSet optionSet : findOptionSets) {
+		List<ProductDto> findOptionSets = optionSetDao.findAllByProductId(product.getId()).stream().map(t -> new ProductDto(t)).collect(Collectors.toList());;
+		for (ProductDto optionSet : findOptionSets) {
 			if (optionSet.getStock() == 1)
 				findOptionSets.remove(optionSet);
 		}
-		return ResponseDto.<OptionSet>builder().data(findOptionSets).build();
+		return ResponseDto.<ProductDto>builder().data(findOptionSets).build();
 	}
 
 	// 최하위 카테고리 선택하고 나면 어떤 옵션 필터들 있는지 옵션 명과 옵션값 나열
@@ -190,18 +188,18 @@ public class OptionSetServiceImpl implements OptionSetService {
 				createdOption.setOptionSet(createdOptionSet);
 			}
 			createdOptionSet.setTotalPrice(productPrice);
-			List<OptionSet> data = new ArrayList<>();
-			data.add(createdOptionSet);
-			return ResponseDto.<OptionSet>builder().data(data).build();
+			List<ProductDto> data = new ArrayList<>();
+			data.add(new ProductDto(createdOptionSet));
+			return ResponseDto.<ProductDto>builder().data(data).build();
 		}
 		
 		//옵션셋 아이디로 옵션셋 찾기 디테일 들어갈때사용
 		@Override
 		public ResponseDto<?> findById(Long optionSetId) {
 			OptionSet optionSet=optionSetDao.findById(optionSetId);
-			List<OptionSet> data = new ArrayList<>();
-			data.add(optionSet);
-			return ResponseDto.<OptionSet>builder().data(data).build();
+			List<ProductDto> data = new ArrayList<>();
+			data.add(new ProductDto(optionSet));
+			return ResponseDto.<ProductDto>builder().data(data).build();
 		}
 	/////////////////////////////////////////////////////////
 		//카테고리도 바꿀수 있게 

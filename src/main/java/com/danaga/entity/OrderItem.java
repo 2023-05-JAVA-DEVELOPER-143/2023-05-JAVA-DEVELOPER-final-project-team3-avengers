@@ -28,7 +28,7 @@ public class OrderItem {
 	private Integer qty;
 
 @ToString.Exclude	
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne
 	@JoinColumn(name = "orderId")
 	private Orders orders;
 	

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- Body-->
+<!-- Header -->
+<div th:insert="include_common :: header"></div>
+
+<body>
+	<!-- Off-Canvas Wrapper-->
+	<div class="offcanvas-wrapper">
+		<!-- Page Content-->
+
+
+
+
+		여기를 채워주시면 됩니다
+
+		<!-- Page Title-->
+		<div class="page-title">
+			<div class="container">
+				<div class="column">
+					<h1>Recent View</h1>
+				</div>
+				<div class="column">
+					<ul class="breadcrumbs">
+						<li><a href="index.html">Home</a></li>
+						<li class="separator">&nbsp;</li>
+						<li><a href="account-orders.html">Account</a></li>
+						<li class="separator">&nbsp;</li>
+						<li>Recent View</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!-- Page Content-->
+		<div class="container padding-bottom-3x mb-2">
+			<div class="row">
+				<!--profile component-->
+				<div th:insert="mypage_component :: profile-component"></div>
+				<!--profile component 끝-->
+				<!-- recentView Table-->
+				<div class="col-lg-8">
+					<div class="padding-top-2x mt-2 hidden-lg-up"></div>
+					<div class="table-responsive wishlist-table margin-bottom-none">
+
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Product Name</th>
+									<!--제목-->
+									<th class="text-center"><a class="btn btn-sm btn-outline-danger" href="#">Clear
+											Wishlist</a></th>
+									<!--전체삭제버튼-->
+								</tr>
+							</thead>
+							<!--상품 반복-->
+
+							<!-- 하위 태그들은 size==1이면 빈상자 이미지로 대체-->
+							<tbody class="product-card-component"
+								th:include="myProduct-component :: myProduct-product-card"></tbody>
+
+							<!--상품반복 끝-->
+						</table>
+
+					</div>
+				</div>
+				<hr class="mb-4">
+				<div class="custom-control custom-checkbox">
+					<input class="custom-control-input" type="checkbox" id="inform_me" checked> <label
+						class="custom-control-label" for="inform_me">Inform me when item from my wishlist is
+						available</label>
+
+				</div>
+			</div>
+		</div>
+
+
+
+
+
+		<!--컨텐츠 끝-->
+
+
+
+
+
+
+
+		<div th:insert="include_common :: footer"></div>
+	</div>
+
+
+	<!-- Back To Top Button-->
+	<a class="scroll-to-top-btn" href="#"><i class="icon-arrow-up"></i></a>
+	<!-- Backdrop-->
+	<div class="site-backdrop"></div>
+	<!-- JavaScript (jQuery) libraries, plugins and custom scripts-->
+	<script src="/bootstrap/js/vendor.min.js"></script>
+	<script src="/bootstrap/js/scripts.min.js"></script>
+</body>
+
+</html>

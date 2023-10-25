@@ -68,16 +68,15 @@ public class Member {
 
 	public static Member toResponseEntity(MemberResponseDto memberResponseDto) {
 		return Member.builder().id(memberResponseDto.getId()).userName(memberResponseDto.getUserName())
-				.password(memberResponseDto.getPassword()).email(memberResponseDto.getEmail()).name(memberResponseDto.getName()).nickname(memberResponseDto.getNickname())
-				.address(memberResponseDto.getAddress()).phoneNo(memberResponseDto.getPhoneNo()).joinDate(memberResponseDto.getJoinDate())
-				.role(memberResponseDto.getRole()).grade(memberResponseDto.getGrade()).gradePoint(memberResponseDto.getGradePoint())
-				.build();
+				.password(memberResponseDto.getPassword()).email(memberResponseDto.getEmail()).name(memberResponseDto.getName())
+				.nickname(memberResponseDto.getNickname()).address(memberResponseDto.getAddress()).phoneNo(memberResponseDto.getPhoneNo())
+				.joinDate(memberResponseDto.getJoinDate()).role(memberResponseDto.getRole()).grade(memberResponseDto.getGrade())
+				.gradePoint(memberResponseDto.getGradePoint()).build();
 	}
 
 	public static Member toUpdateEntity(MemberUpdateDto memberUpdateDto) {
-		return Member.builder().id(memberUpdateDto.getId()).userName(memberUpdateDto.getUserName()).password(memberUpdateDto.getPassword())
-				.email(memberUpdateDto.getEmail()).nickname(memberUpdateDto.getNickname()).address(memberUpdateDto.getAddress())
-				.phoneNo(memberUpdateDto.getPhoneNo()).build();
+		return Member.builder().id(memberUpdateDto.getId()).password(memberUpdateDto.getPassword())
+				.nickname(memberUpdateDto.getNickname()).address(memberUpdateDto.getAddress()).build();
 	}
 
 	public static Member toGuestEntity(MemberInsertGuestDto memberInsertGuestDto) {

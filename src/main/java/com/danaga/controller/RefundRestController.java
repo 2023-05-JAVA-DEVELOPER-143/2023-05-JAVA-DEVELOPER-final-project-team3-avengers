@@ -31,7 +31,7 @@ public class RefundRestController {
 	
 	//환불insert
 	@PostMapping("/insert/{orderId}")
-	public ResponseEntity<?> insertRefund(HttpSession session,
+	public ResponseEntity<?> insertRefund(
 											@PathVariable(value = "orderId") Long orderId,
 											@RequestBody RefundDto refundDto) {
 		try {
@@ -46,6 +46,18 @@ public class RefundRestController {
 		}catch(Exception e) {
 			e.printStackTrace();
 			System.out.println("#######################");
+			 return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
+	
+	//환불 select
+	@GetMapping("/select/{orderId}")
+	public ResponseEntity<?> findRefundByOrderId(@PathVariable(value = "orderId") Long orderId) {
+		try {
+			RefundResponseDto refundResponseDto = refundService.findRefundByOrdersId(orderId);
+			return ResponseEntity.status(HttpStatus.CREATED).body(refundResponseDto);		
+			} catch(Exception e) {
+			e.printStackTrace();
 			 return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}

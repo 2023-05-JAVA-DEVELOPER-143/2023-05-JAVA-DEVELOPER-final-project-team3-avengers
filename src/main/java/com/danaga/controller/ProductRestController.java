@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +30,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/productx")
+@RequestMapping("/product")
 @RequiredArgsConstructor
 public class ProductRestController {
 
@@ -40,13 +41,14 @@ public class ProductRestController {
 	
 	//제품디테일에서 하트 누르면 관심제품 추가
 	@PostMapping("/heart/{optionSetId}")
+//	@LoginCheck
 	public ResponseEntity<?> tapHeartInDetail(HttpSession session,@PathVariable Long optionSetId){
 		try {
 			//만약 로그인유저가 아니라면 그냥 아무것도 안하고 리턴하는 처리 추가 필요
-			String username=(String)session.getAttribute("sUserId");
-			Long memberId = memberService.findIdByUsername(username);
+//			String username=(String)session.getAttribute("sUserId");
+//			Long memberId = memberService.findIdByUsername(username);
 			ResponseDto<?> response =interestService.clickHeart(InterestDto.builder()
-					.memberId(memberId)
+					.memberId(1L)//임시//원래는 memberId
 					.optionSetId(optionSetId)
 					.build());
 			return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -57,12 +59,13 @@ public class ProductRestController {
 
 	//제품디테일에서 하트 누르면 관심제품 삭제
 	@DeleteMapping("/heart/{optionSetId}")
+//	@LoginCheck
 	public ResponseEntity<?> untapHeartInDetail(HttpSession session,@PathVariable Long optionSetId){
 		try {
-			String username=(String)session.getAttribute("sUserId");
-			Long memberId = memberService.findIdByUsername(username);
-			ResponseDto<?> response =interestService.clickHeart(InterestDto.builder()
-					.memberId(memberId)
+//			String username=(String)session.getAttribute("sUserId");
+//			Long memberId = memberService.findIdByUsername(username);
+			ResponseDto<?> response =interestService.deleteHeart(InterestDto.builder()
+					.memberId(1L)//임시//원래는 memberId
 					.optionSetId(optionSetId)
 					.build());
 			return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -83,7 +86,7 @@ public class ProductRestController {
 	}
 	
 	//최하위 선택시 선택가능한 옵션명, 옵션값 반환
-	@GetMapping("/category/{categoryId}/options")
+	@GetMapping("/category/options/{categoryId}")
 	public ResponseEntity<?> showOptionFilter(@PathVariable Long categoryId){
 		try {
 			ResponseDto<?> response =service.showOptionNameValues(categoryId);
@@ -94,7 +97,7 @@ public class ProductRestController {
 	}
 	
 	//조건에 해당하는 리스트 전체 조회 
-	@PostMapping()
+	@PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> searchResult(@RequestBody QueryStringDataDto filterDto){
 		try {
 			ResponseDto<?> response =service.searchProducts(filterDto);

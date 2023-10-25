@@ -1,0 +1,25 @@
+    <div class="container" style="display: flex;" th:fragment="filter" th:remove="tag">
+        <div class="category-section" style="flex: 1; margin: 10px; padding: 10px;">
+            <h3>분류</h3>
+            <ul id="category-list" th:each="category : ${categoryList}" style="list-style-type: none; padding: 0;">
+                <li class="category-item" data-category-id="1" th:text="${category}" 
+                style=" margin-bottom: 5px; cursor: pointer;">Category 1</li>
+            </ul>
+        </div>
+        <div class="subcategory-section" style="flex: 1; margin: 10px; padding: 10px;">
+            <h3>카테고리</h3>
+            <ul id="subcategory-list" style="list-style-type: none; padding: 0;">
+                <li class="category-item" data-category-id="2" style="margin-bottom: 5px; cursor: pointer;">subCategory</li> 
+            </ul>
+        </div>
+        <div class="option-content-section" style="flex: 1; margin: 10px; padding: 10px;">
+            <h3>옵션</h3>
+            <table id="option-table" style=" width: 100%; border-collapse: collapse;">
+                <tbody id="option-list">
+                 	<tr>
+                    	<td style=" border: 1px solid black; padding: 5px;"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
