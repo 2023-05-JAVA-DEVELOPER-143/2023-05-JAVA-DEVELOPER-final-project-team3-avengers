@@ -33,11 +33,13 @@
 		<!-- Page Content-->
 		<div class="container padding-bottom-3x mb-2">
 			<div class="row">
+
 				<!--profile component-->
 				<div th:insert="mypage_component :: profile-component"></div>
 				<!--profile component 끝-->
 
 				<!-- Wishlist Table-->
+
 				<div class="col-lg-8">
 					<div class="padding-top-2x mt-2 hidden-lg-up"></div>
 					<div class="table-responsive wishlist-table margin-bottom-none">
@@ -58,9 +60,11 @@
 									<td>
 										<div class="product-card-component" th:include="product_component :: product-card-component"></div>
 									</td>
-									<td class="text-center"><a class="remove-from-cart"
-										href="#" data-toggle="tooltip" title="Remove item"><i
-											class="icon-heart"></i></a></td>
+									<td class="text-center">
+                    <a class="remove-from-cart"	href="#" data-toggle="tooltip" title="Remove item">
+                      <i class="icon-heart"></i>
+                    </a>
+                  </td>
 								</tr>
 								<!--상품반복 끝-->
 							</tbody>
@@ -68,10 +72,8 @@
 					</div>
 					<hr class="mb-4">
 					<div class="custom-control custom-checkbox">
-						<input class="custom-control-input" type="checkbox" id="inform_me"
-							checked> <label class="custom-control-label"
-							for="inform_me">Inform me when item from my wishlist is
-							available</label>
+						<input class="custom-control-input" type="checkbox" id="inform_me" checked> 
+            <label class="custom-control-label" for="inform_me">Inform me when item from my wishlist is available</label>
 					</div>
 				</div>
 			</div>
