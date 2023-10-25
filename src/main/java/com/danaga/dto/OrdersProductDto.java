@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.springframework.data.domain.jaxb.SpringDataJaxb.OrderDto;
 
+import com.danaga.entity.Delivery;
 import com.danaga.entity.Orders;
 
 import jakarta.persistence.criteria.Order;
@@ -19,26 +20,21 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 
-public class OrdersResponseDto {
-	private String userName;
+public class OrdersProductDto {
 	private Long optionSetId;
 	private Integer orderItem_qty;
 	private String delivaryName;
 	private String delivaryPhoneNumber;
 	private String delivaryAddress;
+
 	
-	public static OrdersResponseDto OrdersResponseDto(Orders entity) {
+	public static OrdersProductDto OrdersResponseDto(Orders entity) {
 		
-		return OrdersResponseDto.builder()
-						.userName(entity.getMember().getUserName())
+		return OrdersProductDto.builder()
 						.optionSetId(entity.getOrderItems().get(0).getOptionSet().getId())
 						.orderItem_qty(entity.getOrderItems().get(0).getQty())
-						.delivaryName(entity.getDelivery().getName())
-						.delivaryPhoneNumber(entity.getDelivery().getPhoneNumber())
-						.delivaryAddress(entity.getDelivery().getAddress())
 						.build();
 	}
-	
 	
 	
 }
