@@ -56,6 +56,8 @@ public class Board extends BaseEntity {
     @ColumnDefault(value = "0")
     @Column(name = "read_count",nullable = false)
     private Integer readCount;
+    @ColumnDefault(value = "1")
+    @Column(name = "is_admin",nullable = false)
     private Integer isAdmin;
 
     @ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.LAZY)
@@ -70,7 +72,7 @@ public class Board extends BaseEntity {
     @Builder.Default
     private BoardGroup boardGroup = new BoardGroup();
 
-    @OneToMany(mappedBy = "board" ,fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "board" ,fetch = FetchType.LAZY,cascade = CascadeType.PERSIST,orphanRemoval = true)
     @Builder.Default
     @ToString.Exclude
     private List<Comments> comments = new ArrayList<>();
@@ -99,24 +101,7 @@ public class Board extends BaseEntity {
 		
 	 */
 
-    public static Board createBoard(BoardDto dto,Member member, BoardGroup boardGroup,List<LikeConfig> configs) {
-    	if(boardGroup.getId()==null) {
-    		System.out.println("게시판을 선택해주세요");
-    	}
-    	if(member.getId()==null) {
-    		System.out.println("사용자가 없습니다");
-    	}
-    	if(member.getRole().equals("ADMIN")) {
-    		dto.setIsAdmin(2);
-    	}
-    	return Board.builder()
-    			.id(dto.getId()).title(dto.getTitle())
-    			.content(dto.getContent()).img1(dto.getImg1()).img2(dto.getImg2())
-    			.img3(dto.getImg3()).img4(dto.getImg4()).img5(dto.getImg5())
-    			.isLike(dto.getIsLike()).disLike(dto.getDisLike())
-    			.readCount(dto.getReadCount()).member(member).boardGroup(boardGroup).lConfigs(configs)
-    			.build();
-    }
+   
   
     public void patch(BoardDto dto) {
     	if(this.id!=dto.getId()) {

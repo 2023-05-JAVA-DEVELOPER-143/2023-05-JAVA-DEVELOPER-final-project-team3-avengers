@@ -9,9 +9,45 @@
       <!-- Page Content-->
       <!-- Main Slider-->
       <section class="hero-slider" style="background-image: url(img/hero-slider/main-bg.jpg);">
-        
-        
-        여기를 채워주시면 됩니다
+
+        <!-- Page Content-->
+	      <div class="container padding-bottom-3x mb-2">
+	        <div class="row">
+	          <div class="col-lg-12">
+	            <div class="padding-top-2x mt-2 hidden-lg-up"></div>
+	            <div class="table-responsive">
+	              <table class="table table-hover margin-bottom-none">
+	                <thead>
+	                  <tr>
+	                    <th>게시물 번호</th>
+	                    <th>글 제목</th>
+	                    <th>내용</th>
+	                    <th>작성자</th>
+	                    <th>조회수</th>
+	                    <th>좋아요</th>
+	                    <th>작성일</th>
+	                  </tr>
+	                </thead>
+	                <tbody>
+	                  <tr th:each="list : ${boardList}">
+						
+	                    <td th:text="${list.id}"><a class="text-medium navi-link" th:href="@{/board/${id}/show(id=${list.id})}">78A643CD409</a></td>
+	                    <td th:text="${list.title}"><a class="text-medium navi-link" th:href="@{/board/${id}/show(id=${list.id})}">st 08, 2017</a></td>
+	                    <td th:text="${list.content}"><a class="text-medium navi-link" th:href="@{/board/${id}/show(id=${list.id})}">August 08, 2017</a></td>
+	                    <td th:text="${list.nickname}">August 08, 2017</td>
+	                    <td><span class="text-danger" th:text="${list.readCount}">Canceled</span></td>
+	                    <td><span class="text-medium" th:text="${list.isLike}">$760.50</span></td>
+	                    <td><span th:text="${#dates.format(list.createTime, 'yyyy-MM-dd HH:mm')}"></span>August 08, 2017</td>
+	                 
+	                  </tr>
+	                </tbody>
+	              </table>
+	            </div>
+	            <hr>
+	            <div class="text-right"><a class="btn btn-link-primary margin-bottom-none" href="#"><i class="icon-download"></i>&nbsp;Order Details</a></div>
+	          </div>
+	        </div>
+	      </div>
         
         
       </section>

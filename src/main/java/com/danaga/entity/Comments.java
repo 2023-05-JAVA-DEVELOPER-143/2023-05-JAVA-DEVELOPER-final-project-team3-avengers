@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.danaga.dto.CommentDto;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -21,49 +22,46 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-@Data
 @Builder
+@Data
+@EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor
-@Entity
 @AllArgsConstructor
+@Entity
 @Table(name = "comments")
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
 public class Comments extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_id")
-    private Long id;
-    @Column(nullable = false)
-    private String writer;
-    @Column(nullable = false, length = 1000)
-    private String content;
-    private String pw;
-   
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
-    private Comments parent;
+  @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE)
+  private Long id;
 
-    @OneToMany(mappedBy = "parent", orphanRemoval = true)
-    @Builder.Default
-    private List<Comments> children = new ArrayList<>();
+  private String writer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id")
-    private Board board;
+  private String pw;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "board_id", nullable = false)
+  private Board board;
 
-    public void updateParent(Comments comment) {
-        this.parent = comment;
-    }
-    public void patch(CommentDto dto) {
-    	//예외처리
-    	if(this.id!=dto.getId()) {
-    		throw new IllegalArgumentException("댓글 수정 실패!! 잘못된 id가 입력되었습니다.");
-    	}
-    	//객체 갱신
-    	if(dto.getContent()!=null) {
-    		this.content=dto.getContent();
-    	}
-    }
+  @Column(nullable = false)
+  private String content;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "parent_id")
+  private Comments parent;
+
+  @Builder.Default
+  @OneToMany(mappedBy = "parent", orphanRemoval = true,cascade = CascadeType.PERSIST,fetch = FetchType.LAZY)
+  private List<Comments> children = new ArrayList<>();
+
+  public void update(CommentDto commentRequestDto) {
+    this.content = commentRequestDto.getContent();
+  }
+
+  // 부모 댓글 수정
+  public void updateParent(Comments parent){
+    this.parent = parent;
+  }
+
+
+ 
 }
