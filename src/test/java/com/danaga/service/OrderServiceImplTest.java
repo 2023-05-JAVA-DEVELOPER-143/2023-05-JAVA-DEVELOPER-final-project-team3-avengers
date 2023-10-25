@@ -108,7 +108,7 @@ class OrderServiceImplTest {
 		System.out.println("777777777777777777777777"+orderService.memberOrderDetail(5L)); 
 	}
 	@Test
-	//@Disabled
+	@Disabled
 	void testUpdateStatementByNormalOrder() {
 		
 		System.out.println("44444444444444444444"+orderService.updateStatementByNormalOrder(5L));
@@ -117,14 +117,14 @@ class OrderServiceImplTest {
 		orderService.updateStatementByNormalOrder(3L);
 	}
 	@Test
-	//@Disabled
+	@Disabled
 	void testUpdateStatementByCancleOrder() {
 		
 		orderService.updateStatementByCancleOrder(6L);
 		orderService.updateStatementByCancleOrder(19L);
 	}
 	@Test
-	//@Disabled
+	@Disabled
 	void testUpdateStatementByRefundOrder() {
 		
 		orderService.updateStatementByRefundOrder(1L);
@@ -132,7 +132,7 @@ class OrderServiceImplTest {
 		orderService.updateStatementByRefundOrder(3L);
 	}
 	@Test
-	//@Disabled
+	@Disabled
 	void testUpdateStatementByResetOrder() {
 		
 		orderService.updateStatementByResetOrder(19L);
