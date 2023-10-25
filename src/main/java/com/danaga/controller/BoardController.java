@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.danaga.dto.BoardDto;
+import com.danaga.dto.LikeConfigDto;
 import com.danaga.entity.Board;
 import com.danaga.entity.LikeConfig;
 import com.danaga.service.BoardService;
@@ -33,9 +34,15 @@ public class BoardController {
 	@GetMapping("/list/{boardGroupId}")
 	public String list(@PathVariable Long boardGroupId,Model model) {
 		List<BoardDto>boardList=bService.boards(boardGroupId);
+		for (BoardDto boardDto : boardList) {
+			if(boardDto.getContent().length()>15) {
+				String contentTemp=boardDto.getContent().substring(15)+"...";
+				boardDto.setContent(contentTemp);
+			}
+		}
 		log.info("boardList : {} "+boardList.toString());
 		model.addAttribute("boardList",boardList);
-		return "board/list";
+		return "board/board";
 	}
 	@GetMapping("/create/{boardGroupId}")
 	public String createForm(@PathVariable Long boardGroupId ,Model model) {
@@ -47,8 +54,8 @@ public class BoardController {
 	@PostMapping("/create")
 	public String createBoard(@PathVariable BoardDto dto,Model model) {
 		log.info("dto : {} ",dto);
-		List<LikeConfig> configs = lcService.create(dto);
-		BoardDto saved = bService.createBoard(dto,configs);
+		List<LikeConfigDto> configs = lcService.create(dto.getId(),dto.getMemberId());
+		BoardDto saved = bService.createBoard(dto);
 		log.info("saved: {}",saved);
 		model.addAttribute("saved",saved);
 		return "redirect:/board/show"+saved.getId();
