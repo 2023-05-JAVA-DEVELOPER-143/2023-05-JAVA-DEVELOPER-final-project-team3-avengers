@@ -86,94 +86,25 @@ public class OrderServiceImpl implements OrderService {
 	    delivery.setOrders(orders);
 	    orderItem.setOrders(orders); //transactional
 
-//	    MemberResponseDto memberResponseDto =memberService.getMemberBy(sUserId);
-//	      
-//	      memberResponseDto.setGradePoint((int)((orders.getPrice())*0.1));
-//	      memberService.updateGrade(Member.builder()
-//	                           .id(memberResponseDto.getId())
-//	                           .userName(memberResponseDto.getUserName())
-//	                           .password(memberResponseDto.getPassword())
-//	                           .email(memberResponseDto.getEmail())
-//	                           .nickname(memberResponseDto.getNickname())
-//	                           .address(memberResponseDto.getAddress())
-//	                           .phoneNo(memberResponseDto.getPhoneNo())
-//	                           .joinDate(memberResponseDto.getJoinDate())
-//	                           .birthday(memberResponseDto.getBirthday())
-//	                           .role(memberResponseDto.getRole())
-//	                           .grade(memberResponseDto.getGrade())
-//	                           .build(),memberResponseDto.getGradePoint());
+	    MemberResponseDto memberResponseDto =memberService.getMemberBy(sUserId);
 	      
+	      memberResponseDto.setGradePoint((int)((orders.getPrice())*0.1));
+	      memberService.updateGrade(Member.builder()
+	                           .id(memberResponseDto.getId())
+	                           .userName(memberResponseDto.getUserName())
+	                           .password(memberResponseDto.getPassword())
+	                           .email(memberResponseDto.getEmail())
+	                           .nickname(memberResponseDto.getNickname())
+	                           .address(memberResponseDto.getAddress())
+	                           .phoneNo(memberResponseDto.getPhoneNo())
+	                           .joinDate(memberResponseDto.getJoinDate())
+	                           .birthday(memberResponseDto.getBirthday())
+	                           .role(memberResponseDto.getRole())
+	                           .grade(memberResponseDto.getGrade())
+	                           .gradePoint(memberResponseDto.getGradePoint())
+	                           .build(),memberResponseDto.getGradePoint());
 	      
 	    return OrdersDto.orderDto(orders);
-	    
-	    
-	    
-//	    Member member =memberDao.findMember(sUserId);
-//	    
-//	    OrdersDto ordersInsertDto= OrdersDto.builder()
-//	             .userName(member.getUserName())
-//	             .build();
-//		
-//	    Orders orders= orderDao.save(Orders.toResponseEntity(ordersInsertDto));
-//	    
-//		OptionSet optionSet = optionSetDao.findById(ordersProductDto.getOptionSetId());// 상품 찾고
-//		System.out.println("@@@@@@@@@@@@@@@optionSet = "+optionSet);
-//		List<OrderItemDto> orderItemList = new ArrayList<>();
-//		
-//		OrderItemDto orderItemDto = OrderItemDto.builder()
-//										.qty(ordersProductDto.getOrderItem_qty())
-//										.optionSetId(optionSet.getId())
-//										.orderId(orders.getId())
-//										.build();//orderItem찾음
-//		
-//		orderItemList.add(orderItemDto);//상품에서 직접 주문하는거니까 orderItem하나만 들어간다
-//		
-//		OrderItem orderItemEntity = OrderItem.builder()
-//												.qty(ordersProductDto.getOrderItem_qty())
-//												.optionSet(optionSet)
-//												.orders(orders)
-//												.build();//orderItem찾음
-//		
-//		orderItemRepository.save(orderItemEntity);
-//		
-//		
-//		DeliveryDto delivery = DeliveryDto.builder()
-//				.name(ordersProductDto.getDelivaryName())
-//				.phoneNumber(ordersProductDto.getDelivaryPhoneNumber())
-//				.address(ordersProductDto.getDelivaryAddress())
-//				.build();
-//		
-//		System.out.println("@@@@@@@@@@@@@@@delivery= "+delivery);
-//	      
-//	    orderDao.save(Orders.builder()
-//	    		 				.id(orders.getId())
-//	                            .description(optionSet.getProduct().getName())
-//	                            .price(optionSet.getProduct().getPrice()*ordersProductDto.getOrderItem_qty())
-//	                            .statement(OrderStateMsg.입금대기중)
-//	                            .member(Member.toResponseEntity(memberService.getMemberBy(sUserId)))
-//	                            .build());
-//		
-//		deliveryService.saveDeliveryByOrdersId(delivery, orders.getId());
-//		
-//		MemberResponseDto memberResponseDto =memberService.getMemberBy(sUserId);
-//	      
-//	      memberResponseDto.setGradePoint((int)((orders.getPrice())*0.1));
-//	      memberService.updateGrade(Member.builder()
-//	                           .id(memberResponseDto.getId())
-//	                           .userName(memberResponseDto.getUserName())
-//	                           .password(memberResponseDto.getPassword())
-//	                           .email(memberResponseDto.getEmail())
-//	                           .nickname(memberResponseDto.getNickname())
-//	                           .address(memberResponseDto.getAddress())
-//	                           .phoneNo(memberResponseDto.getPhoneNo())
-//	                           .joinDate(memberResponseDto.getJoinDate())
-//	                           .birthday(memberResponseDto.getBirthday())
-//	                           .role(memberResponseDto.getRole())
-//	                           .grade(memberResponseDto.getGrade())
-//	                           .build(),memberResponseDto.getGradePoint());
-//		
-//		
-//		return OrdersDto.orderDto(orders);
 
 	}
 
