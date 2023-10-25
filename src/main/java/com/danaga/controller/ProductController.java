@@ -54,6 +54,15 @@ public class ProductController {
 	// 상품 클릭해서 디테일 들어갈때 조회수 업뎃
 	// product detail 조회시 recentView 추가
 
+	//메인페이지에서 카테고리별 인기상품
+	//최신상품 뽑는 거 
+	
+	//옵션명,값 뽑는거 다시  옵션:list<값> 으로 나오게 
+
+	//필터 쿼리 짜기....
+	//th:link들 하고 핸들바{}하고 
+	//상단바의 검색 으로 키워드 검색 하는거 만들기
+	
 	//전체상품 
 	@GetMapping
 	public String searchProduct(Model model) {
@@ -80,7 +89,7 @@ public class ProductController {
 	//대분류 카테고리를 선택하고 검색메인화면으로 들어간 경우
 	
 
-	//제품디테일 
+	//제품디테일 ++++++관련상품 20개 뽑기 옆으로 스크롤해서+++++같은 프로덕트의 다른 옵션들 뽑기
 	@GetMapping("/{optionSetId}")
 	public String productDetail(HttpSession session, @PathVariable Long optionSetId, Model model) {
 		try {
