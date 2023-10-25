@@ -24,7 +24,7 @@ public interface OrderService {
 	/*
 	 * cart에서 선택주문
 	 */
-	OrdersDto memberCartSelectOrderSave(String sUserId,DeliveryDto deliveryDto,List<Long> cartItemNoArray)throws Exception;
+	OrdersDto memberCartSelectOrderSave(String sUserId,DeliveryDto deliveryDto,List<Long> optionSetIdArray)throws Exception;
 	/*
 	 * 주문+주문아이템 목록
 	 */

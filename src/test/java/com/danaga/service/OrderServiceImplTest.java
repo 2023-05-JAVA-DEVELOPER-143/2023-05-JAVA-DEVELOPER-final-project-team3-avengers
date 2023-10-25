@@ -2,6 +2,9 @@ package com.danaga.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +58,7 @@ class OrderServiceImplTest {
 	@Transactional
 	@Rollback(false)
 	@Test
-	//@Disabled
+	@Disabled
 	void testMemberCartOrderSave()throws Exception {
 
 		
@@ -78,22 +81,27 @@ class OrderServiceImplTest {
 		
 	}
 
-//	@Transactional
-//	@Rollback(false)
-//	@Test
-//	@Disabled
-//	void testMemberCartSelectOrderSave()throws Exception {
-//		String[] cart_item_noStr_array = {"102"};
-//		OrdersDto ordersDto = OrdersDto.builder()
-//				   .delivaryAddress("ff")
-//				   .delivaryName("ff")
-//				   .delivaryPhoneNumber("22")
-//				   .optionSetId(20L)
-//				   .orderItem_qty(3)
-//				   .userName("User2")
-//				   .build();
-//	 System.out.println("********************************"+orderService.memberCartSelectOrderSave(ordersDto, cart_item_noStr_array));	
-//	}
+	@Transactional
+	@Rollback(false)
+	@Test
+	//@Disabled
+	void testMemberCartSelectOrderSave()throws Exception {
+		DeliveryDto deliveryDto = DeliveryDto.builder()
+				.address("ff")
+				.name("ff")
+				.phoneNumber("010-3023-323232")
+				.build();
+		
+		
+		List<Long> optionSetIdArray = new ArrayList<>();
+		optionSetIdArray.add(1L);
+		optionSetIdArray.add(2L);
+		optionSetIdArray.add(3L);
+		optionSetIdArray.add(4L);
+		optionSetIdArray.add(5L);
+		
+	 System.out.println("********************************"+orderService.memberCartSelectOrderSave("User1",deliveryDto,optionSetIdArray));	
+	}
 	@Test
 	@Disabled
 	void testmemberOrderDetail()throws Exception {

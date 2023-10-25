@@ -40,14 +40,13 @@ import lombok.RequiredArgsConstructor;
 
 public class OrderServiceImpl implements OrderService {
 
+	private final CartRepository cartRepository;
 	private final OrderItemRepository orderItemRepository;
 	private final MemberService memberService;
-	private final MemberDao memberDao;
 	private final OptionSetDao optionSetDao;
-	private final DeliveryService deliveryService;
 	private final OrderDao orderDao;
 	private final CartService cartService;
-
+	private final MemberDao memberDao;
 
 
 	/*
@@ -184,6 +183,7 @@ public class OrderServiceImpl implements OrderService {
 	   @Transactional
 	   public OrdersDto memberCartOrderSave(String sUserId,DeliveryDto deliveryDto) throws Exception {
 	      
+	      
 	      List<Cart> cartList= cartService.findCartList(sUserId);
 	      
 	      int o_tot_price = 0;
@@ -200,8 +200,7 @@ public class OrderServiceImpl implements OrderService {
 		               .optionSet(cart.getOptionSet())
 		               .build();
 	         
-	         orderItemRepository.save(inputOIEntity);
-	         
+	         orderItemList.add(inputOIEntity);
 	      }
 	      
 	       OptionSet optionSet= optionSetDao.findById(orderItemList.get(0).getOptionSet().getId());
@@ -210,11 +209,11 @@ public class OrderServiceImpl implements OrderService {
 	       if (oi_tot_count == 1) {
 	    	   o_desc = optionSet.getProduct().getName();
 	       }
-	   	Delivery delivery = Delivery.builder()
-									.name(deliveryDto.getName())
-									.phoneNumber(deliveryDto.getPhoneNumber())
-									.address(deliveryDto.getAddress())
-									.build();
+		   	Delivery delivery = Delivery.builder()
+										.name(deliveryDto.getName())
+										.phoneNumber(deliveryDto.getPhoneNumber())
+										.address(deliveryDto.getAddress())
+										.build();
 						      
 	       
 	      Orders orders = orderDao.save(Orders.builder()
@@ -256,76 +255,57 @@ public class OrderServiceImpl implements OrderService {
 	 * cart에서 선택주문(회원)
 	 */
 
-	public OrdersDto memberCartSelectOrderSave(String sUserId,DeliveryDto deliveryDto,List<Long> cartItemNoArray) {
+	public OrdersDto memberCartSelectOrderSave(String sUserId,DeliveryDto deliveryDto,List<Long> optionSetIdArray)throws Exception {
 
-//
-//		Member member =memberDao.findMember(sUserId);
-//	    OrdersDto ordersInsertDto= OrdersDto.builder()
-//	             .userName(member.getUserName())
-//	             .build();
-//	    Orders orders= orderDao.save(Orders.toResponseEntity(ordersInsertDto)); 
-//	    
-//		ArrayList<OrderItemDto> orderItemList = new ArrayList<>();
-//		
-//		int o_tot_price = 0;
-//		int oi_tot_count = 0;
-//		
-//		for (int i = 0; i < cartItemNoArray.size(); i++) {
-//			Cart cart = cartRepository.findById(cartItemNoArray.get(i)).get();
-//			
-//		    o_tot_price+=(cart.getOptionSet().getTotalPrice())*(cart.getQty());
-//		    oi_tot_count+=cart.getQty();
-//			
-//		    OrderItemDto inputOIDto = OrderItemDto.builder()
-//								                  .qty(cart.getQty())
-//								                  .orderId(orders.getId())
-//								                  .optionSetId(cart.getOptionSet().getId())
-//								                  .build();
-//		    orderItemList.add(inputOIDto);
-//            OrderItem inputOIEntity = OrderItem.builder()
-//							                   .qty(cart.getQty())
-//							                   .orders(orders)
-//							                   .optionSet(cart.getOptionSet())
-//							                   .build();
-//	        orderItemRepository.save(inputOIEntity);
-//
-//		}
-//		 
-//	       OptionSet optionSet= optionSetDao.findById(orderItemList.get(0).getOptionSetId());
-//	      
-//	       String o_desc = optionSet.getProduct().getName() + "외" + (oi_tot_count - 1) + "개";
-//	       if (oi_tot_count == 1) {
-//	    	   o_desc = optionSet.getProduct().getName();
-//	       }
-//	       orders = orderDao.save(Orders.builder()
-//                   .id(orders.getId())
-//                   .description(o_desc)
-//                   .price(o_tot_price)
-//                   .statement(OrderStateMsg.입금대기중)
-//                   .member(Member.toResponseEntity(memberService.getMemberBy(sUserId)))
-//                   .build());
-//
-//		
-//		
-//		
-//		String o_desc = orderItemList.get(0).getOptionSet().getProduct().getName() + "외" + (oi_tot_count - 1) + "개";
-//		if (oi_tot_count == 1) {
-//			o_desc = orderItemList.get(0).getOptionSet().getProduct().getName();
-//		}
-//		Orders orders = Orders.builder().statement(OrderStateMsg.입금대기중).orderItems(orderItemList).price(o_tot_price)
-//				.description(o_desc).member(member).build();
-//		Delivery delivery = Delivery.builder().name(ordersDto.getDelivaryName())
-//				.phoneNumber(ordersDto.getDelivaryPhoneNumber()).address(ordersDto.getDelivaryAddress()).orders(orders)
-//				.build();
-//		Delivery saveDelivery = deliveryDao.insertDelivery(delivery);
-//		orders.setDelivery(saveDelivery);
-//		for (OrderItem orderItem : orderItemList) {
-//			orderItem.setOrders(orders);
-//			orderItemRepository.save(orderItem);
-//		}
-//		Orders saveOrder = orderDao.save(orders);
+		ArrayList<OrderItem> orderItemList = new ArrayList<>();
+		
+		int o_tot_price = 0;
+		int oi_tot_count = 0;
+		
+		MemberResponseDto memberResponseDto = memberService.getMemberBy(sUserId);
+		
+		for (int i = 0; i < optionSetIdArray.size(); i++) {
+			Cart cart = cartRepository.findByOptionSetIdAndMemberId(optionSetIdArray.get(i),memberResponseDto.getId());
+			
+		    o_tot_price+=(cart.getOptionSet().getTotalPrice())*(cart.getQty());
+		    oi_tot_count+=cart.getQty();
+		
+            OrderItem inputOIEntity = OrderItem.builder()
+							                   .qty(cart.getQty())
+							                   .optionSet(cart.getOptionSet())
+							                   .build();
 
-		return null;
+            orderItemList.add(inputOIEntity);
+		}
+		 
+	       OptionSet optionSet= optionSetDao.findById(orderItemList.get(0).getOptionSet().getId());
+	      
+	       String o_desc = optionSet.getProduct().getName() + "외" + (oi_tot_count - 1) + "개";
+	       if (oi_tot_count == 1) {
+	    	   o_desc = optionSet.getProduct().getName();
+	       }
+	     	Delivery delivery = Delivery.builder()
+					.name(deliveryDto.getName())
+					.phoneNumber(deliveryDto.getPhoneNumber())
+					.address(deliveryDto.getAddress())
+					.build();
+	       
+	       Orders orders = orderDao.save(Orders.builder()
+                   .description(o_desc)
+                   .price(o_tot_price)
+                   .statement(OrderStateMsg.입금대기중)
+                   .member(Member.toResponseEntity(memberService.getMemberBy(sUserId)))
+                   .delivery(delivery)
+                   .orderItems(orderItemList)
+                   .build());
+
+		      for (OrderItem orderItem : orderItemList) {
+				orderItem.setOrders(orders);
+			}
+		      delivery.setOrders(orders);
+		
+
+		return OrdersDto.orderDto(orders);
 	}
 
 	/*
@@ -333,8 +313,6 @@ public class OrderServiceImpl implements OrderService {
 	 */
 
 	@Transactional
-
-
 	public List<Orders> memberOrderList(String userName)throws Exception {
 		
 		if(userName==null) {
