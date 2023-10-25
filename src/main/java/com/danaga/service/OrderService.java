@@ -28,22 +28,22 @@ public interface OrderService {
 	/*
 	 * 주문+주문아이템 목록
 	 */
-	List<Orders> memberOrderList(String userName)throws Exception;
+	List<OrdersDto> memberOrderList(String userName)throws Exception;
 
 	/*
 	 * 주문상세보기
 	 */
-	Orders memberOrderDetail(Long orderNo) throws Exception;
+	OrdersDto memberOrderDetail(Long orderNo) throws Exception;
 
 	// 주문상태업데이트(특정주문)
 	// 1.정상주문
-	Orders updateStatementByNormalOrder(Long orderNo);
+	OrdersDto updateStatementByNormalOrder(Long orderNo);
 
 	// 2.취소주문
-	Orders updateStatementByCancleOrder(Long orderNo);
+	OrdersDto updateStatementByCancleOrder(Long orderNo);
 
 	// 3.환불주문
-	Orders updateStatementByRefundOrder(Long orderNo);
+	OrdersDto updateStatementByRefundOrder(Long orderNo);
 
-	Orders updateStatementByResetOrder(Long orderNo);
+	OrdersDto updateStatementByResetOrder(Long orderNo);
 }

@@ -1,37 +1,21 @@
 package com.danaga.service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.jaxb.SpringDataJaxb.OrderDto;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.danaga.config.OrderStateMsg;
-import com.danaga.dao.CartDao;
-import com.danaga.dao.DeliveryDao;
 import com.danaga.dao.MemberDao;
 import com.danaga.dao.OrderDao;
 
-import com.danaga.dto.CartCreateDto;
-import com.danaga.dto.MemberInsertGuestDto;
 import com.danaga.dto.MemberResponseDto;
-import com.danaga.dto.OrderItemDto;
 
 import com.danaga.dao.product.OptionSetDao;
 import com.danaga.dto.*;
 import com.danaga.entity.*;
 import com.danaga.repository.CartRepository;
-import com.danaga.repository.MemberRepository;
 import com.danaga.repository.OrderItemRepository;
-import com.danaga.repository.OrderRepository;
-import com.danaga.service.product.OptionSetService;
-
-import io.swagger.v3.oas.annotations.servers.Server;
-import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -88,21 +72,23 @@ public class OrderServiceImpl implements OrderService {
 
 	    MemberResponseDto memberResponseDto =memberService.getMemberBy(sUserId);
 	      
-	      memberResponseDto.setGradePoint((int)((orders.getPrice())*0.1));
-	      memberService.updateGrade(Member.builder()
-	                           .id(memberResponseDto.getId())
-	                           .userName(memberResponseDto.getUserName())
-	                           .password(memberResponseDto.getPassword())
-	                           .email(memberResponseDto.getEmail())
-	                           .nickname(memberResponseDto.getNickname())
-	                           .address(memberResponseDto.getAddress())
-	                           .phoneNo(memberResponseDto.getPhoneNo())
-	                           .joinDate(memberResponseDto.getJoinDate())
-	                           .birthday(memberResponseDto.getBirthday())
-	                           .role(memberResponseDto.getRole())
-	                           .grade(memberResponseDto.getGrade())
-	                           .gradePoint(memberResponseDto.getGradePoint())
-	                           .build(),memberResponseDto.getGradePoint());
+//	      memberResponseDto.setGradePoint((int)((orders.getPrice())*0.1));
+//	      memberService.updateGrade(Member.builder()
+//	                           .id(memberResponseDto.getId())
+//	                           .userName(memberResponseDto.getUserName())
+//	                           .password(memberResponseDto.getPassword())
+//	                           .email(memberResponseDto.getEmail())
+//	                           .nickname(memberResponseDto.getNickname())
+//	                           .address(memberResponseDto.getAddress())
+//	                           .phoneNo(memberResponseDto.getPhoneNo())
+//	                           .joinDate(memberResponseDto.getJoinDate())
+//	                           .birthday(memberResponseDto.getBirthday())
+//	                           .role(memberResponseDto.getRole())
+//	                           .grade(memberResponseDto.getGrade())
+//	                           .gradePoint(memberResponseDto.getGradePoint())
+//	                           .build(),memberResponseDto.getGradePoint());
+//	     
+//	     orders.setMember(Member.toResponseEntity(memberResponseDto));
 	      
 	    return OrdersDto.orderDto(orders);
 
@@ -244,58 +230,72 @@ public class OrderServiceImpl implements OrderService {
 	 */
 
 	@Transactional
-	public List<Orders> memberOrderList(String userName)throws Exception {
+	public List<OrdersDto> memberOrderList(String userName)throws Exception {
 		
 		if(userName==null) {
 			throw new Exception("일치하는 사용자가없습니다.");
 		}
-		
-		return orderDao.findOrdersByMember_UserName(userName);
+		 List<Orders> orderList= orderDao.findOrdersByMember_UserName(userName);
+		 List<OrdersDto> ordersDtoList = new ArrayList<>();
+		 for (Orders orders : orderList) {
+			OrdersDto ordersDto= OrdersDto.orderDto(orders);
+			ordersDtoList.add(ordersDto);
+		}
+		 
+		return ordersDtoList;
 	}
 
 	/*
 	 * 주문상세보기(회원)
 	 */
-	public Orders memberOrderDetail(Long orderNo)throws Exception {
-		return orderDao.findById(orderNo);
+	@Transactional
+	public OrdersDto memberOrderDetail(Long orderNo)throws Exception {
+		
+		Orders orders=  orderDao.findById(orderNo);
+		
+		return OrdersDto.orderDto(orders);
 	}
 	
 
 	/*
 	 * 1.정상주문
 	 */
+	@Transactional
 	@Override
-	public Orders updateStatementByNormalOrder(Long orderNo) {
+	public OrdersDto updateStatementByNormalOrder(Long orderNo) {
 		Orders updateOrder= orderDao.updateStatementByNormalOrder(orderNo);
 		orderDao.save(updateOrder);
-		return updateOrder;
+		return OrdersDto.orderDto(updateOrder);
 	}
 	/*
 	 * 2.취소주문
 	 */
+	@Transactional
 	@Override
-	public Orders updateStatementByCancleOrder(Long orderNo) {
+	public OrdersDto updateStatementByCancleOrder(Long orderNo) {
 		Orders updateOrder= orderDao.updateStatementByCancleOrder(orderNo);
 		orderDao.save(updateOrder);
-		return updateOrder;
+		return OrdersDto.orderDto(updateOrder);
 	}
 	/*
 	 * 3.환불주문
 	 */
+	@Transactional
 	@Override
-	public Orders updateStatementByRefundOrder(Long orderNo) {
+	public OrdersDto updateStatementByRefundOrder(Long orderNo) {
 		Orders updateOrder= orderDao.updateStatementByRefundOrder(orderNo);
 		orderDao.save(updateOrder);
-		return updateOrder;
+		return OrdersDto.orderDto(updateOrder);
 	}
 	/*
 	 * 4.상태리셋
 	 */
+	@Transactional
 	@Override
-	public Orders updateStatementByResetOrder(Long orderNo) {
+	public OrdersDto updateStatementByResetOrder(Long orderNo) {
 		Orders updateOrder= orderDao.updateStatementByResetOrder(orderNo);
 		orderDao.save(updateOrder);
-		return updateOrder;
+		return OrdersDto.orderDto(updateOrder);
 	}
 	
 	
