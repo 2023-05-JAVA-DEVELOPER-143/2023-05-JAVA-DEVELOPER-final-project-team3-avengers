@@ -25,6 +25,11 @@
 		<link id="mainStyles" rel="stylesheet" media="screen" href="/bootstrap/css/styles.min.css">
 		<!-- Modernizr-->
 		<script src="/bootstrap/js/modernizr.min.js"></script>
+		<!--handlebars-->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js" integrity="sha512-E1dSFxg+wsfJ4HKjutk/WaCzK7S2wv1POn1RRPGh8ZK+ag9l244Vqxji3r6wgz9YBf6+vhQEYJZpSjqWFPg9gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<link id="mainStyles" rel="stylesheet" media="screen" href="gptcss.css">
+
+		
 	</head>
 	<header class="navbar navbar-sticky navbar-dark bg-dark">
 		<!-- Search-->
@@ -44,24 +49,9 @@
 			<ul>
 				<li class="has-megamenu active"><a href="index.html"><span>Home</span></a>
 				</li>
-				<li><a href="shop-grid-ls.html"><span>Shop</span></a>
+				<li><a href="http://localhost/product"><span>Shop</span></a>
 					<ul class="sub-menu">
-						<li><a href="shop-categories.html">Shop Categories</a></li>
-						<li class="has-children"><a href="shop-grid-ls.html"><span>Shop Grid</span></a>
-							<ul class="sub-menu">
-								<li><a href="shop-grid-ls.html">Grid Left Sidebar</a></li>
-								<li><a href="shop-grid-rs.html">Grid Right Sidebar</a></li>
-								<li><a href="shop-grid-ns.html">Grid No Sidebar</a></li>
-							</ul>
-						</li>
-						<li class="has-children"><a href="shop-list-ls.html"><span>Shop List</span></a>
-							<ul class="sub-menu">
-								<li><a href="shop-list-ls.html">List Left Sidebar</a></li>
-								<li><a href="shop-list-rs.html">List Right Sidebar</a></li>
-								<li><a href="shop-list-ns.html">List No Sidebar</a></li>
-							</ul>
-						</li>
-						<li><a href="shop-single.html">Single Product</a></li>
+						<li><a href="http://localhost/product">Product</a></li>
 						<li><a href="cart.html">Cart</a></li>
 						<li class="has-children"><a href="checkout-address.html"><span>Checkout</span></a>
 							<ul class="sub-menu">
@@ -71,51 +61,6 @@
 								<li><a href="checkout-review.html">Review</a></li>
 								<li><a href="checkout-complete.html">Complete</a></li>
 							</ul>
-						</li>
-					</ul>
-				</li>
-				<li class="has-megamenu"><a href="#"><span>Mega Menu</span></a>
-					<ul class="mega-menu">
-						<li><span class="mega-menu-title">Top Categories</span>
-							<ul class="sub-menu">
-								<li><a href="#">Men's Shoes</a></li>
-								<li><a href="#">Women's Shoes</a></li>
-								<li><a href="#">Shirts and Tops</a></li>
-								<li><a href="#">Swimwear</a></li>
-								<li><a href="#">Shorts and Pants</a></li>
-								<li><a href="#">Accessories</a></li>
-							</ul>
-						</li>
-						<li><span class="mega-menu-title">Specialty Shops</span>
-							<ul class="sub-menu">
-								<li><a href="#">Junior's Shop</a></li>
-								<li><a href="#">Swim Shop</a></li>
-								<li><a href="#">Athletic Shop</a></li>
-								<li><a href="#">Outdoor Shop</a></li>
-								<li><a href="#">Luxury Shop</a></li>
-								<li><a href="#">Accessories Shop</a></li>
-							</ul>
-						</li>
-						<li>
-							<section class="promo-box" style="background-image: url(img/banners/02.jpg);"><span
-									class="overlay-dark" style="opacity: .4;"></span>
-								<div class="promo-box-content text-center padding-top-2x padding-bottom-2x">
-									<h4 class="text-light text-thin text-shadow">New Collection of</h4>
-									<h3 class="text-bold text-light text-shadow">Sunglasses</h3><a
-										class="btn btn-sm btn-primary" href="#">Shop Now</a>
-								</div>
-							</section>
-						</li>
-						<li>
-							<section class="promo-box" style="background-image: url(img/banners/03.jpg);">
-								<!-- Choose between .overlay-dark (#000) or .overlay-light (#fff) with default opacity of 50%. You can overrride default color and opacity values via 'style' attribute.--><span
-									class="overlay-dark" style="opacity: .45;"></span>
-								<div class="promo-box-content text-center padding-top-2x padding-bottom-2x">
-									<h3 class="text-bold text-light text-shadow">Limited Offer</h3>
-									<h4 class="text-light text-thin text-shadow">save up to 50%!</h4><a
-										class="btn btn-sm btn-primary" href="#">Learn More</a>
-								</div>
-							</section>
 						</li>
 					</ul>
 				</li>
@@ -208,11 +153,12 @@
 										points</span>
 								</div>
 							</li>
-							<li><a href="account-profile.html">My Profile</a></li>
-							<li><a href="account-orders.html">Orders List</a></li>
-							<li><a href="account-wishlist.html">Wishlist</a></li>
+							<li><a href="account-profile.html">내 정보</a></li>
+							<li><a href="account-orders.html">주문 내역</a></li>
+							<li><a href="account-wishlist.html">관심 상품</a></li>
+							<li><a href="product/recent_view.html">최근 본 상품</a></li>
 							<li class="sub-menu-separator"></li>
-							<li><a href="#"> <i class="icon-unlock"></i>Logout</a></li>
+							<li><a href="#"> <i class="icon-unlock"></i>로그아웃</a></li>
 						</ul>
 					</div>
 					<div class="cart"><a href="cart.html"></a><i class="icon-bag"></i><span class="count">3</span><span
