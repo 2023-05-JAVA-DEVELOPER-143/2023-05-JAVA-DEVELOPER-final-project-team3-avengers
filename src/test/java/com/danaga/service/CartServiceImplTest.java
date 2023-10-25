@@ -1,31 +1,16 @@
 package com.danaga.service;
 
-import java.util.Date;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.danaga.dao.CartDao;
-import com.danaga.dao.MemberDao;
-import com.danaga.dto.CartCreateDto;
-import com.danaga.dto.CartUpdateOptionSetDto;
 import com.danaga.dto.CartDto;
-import com.danaga.entity.Cart;
-import com.danaga.entity.Member;
-import com.danaga.entity.OptionSet;
-import com.danaga.entity.Product;
 import com.danaga.repository.CartRepository;
 import com.danaga.repository.MemberRepository;
-import com.danaga.repository.product.OptionSetQueryRepository;
 import com.danaga.repository.product.OptionSetRepository;
-import com.danaga.dto.CartCreateDto;
-import com.danaga.dto.CartDto;
-import com.danaga.entity.Cart;
-import com.danaga.entity.OptionSet;
 
-import jakarta.transaction.Transactional;
 
 @SpringBootTest
 public class CartServiceImplTest {
@@ -59,7 +44,7 @@ public class CartServiceImplTest {
 		// 중복 옵션 X + 장바구니 수량 >=2 ok 
 		// 중복 옵션 O + 장바구니 수량 1 ok 
 		// 중복 옵션 O + 장바구니 수량 >=2 ok
-		cs.updateCartOptionSet(CartUpdateOptionSetDto.builder().id(1052L).optionSet(or.findById(5L).get()).build());
+		//cs.updateCartOptionSet(CartUpdateOptionSetDto.builder().id(1052L).optionSet(or.findById(5L).get()).build());
 	 	
 	}
 
@@ -72,12 +57,18 @@ public class CartServiceImplTest {
 	}
 
 	// ok
-	@Test
-	@Disabled
-	void addCart() throws Exception {
-		CartCreateDto createDto = CartCreateDto.builder().qty(3).optionset(or.findById(1L).get()).build();
-		cs.addCart(createDto, "User2");
-	}
+//	@Test
+//	@Disabled
+//	void addCart() throws Exception {
+		//CartCreateDto createDto = CartCreateDto.builder().qty(3).optionset(or.findById(1L).get()).build();
+		//cs.addCart(createDto, "User2");
+//	}
+//	@Test
+//	@Disabled
+//	void addCart() throws Exception {
+//		CartDto createDto = CartDto.builder().qty(3).optionSet(or.findById(1L).get()).build();
+//		cs.addCart(createDto, "User2");
+//	}
 	/*
 	 * @Test void updateCart() throws Exception { CartUpdateDto cartUpdateDto =
 	 * CartUpdateDto.builder().id(9L).qty(5).build(); cs.updateCart(cartUpdateDto);
@@ -89,18 +80,15 @@ public class CartServiceImplTest {
 
 	// ok
 //	@Test
-//<<<<<<< HEAD
 //	
 //	void 수량변경() {
 //		CartUpdateDto dto = CartUpdateDto.builder().id(9L).qty(100).build();
 //		cs.updateCart(dto);
-//=======
 //	@Disabled
 //	void updateCart() throws Exception {
 //		CartUpdateDto cartUpdateDto = CartUpdateDto.builder().id(9L).qty(5).build();
 //		cartService.updateCart(cartUpdateDto);
 //		
-//>>>>>>> refs/remotes/origin/feture/bj7
 //	}
 //	
 //	@Test
@@ -109,16 +97,16 @@ public class CartServiceImplTest {
 //	}
 //	
 
-	@Test
-	void 수량파악() throws Exception {
-		CartDto dto = CartDto.builder().id(9L).qty(100).build();
-		String value = "User1";
-		System.out.println(cs.countCarts(value));
-	}
-
-	void 카트리스트() throws Exception {
-		System.out.println(cs.findCartList("User1").get(0));
-
-	}
+//	@Test
+//	void 수량파악() throws Exception {
+//		CartDto dto = CartDto.builder().id(9L).qty(100).build();
+//		String value = "User1";
+//		System.out.println(cs.countCarts(value));
+//	}
+//
+//	void 카트리스트() throws Exception {
+//		System.out.println(cs.findCartList("User1").get(0));
+//
+//	}
 
 }

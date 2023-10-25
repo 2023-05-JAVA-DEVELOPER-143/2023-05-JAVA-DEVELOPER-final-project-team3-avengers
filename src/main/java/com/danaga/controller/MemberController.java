@@ -4,11 +4,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.danaga.dto.MemberResponseDto;
+import com.danaga.dto.MemberUpdateDto;
+import com.danaga.exception.ExistedMemberException;
+import com.danaga.exception.MemberNotFoundException;
+import com.danaga.exception.PasswordMismatchException;
 import com.danaga.service.MemberService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/member")
@@ -17,22 +25,99 @@ public class MemberController {
 	@Autowired
 	private MemberService memberService;
 	
-	@GetMapping("/login_form")
+	@GetMapping("/member_login_form")
 	public String member_login_form() {
 		return "member/member_login_form";
 	}
-	
-	@GetMapping("/join_form")
+	@PostMapping("member_login_action")
+	public String user_login_action(@ModelAttribute("fuser") MemberResponseDto member,Model model,HttpSession session) throws Exception {
+		String forwardPath = "";
+		try {
+			memberService.login(member.getUserName(), member.getPassword());
+			session.setAttribute("sUserId", member.getUserName());
+			forwardPath="redirect:user_main";
+		}catch (MemberNotFoundException e) {
+			e.printStackTrace();
+			model.addAttribute("msg1",e.getMessage());
+			forwardPath="user_login_form";
+		}catch (PasswordMismatchException e) {
+			e.printStackTrace();
+			model.addAttribute("msg2",e.getMessage());
+			forwardPath="user_login_form";
+		}
+		return forwardPath;
+	}
+	@GetMapping("/member_join_form")
 	public String member_join_form() {
 		return "member/member_join_form";
 	}
-	@GetMapping("/find_password_form")
+	@PostMapping("member_join_action")
+	public String user_write_action(@ModelAttribute("fuser") MemberResponseDto member,Model model) throws Exception {
+		String forward_path = "";
+		try {
+			memberService.joinMember(member);
+			forward_path="redirect:member_login_form";
+		}catch (ExistedMemberException e) {
+			model.addAttribute("msg", e.getMessage());
+			model.addAttribute("fuser", member);
+			forward_path="user_write_form";
+		}
+		return forward_path;
+	}
+	@GetMapping("/member_find_password_form")
 	public String member_findpassword_form() {
 		return "member/member_find_password_form";
 	}
-	@GetMapping("/info_form")
+	@GetMapping("/member_info_form")
 	public String member_info_form(HttpServletRequest request,Model model) throws Exception {
+		/************** login check **************/
+		/****************************************/
+		
 		return "member/member_info_form";
+	}
+	
+	@LoginCheck
+    @PostMapping("member_modify_action")
+    public String user_modify_action(@ModelAttribute MemberUpdateDto member,HttpServletRequest request) throws Exception {
+       /************** login check **************/
+       /****************************************/
+       
+       
+       memberService.updateMember(member);
+       return "redirect:user_view";
+    }
+	
+	@LoginCheck
+	@GetMapping("member_logout_action")
+	public String user_logout_action(HttpServletRequest request) {
+		
+		/************** login check **************/
+		/****************************************/
+		request.getSession(false).invalidate();
+		
+		return "redirect:user_main";
+	}
+	
+	@LoginCheck
+	@PostMapping("member_remove_action")
+	public String member_remove_action(HttpServletRequest request) throws Exception {
+		/************** login check **************/
+		/****************************************/
+		String sUserId=(String)request.getSession().getAttribute("sUserId");
+		memberService.deleteMember(sUserId);
+		request.getSession().invalidate();
+		return "redirect:user_main";
+	}
+	
+	@GetMapping({
+		"member_join_action",
+		"member_login_action",
+		"member_modify_action",
+		"member_remove_action"
+		})
+	public String user_get() {
+	String forwardPath = "redirect:user_main";
+	return forwardPath;
 	}
 	
 }

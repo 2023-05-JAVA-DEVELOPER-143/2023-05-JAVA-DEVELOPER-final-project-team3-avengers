@@ -9,6 +9,7 @@ import com.danaga.config.OrderStateMsg;
 import com.danaga.dao.MemberDao;
 import com.danaga.dao.OrderDao;
 
+import com.danaga.dto.MemberInsertGuestDto;
 import com.danaga.dto.MemberResponseDto;
 
 import com.danaga.dao.product.OptionSetDao;

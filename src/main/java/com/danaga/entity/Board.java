@@ -4,12 +4,15 @@ package com.danaga.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.builder.ToStringExclude;
 import org.hibernate.annotations.ColumnDefault;
 
 import com.danaga.dto.BoardDto;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -45,15 +48,20 @@ public class Board extends BaseEntity {
     private String img4;
     private String img5;
     @ColumnDefault(value = "0")
+    @Column(name = "is_like",nullable = false)
     private Integer isLike;
     @ColumnDefault(value = "0")
+    @Column(name = "dis_like",nullable = false)
     private Integer disLike;
     @ColumnDefault(value = "0")
+    @Column(name = "read_count",nullable = false)
     private Integer readCount;
+    @ColumnDefault(value = "1")
+    @Column(name = "is_admin",nullable = false)
     private Integer isAdmin;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "member_id") 
+    @ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id",nullable = false) 
     @ToString.Exclude
     @Builder.Default
     private Member member = new Member();
@@ -64,6 +72,11 @@ public class Board extends BaseEntity {
     @Builder.Default
     private BoardGroup boardGroup = new BoardGroup();
 
+    @OneToMany(mappedBy = "board" ,fetch = FetchType.LAZY,cascade = CascadeType.PERSIST,orphanRemoval = true)
+    @Builder.Default
+    @ToString.Exclude
+    private List<Comments> comments = new ArrayList<>();
+    
     @OneToMany(mappedBy = "board")
     @Builder.Default
     @ToString.Exclude
@@ -88,24 +101,7 @@ public class Board extends BaseEntity {
 		
 	 */
 
-    public static Board createBoard(BoardDto dto,Member member, BoardGroup boardGroup,List<LikeConfig> configs) {
-    	if(boardGroup.getId()==null) {
-    		System.out.println("게시판을 선택해주세요");
-    	}
-    	if(member.getId()==null) {
-    		System.out.println("사용자가 없습니다");
-    	}
-    	if(member.getRole().equals("ADMIN")) {
-    		dto.setIsAdmin(2);
-    	}
-    	return Board.builder()
-    			.id(dto.getId()).title(dto.getTitle())
-    			.content(dto.getContent()).img1(dto.getImg1()).img2(dto.getImg2())
-    			.img3(dto.getImg3()).img4(dto.getImg4()).img5(dto.getImg5())
-    			.isLike(dto.getIsLike()).disLike(dto.getDisLike())
-    			.readCount(dto.getReadCount()).member(member).boardGroup(boardGroup).lConfigs(configs)
-    			.build();
-    }
+   
   
     public void patch(BoardDto dto) {
     	if(this.id!=dto.getId()) {
@@ -143,7 +139,9 @@ public class Board extends BaseEntity {
     	}
     }
 
+    
     public void readCountUp(Board board) {
     	board.readCount++;
     }
+   
 }

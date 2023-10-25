@@ -64,10 +64,10 @@ public class MemberServiceImpl implements MemberService {
 
 	@Transactional
 	public MemberResponseDto joinGuest(MemberInsertGuestDto memberInsertGuestDto) throws Exception {
-		if (!memberDao.existedMemberBy(memberInsertGuestDto.getPhoneNo())) {
-			return MemberResponseDto.toDto(memberDao.insert(Member.toGuestEntity(memberInsertGuestDto)));
+		if (memberDao.existedMemberBy(memberInsertGuestDto.getPhoneNo())) {
+			return MemberResponseDto.toDto(memberDao.findMember((memberInsertGuestDto).getPhoneNo()));
 		} else {
-			return MemberResponseDto.toDto(memberDao.findMember(Member.toGuestEntity(memberInsertGuestDto).getPhoneNo()));
+			return MemberResponseDto.toDto(memberDao.insert(Member.toGuestEntity(memberInsertGuestDto)));
 		}
 	}
 	@Transactional
