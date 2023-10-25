@@ -112,6 +112,10 @@ public class CartRestController {
 		return null;
 	}
 
+	
+
+	
+	
 	// 회원, 비회원 테스트 성공
 	@Operation(summary = "카트 수량 변경")
 	@PutMapping("/qty")
@@ -126,7 +130,7 @@ public class CartRestController {
 		for (int i = 0; i < fUserCarts.size(); i++) {
 			// 비회원일 경우 카트리스트를 돌리면서 dto의 optionsetId 와 동일한 옵션셋 아이디 체크
 			if (dto.getId() == fUserCarts.get(i).getId()) {
-				// 동일한 세션카트의 옵션셋 꺼내서 수량변경 후 세션에 다시 저장
+				// 동일한 세션카트의 옵션셋 꺼내서 수량변경  후 세션에 다시 저장
 				fUserCarts.get(i).setQty(dto.getQty());
 				fUserCarts.add(fUserCarts.get(i));
 				session.setAttribute("fUserCarts", fUserCarts);
@@ -171,7 +175,6 @@ public class CartRestController {
 	@GetMapping
 	public ResponseEntity<Long> findCarts(HttpSession session, Model model) throws Exception {
 		sUserId = (String) session.getAttribute("sUserId");
-		sUserId = "User1";
 		// 회원일시 session에 담긴 sUserId로 멤버카트 불러오기
 		if (sUserId != null) {
 			List<Cart> carts = cartService.findCartList(sUserId);
@@ -188,6 +191,7 @@ public class CartRestController {
 	}
 	
 		// 장바구니에 몇개 담겼는지 숫자 체크 
+	
 	void countCarts(HttpSession session) throws Exception {
 		sUserId = (String) session.getAttribute("sUserId");
 		if (sUserId != null) {
