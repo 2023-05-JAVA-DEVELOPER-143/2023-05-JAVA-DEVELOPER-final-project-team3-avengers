@@ -72,12 +72,12 @@ public class CartServiceImplTest {
 	}
 
 	// ok
-	@Test
-	@Disabled
-	void addCart() throws Exception {
-		CartCreateDto createDto = CartCreateDto.builder().qty(3).optionset(or.findById(1L).get()).build();
-		cs.addCart(createDto, "User2");
-	}
+//	@Test
+//	@Disabled
+//	void addCart() throws Exception {
+//		CartDto createDto = CartDto.builder().qty(3).optionSet(or.findById(1L).get()).build();
+//		cs.addCart(createDto, "User2");
+//	}
 	/*
 	 * @Test void updateCart() throws Exception { CartUpdateDto cartUpdateDto =
 	 * CartUpdateDto.builder().id(9L).qty(5).build(); cs.updateCart(cartUpdateDto);
@@ -89,7 +89,6 @@ public class CartServiceImplTest {
 
 	// ok
 //	@Test
-//<<<<<<< HEAD
 //	
 //	void 수량변경() {
 //		CartUpdateDto dto = CartUpdateDto.builder().id(9L).qty(100).build();
@@ -100,7 +99,6 @@ public class CartServiceImplTest {
 //		CartUpdateDto cartUpdateDto = CartUpdateDto.builder().id(9L).qty(5).build();
 //		cartService.updateCart(cartUpdateDto);
 //		
-//>>>>>>> refs/remotes/origin/feture/bj7
 //	}
 //	
 //	@Test

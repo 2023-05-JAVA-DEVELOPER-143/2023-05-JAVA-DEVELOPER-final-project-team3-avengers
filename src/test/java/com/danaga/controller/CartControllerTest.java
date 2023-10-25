@@ -38,10 +38,10 @@ public class CartControllerTest {
 	void 세션담기() {
 
 		List<CartCreateDto> fUserCarts = new ArrayList<>();
-		CartCreateDto a = CartCreateDto.builder().optionset(os.findById(12L)).qty(3).build();
-		CartCreateDto b = CartCreateDto.builder().optionset(os.findById(12L)).qty(5).build();
-		CartCreateDto c = CartCreateDto.builder().optionset(os.findById(12L)).qty(1).build();
-		CartCreateDto d = CartCreateDto.builder().optionset(os.findById(12L)).qty(7).build();
+		CartCreateDto a = CartCreateDto.builder().optionSet(os.findById(12L)).qty(3).build();
+		CartCreateDto b = CartCreateDto.builder().optionSet(os.findById(12L)).qty(5).build();
+		CartCreateDto c = CartCreateDto.builder().optionSet(os.findById(12L)).qty(1).build();
+		CartCreateDto d = CartCreateDto.builder().optionSet(os.findById(12L)).qty(7).build();
 		fUserCarts.add(a);
 		fUserCarts.add(b);
 		fUserCarts.add(c);
@@ -54,7 +54,7 @@ public class CartControllerTest {
 	void 카트추가(MockHttpSession session) throws Exception {
 		session.setAttribute("sUserId", "User1");
 		os.findById(12L).getClass();
-		CartCreateDto dto = CartCreateDto.builder().qty(4).optionset(os.findById(12L)).build();
+		CartCreateDto dto = CartCreateDto.builder().qty(4).optionSet(os.findById(12L)).build();
 		String jsonString = objectMapper.writeValueAsString(dto);
 		mockMvc.perform(post("/cart").contentType(MediaType.APPLICATION_JSON).param(jsonString))
 				.andExpect(status().isOk());

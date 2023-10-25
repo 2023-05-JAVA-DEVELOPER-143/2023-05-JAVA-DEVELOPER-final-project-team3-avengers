@@ -31,15 +31,15 @@ public class CartController {
 	private final CartService cartService;
 	private final MemberService memberService;
 
-	static List<CartCreateDto> fUserCarts = new ArrayList<>(); // 비회원 장바구니(세션)
+	static List<CartDto> fUserCarts = new ArrayList<>(); // 비회원 장바구니(세션)
 	static String sUserId; // 로그인 유저 아이디
 
 	// 장바구니 담기 컨트롤러...
 	@SuppressWarnings("unchecked")
 	@PostMapping
-	public String addCart(HttpSession session, @RequestBody CartCreateDto dto) throws Exception {
+	public String addCart(HttpSession session, @RequestBody CartDto dto) throws Exception {
 		sUserId = (String) session.getAttribute("sUserId");
-		fUserCarts = (ArrayList<CartCreateDto>) session.getAttribute("fUserCarts");
+		fUserCarts = (ArrayList<CartDto>) session.getAttribute("fUserCarts");
 		// 로그인 유저 + 세션 장바구니 비어있음
 		if (isLogin(sUserId) && fUserCarts.isEmpty()) {
 			cartService.addCart(dto, sUserId);
@@ -97,7 +97,7 @@ public class CartController {
 			//cartService.deleteCart(id);
 			countCarts(session);
 		}
-		fUserCarts = (List<CartCreateDto>) session.getAttribute("fUserCarts");
+		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
 		// 세션에 담긴 장바구니 리스트 돌리면서 옵션셋 아이디와 동일한 것 찾고 remove 후 session에 다시 담기
 		for (int i = 0; i < fUserCarts.size(); i++) {
 			/*
@@ -128,7 +128,7 @@ public class CartController {
 	@PutMapping
 	public void updateCart(HttpSession session, @RequestBody CartDto dto) throws Exception {
 		sUserId = (String) session.getAttribute("sUserId");
-		fUserCarts = (List<CartCreateDto>) session.getAttribute("fUserCarts");
+		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
 		if (isLogin(sUserId)) {
 		}
 	}
@@ -160,7 +160,7 @@ public class CartController {
 		if (isLogin(sUserId)) {
 			session.setAttribute("countCarts", cartService.countCarts(sUserId));
 		} // 비회원 일시 장바구니 리스트의 사이즈
-		fUserCarts = (List<CartCreateDto>) session.getAttribute("fUserCarts");
+		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
 		session.setAttribute("countCarts", fUserCarts.size());
 	};
 

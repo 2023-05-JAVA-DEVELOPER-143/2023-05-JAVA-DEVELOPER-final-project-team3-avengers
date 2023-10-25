@@ -16,7 +16,7 @@ public interface CartService {
 	List<Cart> findCartList(String value) throws Exception;
 
 	// 카트 추가
-	void addCart(CartCreateDto dto, String value) throws Exception;
+	void addCart(CartDto dto, String value) throws Exception;
 
 	// 카트 1개 삭제
 	void deleteCart(Long optionSetId,String value) throws Exception;
