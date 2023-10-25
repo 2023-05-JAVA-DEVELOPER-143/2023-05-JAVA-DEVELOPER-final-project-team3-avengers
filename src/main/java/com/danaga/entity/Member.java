@@ -75,7 +75,7 @@ public class Member {
 	}
 
 	public static Member toUpdateEntity(MemberUpdateDto memberUpdateDto) {
-		return Member.builder().id(memberUpdateDto.getId()).password(memberUpdateDto.getPassword()).userName(memberUpdateDto.getUserName())
+		return Member.builder().id(memberUpdateDto.getId()).password(memberUpdateDto.getPassword())
 				.nickname(memberUpdateDto.getNickname()).address(memberUpdateDto.getAddress()).build();
 	}
 
