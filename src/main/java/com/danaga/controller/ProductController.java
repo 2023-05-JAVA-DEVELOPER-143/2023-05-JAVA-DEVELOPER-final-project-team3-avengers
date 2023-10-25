@@ -50,18 +50,18 @@ public class ProductController {
 	private final CategoryService categoryService;
 	private final RecentViewService recentViewService;
 	private final MemberService memberService;
-	// 상품디테일에서 같은 카테고리 인기상품 노출
-	// 상품 클릭해서 디테일 들어갈때 조회수 업뎃
-	// product detail 조회시 recentView 추가
+	// 상품디테일에서 같은 카테고리 인기상품 노출 ㅇㅇ
+	// 상품 클릭해서 디테일 들어갈때 조회수 업뎃 ㅇㅇ
+	// product detail 조회시 recentView 추가 ㅇㅇ
 
 	//메인페이지에서 카테고리별 인기상품
 	//최신상품 뽑는 거 
 	
-	//옵션명,값 뽑는거 다시  옵션:list<값> 으로 나오게 
+	//옵션명,값 뽑는거 다시  옵션:list<값> 으로 나오게 ㅇㅇ 
 
 	//필터 쿼리 짜기....
 	//th:link들 하고 핸들바{}하고 
-	//상단바의 검색 으로 키워드 검색 하는거 만들기
+	//상단바의 검색 으로 키워드 검색 하는거 만들기 
 	
 	//전체상품 
 	@GetMapping

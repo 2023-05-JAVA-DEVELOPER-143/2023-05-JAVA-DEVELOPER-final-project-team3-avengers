@@ -8,8 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.danaga.dto.product.OptionSaveDto;
 import com.danaga.entity.OptionSet;
 import com.danaga.entity.Options;
-import com.danaga.repository.product.OptionNamesOnly;
-import com.danaga.repository.product.OptionValuesOnly;
+import com.danaga.repository.product.OptionNamesValues;
 import com.danaga.repository.product.OptionsRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -24,14 +23,18 @@ public class OptionsDaoImpl implements OptionsDao{
 //		return options;
 //	}
 
-	@Override
-	public List<OptionNamesOnly> findOptionNamesByCategoryId(Long id) {
-		return optionsRepository.findDistinctNameByOptionSet_Product_CategorySets_Category_Id(id);
-	}
+//	@Override
+//	public List<OptionNamesOnly> findOptionNamesByCategoryId(Long id) {
+//		return optionsRepository.findDistinctNameByOptionSet_Product_CategorySets_Category_Id(id);
+//	}
 
+//	@Override
+//	public List<OptionValuesOnly> findOptionValuesByCategoryId(Long id) {
+//		return optionsRepository.findDistinctValueByOptionSet_Product_CategorySets_Category_Id(id);
+//	}
 	@Override
-	public List<OptionValuesOnly> findOptionValuesByCategoryId(Long id) {
-		return optionsRepository.findDistinctValueByOptionSet_Product_CategorySets_Category_Id(id);
+	public List<OptionNamesValues> findOptionNameValueMapByCategoryId(Long id) {
+		return optionsRepository.findDistinctByOptionSet_Product_CategorySets_Category_Id(id);
 	}
 
 	@Override

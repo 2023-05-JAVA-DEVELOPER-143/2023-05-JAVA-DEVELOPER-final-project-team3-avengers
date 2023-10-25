@@ -5,14 +5,13 @@ import java.util.List;
 import com.danaga.dto.product.OptionSaveDto;
 import com.danaga.entity.OptionSet;
 import com.danaga.entity.Options;
-import com.danaga.repository.product.OptionNamesOnly;
-import com.danaga.repository.product.OptionValuesOnly;
+import com.danaga.repository.product.OptionNamesValues;
 
 public interface OptionsDao {
 	//List<Options> findOptionsByOptionSet(OptionSet optionSet);
 	
-	List<OptionNamesOnly> findOptionNamesByCategoryId(Long id); 
-	List<OptionValuesOnly> findOptionValuesByCategoryId(Long id);
+//	List<OptionNamesOnly> findOptionNamesByCategoryId(Long id); 
+//	List<OptionValuesOnly> findOptionValuesByCategoryId(Long id);
 	
 	Options findById(Long id);
 	
@@ -24,6 +23,7 @@ public interface OptionsDao {
 	
 	void deleteById(Long id);
 	Options update(OptionSaveDto dto);
+	List<OptionNamesValues> findOptionNameValueMapByCategoryId(Long id);
 	
 	
 }
