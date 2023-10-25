@@ -32,8 +32,6 @@ public class MemberController {
 	}
 	@GetMapping("/info_form")
 	public String member_info_form(HttpServletRequest request,Model model) throws Exception {
-		String sUserId=(String)request.getSession().getAttribute("sUserId");
-		model.addAttribute("loginUser", memberService.getMemberBy(sUserId));
 		return "member/member_info_form";
 	}
 	
