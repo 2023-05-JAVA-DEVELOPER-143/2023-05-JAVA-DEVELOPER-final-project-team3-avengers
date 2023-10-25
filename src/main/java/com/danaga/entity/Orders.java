@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -19,6 +18,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.danaga.config.OrderStateMsg;
 import com.danaga.dto.*;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -59,13 +59,13 @@ public class Orders {
 	@CreationTimestamp
 	private LocalDateTime createDate; //주문날짜
 
-	@OneToOne(mappedBy = "orders", cascade = jakarta.persistence.CascadeType.PERSIST)
+	@OneToOne(mappedBy = "orders", cascade = CascadeType.PERSIST)
 	private Delivery delivery; //배송
 	
 	@OneToOne(mappedBy = "orders")
 	private Refund refund; //환불
 	
-	@OneToMany(mappedBy = "orders" ,fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "orders",cascade = CascadeType.PERSIST)
 	@Builder.Default
 	private List<OrderItem> orderItems = new ArrayList<>(); //주문상품목록
 	

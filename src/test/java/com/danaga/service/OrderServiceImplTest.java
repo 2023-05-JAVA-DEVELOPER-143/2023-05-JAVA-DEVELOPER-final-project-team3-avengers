@@ -45,7 +45,7 @@ class OrderServiceImplTest {
 		OrdersProductDto ordersDto = OrdersProductDto.builder()
 									   .delivaryAddress("dd")
 									   .delivaryName("dd")
-									   .delivaryPhoneNumber("11")
+									   .delivaryPhoneNumber("221")
 									   .optionSetId(2L)
 									   .orderItem_qty(3)
 									   .build();

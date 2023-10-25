@@ -2,6 +2,7 @@ package com.danaga.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,13 +43,11 @@ public class OrderServiceImpl implements OrderService {
 	private final OrderItemRepository orderItemRepository;
 	private final MemberService memberService;
 	private final MemberDao memberDao;
-	private final CartRepository cartRepository;
 	private final OptionSetDao optionSetDao;
 	private final DeliveryService deliveryService;
 	private final OrderDao orderDao;
 	private final CartService cartService;
 
-	private final OrderRepository orderRepository;
 
 
 	/*
@@ -58,37 +57,17 @@ public class OrderServiceImpl implements OrderService {
 	public OrdersDto memberProductOrderSave(String sUserId,OrdersProductDto ordersProductDto) throws Exception {
 		
 
-	    Member member =memberDao.findMember(sUserId);
-	    
-	    OrdersDto ordersInsertDto= OrdersDto.builder()
-	             .userName(member.getUserName())
-	             .build();
-		
-	    Orders orders= orderDao.save(Orders.toResponseEntity(ordersInsertDto));
-	    
 		OptionSet optionSet = optionSetDao.findById(ordersProductDto.getOptionSetId());// 상품 찾고
-		System.out.println("@@@@@@@@@@@@@@@optionSet = "+optionSet);
-		List<OrderItemDto> orderItemList = new ArrayList<>();
+		List<OrderItem> orderItemList = new ArrayList<>();
 		
-		OrderItemDto orderItemDto = OrderItemDto.builder()
-										.qty(ordersProductDto.getOrderItem_qty())
-										.optionSetId(optionSet.getId())
-										.orderId(orders.getId())
-										.build();//orderItem찾음
+		OrderItem orderItem = OrderItem.builder()
+				.qty(ordersProductDto.getOrderItem_qty())
+				.optionSet(optionSet)
+				.build();//orderItem찾음
 		
-		orderItemList.add(orderItemDto);//상품에서 직접 주문하는거니까 orderItem하나만 들어간다
-		System.out.println("@@@@@@@@@@@@@@@orderItemList = "+orderItemList);
+		orderItemList.add(orderItem);//상품에서 직접 주문하는거니까 orderItem하나만 들어간다
 		
-		OrderItem orderItemEntity = OrderItem.builder()
-												.qty(ordersProductDto.getOrderItem_qty())
-												.optionSet(optionSet)
-												.orders(orders)
-												.build();//orderItem찾음
-		
-		orderItemRepository.save(orderItemEntity);
-		
-		
-		DeliveryDto delivery = DeliveryDto.builder()
+		Delivery delivery = Delivery.builder()
 				.name(ordersProductDto.getDelivaryName())
 				.phoneNumber(ordersProductDto.getDelivaryPhoneNumber())
 				.address(ordersProductDto.getDelivaryAddress())
@@ -96,35 +75,106 @@ public class OrderServiceImpl implements OrderService {
 		
 		System.out.println("@@@@@@@@@@@@@@@delivery= "+delivery);
 	      
-	    orderDao.save(Orders.builder()
-	    		 				.id(orders.getId())
+	    Orders orders= orderDao.save(Orders.builder()
 	                            .description(optionSet.getProduct().getName())
 	                            .price(optionSet.getProduct().getPrice()*ordersProductDto.getOrderItem_qty())
 	                            .statement(OrderStateMsg.입금대기중)
 	                            .member(Member.toResponseEntity(memberService.getMemberBy(sUserId)))
+	                            .delivery(delivery)
+	                            .orderItems(orderItemList)
 	                            .build());
 		
-		deliveryService.saveDeliveryByOrdersId(delivery, orders.getId());
-		
-		MemberResponseDto memberResponseDto =memberService.getMemberBy(sUserId);
+	    delivery.setOrders(orders);
+	    orderItem.setOrders(orders); //transactional
+
+//	    MemberResponseDto memberResponseDto =memberService.getMemberBy(sUserId);
+//	      
+//	      memberResponseDto.setGradePoint((int)((orders.getPrice())*0.1));
+//	      memberService.updateGrade(Member.builder()
+//	                           .id(memberResponseDto.getId())
+//	                           .userName(memberResponseDto.getUserName())
+//	                           .password(memberResponseDto.getPassword())
+//	                           .email(memberResponseDto.getEmail())
+//	                           .nickname(memberResponseDto.getNickname())
+//	                           .address(memberResponseDto.getAddress())
+//	                           .phoneNo(memberResponseDto.getPhoneNo())
+//	                           .joinDate(memberResponseDto.getJoinDate())
+//	                           .birthday(memberResponseDto.getBirthday())
+//	                           .role(memberResponseDto.getRole())
+//	                           .grade(memberResponseDto.getGrade())
+//	                           .build(),memberResponseDto.getGradePoint());
 	      
-	      memberResponseDto.setGradePoint((int)((orders.getPrice())*0.1));
-	      memberService.updateGrade(Member.builder()
-	                           .id(memberResponseDto.getId())
-	                           .userName(memberResponseDto.getUserName())
-	                           .password(memberResponseDto.getPassword())
-	                           .email(memberResponseDto.getEmail())
-	                           .nickname(memberResponseDto.getNickname())
-	                           .address(memberResponseDto.getAddress())
-	                           .phoneNo(memberResponseDto.getPhoneNo())
-	                           .joinDate(memberResponseDto.getJoinDate())
-	                           .birthday(memberResponseDto.getBirthday())
-	                           .role(memberResponseDto.getRole())
-	                           .grade(memberResponseDto.getGrade())
-	                           .build(),memberResponseDto.getGradePoint());
-		
-		
-		return OrdersDto.orderDto(orders);
+	      
+	    return OrdersDto.orderDto(orders);
+	    
+	    
+	    
+//	    Member member =memberDao.findMember(sUserId);
+//	    
+//	    OrdersDto ordersInsertDto= OrdersDto.builder()
+//	             .userName(member.getUserName())
+//	             .build();
+//		
+//	    Orders orders= orderDao.save(Orders.toResponseEntity(ordersInsertDto));
+//	    
+//		OptionSet optionSet = optionSetDao.findById(ordersProductDto.getOptionSetId());// 상품 찾고
+//		System.out.println("@@@@@@@@@@@@@@@optionSet = "+optionSet);
+//		List<OrderItemDto> orderItemList = new ArrayList<>();
+//		
+//		OrderItemDto orderItemDto = OrderItemDto.builder()
+//										.qty(ordersProductDto.getOrderItem_qty())
+//										.optionSetId(optionSet.getId())
+//										.orderId(orders.getId())
+//										.build();//orderItem찾음
+//		
+//		orderItemList.add(orderItemDto);//상품에서 직접 주문하는거니까 orderItem하나만 들어간다
+//		
+//		OrderItem orderItemEntity = OrderItem.builder()
+//												.qty(ordersProductDto.getOrderItem_qty())
+//												.optionSet(optionSet)
+//												.orders(orders)
+//												.build();//orderItem찾음
+//		
+//		orderItemRepository.save(orderItemEntity);
+//		
+//		
+//		DeliveryDto delivery = DeliveryDto.builder()
+//				.name(ordersProductDto.getDelivaryName())
+//				.phoneNumber(ordersProductDto.getDelivaryPhoneNumber())
+//				.address(ordersProductDto.getDelivaryAddress())
+//				.build();
+//		
+//		System.out.println("@@@@@@@@@@@@@@@delivery= "+delivery);
+//	      
+//	    orderDao.save(Orders.builder()
+//	    		 				.id(orders.getId())
+//	                            .description(optionSet.getProduct().getName())
+//	                            .price(optionSet.getProduct().getPrice()*ordersProductDto.getOrderItem_qty())
+//	                            .statement(OrderStateMsg.입금대기중)
+//	                            .member(Member.toResponseEntity(memberService.getMemberBy(sUserId)))
+//	                            .build());
+//		
+//		deliveryService.saveDeliveryByOrdersId(delivery, orders.getId());
+//		
+//		MemberResponseDto memberResponseDto =memberService.getMemberBy(sUserId);
+//	      
+//	      memberResponseDto.setGradePoint((int)((orders.getPrice())*0.1));
+//	      memberService.updateGrade(Member.builder()
+//	                           .id(memberResponseDto.getId())
+//	                           .userName(memberResponseDto.getUserName())
+//	                           .password(memberResponseDto.getPassword())
+//	                           .email(memberResponseDto.getEmail())
+//	                           .nickname(memberResponseDto.getNickname())
+//	                           .address(memberResponseDto.getAddress())
+//	                           .phoneNo(memberResponseDto.getPhoneNo())
+//	                           .joinDate(memberResponseDto.getJoinDate())
+//	                           .birthday(memberResponseDto.getBirthday())
+//	                           .role(memberResponseDto.getRole())
+//	                           .grade(memberResponseDto.getGrade())
+//	                           .build(),memberResponseDto.getGradePoint());
+//		
+//		
+//		return OrdersDto.orderDto(orders);
 
 	}
 
@@ -134,34 +184,19 @@ public class OrderServiceImpl implements OrderService {
 	   @Transactional
 	   public OrdersDto memberCartOrderSave(String sUserId,DeliveryDto deliveryDto) throws Exception {
 	      
-		  Member member =memberDao.findMember(sUserId);
-	      OrdersDto ordersInsertDto= OrdersDto.builder()
-	             .userName(member.getUserName())
-	             .build();
-
-	      Orders orders= orderDao.save(Orders.toResponseEntity(ordersInsertDto));
-	      
 	      List<Cart> cartList= cartService.findCartList(sUserId);
 	      
 	      int o_tot_price = 0;
 	      int oi_tot_count = 0;
-	      List<OrderItemDto> orderItemList = new ArrayList<>();
+	      List<OrderItem> orderItemList = new ArrayList<>();
 	      for (Cart cart : cartList) {
 	         
 	         o_tot_price+=(cart.getOptionSet().getTotalPrice())*(cart.getQty());
 	         oi_tot_count+=cart.getQty();
 	      
 	         
-	         OrderItemDto inputOIDto = OrderItemDto.builder()
-	               .qty(cart.getQty())
-	               .orderId(orders.getId())
-	               .optionSetId(cart.getOptionSet().getId())
-	               .build();
-	         orderItemList.add(inputOIDto);
-	         
 	         OrderItem inputOIEntity = OrderItem.builder()
 		               .qty(cart.getQty())
-		               .orders(orders)
 		               .optionSet(cart.getOptionSet())
 		               .build();
 	         
@@ -169,39 +204,50 @@ public class OrderServiceImpl implements OrderService {
 	         
 	      }
 	      
-	       OptionSet optionSet= optionSetDao.findById(orderItemList.get(0).getOptionSetId());
+	       OptionSet optionSet= optionSetDao.findById(orderItemList.get(0).getOptionSet().getId());
 	      
 	       String o_desc = optionSet.getProduct().getName() + "외" + (oi_tot_count - 1) + "개";
 	       if (oi_tot_count == 1) {
 	    	   o_desc = optionSet.getProduct().getName();
 	       }
+	   	Delivery delivery = Delivery.builder()
+									.name(deliveryDto.getName())
+									.phoneNumber(deliveryDto.getPhoneNumber())
+									.address(deliveryDto.getAddress())
+									.build();
+						      
 	       
-	      orders = orderDao.save(Orders.builder()
-	                            .id(orders.getId())
+	      Orders orders = orderDao.save(Orders.builder()
 	                            .description(o_desc)
 	                            .price(o_tot_price)
 	                            .statement(OrderStateMsg.입금대기중)
 	                            .member(Member.toResponseEntity(memberService.getMemberBy(sUserId)))
+	                            .delivery(delivery)
+	                            .orderItems(orderItemList)
 	                            .build());
 	      
-	     	deliveryService.saveDeliveryByOrdersId(deliveryDto,orders.getId());
+	      for (OrderItem orderItem : orderItemList) {
+			orderItem.setOrders(orders);
+		}
+	      delivery.setOrders(orders);
 	      
-	      MemberResponseDto memberResponseDto =memberService.getMemberBy(sUserId);
 	      
-	      memberResponseDto.setGradePoint((int)((orders.getPrice())*0.1));
-	      memberService.updateGrade(Member.builder()
-	                           .id(memberResponseDto.getId())
-	                           .userName(memberResponseDto.getUserName())
-	                           .password(memberResponseDto.getPassword())
-	                           .email(memberResponseDto.getEmail())
-	                           .nickname(memberResponseDto.getNickname())
-	                           .address(memberResponseDto.getAddress())
-	                           .phoneNo(memberResponseDto.getPhoneNo())
-	                           .joinDate(memberResponseDto.getJoinDate())
-	                           .birthday(memberResponseDto.getBirthday())
-	                           .role(memberResponseDto.getRole())
-	                           .grade(memberResponseDto.getGrade())
-	                           .build(),memberResponseDto.getGradePoint());
+//	      MemberResponseDto memberResponseDto =memberService.getMemberBy(sUserId);
+//	      
+//	      memberResponseDto.setGradePoint((int)((orders.getPrice())*0.1));
+//	      memberService.updateGrade(Member.builder()
+//	                           .id(memberResponseDto.getId())
+//	                           .userName(memberResponseDto.getUserName())
+//	                           .password(memberResponseDto.getPassword())
+//	                           .email(memberResponseDto.getEmail())
+//	                           .nickname(memberResponseDto.getNickname())
+//	                           .address(memberResponseDto.getAddress())
+//	                           .phoneNo(memberResponseDto.getPhoneNo())
+//	                           .joinDate(memberResponseDto.getJoinDate())
+//	                           .birthday(memberResponseDto.getBirthday())
+//	                           .role(memberResponseDto.getRole())
+//	                           .grade(memberResponseDto.getGrade())
+//	                           .build(),memberResponseDto.getGradePoint());
 	      
 	      return OrdersDto.orderDto(orders);
 	   }
