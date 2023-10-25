@@ -13,7 +13,9 @@ import org.springframework.data.domain.jaxb.SpringDataJaxb.OrderDto;
 import org.springframework.test.annotation.Rollback;
 
 import com.danaga.config.OrderStateMsg;
+import com.danaga.dto.CartDto;
 import com.danaga.dto.DeliveryDto;
+import com.danaga.dto.OrderGuestDto;
 import com.danaga.dto.OrdersDto;
 import com.danaga.dto.OrdersProductDto;
 import com.danaga.entity.Cart;
@@ -37,6 +39,35 @@ class OrderServiceImplTest {
 	DeliveryRepository deliveryRepository;
 	@Autowired
 	CartService cartService;
+	
+	@Transactional
+	@Rollback(false)
+	@Test
+	//@Disabled
+	void testGuestCartOrderSave() throws Exception {
+		// List<CartCreateDto> fUserCarts, DeliveryDto deliveryDto
+
+		
+		CartDto cartDto1 = CartDto.builder().qty(6).optionSetId(6L).build();
+		CartDto cartDto2 = CartDto.builder().qty(7).optionSetId(5L).build();
+		
+		List<CartDto> fUserCarts = new ArrayList();
+		fUserCarts.add(cartDto1);
+		fUserCarts.add(cartDto2);
+		
+		DeliveryDto deliveryDto = DeliveryDto.builder()
+					.address("어딘가10")
+					.phoneNumber("아무번호10")
+					.name("누군가10")
+					.build();
+		OrderGuestDto orderGuestDto = OrderGuestDto.builder()
+													.name("주문자명1")
+													.phoneNo("123-123123232322")
+													.build();
+		orderService.guestCartOrderSave(fUserCarts, deliveryDto,orderGuestDto);
+		
+	}
+	
 	@Transactional
 	@Rollback(false)
 	@Test

@@ -12,6 +12,11 @@ import com.danaga.entity.Orders;
 
 public interface OrderService {
 	/*
+	 * 비회원 카트에서 주문
+	 */
+	OrdersDto guestCartOrderSave(List<CartDto> fUserCarts, DeliveryDto deliveryDto, OrderGuestDto orderGuestDto)  throws Exception; 
+
+	/*
 	 * 상품에서 직접주문
 	 */
 	OrdersDto memberProductOrderSave(String sUserId,OrdersProductDto ordersProductDto) throws Exception;
