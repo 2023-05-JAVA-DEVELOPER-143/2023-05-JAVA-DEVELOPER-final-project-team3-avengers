@@ -65,7 +65,7 @@ public class Orders {
 	@OneToOne(mappedBy = "orders")
 	private Refund refund; //환불
 	
-	@OneToMany(mappedBy = "orders" ,fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "orders" ,fetch = FetchType.LAZY)
 	@Builder.Default
 	private List<OrderItem> orderItems = new ArrayList<>(); //주문상품목록
 	
