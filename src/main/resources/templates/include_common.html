@@ -198,7 +198,10 @@
 			<div class="inner">
 				<div class="tools">
 					<div class="search"><i class="icon-search"></i></div>
-					<div class="account"><a href="account-orders.html"></a><i class="icon-head"></i>
+					<div class="account">
+					<a th:if="${sUserId != null}" th:href="@{/member/member_info_form}"></a>
+				    <!-- Thymeleaf 조건문을 사용하여 sUserId가 null인 경우 로그인 페이지로 이동 -->
+				    <a th:if="${sUserId == null}" th:href="@{/member/member_login_form}"></a><i class="icon-head"></i>
 						<ul class="toolbar-dropdown">
 							<li class="sub-menu-user">
 								<div class="user-ava"><img src="img/account/user-ava-sm.jpg" alt="Daniel Adams">

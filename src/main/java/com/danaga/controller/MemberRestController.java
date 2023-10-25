@@ -52,7 +52,7 @@ public class MemberRestController {
 	
 	@LoginCheck
 	@GetMapping("/logout")
-	public ResponseEntity<MemberResponse> user_logout_action(HttpSession session) throws Exception {
+	public ResponseEntity<MemberResponse> member_logout_action(HttpSession session) throws Exception {
 		session.invalidate();
 		MemberResponse response = new MemberResponse();
 		response.setStatus(MemberResponseStatusCode.LOGOUT_USER);
@@ -78,7 +78,7 @@ public class MemberRestController {
 
 	@LoginCheck
 	@PutMapping("/{id}")
-	public ResponseEntity<MemberResponse> member_modify_action(
+	public ResponseEntity<MemberResponse> member_modify_action(@PathVariable(name = "id") String id,
 			@RequestBody MemberUpdateDto memberUpdateDto) throws Exception {
 		MemberResponseDto updatedMember = memberService.updateMember(memberUpdateDto);
 
@@ -132,7 +132,7 @@ public class MemberRestController {
 	}
 	
 	@ExceptionHandler(value = ExistedMemberException.class)
-	public ResponseEntity<MemberResponse> user_existed_exception_handler(ExistedMemberException e) throws Exception {
+	public ResponseEntity<MemberResponse> member_existed_exception_handler(ExistedMemberException e) throws Exception {
 		MemberResponse response = new MemberResponse();
 		response.setStatus(MemberResponseStatusCode.CREATE_FAIL_EXISTED_USER);
 		response.setMessage(MemberResponseMessage.CREATE_FAIL_EXISTED_USER);
@@ -143,7 +143,7 @@ public class MemberRestController {
 	}
 
 	@ExceptionHandler(value = MemberNotFoundException.class)
-	public ResponseEntity<MemberResponse> user_not_found_exception_handler(MemberNotFoundException e) throws Exception {
+	public ResponseEntity<MemberResponse> member_not_found_exception_handler(MemberNotFoundException e) throws Exception {
 		MemberResponse response = new MemberResponse();
 		response.setStatus(MemberResponseStatusCode.LOGIN_FAIL_NOT_FOUND_USER);
 		response.setMessage(MemberResponseMessage.LOGIN_FAIL_NOT_FOUND_USER);
@@ -154,7 +154,7 @@ public class MemberRestController {
 	}
 
 	@ExceptionHandler(value = PasswordMismatchException.class)
-	public ResponseEntity<MemberResponse> user_password_mismatch_handler(PasswordMismatchException e) throws Exception {
+	public ResponseEntity<MemberResponse> member_password_mismatch_handler(PasswordMismatchException e) throws Exception {
 		MemberResponse response = new MemberResponse();
 		response.setStatus(MemberResponseStatusCode.LOGIN_FAIL_PASSWORD_MISMATCH_USER);
 		response.setMessage(MemberResponseMessage.LOGIN_FAIL_PASSWORD_MISMATCH_USER);

@@ -1,26 +1,4 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<!-- Body-->
-<!-- Header -->
-<div th:insert="include_common :: header"></div>
-<body>
-	<!-- Off-Canvas Wrapper-->
-	<div class="offcanvas-wrapper">
-		<!-- Page Content-->
-		<!-- Main Slider-->
-		<section class="hero-slider"
-			style="background-image: url(img/hero-slider/main-bg.jpg);">
-			<div class="page-title">
-				<div class="container">
-					<div class="column">
-						<h1>내 정보</h1>
-					</div>
-				</div>
-			</div>
-			<!-- Page Content-->
-			<div class="container padding-bottom-3x mb-2">
-				<div class="row">
-					<div class="col-lg-4">
+<div class="col-lg-4" th:fragment="mypage" th:remove="tag">
 						<aside class="user-info-wrapper">
               <div class="user-cover" style="background-image: url(img/account/user-cover-img.jpg);">
                 <div class="info-label" data-toggle="tooltip"><i class="icon-medal"></i>Silver&nbsp;<span>6000points</span></div>
@@ -42,25 +20,3 @@
 							<i class="icon-bag"></i>주문 목록<span	class="badge badge-primary badge-pill">6</span></a>
 						</nav>
 					</div>
-					<div class="col-lg-8">
-						<div class="padding-top-2x mt-2 hidden-lg-up"></div>
-						<form class="row">
-							~~~~~~~~~~~~~~~여기
-						</form>
-					</div>
-				</div>
-			</div>
-		</section>
-		<div th:insert="include_common :: footer"></div>
-	</div>
-
-
-	<!-- Back To Top Button-->
-	<a class="scroll-to-top-btn" href="#"><i class="icon-arrow-up"></i></a>
-	<!-- Backdrop-->
-	<div class="site-backdrop"></div>
-	<!-- JavaScript (jQuery) libraries, plugins and custom scripts-->
-	<script src="/bootstrap/js/vendor.min.js"></script>
-	<script src="/bootstrap/js/scripts.min.js"></script>
-</body>
-</html>
