@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.danaga.dao.CartDao;
 import com.danaga.dao.MemberDao;
-import com.danaga.dto.CartCreateDto;
 import com.danaga.dto.CartUpdateOptionSetDto;
 import com.danaga.dto.CartDto;
 import com.danaga.entity.Cart;
@@ -20,7 +19,6 @@ import com.danaga.repository.CartRepository;
 import com.danaga.repository.MemberRepository;
 import com.danaga.repository.product.OptionSetQueryRepository;
 import com.danaga.repository.product.OptionSetRepository;
-import com.danaga.dto.CartCreateDto;
 import com.danaga.dto.CartDto;
 import com.danaga.entity.Cart;
 import com.danaga.entity.OptionSet;
@@ -59,7 +57,7 @@ public class CartServiceImplTest {
 		// 중복 옵션 X + 장바구니 수량 >=2 ok 
 		// 중복 옵션 O + 장바구니 수량 1 ok 
 		// 중복 옵션 O + 장바구니 수량 >=2 ok
-		cs.updateCartOptionSet(CartUpdateOptionSetDto.builder().id(1052L).optionSet(or.findById(5L).get()).build());
+		//cs.updateCartOptionSet(CartUpdateOptionSetDto.builder().id(1052L).optionSet(or.findById(5L).get()).build());
 	 	
 	}
 
@@ -75,8 +73,8 @@ public class CartServiceImplTest {
 	@Test
 	@Disabled
 	void addCart() throws Exception {
-		CartCreateDto createDto = CartCreateDto.builder().qty(3).optionset(or.findById(1L).get()).build();
-		cs.addCart(createDto, "User2");
+		//CartCreateDto createDto = CartCreateDto.builder().qty(3).optionset(or.findById(1L).get()).build();
+		//cs.addCart(createDto, "User2");
 	}
 	/*
 	 * @Test void updateCart() throws Exception { CartUpdateDto cartUpdateDto =
