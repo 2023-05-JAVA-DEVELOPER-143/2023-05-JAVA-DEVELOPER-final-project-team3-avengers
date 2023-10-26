@@ -1,5 +1,7 @@
 package com.danaga.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,14 @@ public class StatisticRestController {
 		modelAndView.setViewName("admin/admin");
 		modelAndView.addObject("statisticList",statisticService.Statistics());
 		return modelAndView;
+	}
+	@Operation(summary = "admin : ")
+	@GetMapping("/daily")
+	public ResponseEntity<List<Statistic>> getTodayList() {
+		String today = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
+		statisticService.updateAt(today);
+		List<Statistic> statistics = statisticService.updateAll();
+		return ResponseEntity.status(HttpStatus.OK).body(statistics);
 	}
 	@Operation(summary = "admin : yyyymmdd 통계 업데이트")
 	@PostMapping("/{date}")
