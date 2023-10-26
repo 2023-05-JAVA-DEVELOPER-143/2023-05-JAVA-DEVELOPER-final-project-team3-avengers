@@ -1,4 +1,4 @@
-const API_BASE_URL="http://localhost:8080";
+const API_BASE_URL="http://localhost:80";
 
 const REMOVE_RECENT_VIEW={url:"/member/recentView/@optionSetId",method:"DELTE"};
 const ADD_WISHLIST={url:"/member/wishlist/@optionSetId",method:"POST"};

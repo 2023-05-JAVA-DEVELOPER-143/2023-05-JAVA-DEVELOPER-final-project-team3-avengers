@@ -2,24 +2,39 @@
         <div class="category-section" style="flex: 1; margin: 10px; padding: 10px;">
             <h3>분류</h3>
             <ul id="category-list" th:each="category : ${categoryList}" style="list-style-type: none; padding: 0;">
-                <li class="category-item" data-category-id="1" th:text="${category}" 
+                <li class="category-item" data-category-id="${category.id}" th:text="${category.name}" 
                 style=" margin-bottom: 5px; cursor: pointer;">Category 1</li>
             </ul>
         </div>
+        <script id="subcategory-template" type="text/x-handlebars-template">
         <div class="subcategory-section" style="flex: 1; margin: 10px; padding: 10px;">
             <h3>카테고리</h3>
             <ul id="subcategory-list" style="list-style-type: none; padding: 0;">
-                <li class="category-item" data-category-id="2" style="margin-bottom: 5px; cursor: pointer;">subCategory</li> 
+                {{#each data}}
+                {{#if (eq id parentId)}}
+                <li th:text="${name}" class="sub-category-item" data-subcategory-id="${id}" style="margin-bottom: 5px; cursor: pointer;">{{name}} 전체</li>
+                {{else}}
+                <li th:text="${name}" class="sub-category-item" data-subcategory-id="${id}" style="margin-bottom: 5px; cursor: pointer;">{{name}}</li>
+                {{/if}}
+                {{/each}}
             </ul>
         </div>
-        <div class="option-content-section" style="flex: 1; margin: 10px; padding: 10px;">
-            <h3>옵션</h3>
-            <table id="option-table" style=" width: 100%; border-collapse: collapse;">
-                <tbody id="option-list">
-                 	<tr>
-                    	<td style=" border: 1px solid black; padding: 5px;"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        </script>
+        <script id="option-choice-template" type="text/x-handlebars-template">
+            <div class="option-content-section" style="flex: 1; margin: 10px; padding: 10px;">
+                <h3>옵션</h3>
+                <table id="option-table" style="width: 100%; border-collapse: collapse;">
+                    <tbody id="option-list">
+                        {{#each data}}
+                        {{#each this}}
+                        <tr>
+                            <td style="border: 1px solid black; padding: 5px;">{{@key}}</td>
+                            <td style="border: 1px solid black; padding: 5px;">{{this}}</td>
+                        </tr>
+                        {{/each}}
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </script>
     </div>
