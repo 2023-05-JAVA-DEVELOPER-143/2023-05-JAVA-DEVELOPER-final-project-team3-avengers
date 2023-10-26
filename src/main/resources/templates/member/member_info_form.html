@@ -25,35 +25,36 @@
 					</div>
 					<div class="col-lg-8">
 						<div class="padding-top-2x mt-2 hidden-lg-up"></div>
-						<form class="row">
+						<form class="row" th:object="${loginUser}">
+						<input type="hidden" name="userName" value="guard" th:value="*{userName}"/>
 							<div class="col-sm-6">
 								<div class="form-group">
-									<label for="reg-email">E-mail 주소</label> <input
+									<label for="reg-email">E-mail 주소</label> <input name="email" value="guard" th:value="*{email}"
 										class="form-control" type="email" id="reg-email" disabled>
 								</div>
 							</div>
 							<div class="col-sm-6">
 								<div class="form-group">
-									<label for="reg-phone">휴대폰 번호</label> <input
+									<label for="reg-phone">휴대폰 번호</label> <input name="phoneNo" value="guard" th:value="*{phoneNo}"
 										class="form-control" type="text" id="reg-phone" disabled>
 								</div>
 							</div>
 							<div class="col-sm-6">
 								<div class="form-group">
-									<label for="reg-nickname">닉네임</label> <input
+									<label for="reg-nickname">닉네임</label> <input name="nickname" value="guard" th:value="*{nickname}"
 										class="form-control" type="text" id="reg-nickname" required>
 								</div>
 							</div>
 							<div class="col-sm-6">
 								<div class="form-group">
-									<label for="reg-birthday">생년월일</label> <input
+									<label for="reg-birthday">생년월일</label> <input name="birthday" value="guard" th:value="*{birthday}"
 										class="form-control" type="text" id="reg-birthday" required>
 								</div>
 							</div>
 							<div class="col-sm-6">
 								<div class="form-group">
-									<label for="reg-pass">비밀번호</label> <input class="form-control"
-										type="password" id="reg-pass" required>
+									<label for="reg-pass">비밀번호</label> <input name="password" value="guard" th:value="*{password}"
+									class="form-control" type="password" id="reg-pass" required>
 								</div>
 							</div>
 							<div class="col-sm-6">
@@ -64,17 +65,12 @@
 								</div>
 							</div>
 							<div class="col-sm-12">
-                <div class="form-group">
-                  <label for="reg-address">주소</label>
-                  <input class="form-control" type="text" id="reg-address" required>
-                </div>
-              </div>
-              <div class="col-sm-12">
-                <div class="form-group">
-                  <label for=reg-detailaddress>상세 주소</label>
-                  <input class="form-control" type="text" id="reg-detailaddress" required>
-                </div>
-              </div>
+			                <div class="form-group">
+			                  <label for="reg-address">주소</label>
+			                  <input class="form-control" name="address" value="guard" th:value="*{address}"
+			                  type="text" id="reg-address" required>
+			                </div>
+			              </div>
 							<div class="col-12">
 								<hr class="mt-2 mb-3">
 								<div
