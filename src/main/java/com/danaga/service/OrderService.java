@@ -20,15 +20,15 @@ public interface OrderService {
 	/*
 	 * 상품에서 직접주문(비회원)
 	 */
-	OrdersDto memberProductOrderSave(OrdersProductDto ordersProductDto,OrderGuestDto orderGuestDto) throws Exception;
-	/*
-	 * 주문+주문아이템 목록(비회원)
-	 */
-	OrdersDto memberCartSelectOrderSave(DeliveryDto deliveryDto,List<Long> optionSetIdArray,OrderGuestDto orderGuestDto)throws Exception;
+	OrdersDto guestProductOrderSave(OrdersProductDto ordersProductDto,OrderGuestDto orderGuestDto) throws Exception;
 	/*
 	 * cart에서 선택주문(비회원)
 	 */
-	List<OrdersDto> memberOrderList(Long orderNo, String phoneNumber)throws Exception;
+	OrdersDto guestCartSelectOrderSave(DeliveryDto deliveryDto,List<CartDto> fUserCarts,OrderGuestDto orderGuestDto)throws Exception;
+	/*
+	 * 주문+주문아이템 목록(비회원)
+	 */
+	List<OrdersDto> guestOrderList(Long orderNo, String phoneNumber)throws Exception;
 	/*****************************회원**************************/
 	
 	/*
@@ -66,7 +66,9 @@ public interface OrderService {
 	OrdersDto updateStatementByCancleOrder(Long orderNo);
 
 	// 3.환불주문
-	OrdersDto updateStatementByRefundOrder(Long orderNo);
-
+	OrdersDto updateStatementByClientRefundOrder(Long orderNo);
+	// 4.환불주문
+	OrdersDto updateStatementByAdminRefundOrder(Long orderNo);
+	// 5.상태리셋
 	OrdersDto updateStatementByResetOrder(Long orderNo);
 }

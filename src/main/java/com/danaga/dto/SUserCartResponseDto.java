@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 public class SUserCartResponseDto {
 	private Long id;
 	private Long memberId;
+	
 	private Integer qty;
 	private String productName;
 	private Integer totalPrice; // 토탈 금액

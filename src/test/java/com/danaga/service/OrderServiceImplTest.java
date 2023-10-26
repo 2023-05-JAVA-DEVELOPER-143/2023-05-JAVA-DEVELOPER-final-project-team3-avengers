@@ -40,13 +40,14 @@ class OrderServiceImplTest {
 	@Autowired
 	CartService cartService;
 	
+	/*************************************비회원*********************************/
 	@Transactional
 	@Rollback(false)
 	@Test
 	@Disabled
 	void testGuestCartOrderSave() throws Exception {
 		// List<CartCreateDto> fUserCarts, DeliveryDto deliveryDto
-
+		
 		
 		CartDto cartDto1 = CartDto.builder().qty(6).id(6L).build();
 		CartDto cartDto2 = CartDto.builder().qty(7).id(5L).build();
@@ -56,14 +57,14 @@ class OrderServiceImplTest {
 		fUserCarts.add(cartDto2);
 		
 		DeliveryDto deliveryDto = DeliveryDto.builder()
-					.address("어딘가10")
-					.phoneNumber("아무번호10")
-					.name("누군가10")
-					.build();
+				.address("어딘가10")
+				.phoneNumber("아무번호10")
+				.name("누군가10")
+				.build();
 		OrderGuestDto orderGuestDto = OrderGuestDto.builder()
-													.name("주문자명1")
-													.phoneNo("123-123123232322")
-													.build();
+				.name("주문자명1")
+				.phoneNo("123-123123232322")
+				.build();
 		orderService.guestCartOrderSave(fUserCarts, deliveryDto,orderGuestDto);
 		
 	}
@@ -72,6 +73,76 @@ class OrderServiceImplTest {
 	@Rollback(false)
 	@Test
 	@Disabled
+	void testGuestProductOrderSave() throws Exception {
+		// List<CartCreateDto> fUserCarts, DeliveryDto deliveryDto
+		
+		OrdersProductDto ordersProductDto = OrdersProductDto.builder()
+															.optionSetId(3L)
+															.orderItem_qty(3)
+															.delivaryAddress("어딘가21310")
+															.delivaryName("ddd")
+															.delivaryPhoneNumber("010-3020492-2132")
+															.build();
+		
+		OrderGuestDto orderGuestDto = OrderGuestDto.builder()
+													.name("주문자명1")
+													.phoneNo("123-123123232322")
+													.build();
+		orderService.guestProductOrderSave(ordersProductDto,orderGuestDto);
+		
+	}
+	
+	
+	@Transactional
+	@Rollback(false)
+	@Test
+	@Disabled
+	void testGuestCartSelectOrderSave() throws Exception {
+		// List<CartCreateDto> fUserCarts, DeliveryDto deliveryDto
+		
+		DeliveryDto deliveryDto = DeliveryDto.builder()
+				.address("어딘가10")
+				.phoneNumber("아무번호10")
+				.name("누군가10")
+				.build();
+		
+		
+		CartDto cartDto1 = CartDto.builder().qty(6).id(1L).build();
+		CartDto cartDto2 = CartDto.builder().qty(7).id(2L).build();
+		
+		
+		List<CartDto> fUserCarts = new ArrayList();
+		fUserCarts.add(cartDto1);
+		fUserCarts.add(cartDto2);
+		
+		OrderGuestDto orderGuestDto = OrderGuestDto.builder()
+													.name("주문자명1232")
+													.phoneNo("123-123123232322")
+													.build();
+		orderService.guestCartSelectOrderSave(deliveryDto,fUserCarts,orderGuestDto);
+		
+	}
+	
+	
+	@Transactional
+	@Rollback(false)
+	@Test
+	@Disabled
+	void testGuestOrderList() throws Exception {
+		// List<CartCreateDto> fUserCarts, DeliveryDto deliveryDto
+		
+		System.out.println("$$$$$$$$$$$$$$$"+orderService.guestOrderList(1L,"123-123123232322"));
+		
+	}
+	
+	
+	/**************************************회원*********************************/
+	
+	
+	@Transactional
+	@Rollback(false)
+	@Test
+	//@Disabled
 	void testMemberProductOrderSave()throws Exception {
 		
 		System.out.println("0000000000000000000000000000000000000");
@@ -84,7 +155,7 @@ class OrderServiceImplTest {
 									   .orderItem_qty(3)
 									   .build();
 		
-		orderService.memberProductOrderSave("User5",ordersDto);
+		orderService.memberProductOrderSave("User1",ordersDto);
 	}
 	@Transactional
 	@Rollback(false)
@@ -115,7 +186,7 @@ class OrderServiceImplTest {
 	@Transactional
 	@Rollback(false)
 	@Test
-	//@Disabled
+	@Disabled
 	void testMemberCartSelectOrderSave()throws Exception {
 		DeliveryDto deliveryDto = DeliveryDto.builder()
 				.address("ff")
@@ -136,7 +207,7 @@ class OrderServiceImplTest {
 	@Test
 	@Disabled
 	void testmemberOrderDetail()throws Exception {
-		System.out.println("777777777777777777777777"+orderService.memberOrderDetail(5L)); 
+		System.out.println("777777777777777777777777"+orderService.memberOrderDetail(1L)); 
 	}
 	@Test
 	@Disabled

@@ -24,9 +24,11 @@ public interface OrderDao {
 	  Orders updateStatementByNormalOrder(Long orderNo);
 	  // 2.취소주문
 	  Orders updateStatementByCancleOrder(Long orderNo);
-	  // 3.환불주문
-	  Orders updateStatementByRefundOrder(Long orderNo);
-	  // 4.상태리셋
+	  // 3.환불주문(client)
+	  Orders updateStatementByClientRefundOrder(Long orderNo);
+	  // 4.환불주문(admin)
+	  Orders updateStatementByAdminRefundOrder(Long orderNo);
+	  // 5.상태리셋
 	  Orders updateStatementByResetOrder(Long orderNo);
 	  
 	//  주문전체(특정사용자)

@@ -29,6 +29,7 @@ public class MemberController {
 	public String member_login_form() {
 		return "member/member_login_form";
 	}
+	@LoginCheck
 	@PostMapping("/member_login_action")
 	public String member_login_action(@ModelAttribute("fuser") MemberResponseDto member,Model model,HttpSession session) throws Exception {
 		String forwardPath = "";
@@ -68,11 +69,13 @@ public class MemberController {
 	public String member_findpassword_form() {
 		return "member/member_find_password_form";
 	}
+	@LoginCheck
 	@GetMapping("/member_info_form")
 	public String member_info_form(HttpServletRequest request,Model model) throws Exception {
 		/************** login check **************/
 		/****************************************/
-		
+		String loginUser = (String) request.getSession().getAttribute("sUserId");
+		model.addAttribute(memberService.findIdByUsername(loginUser));
 		return "member/member_info_form";
 	}
 	
