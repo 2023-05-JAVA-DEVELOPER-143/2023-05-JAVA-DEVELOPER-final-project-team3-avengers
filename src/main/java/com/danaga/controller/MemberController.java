@@ -29,21 +29,21 @@ public class MemberController {
 	public String member_login_form() {
 		return "member/member_login_form";
 	}
-	@PostMapping("member_login_action")
-	public String user_login_action(@ModelAttribute("fuser") MemberResponseDto member,Model model,HttpSession session) throws Exception {
+	@PostMapping("/member_login_action")
+	public String member_login_action(@ModelAttribute("fuser") MemberResponseDto member,Model model,HttpSession session) throws Exception {
 		String forwardPath = "";
 		try {
 			memberService.login(member.getUserName(), member.getPassword());
 			session.setAttribute("sUserId", member.getUserName());
-			forwardPath="redirect:user_main";
+			forwardPath="redirect:index";
 		}catch (MemberNotFoundException e) {
 			e.printStackTrace();
 			model.addAttribute("msg1",e.getMessage());
-			forwardPath="user_login_form";
+			forwardPath="member/member_login_form";
 		}catch (PasswordMismatchException e) {
 			e.printStackTrace();
 			model.addAttribute("msg2",e.getMessage());
-			forwardPath="user_login_form";
+			forwardPath="member/member_login_form";
 		}
 		return forwardPath;
 	}
@@ -60,7 +60,7 @@ public class MemberController {
 		}catch (ExistedMemberException e) {
 			model.addAttribute("msg", e.getMessage());
 			model.addAttribute("fuser", member);
-			forward_path="user_write_form";
+			forward_path="member_join_form";
 		}
 		return forward_path;
 	}
@@ -84,7 +84,7 @@ public class MemberController {
        
        
        memberService.updateMember(member);
-       return "redirect:user_view";
+       return "redirect:member_info_form";
     }
 	
 	@LoginCheck
@@ -95,7 +95,7 @@ public class MemberController {
 		/****************************************/
 		request.getSession(false).invalidate();
 		
-		return "redirect:user_main";
+		return "redirect:index";
 	}
 	
 	@LoginCheck
@@ -106,7 +106,7 @@ public class MemberController {
 		String sUserId=(String)request.getSession().getAttribute("sUserId");
 		memberService.deleteMember(sUserId);
 		request.getSession().invalidate();
-		return "redirect:user_main";
+		return "redirect:index";
 	}
 	
 	@GetMapping({
@@ -116,7 +116,7 @@ public class MemberController {
 		"member_remove_action"
 		})
 	public String user_get() {
-	String forwardPath = "redirect:user_main";
+	String forwardPath = "redirect:index";
 	return forwardPath;
 	}
 	
