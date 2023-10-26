@@ -90,7 +90,7 @@ public class OrderDaoImpl implements OrderDao {
 		}
 		return findOrder;
 	}
-	// 3.환불주문
+	// 3.환불주문 //이걸나누기
 	public Orders updateStatementByRefundOrder(Long orderNo) {
 
 		Orders findOrder = orderRepository.findById(orderNo).get();

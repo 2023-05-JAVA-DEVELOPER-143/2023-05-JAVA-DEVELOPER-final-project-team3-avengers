@@ -164,7 +164,7 @@ public class OrderServiceImpl implements OrderService {
 	    delivery.setOrders(orders);
 	    orderItem.setOrders(orders); //transactional
 
-	    MemberResponseDto memberResponseDto =memberService.getMemberBy(sUserId);
+//	    MemberResponseDto memberResponseDto =memberService.getMemberBy(sUserId);
 	      
 //	      memberResponseDto.setGradePoint((int)((orders.getPrice())*0.1));
 //	      memberService.updateGrade(Member.builder()
@@ -195,20 +195,20 @@ public class OrderServiceImpl implements OrderService {
 	   public OrdersDto memberCartOrderSave(String sUserId,DeliveryDto deliveryDto) throws Exception {
 	      
 	      
-	      List<Cart> cartList= cartService.findCartList(sUserId);
+	      List<SUserCartResponseDto> cartList= cartService.findsUserCartList(sUserId);
 	      
 	      int o_tot_price = 0;
 	      int oi_tot_count = 0;
 	      List<OrderItem> orderItemList = new ArrayList<>();
-	      for (Cart cart : cartList) {
-	         
-	         o_tot_price+=(cart.getOptionSet().getTotalPrice())*(cart.getQty());
+	      for (SUserCartResponseDto cart : cartList) {
+	    	  OptionSet optionSet = optionSetDao.findById(cart.getOsId());
+	         o_tot_price+=optionSet.getTotalPrice()*(cart.getQty());
 	         oi_tot_count+=cart.getQty();
 	      
 	         
 	         OrderItem inputOIEntity = OrderItem.builder()
 		               .qty(cart.getQty())
-		               .optionSet(cart.getOptionSet())
+		               .optionSet(optionSet)
 		               .build();
 	         
 	         orderItemList.add(inputOIEntity);
@@ -262,9 +262,6 @@ public class OrderServiceImpl implements OrderService {
 	      return OrdersDto.orderDto(orders);
 	   }
 
-	   
-	   
-	   
 	/*
 	 * cart에서 선택주문(회원)
 	 */
@@ -341,17 +338,6 @@ public class OrderServiceImpl implements OrderService {
 		return OrdersDto.orderDto(orders);
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	/*
 	 * 주문+주문아이템 목록(회원)
 	 */
@@ -382,7 +368,43 @@ public class OrderServiceImpl implements OrderService {
 		
 		return OrdersDto.orderDto(orders);
 	}
-	
+	/*
+	 * 주문상세보기(비회원)
+	 */
+	@Transactional
+	public OrdersDto memberOrderDetail(Long orderNo,String phoneNumber)throws Exception {
+		
+		if(orderNo==orderDao.findById(orderNo).getId()) {
+			
+			if(phoneNumber==memberService.getMemberBy(phoneNumber).getPhoneNo()) {
+				Orders orders=  orderDao.findById(orderNo);
+				
+				return OrdersDto.orderDto(orders);
+			}
+			throw new Exception("일치하는 핸드폰번호가없습니다.");
+		}
+		throw new Exception("일치하는 주문번호가 없습니다.");
+		
+	}
+	/*
+	 * 주문상세보기(비회원)
+	 */
+//	@Transactional
+//	public OrdersDto memberOrderDetail(Long orderNo,String phoneNumber)throws Exception {
+//		
+//		if(orderNo==orderDao.findById(orderNo).getId()) {
+//			
+//			if(phoneNumber==memberService.getMemberBy(phoneNumber).getPhoneNo()) {
+//				Orders orders=  orderDao.findById(orderNo);
+//				
+//				return OrdersDto.orderDto(orders);
+//			}
+//			throw new Exception("일치하는 핸드폰번호가없습니다.");
+//		}
+//		throw new Exception("일치하는 주문번호가 없습니다.");
+//		
+//	}
+
 
 	/*
 	 * 1.정상주문

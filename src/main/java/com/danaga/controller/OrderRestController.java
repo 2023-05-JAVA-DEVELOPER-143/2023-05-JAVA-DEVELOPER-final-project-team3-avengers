@@ -61,7 +61,7 @@ public class OrderRestController {
 			//List<CartDto> fUserCarts // 지금 session을 받아올 수 없어서?
 			List<CartDto> cartDtoList = new ArrayList<>();
 			CartDto cartDto = new CartDto();
-			cartDto.setOptionSetId(2L);
+			cartDto.setId(2L);
 			cartDto.setQty(2);
 			cartDtoList.add(cartDto);
 //			List<CartDto> fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
