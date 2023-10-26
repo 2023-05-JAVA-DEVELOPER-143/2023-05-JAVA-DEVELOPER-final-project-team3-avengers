@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.danaga.dao.product.OptionSetDao;
 import com.danaga.dto.CartDto;
 import com.danaga.dto.FUserCartResponseDto;
+import com.danaga.dto.ResponseDto;
 import com.danaga.dto.SUserCartResponseDto;
 import com.danaga.entity.Cart;
 import com.danaga.service.CartService;
@@ -112,7 +114,7 @@ public class CartRestController {
 
 		return null;
 	}
-	
+
 	// 회원, 비회원 테스트 성공
 	@Operation(summary = "카트 수량 변경")
 	@PutMapping("/qty")
@@ -127,7 +129,7 @@ public class CartRestController {
 		for (int i = 0; i < fUserCarts.size(); i++) {
 			// 비회원일 경우 카트리스트를 돌리면서 dto의 optionsetId 와 동일한 옵션셋 아이디 체크
 			if (dto.getId() == fUserCarts.get(i).getId()) {
-				// 동일한 세션카트의 옵션셋 꺼내서 수량변경  후 세션에 다시 저장
+				// 동일한 세션카트의 옵션셋 꺼내서 수량변경 후 세션에 다시 저장
 				fUserCarts.get(i).setQty(dto.getQty());
 				fUserCarts.add(fUserCarts.get(i));
 				session.setAttribute("fUserCarts", fUserCarts);
@@ -142,7 +144,7 @@ public class CartRestController {
 	// 선택삭제 optionsetId 리스트로 받기 --> 체크박스 2개 이상 선택시 여러개 존재
 	@Operation(summary = "카트 선택삭제")
 	@DeleteMapping("/check")
-	public void deleteCart(HttpSession session, @RequestParam(name = "optionsetId") List<Long> idList)
+	public void deleteCart(HttpSession session, @RequestParam List<Long> idList)
 			throws Exception {
 		// Long id == 회원일시 카트 pk , 비회원 일시 optionsetId
 		sUserId = (String) session.getAttribute("sUserId");
@@ -167,32 +169,6 @@ public class CartRestController {
 	}
 
 	// 회원 성공 + 비회원 성공
-	@Operation(summary = "카트리스트 보기")
-	@GetMapping("/list")
-	public ResponseEntity<Model> findCarts(HttpSession session, Model model) throws Exception {
-		// sUserId = (String) session.getAttribute("sUserId");
-		//sUserId = "User1";
-		
-		// 회원일시 session에 담긴 sUserId로 멤버카트 불러오기
-		if (sUserId != null) {
-			List<SUserCartResponseDto> carts = cartService.findsUserCartList(sUserId);
-			model.addAttribute("cartList", carts);
-			// model.addAttributes("member");
-			return ResponseEntity.status(HttpStatus.OK).body(model);
-		}
-		// 비회원일시 session에 담긴 fUserCarts 리스트 불러오기
-		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
-		List<FUserCartResponseDto> responseDto = new ArrayList<>();
-		for (int i = 0; i < fUserCarts.size(); i++) {
-			responseDto.add(cartService.findfUserCartList(fUserCarts.get(i)));
-		}
-		model.addAttribute("cartList", responseDto);
-		return ResponseEntity.status(HttpStatus.OK).body(model);
-		// return 후 템플릿에서 타임리프로 리스트 돌려가며 뿌리기
-	}  
-	
-		
-	
 	
 
 	// 장바구니에 몇개 담겼는지 숫자 체크
