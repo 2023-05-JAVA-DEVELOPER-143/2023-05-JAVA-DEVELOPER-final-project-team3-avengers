@@ -34,8 +34,10 @@ public class OrderServiceImpl implements OrderService {
 	private final MemberDao memberDao;
 
 
+	
+	/******************************************************비회원******************************************************************/
 	/*
-	 * 비회원 카트에서 주문
+	 * 카트에서 주문(비회원)
 	 */
 	@Transactional
 	public OrdersDto guestCartOrderSave(List<CartDto> fUserCarts, DeliveryDto deliveryDto, OrderGuestDto orderGuestDto)  throws Exception{
@@ -127,13 +129,14 @@ public class OrderServiceImpl implements OrderService {
 
 		      return OrdersDto.orderDto(orders);
 	}
+
 	/*
-	 * 상품에서 직접주문
+	 * 상품에서 직접주문(비회원)
 	 */
 	@Transactional
-	public OrdersDto memberProductOrderSave(String sUserId,OrdersProductDto ordersProductDto) throws Exception {
+	public OrdersDto memberProductOrderSave(OrdersProductDto ordersProductDto,OrderGuestDto orderGuestDto) throws Exception {
 		
-
+		
 		OptionSet optionSet = optionSetDao.findById(ordersProductDto.getOptionSetId());// 상품 찾고
 		List<OrderItem> orderItemList = new ArrayList<>();
 		
@@ -151,21 +154,179 @@ public class OrderServiceImpl implements OrderService {
 				.build();
 		
 		System.out.println("@@@@@@@@@@@@@@@delivery= "+delivery);
-	      
-	    Orders orders= orderDao.save(Orders.builder()
-	                            .description(optionSet.getProduct().getName())
-	                            .price(optionSet.getProduct().getPrice()*ordersProductDto.getOrderItem_qty())
-	                            .statement(OrderStateMsg.입금대기중)
-	                            .member(Member.toResponseEntity(memberService.getMemberBy(sUserId)))
-	                            .delivery(delivery)
-	                            .orderItems(orderItemList)
-	                            .build());
+	   	
+	   	MemberResponseDto memberResponseDto =memberService.joinGuest(MemberInsertGuestDto.builder()
+									   							   .name(orderGuestDto.getName())
+									   							   .phoneNo(orderGuestDto.getPhoneNo())
+									   							   .role("Guest")
+									   							   .build());
+	   	Member member= Member.toResponseEntity(memberResponseDto);
 		
-	    delivery.setOrders(orders);
-	    orderItem.setOrders(orders); //transactional
+		
+		
+		Orders orders= orderDao.save(Orders.builder()
+				.description(optionSet.getProduct().getName())
+				.price(optionSet.getProduct().getPrice()*ordersProductDto.getOrderItem_qty())
+				.statement(OrderStateMsg.입금대기중)
+				.member(member)
+				.delivery(delivery)
+				.orderItems(orderItemList)
+				.build());
+		
+		delivery.setOrders(orders);
+		orderItem.setOrders(orders); //transactional
+		
+		return OrdersDto.orderDto(orders);
+		
+	}
+	
+	
+	/*
+	 * cart에서 선택주문(비회원)
+	 */
 
-//	    MemberResponseDto memberResponseDto =memberService.getMemberBy(sUserId);
+	public OrdersDto memberCartSelectOrderSave(DeliveryDto deliveryDto,List<Long> optionSetIdArray,OrderGuestDto orderGuestDto)throws Exception {
+
+		ArrayList<OrderItem> orderItemList = new ArrayList<>();
+		
+		int o_tot_price = 0;
+		int oi_tot_count = 0;
+		
+	   	MemberResponseDto memberResponseDto =memberService.joinGuest(MemberInsertGuestDto.builder()
+				   .name(orderGuestDto.getName())
+				   .phoneNo(orderGuestDto.getPhoneNo())
+				   .role("Guest")
+				   .build());
+	   	Member member= Member.toResponseEntity(memberResponseDto);
+
+		System.out.println("@@@@@@@@@@@@@@@@@@memberResponseDto: "+memberResponseDto);
+	
+		
+		for (int i = 0; i < optionSetIdArray.size(); i++) {
+			Cart cart = cartRepository.findByOptionSetIdAndMemberId(optionSetIdArray.get(i),memberResponseDto.getId());
+    		System.out.println("@@@@@@@@@@@@@@@@@@cart: "+cart);
+
+		    o_tot_price+=(cart.getOptionSet().getTotalPrice())*(cart.getQty());
+		    oi_tot_count+=cart.getQty();
+		
+            OrderItem inputOIEntity = OrderItem.builder()
+							                   .qty(cart.getQty())
+							                   .optionSet(cart.getOptionSet())
+							                   .build();
+    		System.out.println("@@@@@@@@@@@@@@@@@@orderItemEntity: "+inputOIEntity);
+
+            orderItemList.add(inputOIEntity);
+		}
+			System.out.println("@@@@@@@@@@@@@@@@@@orderItemList: "+orderItemList);
+	       
+			OptionSet optionSet= optionSetDao.findById(orderItemList.get(0).getOptionSet().getId());
+			System.out.println("@@@@@@@@@@@@@@@@@@optionSet: "+optionSet);
+	       
+			
+			String o_desc = optionSet.getProduct().getName() + "외" + (oi_tot_count - 1) + "개";
 	      
+			if (oi_tot_count == 1) {
+	    	   o_desc = optionSet.getProduct().getName();
+	       }
+	       
+	       
+	     	Delivery delivery = Delivery.builder()
+					.name(deliveryDto.getName())
+					.phoneNumber(deliveryDto.getPhoneNumber())
+					.address(deliveryDto.getAddress())
+					.build();
+			System.out.println("@@@@@@@@@@@@@@@@@@delivery: "+delivery);
+
+	       Orders orders = Orders.builder()
+                   .description(o_desc)
+                   .price(o_tot_price)
+                   .statement(OrderStateMsg.입금대기중)
+                   .member(member)
+                   .delivery(delivery)
+                   .orderItems(orderItemList)
+                   .build();
+			System.out.println("@@@@@@@@@@@@@@@@@@orders: "+orders);
+
+		      for (OrderItem orderItem : orderItemList) {
+				orderItem.setOrders(orders);
+			}
+		      delivery.setOrders(orders);
+		      orders.setMember(member);
+		      Orders realOrders = orderDao.save(orders);// 마지막에 세이브해야되는듯
+		      System.out.println("@@@@@@@@@@@@@@@@@@delivery: "+delivery);
+		      System.out.println("@@@@@@@@@@@@@@@@@@orderItemList: "+orderItemList);
+		      System.out.println("@@@@@@@@@@@@@@@@@@real orders: "+realOrders);
+
+		return OrdersDto.orderDto(orders);
+	}
+
+	
+	
+	/*
+	 * 주문+주문아이템 목록(비회원)
+	 */
+	
+	@Transactional
+	public List<OrdersDto> memberOrderList(Long orderNo, String phoneNumber)throws Exception {
+		if(phoneNumber==memberService.getMemberBy(phoneNumber).getPhoneNo()) {
+			if(orderNo==orderDao.findById(orderNo).getId()) {
+				List<Orders> orderList= new ArrayList<>();	
+				orderList.add(orderDao.findById(orderNo));
+				List<OrdersDto> ordersDtoList = new ArrayList<>();
+				for (Orders orders : orderList) {
+					OrdersDto ordersDto= OrdersDto.orderDto(orders);
+					ordersDtoList.add(ordersDto);
+				}
+				return ordersDtoList;
+			}
+			throw new Exception("일치하는 주문번호가 없습니다.");
+		}
+		throw new Exception("일치하는 전화번호가 없습니다.");
+	}
+	
+	
+	
+	/**************************************************************회원******************************************************************/
+	
+	/*
+	 * 상품에서 직접주문(회원)
+	 */
+	@Transactional
+	public OrdersDto memberProductOrderSave(String sUserId,OrdersProductDto ordersProductDto) throws Exception {
+		
+		
+		OptionSet optionSet = optionSetDao.findById(ordersProductDto.getOptionSetId());// 상품 찾고
+		List<OrderItem> orderItemList = new ArrayList<>();
+		
+		OrderItem orderItem = OrderItem.builder()
+				.qty(ordersProductDto.getOrderItem_qty())
+				.optionSet(optionSet)
+				.build();//orderItem찾음
+		
+		orderItemList.add(orderItem);//상품에서 직접 주문하는거니까 orderItem하나만 들어간다
+		
+		Delivery delivery = Delivery.builder()
+				.name(ordersProductDto.getDelivaryName())
+				.phoneNumber(ordersProductDto.getDelivaryPhoneNumber())
+				.address(ordersProductDto.getDelivaryAddress())
+				.build();
+		
+		System.out.println("@@@@@@@@@@@@@@@delivery= "+delivery);
+		
+		Orders orders= orderDao.save(Orders.builder()
+				.description(optionSet.getProduct().getName())
+				.price(optionSet.getProduct().getPrice()*ordersProductDto.getOrderItem_qty())
+				.statement(OrderStateMsg.입금대기중)
+				.member(Member.toResponseEntity(memberService.getMemberBy(sUserId)))
+				.delivery(delivery)
+				.orderItems(orderItemList)
+				.build());
+		
+		delivery.setOrders(orders);
+		orderItem.setOrders(orders); //transactional
+		
+//	    MemberResponseDto memberResponseDto =memberService.getMemberBy(sUserId);
+		
 //	      memberResponseDto.setGradePoint((int)((orders.getPrice())*0.1));
 //	      memberService.updateGrade(Member.builder()
 //	                           .id(memberResponseDto.getId())
@@ -183,11 +344,10 @@ public class OrderServiceImpl implements OrderService {
 //	                           .build(),memberResponseDto.getGradePoint());
 //	     
 //	     orders.setMember(Member.toResponseEntity(memberResponseDto));
-	      
-	    return OrdersDto.orderDto(orders);
-
+		
+		return OrdersDto.orderDto(orders);
+		
 	}
-
 		/*
 	    * cart에서 주문(회원)
 	    */
@@ -338,6 +498,7 @@ public class OrderServiceImpl implements OrderService {
 		return OrdersDto.orderDto(orders);
 	}
 
+	
 	/*
 	 * 주문+주문아이템 목록(회원)
 	 */
@@ -358,6 +519,9 @@ public class OrderServiceImpl implements OrderService {
 		return ordersDtoList;
 	}
 
+	
+	/*******************************공용****************************/
+	
 	/*
 	 * 주문상세보기(회원)
 	 */
@@ -368,43 +532,6 @@ public class OrderServiceImpl implements OrderService {
 		
 		return OrdersDto.orderDto(orders);
 	}
-	/*
-	 * 주문상세보기(비회원)
-	 */
-	@Transactional
-	public OrdersDto memberOrderDetail(Long orderNo,String phoneNumber)throws Exception {
-		
-		if(orderNo==orderDao.findById(orderNo).getId()) {
-			
-			if(phoneNumber==memberService.getMemberBy(phoneNumber).getPhoneNo()) {
-				Orders orders=  orderDao.findById(orderNo);
-				
-				return OrdersDto.orderDto(orders);
-			}
-			throw new Exception("일치하는 핸드폰번호가없습니다.");
-		}
-		throw new Exception("일치하는 주문번호가 없습니다.");
-		
-	}
-	/*
-	 * 주문상세보기(비회원)
-	 */
-//	@Transactional
-//	public OrdersDto memberOrderDetail(Long orderNo,String phoneNumber)throws Exception {
-//		
-//		if(orderNo==orderDao.findById(orderNo).getId()) {
-//			
-//			if(phoneNumber==memberService.getMemberBy(phoneNumber).getPhoneNo()) {
-//				Orders orders=  orderDao.findById(orderNo);
-//				
-//				return OrdersDto.orderDto(orders);
-//			}
-//			throw new Exception("일치하는 핸드폰번호가없습니다.");
-//		}
-//		throw new Exception("일치하는 주문번호가 없습니다.");
-//		
-//	}
-
 
 	/*
 	 * 1.정상주문

@@ -11,11 +11,26 @@ import com.danaga.entity.Member;
 import com.danaga.entity.Orders;
 
 public interface OrderService {
+	/*****************************비회원*************************/
+	
 	/*
-	 * 비회원 카트에서 주문
+	 * 카트에서 주문(비회원)
 	 */
 	OrdersDto guestCartOrderSave(List<CartDto> fUserCarts, DeliveryDto deliveryDto, OrderGuestDto orderGuestDto)  throws Exception; 
-
+	/*
+	 * 상품에서 직접주문(비회원)
+	 */
+	OrdersDto memberProductOrderSave(OrdersProductDto ordersProductDto,OrderGuestDto orderGuestDto) throws Exception;
+	/*
+	 * 주문+주문아이템 목록(비회원)
+	 */
+	OrdersDto memberCartSelectOrderSave(DeliveryDto deliveryDto,List<Long> optionSetIdArray,OrderGuestDto orderGuestDto)throws Exception;
+	/*
+	 * cart에서 선택주문(비회원)
+	 */
+	List<OrdersDto> memberOrderList(Long orderNo, String phoneNumber)throws Exception;
+	/*****************************회원**************************/
+	
 	/*
 	 * 상품에서 직접주문
 	 */
@@ -34,7 +49,10 @@ public interface OrderService {
 	 * 주문+주문아이템 목록
 	 */
 	List<OrdersDto> memberOrderList(String userName)throws Exception;
-
+	
+	
+	/**********************공용*******************/
+	
 	/*
 	 * 주문상세보기
 	 */
