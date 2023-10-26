@@ -262,6 +262,9 @@ public class OrderServiceImpl implements OrderService {
 	      return OrdersDto.orderDto(orders);
 	   }
 
+	   
+	   
+	   
 	/*
 	 * cart에서 선택주문(회원)
 	 */
@@ -274,10 +277,13 @@ public class OrderServiceImpl implements OrderService {
 		int oi_tot_count = 0;
 		
 		MemberResponseDto memberResponseDto = memberService.getMemberBy(sUserId);
+		System.out.println("@@@@@@@@@@@@@@@@@@memberResponseDto: "+memberResponseDto);
+	
 		
 		for (int i = 0; i < optionSetIdArray.size(); i++) {
 			Cart cart = cartRepository.findByOptionSetIdAndMemberId(optionSetIdArray.get(i),memberResponseDto.getId());
-			
+    		System.out.println("@@@@@@@@@@@@@@@@@@cart: "+cart);
+
 		    o_tot_price+=(cart.getOptionSet().getTotalPrice())*(cart.getQty());
 		    oi_tot_count+=cart.getQty();
 		
@@ -285,40 +291,67 @@ public class OrderServiceImpl implements OrderService {
 							                   .qty(cart.getQty())
 							                   .optionSet(cart.getOptionSet())
 							                   .build();
+    		System.out.println("@@@@@@@@@@@@@@@@@@orderItemEntity: "+inputOIEntity);
 
             orderItemList.add(inputOIEntity);
 		}
-		 
-	       OptionSet optionSet= optionSetDao.findById(orderItemList.get(0).getOptionSet().getId());
+			System.out.println("@@@@@@@@@@@@@@@@@@orderItemList: "+orderItemList);
+	       
+			OptionSet optionSet= optionSetDao.findById(orderItemList.get(0).getOptionSet().getId());
+			System.out.println("@@@@@@@@@@@@@@@@@@optionSet: "+optionSet);
+	       
+			
+			String o_desc = optionSet.getProduct().getName() + "외" + (oi_tot_count - 1) + "개";
 	      
-	       String o_desc = optionSet.getProduct().getName() + "외" + (oi_tot_count - 1) + "개";
-	       if (oi_tot_count == 1) {
+			if (oi_tot_count == 1) {
 	    	   o_desc = optionSet.getProduct().getName();
 	       }
+	       
+	       
 	     	Delivery delivery = Delivery.builder()
 					.name(deliveryDto.getName())
 					.phoneNumber(deliveryDto.getPhoneNumber())
 					.address(deliveryDto.getAddress())
 					.build();
-	       
-	       Orders orders = orderDao.save(Orders.builder()
+			System.out.println("@@@@@@@@@@@@@@@@@@delivery: "+delivery);
+			
+			Member member =Member.toResponseEntity(memberService.getMemberBy(sUserId));
+			System.out.println("@@@@@@@@@@@@@@@@@@ member: "+member);
+
+	       Orders orders = Orders.builder()
                    .description(o_desc)
                    .price(o_tot_price)
                    .statement(OrderStateMsg.입금대기중)
-                   .member(Member.toResponseEntity(memberService.getMemberBy(sUserId)))
+                   .member(member)
                    .delivery(delivery)
                    .orderItems(orderItemList)
-                   .build());
+                   .build();
+			System.out.println("@@@@@@@@@@@@@@@@@@orders: "+orders);
 
 		      for (OrderItem orderItem : orderItemList) {
 				orderItem.setOrders(orders);
 			}
 		      delivery.setOrders(orders);
-		
+		      orders.setMember(member);
+		      Orders realOrders = orderDao.save(orders);// 마지막에 세이브해야되는듯
+		      System.out.println("@@@@@@@@@@@@@@@@@@delivery: "+delivery);
+		      System.out.println("@@@@@@@@@@@@@@@@@@orderItemList: "+orderItemList);
+		      System.out.println("@@@@@@@@@@@@@@@@@@real orders: "+realOrders);
 
 		return OrdersDto.orderDto(orders);
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/*
 	 * 주문+주문아이템 목록(회원)
 	 */
@@ -357,6 +390,7 @@ public class OrderServiceImpl implements OrderService {
 	@Transactional
 	@Override
 	public OrdersDto updateStatementByNormalOrder(Long orderNo) {
+		
 		Orders updateOrder= orderDao.updateStatementByNormalOrder(orderNo);
 		orderDao.save(updateOrder);
 		return OrdersDto.orderDto(updateOrder);

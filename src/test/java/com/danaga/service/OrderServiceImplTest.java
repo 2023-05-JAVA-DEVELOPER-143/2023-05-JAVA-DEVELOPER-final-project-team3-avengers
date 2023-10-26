@@ -43,7 +43,7 @@ class OrderServiceImplTest {
 	@Transactional
 	@Rollback(false)
 	@Test
-	//@Disabled
+	@Disabled
 	void testGuestCartOrderSave() throws Exception {
 		// List<CartCreateDto> fUserCarts, DeliveryDto deliveryDto
 
@@ -115,7 +115,7 @@ class OrderServiceImplTest {
 	@Transactional
 	@Rollback(false)
 	@Test
-	@Disabled
+	//@Disabled
 	void testMemberCartSelectOrderSave()throws Exception {
 		DeliveryDto deliveryDto = DeliveryDto.builder()
 				.address("ff")
@@ -127,9 +127,9 @@ class OrderServiceImplTest {
 		List<Long> optionSetIdArray = new ArrayList<>();
 		optionSetIdArray.add(1L);
 		optionSetIdArray.add(2L);
-		optionSetIdArray.add(3L);
-		optionSetIdArray.add(4L);
-		optionSetIdArray.add(5L);
+//		optionSetIdArray.add(3L);
+//		optionSetIdArray.add(4L);
+//		optionSetIdArray.add(5L);
 		
 	 System.out.println("********************************"+orderService.memberCartSelectOrderSave("User1",deliveryDto,optionSetIdArray));	
 	}

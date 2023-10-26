@@ -15,10 +15,9 @@ import lombok.*;
 @RestController
 @RequestMapping("/orders")
 @RequiredArgsConstructor
-public class OrdersResetController {
+public class OrdersResetController {  
 	@Autowired
 	private OrderService orderService;
-	
 	@GetMapping
 	public ModelAndView orders() {
 		ModelAndView modelAndView = new ModelAndView();
