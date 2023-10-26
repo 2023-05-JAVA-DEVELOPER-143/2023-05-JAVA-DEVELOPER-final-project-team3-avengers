@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/order")
 @RequiredArgsConstructor
-public class OrderRestController {
+public class OrderController {
 	
 	private final OrderService orderService;
 	
@@ -197,9 +197,9 @@ public class OrderRestController {
 	
 	
 	
-	/*
-	 * 3.환불주문(완료)
-	 */
+//	/*
+//	 * 3.환불주문(완료)
+//	 */
 ////	 OrdersDto updateStatementByRefundOrder(Long orderNo) 
 //	@PutMapping("/updateRefund/{orderId}")
 //	public ResponseEntity<?> updateStatementByRefundOrder(HttpSession session, @PathVariable(value = "orderId")Long orderId) {

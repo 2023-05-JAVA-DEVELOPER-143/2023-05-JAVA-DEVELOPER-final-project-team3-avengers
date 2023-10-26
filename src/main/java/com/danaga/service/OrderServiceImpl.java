@@ -535,17 +535,27 @@ public class OrderServiceImpl implements OrderService {
 		return OrdersDto.orderDto(updateOrder);
 	}
 	/*
-	 * 3.환불주문
+	 * 3.환불주문(client)
 	 */
 	@Transactional
 	@Override
-	public OrdersDto updateStatementByRefundOrder(Long orderNo) {
-		Orders updateOrder= orderDao.updateStatementByRefundOrder(orderNo);
+	public OrdersDto updateStatementByClientRefundOrder(Long orderNo) {
+		Orders updateOrder= orderDao.updateStatementByClientRefundOrder(orderNo);
 		orderDao.save(updateOrder);
 		return OrdersDto.orderDto(updateOrder);
 	}
 	/*
-	 * 4.상태리셋
+	 * 4.환불주문(admin)
+	 */
+	@Transactional
+	@Override
+	public OrdersDto updateStatementByAdminRefundOrder(Long orderNo) {
+		Orders updateOrder= orderDao.updateStatementByAdminRefundOrder(orderNo);
+		orderDao.save(updateOrder);
+		return OrdersDto.orderDto(updateOrder);
+	}
+	/*
+	 * 5.상태리셋
 	 */
 	@Transactional
 	@Override

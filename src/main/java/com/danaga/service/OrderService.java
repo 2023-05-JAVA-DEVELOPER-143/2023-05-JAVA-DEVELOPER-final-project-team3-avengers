@@ -66,7 +66,9 @@ public interface OrderService {
 	OrdersDto updateStatementByCancleOrder(Long orderNo);
 
 	// 3.환불주문
-	OrdersDto updateStatementByRefundOrder(Long orderNo);
-
+	OrdersDto updateStatementByClientRefundOrder(Long orderNo);
+	// 4.환불주문
+	OrdersDto updateStatementByAdminRefundOrder(Long orderNo);
+	// 5.상태리셋
 	OrdersDto updateStatementByResetOrder(Long orderNo);
 }
