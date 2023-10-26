@@ -1,27 +1,27 @@
-                    <div th:fragment="product-card-component" th:remove="tag">
-						<div class="product-card product-list" th:each="productDto : ${productList}">
-							<a class="product-thumb" href="product_detail.html" th:href="@{http://localhost/product/${productDto.osId}}">
-								<img src="/bootstrap/img/shop/products/01.jpg" alt="Product" th:src="@{${productDto.pImage}}">
-							</a>
-							<div class="product-info">
-								<h3 class="product-title">
-									<a href="product_detail.html" th:href="@{'http://localhost/product/'+${productDto.osId}}" th:text="${productDto.name}">상품명</a>
-								</h3>
-								<h4 class="product-price" th:text="${productDto.totalPrice}+'원'">$34.99</h4>
-								<div th:each="option : ${productDto.optionSet}">
-									<div class="product-price" th:text="${option.name + ':' + option.value}">옵션명, 옵션값</div>
-								</div>
-									<div class="d-inline text-success" th:text="'등록일 : '+${productDto.updateTime}">등록일</div>
-									<div class="d-inline text-success" >리뷰수</div>
-								<div class="product-buttons">
-									<button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip" title="Whishlist">
-										<i class="icon-heart"></i>
-									</button>
-									<button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success" data-toast-position="topRight"
-										data-toast-icon="icon-circle-check" data-toast-title="Product" data-toast-message="successfuly added to cart!">
-										Add to Cart
-									</button>
-								</div>
-							</div>
-						</div>
-                    </div>
+<div th:fragment="product-card-component" th:remove="tag">
+	<div class="product-card product-list" th:each="productDto : ${productList}">
+		<a class="product-thumb" href="product_detail.html" th:href="@{http://localhost/product/${productDto.osId}}">
+			<img src="/bootstrap/img/shop/products/01.jpg" alt="Product" th:src="@{${productDto.pImage}}">
+		</a>
+		<div class="product-info">
+			<h3 class="product-title">
+				<a href="product_detail.html" th:href="@{'http://localhost/product/'+${productDto.osId}}" th:text="${productDto.name}">상품명</a>
+			</h3>
+			<h4 class="product-price" th:text="${productDto.totalPrice}+'원'">$34.99</h4>
+			<div th:each="option : ${productDto.optionSet}">
+				<div class="product-price" th:text="${option.name + ':' + option.value}">옵션명, 옵션값</div>
+			</div>
+				<div class="d-inline text-success" th:text="'등록일 : '+${productDto.updateTime}">등록일</div>
+				<div class="d-inline text-success" >리뷰수</div>
+			<div class="product-buttons">
+				<button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip" title="Whishlist">
+					<i class="icon-heart"></i>
+				</button>
+				<button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success" data-toast-position="topRight"
+					data-toast-icon="icon-circle-check" data-toast-title="Product" data-toast-message="successfuly added to cart!">
+					Add to Cart
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

@@ -9,11 +9,6 @@
 	<div class="offcanvas-wrapper">
 		<!-- Page Content-->
 
-
-
-
-		여기를 채워주시면 됩니다
-
 		<!-- Page Title-->
 		<div class="page-title">
 			<div class="container">
@@ -37,31 +32,15 @@
 				<!--profile component-->
 				<div th:insert="mypage_component :: profile-component"></div>
 				<!--profile component 끝-->
-				<!-- recentView Table-->
 				<div class="col-lg-8">
 					<div class="padding-top-2x mt-2 hidden-lg-up"></div>
 					<div class="table-responsive wishlist-table margin-bottom-none">
-
-						<table class="table">
-							<thead>
-								<tr>
-									<th>Product Name</th>
-									<!--제목-->
-									<th class="text-center"><a class="btn btn-sm btn-outline-danger" href="#">Clear
-											Wishlist</a></th>
-									<!--전체삭제버튼-->
-								</tr>
-							</thead>
-							<!--상품 반복-->
-
-							<!-- 하위 태그들은 size==1이면 빈상자 이미지로 대체-->
-							<tbody class="product-card-component"
-								th:include="myProduct-component :: myProduct-product-card"></tbody>
-
-							<!--상품반복 끝-->
-						</table>
-
-					</div>
+						<!-- recentView Table-->
+						<!-- 하위 태그들은 size==1이면 빈상자 이미지로 대체-->
+						<table class="table"
+							th:include="myProduct-component :: product-table"></table>
+						<!-- recentView Table-->
+						
 				</div>
 				<hr class="mb-4">
 				<div class="custom-control custom-checkbox">
@@ -69,6 +48,7 @@
 						class="custom-control-label" for="inform_me">Inform me when item from my wishlist is
 						available</label>
 
+					</div>
 				</div>
 			</div>
 		</div>

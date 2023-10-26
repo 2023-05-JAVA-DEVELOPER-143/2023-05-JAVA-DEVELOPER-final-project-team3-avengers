@@ -2,7 +2,9 @@ package com.danaga.service.product;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -25,10 +27,9 @@ import com.danaga.entity.Category;
 import com.danaga.entity.OptionSet;
 import com.danaga.entity.Options;
 import com.danaga.entity.Product;
-import com.danaga.repository.product.OptionNamesOnly;
+import com.danaga.repository.product.OptionNamesValues;
 import com.danaga.repository.product.OptionSetQueryData;
 import com.danaga.repository.product.OptionSetSearchQuery;
-import com.danaga.repository.product.OptionValuesOnly;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -111,7 +112,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 		List<ProductDto> searchResult = optionSetDao.findByFilter(QueryStringDataDto.builder()
 				.orderType(orderType)
 				.category(findCategory.get(findCategory.size()-1).getName())
-				.build()).stream().map(t -> new ProductDto(t)).collect(Collectors.toList());;
+				.build()).stream().limit(20).map(t -> new ProductDto(t)).collect(Collectors.toList());;
 		return ResponseDto.<ProductDto>builder().data(searchResult).build();
 	}
 
@@ -146,17 +147,11 @@ public class OptionSetServiceImpl implements OptionSetService {
 		@Transactional
 		public ResponseDto<?> showOptionNameValues(Long categoryId) {
 			if (categoryService.isYoungest(categoryId)) {
-				List<OptionNamesOnly> optionNames = optionDao.findOptionNamesByCategoryId(categoryId);
-				List<OptionValuesOnly> optionValues = optionDao.findOptionValuesByCategoryId(categoryId);
-				List<String> optionNameStrings = optionNames.stream().map(OptionNamesOnly::getName)
-						.collect(Collectors.toList());
-				List<String> optionValueStrings = optionValues.stream().map(OptionValuesOnly::getValue)
-						.collect(Collectors.toList());
-				OptionNameValueDto dto = OptionNameValueDto.builder().optionNames(optionNameStrings)
-						.optionValues(optionValueStrings).build();
-				List<OptionNameValueDto> data = new ArrayList<>();
+				List<OptionNamesValues> optionNameValue = optionDao.findOptionNameValueMapByCategoryId(categoryId);
+				Map<String,Set<String>> dto = optionNameValue.stream().collect(Collectors.groupingBy(OptionNamesValues::getName,Collectors.mapping(OptionNamesValues::getValue, Collectors.toSet())));
+				List<Map<String,Set<String>>> data = new ArrayList<>();
 				data.add(dto);
-				return ResponseDto.<OptionNameValueDto>builder().data(data).build();
+				return ResponseDto.<Map<String, Set<String>>>builder().data(data).build();
 			} else {
 				return ResponseDto.builder().error("하위 카테고리를 선택하세요").build();
 			}

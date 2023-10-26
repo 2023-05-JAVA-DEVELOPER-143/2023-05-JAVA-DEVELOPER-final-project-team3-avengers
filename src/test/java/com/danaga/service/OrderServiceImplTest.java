@@ -13,7 +13,9 @@ import org.springframework.data.domain.jaxb.SpringDataJaxb.OrderDto;
 import org.springframework.test.annotation.Rollback;
 
 import com.danaga.config.OrderStateMsg;
+import com.danaga.dto.CartDto;
 import com.danaga.dto.DeliveryDto;
+import com.danaga.dto.OrderGuestDto;
 import com.danaga.dto.OrdersDto;
 import com.danaga.dto.OrdersProductDto;
 import com.danaga.entity.Cart;
@@ -37,6 +39,35 @@ class OrderServiceImplTest {
 	DeliveryRepository deliveryRepository;
 	@Autowired
 	CartService cartService;
+	
+	@Transactional
+	@Rollback(false)
+	@Test
+	//@Disabled
+	void testGuestCartOrderSave() throws Exception {
+		// List<CartCreateDto> fUserCarts, DeliveryDto deliveryDto
+
+		
+		CartDto cartDto1 = CartDto.builder().qty(6).optionSetId(6L).build();
+		CartDto cartDto2 = CartDto.builder().qty(7).optionSetId(5L).build();
+		
+		List<CartDto> fUserCarts = new ArrayList();
+		fUserCarts.add(cartDto1);
+		fUserCarts.add(cartDto2);
+		
+		DeliveryDto deliveryDto = DeliveryDto.builder()
+					.address("어딘가10")
+					.phoneNumber("아무번호10")
+					.name("누군가10")
+					.build();
+		OrderGuestDto orderGuestDto = OrderGuestDto.builder()
+													.name("주문자명1")
+													.phoneNo("123-123123232322")
+													.build();
+		orderService.guestCartOrderSave(fUserCarts, deliveryDto,orderGuestDto);
+		
+	}
+	
 	@Transactional
 	@Rollback(false)
 	@Test
@@ -53,7 +84,7 @@ class OrderServiceImplTest {
 									   .orderItem_qty(3)
 									   .build();
 		
-		orderService.memberProductOrderSave("User2",ordersDto);
+		orderService.memberProductOrderSave("User5",ordersDto);
 	}
 	@Transactional
 	@Rollback(false)
@@ -77,14 +108,14 @@ class OrderServiceImplTest {
 	@Test
 	void testMemberOrderList()throws Exception {
 		
-		System.out.println("-----------------------------"+orderService.memberOrderList("User1"));
+		System.out.println("-----------------------------"+orderService.memberOrderList("User5"));
 		
 	}
 
 	@Transactional
 	@Rollback(false)
 	@Test
-	//@Disabled
+	@Disabled
 	void testMemberCartSelectOrderSave()throws Exception {
 		DeliveryDto deliveryDto = DeliveryDto.builder()
 				.address("ff")
@@ -105,30 +136,39 @@ class OrderServiceImplTest {
 	@Test
 	@Disabled
 	void testmemberOrderDetail()throws Exception {
-		System.out.println("777777777777777777777777"+orderService.memberOrderDetail(102L)); 
+		System.out.println("777777777777777777777777"+orderService.memberOrderDetail(5L)); 
 	}
 	@Test
 	@Disabled
 	void testUpdateStatementByNormalOrder() {
 		
 		System.out.println("44444444444444444444"+orderService.updateStatementByNormalOrder(5L));
-		orderService.updateStatementByNormalOrder(10L);
-		orderService.updateStatementByNormalOrder(24L);
-		orderService.updateStatementByNormalOrder(16L);
-		orderService.updateStatementByNormalOrder(18L);
+		orderService.updateStatementByNormalOrder(1L);
+		orderService.updateStatementByNormalOrder(2L);
+		orderService.updateStatementByNormalOrder(3L);
 	}
 	@Test
 	@Disabled
 	void testUpdateStatementByCancleOrder() {
 		
-		orderService.updateStatementByCancleOrder(13L);
+		orderService.updateStatementByCancleOrder(6L);
 		orderService.updateStatementByCancleOrder(19L);
 	}
 	@Test
 	@Disabled
 	void testUpdateStatementByRefundOrder() {
 		
-		orderService.updateStatementByRefundOrder(10L);
+		orderService.updateStatementByRefundOrder(1L);
+		orderService.updateStatementByRefundOrder(2L);
+		orderService.updateStatementByRefundOrder(3L);
 	}
+	@Test
+	@Disabled
+	void testUpdateStatementByResetOrder() {
+		
+		orderService.updateStatementByResetOrder(19L);
+	}
+	
+
 
 }
