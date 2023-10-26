@@ -10,10 +10,6 @@
 		<!-- Page Content-->
 
 
-
-
-		여기를 채워주시면 됩니다
-
 		<!-- Page Title-->
 		<div class="page-title">
 			<div class="container">
@@ -38,14 +34,14 @@
 			<div class="row">
 				<!-- Poduct Gallery-->
 				<div class="col-md-6">
-					<div class="product-gallery">
+					<div class="product-gallery" th:object="${productList}">
 						<div class="gallery-wrapper">
 						</div>
 						<div class="product-carousel owl-carousel gallery-wrapper">
 							<div class="gallery-item" data-hash="one">
-								<a href="img/shop/products/01.jpg" data-size="1000x667" th:href="${product.img}"><img
+								<a href="img/shop/products/01.jpg" data-size="1000x667" th:href="@{*{pImage}}"><img
 										src="img/shop/single/01.jpg" alt="Product"
-										th:src="@{/images/gtvglogo.png},title=#{logo},alt=#{logo}"></a>
+										th:src="@{*{pImage}}"></a>
 							</div>
 						</div>
 					</div>
@@ -53,27 +49,25 @@
 				<!-- Product Info-->
 				<div class="col-md-6">
 					<div class="padding-top-2x mt-2 hidden-md-up"></div><!--별점 -->
-					<div class="rating-stars" th:each="rating"><i class="icon-star filled"></i><i class="icon-star"></i>
-					</div><span class="text-muted align-middle" th:text="${rating}|${reviews.size}">&nbsp;&nbsp;4.2 | 3
+					<div class="rating-stars" ><i class="icon-star filled"></i><i class="icon-star"></i>
+					</div><span class="text-muted align-middle" >&nbsp;&nbsp;4.2 | 3
 						customer reviews</span>
-					<h2 class="padding-top-1x text-normal" th:text="${productName}">Product Name</h2><span
-						class="h2 d-block" th:text="${optionset.totalPrice}">
-						<del class="text-muted text-normal" th:text="${optionset.totalPrice}/{member.grade}">상품 원래
-							가격</del>&nbsp; 멤버등급할인된가격</span>
-					<p th:text="${options}">상품 옵션들 나열</p>
+					<h2 class="padding-top-1x text-normal" th:text="*{name}">Product Name</h2>
+					<span class="h2 d-block" th:text="*{totalPrice}">멤버등급할인된가격</span>
+					<p th:text="*{optionSet}">상품 옵션들 나열</p>
 					<div class="row margin-top-1x">
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label for="size">다른 옵션 보기</label>
-								<select class="form-control" id="size" th:each="${optionsetlist}">
+								<select class="form-control" id="size">
 									<option>Chooze options</option>
-									<option th:text="${optionset}">11.5</option>
-									<option th:text="${optionset}">11</option>
-									<option th:text="${optionset}">10.5</option>
-									<option th:text="${optionset}">10</option>
-									<option th:text="${optionset}">9.5</option>
-									<option th:text="${optionset}">9</option>
-									<option th:text="${optionset}">8.5</option>
+									<option>11.5</option>
+									<option>11</option>
+									<option>10.5</option>
+									<option>10</option>
+									<option>9.5</option>
+									<option>9</option>
+									<option>8.5</option>
 								</select>
 							</div>
 						</div>
@@ -115,25 +109,25 @@
 					<div class="tab-content">
 						<div class="tab-pane fade show active" id="description" role="tabpanel">
 							<img src="img/reviews/01.jpg" alt="Review author"
-								th:attr="src=@{/images/gtvglogo.png},title=#{logo},alt=#{logo}"><!--상품설명이미지-->
+								><!--상품설명이미지-->
 						</div>
-						<div class="tab-pane fade" id="reviews" role="tabpanel" th:each="${reviews}">
+						<div class="tab-pane fade" id="reviews" role="tabpanel" >
 							<!-- Review-->
 							<div class="comment">
 								<div class="comment-author-ava"><img src="img/reviews/01.jpg" alt="Review author"
-										th:attr="src=@{/images/gtvglogo.png},title=#{logo},alt=#{logo}"></div>
+										></div>
 								<div class="comment-body">
 									<div class="comment-header d-flex flex-wrap justify-content-between">
-										<h4 class="comment-title" th:text="${review.title}">리뷰제목</h4>
+										<h4 class="comment-title" >리뷰제목</h4>
 										<div class="mb-2">
-											<div class="rating-stars" th:each="${review.rating}"><i
+											<div class="rating-stars" ><i
 													class="icon-star filled"></i><i class="icon-star"></i>
 											</div>
 										</div>
 									</div>
-									<p class="comment-text" th:text="${review.content}">리뷰내용</p>
+									<p class="comment-text" >리뷰내용</p>
 									<div class="comment-footer"><span class="comment-meta"
-											th:text="${review.writer}">작성자</span></div>
+											>작성자</span></div>
 								</div>
 							</div>
 							<!-- Review Form-->
@@ -192,17 +186,15 @@
 			<!-- Carousel-->
 			<div class="owl-carousel"
 				data-owl-carousel="{ &quot;nav&quot;: false, &quot;dots&quot;: true, &quot;margin&quot;: 30, &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;576&quot;:{&quot;items&quot;:2},&quot;768&quot;:{&quot;items&quot;:3},&quot;991&quot;:{&quot;items&quot;:4},&quot;1200&quot;:{&quot;items&quot;:4}} }"
-				th:each="${optionsetlist}">
+				th:each="productDto:${hits}">
 				<!-- Product-->
 				<div class="grid-item">
 					<div class="product-card">
 						<a class="product-thumb" href="product-detail.html" th:href="product-detail.html"><img
 								src="img/shop/products/09.jpg" alt="Product"
-								th:attr="src=@{/images/gtvglogo.png},title=#{logo},alt=#{logo}"></a>
-						<h3 class="product-title" th:text="${productname}"><a href="product-detail.html">상품명</a></h3>
-						<h4 class="product-price" th:text="${optionset.totalprice}/grade">
-							<del th:text="${optionset.totalprice}">$44.95</del>$34.99
-						</h4>
+								th:attr="src=@{${productDto.pImage}}"></a>
+						<h3 class="product-title" th:text="${productDto.name}"><a href="product-detail.html">상품명</a></h3>
+						<h4 class="product-price" th:text="${productDto.totalPrice}">$34.99</h4>
 						<div class="product-buttons">
 							<button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip"
 								title="Whishlist"><i class="icon-heart"></i></button>

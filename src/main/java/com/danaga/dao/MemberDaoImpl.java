@@ -44,16 +44,13 @@ public class MemberDaoImpl implements MemberDao {
 	}
 
 	public Member update(Member updateMember) throws Exception {
-		Optional<Member> findOptionalMember = memberRepository.findByUserName(updateMember.getUserName());
+		Optional<Member> findOptionalMember = memberRepository.findById(updateMember.getId());
 		Member updatedMember = null;
 		if (findOptionalMember.isPresent()) {
 			Member member = findOptionalMember.get();
 			member.setPassword(updateMember.getPassword());
-			member.setEmail(updateMember.getEmail());
-			member.setName(updateMember.getName());
 			member.setNickname(updateMember.getNickname());
 			member.setAddress(updateMember.getAddress());
-			member.setPhoneNo(updateMember.getPhoneNo());
 			updatedMember = memberRepository.save(member);
 		} else {
 			throw new MemberNotFoundException("존재하지 않는 회원입니다");

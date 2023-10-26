@@ -57,8 +57,8 @@ public class OrderDaoImpl implements OrderDao {
 //	}
 	
 	//주문SAVE
-	public Orders save(Orders orders, String sUserId) {
-		orders.setMember(memberRepository.findByUserName(sUserId).get());
+	public Orders save(Orders orders) {
+	
 		return orderRepository.save(orders);
 	}
 	
@@ -113,8 +113,8 @@ public class OrderDaoImpl implements OrderDao {
 	//Id로 주문전체(특정사용자)
 	
 	@Override
-	public List<Orders> findOrdersByMember_UserName(String userName) {
-
+	public List<Orders> findOrdersByMember_UserName(String userName){
+	
 		List<Orders> orders = orderRepository.findOrdersByMember_UserName(userName);
 
 		return orders;

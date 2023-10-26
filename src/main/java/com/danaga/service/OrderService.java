@@ -3,8 +3,6 @@ package com.danaga.service;
 import java.util.List;
 
 import com.danaga.dao.OrderDao;
-
-import com.danaga.dto.OrdersDto;
 import com.danaga.entity.Delivery;
 
 import com.danaga.dto.*;
@@ -14,39 +12,43 @@ import com.danaga.entity.Orders;
 
 public interface OrderService {
 	/*
+	 * 비회원 카트에서 주문
+	 */
+	OrdersDto guestCartOrderSave(List<CartDto> fUserCarts, DeliveryDto deliveryDto, OrderGuestDto orderGuestDto)  throws Exception; 
+
+	/*
 	 * 상품에서 직접주문
 	 */
-	OrdersResponseDto memberProductOrderSave(OrdersDto ordersDto, Long optionSetId, String oName, String oPhoneNumber,String sUserId)
-			throws Exception;
+	OrdersDto memberProductOrderSave(String sUserId,OrdersProductDto ordersProductDto) throws Exception;
 
 	/*
 	 * cart에서 주문
 	 */
-	public Orders memberCartOrderSave(OrdersDto ordersDto, String sUserId,Delivery delivery) throws Exception;
+	OrdersDto memberCartOrderSave(String sUserId,DeliveryDto deliveryDto) throws Exception;
 
 	/*
 	 * cart에서 선택주문
 	 */
-	Orders memberCartSelectOrderSave(OrdersDto ordersDto, String[] cart_item_noStr_array)throws Exception;
+	OrdersDto memberCartSelectOrderSave(String sUserId,DeliveryDto deliveryDto,List<Long> optionSetIdArray)throws Exception;
 	/*
 	 * 주문+주문아이템 목록
 	 */
-	List<Orders> memberOrderList(String userName);
+	List<OrdersDto> memberOrderList(String userName)throws Exception;
 
 	/*
 	 * 주문상세보기
 	 */
-	Orders memberOrderDetail(Long orderNo) throws Exception;
+	OrdersDto memberOrderDetail(Long orderNo) throws Exception;
 
 	// 주문상태업데이트(특정주문)
 	// 1.정상주문
-	Orders updateStatementByNormalOrder(Long orderNo, String sUserId);
+	OrdersDto updateStatementByNormalOrder(Long orderNo);
 
 	// 2.취소주문
-	Orders updateStatementByCancleOrder(Long orderNo, String sUserId);
+	OrdersDto updateStatementByCancleOrder(Long orderNo);
 
 	// 3.환불주문
-	Orders updateStatementByRefundOrder(Long orderNo, String sUserId);
+	OrdersDto updateStatementByRefundOrder(Long orderNo);
 
-	Orders updateStatementByResetOrder(Long orderNo, String sUserId);
+	OrdersDto updateStatementByResetOrder(Long orderNo);
 }

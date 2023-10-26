@@ -20,27 +20,8 @@
 			<!-- Page Content-->
 			<div class="container padding-bottom-3x mb-2">
 				<div class="row">
-					<div class="col-lg-4">
-						<aside class="user-info-wrapper">
-              <div class="user-cover" style="background-image: url(img/account/user-cover-img.jpg);">
-                <div class="info-label" data-toggle="tooltip"><i class="icon-medal"></i>Silver&nbsp;<span>6000points</span></div>
-              </div>
-              <div class="user-info">
-                <div class="user-data">
-                  <h1>다나카</h1>
-                </div>
-              </div>
-            </aside>
-						<nav class="list-group">
-							<a class="list-group-item with-badge" href="account-orders.html"><i
-								class="icon-bag"></i>주문 목록<span
-								class="badge badge-primary badge-pill">6</span></a><a
-								class="list-group-item active" href="account-profile.html"><i
-								class="icon-head"></i>내 정보</a><a
-								class="list-group-item with-badge" href="account-wishlist.html"><i
-								class="icon-heart"></i>관심 상품<span
-								class="badge badge-primary badge-pill">3</span></a>
-						</nav>
+					<div class="col-lg-4" th:insert="mypage_component :: mypage">
+						
 					</div>
 					<div class="col-lg-8">
 						<div class="padding-top-2x mt-2 hidden-lg-up"></div>

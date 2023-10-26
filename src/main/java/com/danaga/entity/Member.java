@@ -75,13 +75,13 @@ public class Member {
 	}
 
 	public static Member toUpdateEntity(MemberUpdateDto memberUpdateDto) {
-		return Member.builder().id(memberUpdateDto.getId()).password(memberUpdateDto.getPassword()).userName(memberUpdateDto.getUserName())
+		return Member.builder().id(memberUpdateDto.getId()).password(memberUpdateDto.getPassword())
 				.nickname(memberUpdateDto.getNickname()).address(memberUpdateDto.getAddress()).build();
 	}
 
 	public static Member toGuestEntity(MemberInsertGuestDto memberInsertGuestDto) {
 		return Member.builder().id(memberInsertGuestDto.getId()).name(memberInsertGuestDto.getName())
-				.phoneNo(memberInsertGuestDto.getPhoneNo()).build();
+				.phoneNo(memberInsertGuestDto.getPhoneNo()).role(memberInsertGuestDto.getRole()).build();
 	}
 	// 관계설정
 
