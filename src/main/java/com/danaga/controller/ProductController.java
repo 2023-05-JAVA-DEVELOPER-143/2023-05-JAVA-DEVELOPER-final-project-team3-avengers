@@ -54,15 +54,38 @@ public class ProductController {
 	// 상품 클릭해서 디테일 들어갈때 조회수 업뎃 ㅇㅇ
 	// product detail 조회시 recentView 추가 ㅇㅇ
 
-	//메인페이지에서 카테고리별 인기상품
-	//최신상품 뽑는 거 
 	
 	//옵션명,값 뽑는거 다시  옵션:list<값> 으로 나오게 ㅇㅇ 
 
 	//필터 쿼리 짜기....
 	//th:link들 하고 핸들바{}하고 
-	//상단바의 검색 으로 키워드 검색 하는거 만들기 
 	
+	
+	//상단바의 검색 으로 키워드 검색 하는거 만들기 
+	@GetMapping("/site_search")
+	public String site_search(Model model) {
+		try {
+			String nameKeyword = (String) model.getAttribute("site_search");
+			//검색 메인화면에 최상위 카테고리 선택할수 있게 표시
+			ResponseDto<CategoryDto> categoryResponseDto = categoryService.AncestorCategories();
+			List<CategoryDto> categoryList = categoryResponseDto.getData();
+			ResponseDto<ProductDto> responseDto = service.searchProducts(//주문수로 전체상품 정렬하여 조회
+					QueryStringDataDto.builder()
+					.nameKeyword(nameKeyword)
+					.orderType(OptionSetQueryData.BY_ORDER_COUNT)
+					.build());
+			List<ProductDto> productList = responseDto.getData();
+			log.warn(productList.toString()+categoryList.toString());
+			model.addAttribute("productList",productList);
+			model.addAttribute("categoryList",categoryList);
+			return "product/product";
+		} catch (Exception e) {
+			// error페이지, 페이지내 에러 메세지 넘겨주기
+			e.printStackTrace();
+			model.addAttribute("errorMsg", e.getMessage());
+			return null;
+		}
+	}
 	//전체상품 
 	@GetMapping
 	public String searchProduct(Model model) {
@@ -95,6 +118,7 @@ public class ProductController {
 		try {
 			ProductDto productList =(ProductDto) service.findById(optionSetId).getData().get(0);
 			//해당 옵션셋 찾아서 뿌리기
+			List<ProductDto> optionSets = (List<ProductDto>) service.showOtherOptionSets(optionSetId).getData();
 			service.updateViewCount(optionSetId);
 			//디테일 들어갈때 조회수도 증가
 			List<ProductDto> hits = service.displayHitProducts(optionSetId).getData();
@@ -109,6 +133,7 @@ public class ProductController {
 			}//최근본상품에 추가
 			log.warn(productList.toString()+hits.toString());
 			model.addAttribute("productList",productList);
+			model.addAttribute("otherOptions",optionSets);
 			model.addAttribute("hits",hits);
 			return "product/product_detail";
 		} catch (Exception e) {
