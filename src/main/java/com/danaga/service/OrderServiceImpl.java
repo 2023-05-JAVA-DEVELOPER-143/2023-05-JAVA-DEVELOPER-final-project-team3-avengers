@@ -8,10 +8,6 @@ import org.springframework.stereotype.Service;
 import com.danaga.config.OrderStateMsg;
 import com.danaga.dao.MemberDao;
 import com.danaga.dao.OrderDao;
-
-import com.danaga.dto.MemberInsertGuestDto;
-import com.danaga.dto.MemberResponseDto;
-
 import com.danaga.dao.product.OptionSetDao;
 import com.danaga.dto.*;
 import com.danaga.entity.*;
@@ -134,7 +130,7 @@ public class OrderServiceImpl implements OrderService {
 	 * 상품에서 직접주문(비회원)
 	 */
 	@Transactional
-	public OrdersDto memberProductOrderSave(OrdersProductDto ordersProductDto,OrderGuestDto orderGuestDto) throws Exception {
+	public OrdersDto guestProductOrderSave(OrdersProductDto ordersProductDto,OrderGuestDto orderGuestDto) throws Exception {
 		
 		
 		OptionSet optionSet = optionSetDao.findById(ordersProductDto.getOptionSetId());// 상품 찾고
@@ -184,8 +180,8 @@ public class OrderServiceImpl implements OrderService {
 	/*
 	 * cart에서 선택주문(비회원)
 	 */
-
-	public OrdersDto memberCartSelectOrderSave(DeliveryDto deliveryDto,List<Long> optionSetIdArray,OrderGuestDto orderGuestDto)throws Exception {
+	@Transactional
+	public OrdersDto guestCartSelectOrderSave(DeliveryDto deliveryDto,List<CartDto> fUserCarts,OrderGuestDto orderGuestDto)throws Exception {
 
 		ArrayList<OrderItem> orderItemList = new ArrayList<>();
 		
@@ -199,29 +195,24 @@ public class OrderServiceImpl implements OrderService {
 				   .build());
 	   	Member member= Member.toResponseEntity(memberResponseDto);
 
-		System.out.println("@@@@@@@@@@@@@@@@@@memberResponseDto: "+memberResponseDto);
-	
-		
-		for (int i = 0; i < optionSetIdArray.size(); i++) {
-			Cart cart = cartRepository.findByOptionSetIdAndMemberId(optionSetIdArray.get(i),memberResponseDto.getId());
-    		System.out.println("@@@@@@@@@@@@@@@@@@cart: "+cart);
+		for (int i = 0; i < fUserCarts.size(); i++) {
+			
+			CartDto cartDto= fUserCarts.get(i);
+			OptionSet optionSet = optionSetDao.findById(cartDto.getId());
+			
 
-		    o_tot_price+=(cart.getOptionSet().getTotalPrice())*(cart.getQty());
-		    oi_tot_count+=cart.getQty();
+		    o_tot_price+=(optionSet.getTotalPrice())*(cartDto.getQty());
+		    oi_tot_count+=cartDto.getQty();
 		
             OrderItem inputOIEntity = OrderItem.builder()
-							                   .qty(cart.getQty())
-							                   .optionSet(cart.getOptionSet())
+							                   .qty(cartDto.getQty())
+							                   .optionSet(optionSet)
 							                   .build();
-    		System.out.println("@@@@@@@@@@@@@@@@@@orderItemEntity: "+inputOIEntity);
 
             orderItemList.add(inputOIEntity);
 		}
-			System.out.println("@@@@@@@@@@@@@@@@@@orderItemList: "+orderItemList);
 	       
 			OptionSet optionSet= optionSetDao.findById(orderItemList.get(0).getOptionSet().getId());
-			System.out.println("@@@@@@@@@@@@@@@@@@optionSet: "+optionSet);
-	       
 			
 			String o_desc = optionSet.getProduct().getName() + "외" + (oi_tot_count - 1) + "개";
 	      
@@ -267,8 +258,8 @@ public class OrderServiceImpl implements OrderService {
 	 */
 	
 	@Transactional
-	public List<OrdersDto> memberOrderList(Long orderNo, String phoneNumber)throws Exception {
-		if(phoneNumber==memberService.getMemberBy(phoneNumber).getPhoneNo()) {
+	public List<OrdersDto> guestOrderList(Long orderNo, String phoneNumber)throws Exception {
+		if(phoneNumber.equals(memberService.getMemberBy(phoneNumber).getPhoneNo())) {
 			if(orderNo==orderDao.findById(orderNo).getId()) {
 				List<Orders> orderList= new ArrayList<>();	
 				orderList.add(orderDao.findById(orderNo));
@@ -325,25 +316,13 @@ public class OrderServiceImpl implements OrderService {
 		delivery.setOrders(orders);
 		orderItem.setOrders(orders); //transactional
 		
-//	    MemberResponseDto memberResponseDto =memberService.getMemberBy(sUserId);
+	    MemberResponseDto memberResponseDto =memberService.getMemberBy(sUserId);
 		
-//	      memberResponseDto.setGradePoint((int)((orders.getPrice())*0.1));
-//	      memberService.updateGrade(Member.builder()
-//	                           .id(memberResponseDto.getId())
-//	                           .userName(memberResponseDto.getUserName())
-//	                           .password(memberResponseDto.getPassword())
-//	                           .email(memberResponseDto.getEmail())
-//	                           .nickname(memberResponseDto.getNickname())
-//	                           .address(memberResponseDto.getAddress())
-//	                           .phoneNo(memberResponseDto.getPhoneNo())
-//	                           .joinDate(memberResponseDto.getJoinDate())
-//	                           .birthday(memberResponseDto.getBirthday())
-//	                           .role(memberResponseDto.getRole())
-//	                           .grade(memberResponseDto.getGrade())
-//	                           .gradePoint(memberResponseDto.getGradePoint())
-//	                           .build(),memberResponseDto.getGradePoint());
-//	     
-//	     orders.setMember(Member.toResponseEntity(memberResponseDto));
+	      Member member1= Member.toResponseEntity(memberResponseDto);
+	      
+	       memberService.updateGrade(member1,(int)((orders.getPrice())*0.001));
+	     
+	      orders.setMember(Member.toResponseEntity(memberResponseDto));
 		
 		return OrdersDto.orderDto(orders);
 		
@@ -402,22 +381,13 @@ public class OrderServiceImpl implements OrderService {
 	      delivery.setOrders(orders);
 	      
 	      
-//	      MemberResponseDto memberResponseDto =memberService.getMemberBy(sUserId);
-//	      
-//	      memberResponseDto.setGradePoint((int)((orders.getPrice())*0.1));
-//	      memberService.updateGrade(Member.builder()
-//	                           .id(memberResponseDto.getId())
-//	                           .userName(memberResponseDto.getUserName())
-//	                           .password(memberResponseDto.getPassword())
-//	                           .email(memberResponseDto.getEmail())
-//	                           .nickname(memberResponseDto.getNickname())
-//	                           .address(memberResponseDto.getAddress())
-//	                           .phoneNo(memberResponseDto.getPhoneNo())
-//	                           .joinDate(memberResponseDto.getJoinDate())
-//	                           .birthday(memberResponseDto.getBirthday())
-//	                           .role(memberResponseDto.getRole())
-//	                           .grade(memberResponseDto.getGrade())
-//	                           .build(),memberResponseDto.getGradePoint());
+		    MemberResponseDto memberResponseDto =memberService.getMemberBy(sUserId);
+			
+		      Member member1= Member.toResponseEntity(memberResponseDto);
+		      
+		       memberService.updateGrade(member1,(int)((orders.getPrice())*0.001));
+		     
+		      orders.setMember(Member.toResponseEntity(memberResponseDto));
 	      
 	      return OrdersDto.orderDto(orders);
 	   }
@@ -495,6 +465,16 @@ public class OrderServiceImpl implements OrderService {
 		      System.out.println("@@@@@@@@@@@@@@@@@@orderItemList: "+orderItemList);
 		      System.out.println("@@@@@@@@@@@@@@@@@@real orders: "+realOrders);
 
+		      
+		    MemberResponseDto memberResponseDto1 =memberService.getMemberBy(sUserId);
+			
+		      Member member1= Member.toResponseEntity(memberResponseDto1);
+		      
+		       memberService.updateGrade(member1,(int)((orders.getPrice())*0.001));
+		     
+		      orders.setMember(Member.toResponseEntity(memberResponseDto1));
+	      
+		      
 		return OrdersDto.orderDto(orders);
 	}
 
