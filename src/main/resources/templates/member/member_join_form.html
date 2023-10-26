@@ -61,7 +61,7 @@
           <div class="col-md-6">
             <div class="padding-top-3x hidden-md-up"></div>
             <h3 class="margin-bottom-1x">회원가입</h3>
-            <form class="row" name="f" method="post" th:object="${fuser!=null ? fuser : new com.danaga.dto.MemberResponseDto()}">
+            <form class="row" name="f" method="post" >
               <div class="col-sm-6">
                 <div class="form-group">
                   <label for="reg-username">아이디</label>
@@ -95,7 +95,7 @@
               <div class="col-sm-6">
                 <div class="form-group">
                   <label for="reg-birthday">생년월일</label>
-                  <input class="form-control" type="text" placeholder="ex) 19980617" th:value="*{birthday}" id="reg-birthday" required>
+                  <input class="form-control" type="text" placeholder="ex) 19980617" id="reg-birthday" required>
                 </div>
               </div>
               <div class="col-sm-6">

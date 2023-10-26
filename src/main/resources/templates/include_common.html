@@ -1,7 +1,7 @@
 <!-- Navbar-->
-<div th:fragment="header">
 
-	<head>
+
+	<head th:fragment="head" th:remove="tag">
 		<meta charset="utf-8">
 		<title>다나가닷컴
 		</title>
@@ -29,13 +29,13 @@
 		<script src="/bootstrap/js/modernizr.min.js"></script>
 		<!--handlebars-->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js" integrity="sha512-E1dSFxg+wsfJ4HKjutk/WaCzK7S2wv1POn1RRPGh8ZK+ag9l244Vqxji3r6wgz9YBf6+vhQEYJZpSjqWFPg9gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-		<link id="mainStyles" rel="stylesheet" media="screen" href="gptcss.css">
 
 		
 	</head>
-	<header class="navbar navbar-sticky navbar-dark bg-dark">
+
+	<header class="navbar navbar-sticky navbar-dark bg-dark" th:fragment="header" th:remove="tag">
 		<!-- Search-->
-		<form class="site-search" method="get">
+		<form class="site-search" method="get" url="/product/site_search">
 			<input type="text" name="site_search" placeholder="Type to search...">
 			<div class="search-tools"><span class="clear-search">Clear</span><span class="close-search"><i
 						class="icon-cross"></i></span></div>
@@ -217,7 +217,7 @@
 			</div>
 		</div>
 	</header>
-</div>
+
 
 <!-- Site Footer-->
 <div th:fragment="footer">
