@@ -172,7 +172,7 @@ public class CartRestController {
 	// responseDto 생성하기
 	// 회원 성공 + 비회원 성공
 	@Operation(summary = "카트리스트 보기")
-	@GetMapping
+	@GetMapping("/list")
 	public ResponseEntity<Long> findCarts(HttpSession session, Model model) throws Exception {
 		sUserId = (String) session.getAttribute("sUserId");
 		// 회원일시 session에 담긴 sUserId로 멤버카트 불러오기
@@ -188,7 +188,7 @@ public class CartRestController {
 		List<CartDto> f = (List<CartDto>) model.getAttribute("fUserCarts");
 		return ResponseEntity.status(HttpStatus.OK).body(f.get(0).getId());
 		// return 후 템플릿에서 타임리프로 리스트 돌려가며 뿌리기
-	}
+	}  
 	
 		// 장바구니에 몇개 담겼는지 숫자 체크 
 	
