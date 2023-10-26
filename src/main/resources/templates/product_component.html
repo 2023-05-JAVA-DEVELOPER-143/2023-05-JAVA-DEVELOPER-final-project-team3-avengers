@@ -14,7 +14,7 @@
 				<div class="d-inline text-success" th:text="'등록일 : '+${productDto.updateTime}">등록일</div>
 				<div class="d-inline text-success" >리뷰수</div>
 			<div class="product-buttons">
-				<button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip" title="Whishlist">
+				<button class="btn btn-outline-secondary btn-sm btn-wishlist" data-no="${productDto.osId}" data-toggle="tooltip" title="Whishlist">
 					<i class="icon-heart"></i>
 				</button>
 				<button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success" data-toast-position="topRight"
