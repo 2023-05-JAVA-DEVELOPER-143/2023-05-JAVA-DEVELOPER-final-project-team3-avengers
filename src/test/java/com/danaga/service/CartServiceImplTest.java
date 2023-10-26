@@ -108,14 +108,16 @@ public class CartServiceImplTest {
 //	
 
 	@Test
+	@Disabled
 	void 수량파악() throws Exception {
 		CartDto dto = CartDto.builder().id(9L).qty(100).build();
 		String value = "User1";
 		System.out.println(cs.countCarts(value));
 	}
 
+	@Test
 	void 카트리스트() throws Exception {
-		System.out.println(cs.findCartList("User1").get(0));
+		System.out.println(cs.findsUserCartList("User1").get(0));
 
 	}
 

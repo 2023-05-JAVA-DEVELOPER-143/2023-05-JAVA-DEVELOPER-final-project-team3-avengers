@@ -1,20 +1,19 @@
 package com.danaga.service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import com.danaga.dao.MemberDao;
 import com.danaga.dao.product.OptionSetDao;
-import com.danaga.dto.CartUpdateOptionSetDto;
 import com.danaga.dto.CartDto;
-import com.danaga.dto.CartUpdateResponseDto;
+import com.danaga.dto.FUserCartResponseDto;
+import com.danaga.dto.SUserCartResponseDto;
 
 import lombok.RequiredArgsConstructor;
 import com.danaga.entity.Cart;
 import com.danaga.entity.OptionSet;
 import com.danaga.repository.CartRepository;
-
-import groovyjarjarantlr4.v4.parse.ANTLRParser.exceptionGroup_return;
 
 /*****************************************************************************************/
 @Service
@@ -26,10 +25,22 @@ public class CartServiceImpl implements CartService {
 
 	// 유저 카트 리스트
 	@Override
-	public List<Cart> findCartList(String sUserId) throws Exception {
+	public List<SUserCartResponseDto> findsUserCartList(String sUserId) throws Exception {
 		Long memberId = findMemberId(sUserId);
-		return cartRepository.findByMemberId(memberId);
+		System.out.println(">>>>>>>>>>>>>" + memberId);
+		List<Cart> findCarts = cartRepository.findByMemberId(memberId);
+		System.out.println(">>>>>>>>>> findCarts 리스트의 사이즈 == " + findCarts.size());
+		List<SUserCartResponseDto> list = new ArrayList<>();
+		for (int i = 0; i < findCarts.size(); i++) {
+			list.add(SUserCartResponseDto.toDto(findCarts.get(i)));
+		}
+		return list;
+	}
 
+	@Override
+	public FUserCartResponseDto findfUserCartList(CartDto dto) {
+		OptionSet findOptionset = optionSetDao.findById(dto.getId());
+		return FUserCartResponseDto.toDto(findOptionset, dto.getQty());
 	}
 
 	// 카트에 동일제품 체크 후 장바구니 수량 업데이트 or 카트 인서트
@@ -65,7 +76,7 @@ public class CartServiceImpl implements CartService {
 
 	// 옵션셋 변경
 	@Override
-	public List<CartDto> updateCartOptionSet(List<Long> ids, String sUserId) throws Exception{
+	public List<CartDto> updateCartOptionSet(List<Long> ids, String sUserId) throws Exception {
 		List<CartDto> updateCarts = new ArrayList<>();
 		Long memberId = memberDao.findMember(sUserId).getId(); // 회원의 MemberPk
 		Long oldOptionsetId = ids.get(0); // 기존 카트에 담겨있던 OptionsetId
@@ -87,15 +98,15 @@ public class CartServiceImpl implements CartService {
 				findCart.setOptionSet(optionSetDao.findById(changeOptionsetId));
 				cartRepository.save(findCart);
 
-				//updateCarts.add(CartUpdateResponseDto.toDto(findCart));
+				// updateCarts.add(CartUpdateResponseDto.toDto(findCart));
 			} else if (findCart.getQty() >= 2) {
 				// 기존 카트의 수량이 2 이상 , 중복 옵션셋 카트 X == 수량 변경시 기존 카트 수량 -1 후 세이브 , 변경 카트 인써트
 				findCart.setQty(findCart.getQty() - 1);
 				cartRepository.save(findCart);
 				cartRepository.save(newCart);
 
-				//updateCarts.add(CartUpdateResponseDto.toDto(newCart));
-				//updateCarts.add(CartUpdateResponseDto.toDto(findCart));
+				// updateCarts.add(CartUpdateResponseDto.toDto(newCart));
+				// updateCarts.add(CartUpdateResponseDto.toDto(findCart));
 			}
 		} else {
 			if (findCart.getQty() == 1) {
@@ -110,10 +121,9 @@ public class CartServiceImpl implements CartService {
 				findDuplicateCart.setQty(findDuplicateCart.getQty() + 1);
 				cartRepository.save(findCart);
 				cartRepository.save(findDuplicateCart);
-				
-				
-				//updateCarts.add(CartUpdateResponseDto.toDto(findCart));
-				//updateCarts.add(CartUpdateResponseDto.toDto(findDuplicateCart));
+
+				// updateCarts.add(CartUpdateResponseDto.toDto(findCart));
+				// updateCarts.add(CartUpdateResponseDto.toDto(findDuplicateCart));
 			}
 		}
 		return null;
