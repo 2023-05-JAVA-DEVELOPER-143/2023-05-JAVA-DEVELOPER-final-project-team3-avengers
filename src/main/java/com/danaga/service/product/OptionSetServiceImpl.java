@@ -128,14 +128,14 @@ public class OptionSetServiceImpl implements OptionSetService {
 	// 해당 프로덕트의 옵션셋들이 무엇이 있는지 알아야함
 	// 그리고 옵션 변경이 아니라 옵션셋 변경으로
 	// 프로덕트 아이디로 옵션셋 찾기
-	// 품절옵션은 일단 표시하고 프론트에서 표시
+	// 품절옵션은 일단 표시하고 프론트에서 표시?
 	@Override
 	@Transactional
-	public ResponseDto<?> showOtherOptionSets(Long optionSetId) {
+	public ResponseDto<ProductDto> showOtherOptionSets(Long optionSetId) {
 		Product product = productDao.findByOptionSetId(optionSetId);
 		List<ProductDto> findOptionSets = optionSetDao.findAllByProductId(product.getId()).stream().map(t -> new ProductDto(t)).collect(Collectors.toList());;
 		for (ProductDto optionSet : findOptionSets) {
-			if (optionSet.getStock() == 1)
+			if (optionSet.getStock() == 0)
 				findOptionSets.remove(optionSet);
 		}
 		return ResponseDto.<ProductDto>builder().data(findOptionSets).build();

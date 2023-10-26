@@ -33,6 +33,6 @@ public interface OptionSetService {
 		
 		ResponseDto<ProductDto> searchProducts(QueryStringDataDto dto);
 		
-		ResponseDto<?> showOtherOptionSets(Long optionSetId);
+		ResponseDto<ProductDto> showOtherOptionSets(Long optionSetId);
 		
 }

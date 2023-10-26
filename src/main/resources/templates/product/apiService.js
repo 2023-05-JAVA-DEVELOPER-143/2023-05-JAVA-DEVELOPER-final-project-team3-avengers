@@ -1,6 +1,6 @@
 import {API_BASE_URL,REMOVE_RECENT_VIEW,ADD_WISHLIST,REMOVE_WISHLIST,
     TAP_HEART,UNTAP_HEART,CHILD_CATEGORY,SHOW_OPTIONS,SEARCH} from "./api-config.js";
-export function call(api, method,request){
+function call(api, method,request){
     let headers = new Headers({
         "Content-Type": "application/json",
     })
