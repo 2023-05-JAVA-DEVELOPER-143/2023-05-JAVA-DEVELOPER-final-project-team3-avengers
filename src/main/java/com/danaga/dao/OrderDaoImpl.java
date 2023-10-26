@@ -69,6 +69,7 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public Orders updateStatementByNormalOrder(Long orderNo) {
 
+		
 		Orders findOrder = orderRepository.findById(orderNo).get();
 		
 		if(findOrder.getStatement()==OrderStateMsg.입금대기중) {
@@ -77,7 +78,8 @@ public class OrderDaoImpl implements OrderDao {
 			findOrder.setStatement(OrderStateMsg.배송완료);
 		}
 		return findOrder;
-	}
+	    }
+	
 	// 2.취소주문
 	public Orders updateStatementByCancleOrder(Long orderNo) {
 
