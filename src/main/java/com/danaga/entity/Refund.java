@@ -37,6 +37,10 @@ public class Refund {
 	private String description;
 	@Column(length = 100)
 	private String acNo;
+	@Column(length = 100)
+	private String bankName;
+	@Column(length = 100)
+	private String accountName;
 
 	@OneToOne
 	@JoinColumn(name = "orderId")
