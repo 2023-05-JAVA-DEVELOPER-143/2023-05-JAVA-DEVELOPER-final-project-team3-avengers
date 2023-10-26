@@ -188,7 +188,11 @@
 							</div>
 						</div>
 					</div>
-
+					
+					<script th:inline="javascript">
+						var chartData = [[${statisticList.dailyNewMember}]];
+					</script>
+					
 					<div class="row">
 						<!-- Area Chart1 -->
 						<div class="col-xl-6 col-lg-6">
@@ -257,8 +261,6 @@
 								</div>
 							</div>
 						</div>
-
-
 					</div>
 
 					<!-- End of Main Content -->
