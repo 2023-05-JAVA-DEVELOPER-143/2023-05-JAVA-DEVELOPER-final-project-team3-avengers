@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.danaga.dao.product.OptionSetDao;
 import com.danaga.dto.CartDto;
+import com.danaga.dto.FUserCartResponseDto;
+import com.danaga.dto.SUserCartResponseDto;
 import com.danaga.entity.Cart;
 import com.danaga.service.CartService;
 
@@ -39,16 +41,15 @@ public class CartRestController {
 	@PostMapping
 	public void addCart(@RequestBody CartDto dto, HttpSession session) throws Exception {
 		sUserId = (String) session.getAttribute("sUserId");
-		List<CartDto> list = new ArrayList<>();
 		CartDto a = CartDto.builder().qty(55).id(1L).build();
 		CartDto b = CartDto.builder().qty(55).id(2L).build();
 		CartDto c = CartDto.builder().qty(55).id(3L).build();
-		CartDto d = CartDto.builder().qty(55).id(4L).build();   
-		list.add(a);
-		list.add(b);
-		list.add(c);
-		list.add(d);
-		session.setAttribute("fUserCarts", list);
+		CartDto d = CartDto.builder().qty(55).id(4L).build();
+		fUserCarts.add(a);
+		fUserCarts.add(b);
+		fUserCarts.add(c);
+		fUserCarts.add(d);
+		session.setAttribute("fUserCarts", fUserCarts);
 		fUserCarts = (ArrayList<CartDto>) session.getAttribute("fUserCarts");
 		System.out.println("장바구니 담기 액션 하기전 세션 사이즈 = 0 true  -->>>> " + fUserCarts.size());
 		// sUserId = "User3";
@@ -103,18 +104,14 @@ public class CartRestController {
 
 	@Operation(summary = "카트 옵션 변경")
 	@PutMapping("/optionset")
-	public ResponseEntity<CartDto> updateOptionset(@RequestParam List<Long> ids,HttpSession session) throws Exception{
-		sUserId = (String)session.getAttribute("sUserId");
+	public ResponseEntity<CartDto> updateOptionset(@RequestParam List<Long> ids, HttpSession session) throws Exception {
+		sUserId = (String) session.getAttribute("sUserId");
 		Long oldId = ids.get(0); // 기존 옵션셋 아이디
-		Long changeId = ids.get(1); // 변경하고자 하는  옵션셋 아이디
+		Long changeId = ids.get(1); // 변경하고자 하는 옵션셋 아이디
 		cartService.updateCartOptionSet(ids, sUserId);
-		
+
 		return null;
 	}
-
-	
-
-	
 	
 	// 회원, 비회원 테스트 성공
 	@Operation(summary = "카트 수량 변경")
@@ -169,29 +166,36 @@ public class CartRestController {
 		countCarts(session); // 세션에 장바구니수량
 	}
 
-	// responseDto 생성하기
 	// 회원 성공 + 비회원 성공
 	@Operation(summary = "카트리스트 보기")
 	@GetMapping("/list")
-	public ResponseEntity<Long> findCarts(HttpSession session, Model model) throws Exception {
-		sUserId = (String) session.getAttribute("sUserId");
+	public ResponseEntity<Model> findCarts(HttpSession session, Model model) throws Exception {
+		// sUserId = (String) session.getAttribute("sUserId");
+		//sUserId = "User1";
+		
 		// 회원일시 session에 담긴 sUserId로 멤버카트 불러오기
 		if (sUserId != null) {
-			List<Cart> carts = cartService.findCartList(sUserId);
-			model.addAttribute("sUserIdCarts", carts);
-			List<Cart> g = (List<Cart>) model.getAttribute("sUserIdCarts");
-			return ResponseEntity.status(HttpStatus.OK).body(g.get(0).getId());
+			List<SUserCartResponseDto> carts = cartService.findsUserCartList(sUserId);
+			model.addAttribute("cartList", carts);
+			// model.addAttributes("member");
+			return ResponseEntity.status(HttpStatus.OK).body(model);
 		}
 		// 비회원일시 session에 담긴 fUserCarts 리스트 불러오기
 		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
-		model.addAttribute("fUserCarts", fUserCarts);
-		List<CartDto> f = (List<CartDto>) model.getAttribute("fUserCarts");
-		return ResponseEntity.status(HttpStatus.OK).body(f.get(0).getId());
+		List<FUserCartResponseDto> responseDto = new ArrayList<>();
+		for (int i = 0; i < fUserCarts.size(); i++) {
+			responseDto.add(cartService.findfUserCartList(fUserCarts.get(i)));
+		}
+		model.addAttribute("cartList", responseDto);
+		return ResponseEntity.status(HttpStatus.OK).body(model);
 		// return 후 템플릿에서 타임리프로 리스트 돌려가며 뿌리기
 	}  
 	
-		// 장바구니에 몇개 담겼는지 숫자 체크 
+		
 	
+	
+
+	// 장바구니에 몇개 담겼는지 숫자 체크
 	void countCarts(HttpSession session) throws Exception {
 		sUserId = (String) session.getAttribute("sUserId");
 		if (sUserId != null) {
