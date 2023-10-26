@@ -48,8 +48,8 @@ class OrderServiceImplTest {
 		// List<CartCreateDto> fUserCarts, DeliveryDto deliveryDto
 
 		
-		CartDto cartDto1 = CartDto.builder().qty(6).optionSetId(6L).build();
-		CartDto cartDto2 = CartDto.builder().qty(7).optionSetId(5L).build();
+		CartDto cartDto1 = CartDto.builder().qty(6).id(6L).build();
+		CartDto cartDto2 = CartDto.builder().qty(7).id(5L).build();
 		
 		List<CartDto> fUserCarts = new ArrayList();
 		fUserCarts.add(cartDto1);

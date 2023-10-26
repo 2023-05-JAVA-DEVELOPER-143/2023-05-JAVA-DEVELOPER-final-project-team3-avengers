@@ -35,7 +35,7 @@ public class MemberController {
 		try {
 			memberService.login(member.getUserName(), member.getPassword());
 			session.setAttribute("sUserId", member.getUserName());
-			forwardPath="redirect:index";
+			forwardPath="redirect:../index";
 		}catch (MemberNotFoundException e) {
 			e.printStackTrace();
 			model.addAttribute("msg1",e.getMessage());
