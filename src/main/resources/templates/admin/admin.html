@@ -45,7 +45,7 @@
 					<div class="d-sm-flex align-items-center justify-content-between mb-4" style="margin-top: 20px;">
 						<h1 class="h3 mb-0 text-gray-800 font-weight-bold"
 							th:text="${#calendars.format(#calendars.createNow(),'yyyy년 MM월') + ' 통계'}">2023년 10월 통계</h1>
-						<a href="/admin/today" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+						<a href="/admin/daily" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
 								class="fas fa-download fa-sm text-white-50"></i> 실시간 업데이트</a>
 					</div>
 
@@ -68,7 +68,7 @@
 												<span th:if="${data.dailySalesTotQty > 0}"
 													th:text="'(금일 현재 ' + ${data.dailySalesTotQty + '명 &uarr;)'}"></span>
 												<span th:unless="${data.dailySalesTotQty > 0}"
-													th:text="(금일 현재 0명)"></span>
+													th:text="'(금일 현재 0명)'"></span>
 											</span>
 										</div>
 										<div class="col-auto">
@@ -96,7 +96,7 @@
 												<span th:if="${data.dailySalesRevenue > 0}"
 													th:text="'(금일 현재 ' + ${#numbers.formatDecimal(data.dailySalesRevenue,1,'COMMA',0,'POINT') + '원 &uarr;)'}"></span>
 												<span th:unless="${data.dailySalesRevenue > 0}"
-													th:text="(금일 현재 0원)"></span>
+													th:text="'(금일 현재 0원)'"></span>
 											</span>
 										</div>
 										<div class="col-auto">
@@ -135,7 +135,7 @@
 												<span th:if="${data.dailyNewMember > 0}"
 													th:text="'(금일 현재 ' + ${data.dailyNewMember + '명 &uarr;)'}"></span>
 												<span th:unless="${data.dailyNewMember > 0}"
-													th:text="(금일 현재 0명)"></span>
+													th:text="'(금일 현재 0명)'"></span>
 											</span>
 										</div>
 										<div class="col-auto">
@@ -162,7 +162,7 @@
 												<span th:if="${data.dailyBoardInquiry > 0}"
 													th:text="'(금일 현재 ' + ${data.dailyBoardInquiry + '개 &uarr;)'}"></span>
 												<span th:unless="${data.dailyBoardInquiry > 0}"
-													th:text="(금일 현재 0개)"></span>
+													th:text="'(금일 현재 0개)'"></span>
 											</span>
 										</div>
 										<div class="col-auto">
