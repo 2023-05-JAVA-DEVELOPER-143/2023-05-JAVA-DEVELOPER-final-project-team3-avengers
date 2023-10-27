@@ -19,17 +19,16 @@ import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/cart")
 public class CartController {
 	private final CartService cartService;
 
 	static List<CartDto> fUserCarts = new ArrayList<>(); // 비회원 장바구니(세션)
 	static String sUserId = null; // 로그인 유저 아이디
 
-	@GetMapping("/list")
+	@GetMapping("/cart_list")
 	public String findCarts(HttpSession session, Model model) throws Exception {
 		//sUserId = (String) session.getAttribute("sUserId");
-		//sUserId="User3";
+		sUserId= "User3";
 		//session.setAttribute("sUserId", sUserId);
 		if (sUserId != null) {
 			List<SUserCartResponseDto> carts = cartService.findsUserCartList(sUserId);

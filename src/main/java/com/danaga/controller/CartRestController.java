@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -128,10 +129,11 @@ public class CartRestController {
 	// 회원,비회원 테스트 성공
 	// 선택삭제 optionsetId 리스트로 받기 --> 체크박스 2개 이상 선택시 여러개 존재
 	@Operation(summary = "카트 선택삭제")
-	@DeleteMapping
-	public void deleteCart(@RequestBody List<Long> idList, HttpSession session) throws Exception {
+	@DeleteMapping("check/{osId}")
+	public void deleteCart(@PathVariable(name = "osId") List<Long> idList, HttpSession session) throws Exception {
 		// Long id == 회원일시 카트 pk , 비회원 일시 optionsetId
-		sUserId = (String) session.getAttribute("sUserId");
+//		sUserId = (String) session.getAttribute("sUserId");
+		sUserId = "User3";
 		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
 		System.out.println("제품 선택 삭제 컨트롤러 들어올때 카트 사이즈 = " + fUserCarts.size());
 		// 회원일 경우
