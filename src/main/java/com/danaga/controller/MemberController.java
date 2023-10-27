@@ -95,7 +95,7 @@ public class MemberController {
 		member.setId(sUserLongId);
 
 		memberService.updateMember(member);
-		return "redirect:member/member_info_form";
+		return "redirect:member_info_form";
 	}
 
 	@LoginCheck
