@@ -7,7 +7,7 @@
     <head></head>
   
         
-        
+        <body>
         <th:block layout:fragment="content">
         <div class="container padding-bottom-3x mb-2">
 				<div class="row">
@@ -51,7 +51,7 @@
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label for="reg-pass-confirm">비밀번호 확인</label> <input
-										class="form-control" type="password" id="reg-pass-confirm"
+										name="password2" class="form-control" type="password" id="reg-pass-confirm"
 										required>
 								</div>
 							</div>
@@ -79,3 +79,40 @@
 					</div>
 				</div>
 			</div>
+		</th:block>
+		<th:block layout:fragment="script" >
+		   <script type="text/javascript">
+		
+			function modify() {
+				if (document.f.password.value == "") {
+					alert("비밀번호를 입력하십시요.");
+					f.password.focus();
+					return false;
+				}
+				if (document.f.password2.value == "") {
+					alert("비밀번호확인을 입력하십시요.");
+					f.password2.focus();
+					return false;
+				}
+				if (document.f.password.value != document.f.password2.value) {
+					alert("비밀번호와 비밀번호확인은 일치하여야합니다.");
+					f.password.focus();
+					f.password.select();
+					return false;
+				}
+				if (document.f.nickname.value == "") {
+					alert("닉네임을 입력하십시요.");
+					f.nickname.focus();
+					f.nickname.select();
+					return false;
+				}
+				document.f.action = "/member_modify_action";
+				document.method = 'POST';
+				document.f.submit();
+				
+			}
+			
+			
+		</script>
+		</th:block>
+		</body>
