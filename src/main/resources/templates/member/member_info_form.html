@@ -4,6 +4,7 @@
 <!-- Header -->
 <div th:insert="include_common :: header"></div>
 <body>
+<th:block layout:fragment="content">
 	<!-- Off-Canvas Wrapper-->
 	<div class="offcanvas-wrapper">
 		<!-- Page Content-->
@@ -89,6 +90,7 @@
 				</div>
 			</div>
 		</section>
+		</th:block>
 		<div th:insert="include_common :: footer"></div>
 	</div>
 
