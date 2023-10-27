@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>주문 상세 정보</title>
+</head>
+<body>
+    <h1>주문 상세 정보</h1>
+    
+    <div th:if="${ordersDto != null}">
+        <p>주문 번호: <span th:text="${ordersDto.getId()}"></span></p>
+        <p>주문 상세 정보: <span th:text="${ordersDto.getDescription()}"></span></p>
+        <p>주문 총 가격: <span th:text="${ordersDto.getPrice()}"></span></p>
+        <!-- 필요한 주문 정보들을 출력 -->
+    </div>
+    
+    <div th:if="${errorMsg != null}">
+        <p th:text="${errorMsg}"></p>
+    </div>
+</body>
+</html>
