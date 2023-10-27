@@ -229,9 +229,9 @@ class OrderServiceImplTest {
 	@Disabled
 	void testUpdateStatementByRefundOrder() {
 		
-//		orderService.updateStatementByRefundOrder(1L);
-//		orderService.updateStatementByRefundOrder(2L);
-//		orderService.updateStatementByRefundOrder(3L);
+		orderService.updateStatementByRefundOrder(1L);
+		orderService.updateStatementByRefundOrder(2L);
+		orderService.updateStatementByRefundOrder(3L);
 	}
 	@Test
 	@Disabled

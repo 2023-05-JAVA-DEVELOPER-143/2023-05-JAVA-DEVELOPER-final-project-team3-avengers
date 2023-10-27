@@ -25,7 +25,7 @@
 					</div>
 					<div class="col-lg-8">
 						<div class="padding-top-2x mt-2 hidden-lg-up"></div>
-						<form class="row" th:object="${loginUser}">
+						<form class="row" name="f" th:object="${loginUser}" method="post" >
 						<input type="hidden" name="userName" value="guard" th:value="*{userName}"/>
 							<div class="col-sm-6">
 								<div class="form-group">
@@ -48,7 +48,7 @@
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label for="reg-birthday">생년월일</label> <input name="birthday" value="guard" th:value="*{birthday}"
-										class="form-control" type="text" id="reg-birthday" required>
+										class="form-control" type="text" id="reg-birthday" disabled>
 								</div>
 							</div>
 							<div class="col-sm-6">
@@ -80,7 +80,8 @@
 										data-toast data-toast-position="topRight"
 										data-toast-type="success" data-toast-icon="icon-circle-check"
 										data-toast-title="Success!"
-										data-toast-message="Your profile updated successfuly.">수정하기</button>
+										data-toast-message="수정되었습니다!"
+										onclick="modify()">수정하기</button>
 								</div>
 							</div>
 						</form>
@@ -99,5 +100,33 @@
 	<!-- JavaScript (jQuery) libraries, plugins and custom scripts-->
 	<script src="/bootstrap/js/vendor.min.js"></script>
 	<script src="/bootstrap/js/scripts.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validate/1.19.3/jquery.validate.min.js"></script>
+	<script type="text/javascript">
+	function modify() {
+		document.f.action = "/member/member_modify_action";
+		document.method = 'POST';
+		document.f.submit();
+
+	}
+	$(document).ready(function () {
+        $("#f").validate({
+            rules: {
+                name: "required",
+                email: {
+                    required: true,
+                    email: true
+                }
+            },
+            messages: {
+                name: "이름을 입력하세요.",
+                email: {
+                    required: "이메일을 입력하세요.",
+                    email: "올바른 이메일 형식을 입력하세요."
+                }
+            }
+        });
+    });
+	</script>
 </body>
 </html>

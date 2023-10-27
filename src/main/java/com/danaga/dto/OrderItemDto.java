@@ -26,6 +26,7 @@ public class OrderItemDto {
 	private String pImage;
 	private Integer totalPrice;
 	private Long osId;
+	@Builder.Default
 	private List<OptionDto> optionSet = new ArrayList<>();
 	
 	public OrderItemDto(OrderItem entity) {

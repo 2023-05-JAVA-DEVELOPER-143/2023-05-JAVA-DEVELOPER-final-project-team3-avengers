@@ -25,4 +25,5 @@ public interface StatisticService {
 
 	//이번달 기록
 	List<Statistic> thisMonthStatistic();
+	
 }

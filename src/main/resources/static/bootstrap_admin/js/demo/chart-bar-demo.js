@@ -26,7 +26,12 @@ function number_format(number, decimals, dec_point, thousands_sep) {
   }
   return s.join(dec);
 }
-
+var dailySalesTotQtyValues = chartData.map(function(item) {
+    return item.dailySalesTotQty;
+});
+var dateList = chartData.map(function(item) {
+    return item.id;
+});
 // Bar Chart Example
 var ctx = document.getElementById("myBarChart");
 var myBarChart = new Chart(ctx, {
@@ -38,7 +43,7 @@ var myBarChart = new Chart(ctx, {
       backgroundColor: "#4e73df",
       hoverBackgroundColor: "#2e59d9",
       borderColor: "#4e73df",
-      data: [25, 30, 60, 88, 36, 55],
+      data: [25, 30, 60, 88, 36, 55]
     }],
   },
   options: {
@@ -109,6 +114,18 @@ var myBarChart = new Chart(ctx, {
     },
   }
 });
+myBarChart.data.datasets[0].data = dailySalesTotQtyValues.reverse();
+myBarChart.data.labels = dateList.reverse();
+var parsedValues = dailySalesTotQtyValues.map(function(value) {
+  return parseFloat(value); // parseFloat를 사용하여 실수로 파싱
+});
+
+// 파싱된 값 중에서 최댓값 찾기
+var maxParsedValue = Math.max.apply(null, parsedValues);
+
+// yAxes의 max 값을 설정
+myBarChart.options.scales.yAxes[0].ticks.max = maxParsedValue * 1.2;
+myBarChart.update();
 
 // Bar Chart Example
 var ctx = document.getElementById("myBarChart2");

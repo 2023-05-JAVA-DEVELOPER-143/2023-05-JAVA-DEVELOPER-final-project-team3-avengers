@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- 여기에 필요한 스타일이나 스크립트를 추가하세요 -->
+</head>
+<body>
+    <!-- 헤더를 포함합니다 -->
+    <div th:insert="include_common :: header"></div>
+
+    <!-- 페이지 내용 시작 -->
+    <div class="container padding-bottom-3x mb-2">
+        <div class="row">
+            <div class="col-lg-4"></div>
+            <div class="col-lg-8">
+                <div class="padding-top-2x mt-2 hidden-lg-up"></div>
+                <!-- 주문 리스트 출력 부분 -->
+                <div th:each="orderDto : ${ordersDtoList}">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="account-fn" th:text="${orderDto.getDescription()}"></label>
+                                <input class="form-control" type="text" id="account-fn" th:value="${orderDto.getPrice()}" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 페이지 내용 끝 -->
+
+    <!-- 푸터를 포함합니다 -->
+    <div th:insert="include_common :: footer"></div>
+
+    <!-- Back To Top Button-->
+    <a class="scroll-to-top-btn" href="#"><i class="icon-arrow-up"></i></a>
+    <!-- Backdrop-->
+    <div class="site-backdrop"></div>
+    <!-- JavaScript (jQuery) libraries, plugins and custom scripts-->
+    <script src="/bootstrap/js/vendor.min.js"></script>
+    <script src="/bootstrap/js/scripts.min.js"></script>
+</body>
+</html>
