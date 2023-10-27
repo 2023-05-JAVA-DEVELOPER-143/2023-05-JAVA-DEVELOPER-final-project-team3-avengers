@@ -10,7 +10,8 @@ import lombok.*;
 public class RefundDto {
 
 	private String description;
-    
+    private String bankName;
+    private String accountName;
 	private String acNo;
 	
 }
