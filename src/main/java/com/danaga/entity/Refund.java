@@ -50,6 +50,8 @@ public class Refund {
     public static Refund toEntity(RefundDto dto) {
     	return Refund.builder()
     			.description(dto.getDescription())
+    			.bankName(dto.getBankName())
+    			.accountName(dto.getAccountName())
     			.acNo(dto.getAcNo())
     			.build(); 
     }

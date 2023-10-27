@@ -16,12 +16,12 @@ import lombok.*;
 @Builder
 public class RefundResponseDto {
 	
-	@Autowired
-	OrderRepository orderRepository;
-	
+
 	private Long id;
 	private String description;
 	private String acNo;
+    private String bankName;
+    private String accountName;
 	private Long orderId;
 	
 	public static RefundResponseDto toDto(Refund entity) {
@@ -30,6 +30,8 @@ public class RefundResponseDto {
 				.description(entity.getDescription())
 				.acNo(entity.getAcNo())
 				.orderId(entity.getOrders().getId())
+				.bankName(entity.getBankName())
+				.accountName(entity.getAccountName())
 				.build();
 	}
 }
