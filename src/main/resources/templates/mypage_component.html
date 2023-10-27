@@ -1,11 +1,11 @@
 <div class="col-lg-4" th:fragment="mypage" th:remove="tag">
-						<aside class="user-info-wrapper">
+			<aside class="user-info-wrapper" th:object="${loginUser}">
               <div class="user-cover" style="background-image: url(img/account/user-cover-img.jpg);">
-                <div class="info-label" data-toggle="tooltip"><i class="icon-medal"></i>Silver&nbsp;<span>6000points</span></div>
+                <div class="info-label" data-toggle="tooltip"><i class="icon-medal"></i><span th:text="*{grade}+' '">Silver</span><span th:text="*{gradePoint}+'points'">6000points</span></div>
               </div>
               <div class="user-info">
                 <div class="user-data">
-                  <h1>다나카</h1>
+                  <h1 th:text="*{userName}">다나카</h1>
                 </div>
               </div>
             </aside>

@@ -1,10 +1,7 @@
 package com.danaga.service;
 
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Date;
-import java.util.Optional;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -13,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.danaga.dto.MemberInsertGuestDto;
 import com.danaga.dto.MemberUpdateDto;
-import com.danaga.entity.Member;
 import com.danaga.repository.MemberRepository;
 
 
@@ -41,7 +37,7 @@ class MemberServiceImplTest {
 //				.build());
 //	}
 	@Test
-	//@Disabled
+	@Disabled
 	void joinGuest() throws Exception {
 		memberService.joinGuest(MemberInsertGuestDto.builder()
 				.name("유저11")
@@ -51,27 +47,18 @@ class MemberServiceImplTest {
 	}
 	
 	@Test
-	@Disabled
+	//@Disabled
 	void update() throws Exception {
 		memberService.updateMember(MemberUpdateDto.builder()
 				.id(1L)
-				.password("password11")
-				.nickname("닉네임11")
-				.address("주소11")
+				.password("aaa")
+				.nickname("닉네임1")
+				.address("주소1")
 				.build());
 	}
 	@Test
 	@Disabled
 	void delete() throws Exception {
-		memberRepository.deleteById(1L);
-		memberRepository.deleteById(2L);
-		memberRepository.deleteById(3L);
-		memberRepository.deleteById(4L);
-		memberRepository.deleteById(5L);
-		memberRepository.deleteById(6L);
-		memberRepository.deleteById(7L);
-		memberRepository.deleteById(8L);
-		memberRepository.deleteById(9L);
 		memberRepository.deleteById(10L);
 	}
 	@Test
