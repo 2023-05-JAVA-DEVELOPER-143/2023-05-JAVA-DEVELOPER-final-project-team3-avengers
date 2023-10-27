@@ -17,8 +17,8 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 
-@RestController
-@RequestMapping("/order")
+@Controller
+//@RequestMapping("/order")
 @RequiredArgsConstructor
 public class OrderController {
 	
