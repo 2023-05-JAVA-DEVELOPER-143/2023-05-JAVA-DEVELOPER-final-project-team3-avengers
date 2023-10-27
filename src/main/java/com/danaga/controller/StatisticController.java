@@ -1,5 +1,7 @@
 package com.danaga.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.danaga.entity.Statistic;
 import com.danaga.service.BoardService;
 import com.danaga.service.MemberService;
 import com.danaga.service.OrderService;
@@ -26,7 +29,7 @@ public class StatisticController {
 	
 	@GetMapping
 	public String main(Model model) {
-		model.addAttribute("statisticList", statisticService.latest7DaysStatistic());
+		model.addAttribute("statisticList", changeDateFormat(statisticService.latest7DaysStatistic()));
 		return "admin/admin";
 	}
 	@GetMapping("/admin_product_insert")
@@ -50,5 +53,12 @@ public class StatisticController {
 	@GetMapping("/admin_board_list")
 	public String adminBoardList() {
 		return "admin/admin_board_list";
+	}
+	
+	public List<Statistic> changeDateFormat(List<Statistic> statistics) {
+		for (Statistic statistic : statistics) {
+			statistic.setId(statistic.getId().substring(0,4) + "-" + statistic.getId().substring(4,6) + "-" + statistic.getId().substring(6,8));
+		}
+		return statistics;
 	}
 }

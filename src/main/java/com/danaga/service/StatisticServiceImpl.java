@@ -69,4 +69,5 @@ public class StatisticServiceImpl implements StatisticService{
 		return statisticList;
 	}
 	
+	
 }
