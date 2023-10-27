@@ -19,7 +19,6 @@
 
 	<!-- Custom styles for this template-->
 	<link href="/bootstrap_admin/css/sb-admin-2.min.css" rel="stylesheet">
-
 </head>
 
 <body id="page-top">
@@ -65,10 +64,9 @@
 											<span class="mr-2 d-none d-lg-inline text-gray-600 small font-weight-bold"
 												th:each="data : ${statisticList}"
 												th:if="${data.id eq #dates.format(#dates.createNow(), 'yyyyMMdd')}">
+												<span th:if="${data.dailySalesTotQty == null or data.dailySalesTotQty == 0}" th:text="'(금일 현재 0명)'"></span>
 												<span th:if="${data.dailySalesTotQty > 0}"
 													th:text="'(금일 현재 ' + ${data.dailySalesTotQty + '명 &uarr;)'}"></span>
-												<span th:unless="${data.dailySalesTotQty > 0}"
-													th:text="'(금일 현재 0명)'"></span>
 											</span>
 										</div>
 										<div class="col-auto">
@@ -129,7 +127,7 @@
 													</div>
 												</div>
 											</div>
-												<span class="mr-2 d-none d-lg-inline text-gray-600 small font-weight-bold"
+											<span class="mr-2 d-none d-lg-inline text-gray-600 small font-weight-bold"
 												th:each="data : ${statisticList}"
 												th:if="${data.id eq #dates.format(#dates.createNow(), 'yyyyMMdd')}">
 												<span th:if="${data.dailyNewMember > 0}"
@@ -155,7 +153,8 @@
 											<div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
 												이번 달 게시글 수</div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800"
-												th:text="${#numbers.formatDecimal(#aggregates.sum(statisticList.![dailyBoardInquiry]),1,'COMMA',0,'POINT')+'개'}">180</div>
+												th:text="${#numbers.formatDecimal(#aggregates.sum(statisticList.![dailyBoardInquiry]),1,'COMMA',0,'POINT')+'개'}">
+												180</div>
 											<span class="mr-2 d-none d-lg-inline text-gray-600 small font-weight-bold"
 												th:each="data : ${statisticList}"
 												th:if="${data.id eq #dates.format(#dates.createNow(), 'yyyyMMdd')}">
@@ -188,11 +187,9 @@
 							</div>
 						</div>
 					</div>
-					
-					<script th:inline="javascript">
-						var chartData = [[${statisticList.dailyNewMember}]];
-					</script>
-					
+
+
+
 					<div class="row">
 						<!-- Area Chart1 -->
 						<div class="col-xl-6 col-lg-6">
@@ -286,27 +283,6 @@
 				<i class="fas fa-angle-up"></i>
 			</a>
 
-			<!-- Logout Modal-->
-			<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-				aria-hidden="true">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-							<button class="close" type="button" data-dismiss="modal" aria-label="Close">
-								<span aria-hidden="true">×</span>
-							</button>
-						</div>
-						<div class="modal-body">Select "Logout" below if you are ready to end your current session.
-						</div>
-						<div class="modal-footer">
-							<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-							<a class="btn btn-primary" href="login.html">Logout</a>
-						</div>
-					</div>
-				</div>
-			</div>
-
 			<!-- Bootstrap core JavaScript-->
 			<script src="/bootstrap_admin/vendor/jquery/jquery.min.js"></script>
 			<script src="/bootstrap_admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -319,6 +295,10 @@
 
 			<!-- Page level plugins -->
 			<script src="/bootstrap_admin/vendor/chart.js/Chart.min.js"></script>
+
+			<script th:inline="javascript">
+				var chartData = /*[[${statisticList}]]*/
+			</script>
 
 			<!-- Page level custom scripts -->
 			<script src="/bootstrap_admin/js/demo/chart-bar-demo.js"></script>
