@@ -42,7 +42,10 @@ public class BoardController {
 	private LikeConfigService lcService; 
 	
 	
-	
+	@GetMapping("/test")
+	public String test() {
+		return "board/text";
+	}
 	
 	@GetMapping("/list/{boardGroupId}")
 	public String list(@PathVariable Long boardGroupId,Model model) {
