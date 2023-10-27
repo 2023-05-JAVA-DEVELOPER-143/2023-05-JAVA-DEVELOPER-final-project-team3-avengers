@@ -142,7 +142,7 @@ class OrderServiceImplTest {
 	@Transactional
 	@Rollback(false)
 	@Test
-	//@Disabled
+	@Disabled
 	void testMemberProductOrderSave()throws Exception {
 		
 		System.out.println("0000000000000000000000000000000000000");
@@ -213,10 +213,11 @@ class OrderServiceImplTest {
 	@Disabled
 	void testUpdateStatementByNormalOrder() {
 		
-		System.out.println("44444444444444444444"+orderService.updateStatementByNormalOrder(5L));
-		orderService.updateStatementByNormalOrder(1L);
-		orderService.updateStatementByNormalOrder(2L);
-		orderService.updateStatementByNormalOrder(3L);
+		//System.out.println("44444444444444444444"+orderService.updateStatementByNormalOrder(5L));
+//		orderService.updateStatementByNormalOrder(1L);
+		orderService.updateStatementByNormalOrder(23L);
+		orderService.updateStatementByNormalOrder(23L);
+//		orderService.updateStatementByNormalOrder(3L);
 	}
 	@Test
 	@Disabled
@@ -229,9 +230,9 @@ class OrderServiceImplTest {
 	@Disabled
 	void testUpdateStatementByRefundOrder() {
 		
-		orderService.updateStatementByRefundOrder(1L);
-		orderService.updateStatementByRefundOrder(2L);
-		orderService.updateStatementByRefundOrder(3L);
+	//	orderService.updateStatementByClientRefundOrder(21L);
+	//orderService.updateStatementByAdminRefundOrder(23L);
+//		orderService.updateStatementByAdminRefundOrder(4L);
 	}
 	@Test
 	@Disabled

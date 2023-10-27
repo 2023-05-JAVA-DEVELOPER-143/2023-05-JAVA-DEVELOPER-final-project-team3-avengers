@@ -19,7 +19,7 @@ public class RefundServiceImpl implements RefundService {
 	@Autowired
 	private RefundRepository refundRepository;
 	@Autowired
-	private OrderRepository orderRepository;
+	private OrderService orderService;
 	
 
 
@@ -33,11 +33,16 @@ public class RefundServiceImpl implements RefundService {
 	//환불요청
 	@Override
 	@Transactional
-	public RefundResponseDto saveRefund(RefundDto refundDto, Long orderId) {
-		Refund refund = Refund.toEntity(refundDto);
-		refundDao.insertRefund(refund, orderId);
-		RefundResponseDto refundResponseDto = RefundResponseDto.toDto(refund);
-		return refundResponseDto;
+	public RefundResponseDto saveRefund(RefundDto refundDto, Long orderId) throws Exception{
+		
+			Refund refund = Refund.toEntity(refundDto);
+			Refund insertRefund = refundDao.insertRefund(refund, orderId);
+			RefundResponseDto refundResponseDto = RefundResponseDto.toDto(insertRefund);
+			orderService.updateStatementByClientRefundOrder(orderId);
+			return refundResponseDto;
+
+		
+
 	}
 	
 	//환불확인
@@ -45,6 +50,7 @@ public class RefundServiceImpl implements RefundService {
 	@Transactional
 	public RefundResponseDto findRefundByOrdersId(Long orderId) throws Exception{
 		Refund findRefund = refundRepository.findRefundByOrdersId(orderId);
+		
 		
 		if (findRefund.getOrders() != null) {
 		    System.out.println("해당하는 주문내역은: " + findRefund.getOrders());

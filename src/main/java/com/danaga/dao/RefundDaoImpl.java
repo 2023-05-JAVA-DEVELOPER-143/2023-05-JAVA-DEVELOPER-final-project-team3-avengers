@@ -24,7 +24,7 @@ public class RefundDaoImpl  implements RefundDao{
 //	}
 	
 	@Override
-	public Refund insertRefund(Refund refund, Long orderId) { // 환불페이지. 환불하시겠습니까? 네
+	public Refund insertRefund(Refund refund, Long orderId) throws Exception{ // 환불페이지. 환불하시겠습니까? 네
 		Orders order = orderRepository.findById(orderId).get();
 		refund.setOrders(order);
 		Refund saveRefund = refundRepository.save(refund);

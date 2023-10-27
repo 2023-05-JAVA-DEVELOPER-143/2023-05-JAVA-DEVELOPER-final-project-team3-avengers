@@ -5,35 +5,35 @@ import java.util.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.stereotype.*;
+import org.springframework.ui.*;
 import org.springframework.web.bind.annotation.*;
 
+import com.danaga.dto.*;
 import com.danaga.entity.*;
+import com.danaga.repository.*;
 import com.danaga.service.*;
 
 import io.swagger.v3.oas.annotations.*;
 import lombok.*;
-@RestController
+@Controller
 @RequestMapping("/refund")
 public class RefundController {
-	//주문목록에서 환불하기 누르면 환불페이지 이동
+
 	
-	//주문 상세보기에서 전체 환불하기 누르면 환불페이지 이동
-	//환불페이지에서 '환불하시겠습니까 네' 누르면 주문목록으로 이동
-	
-	//주문페이지 
-	
-//	@Autowired
-//	private OrderRepository orderRepository;
-//	@Operation(summary = "refund : 환불페이지")
-//	@GetMapping("/refundWrite")
-//	public ResponseEntity<List<Statistic>> getStatisticListAll() {
-//		List<Statistic> statistics = statisticService.thisMonthStatistic();
-//		return ResponseEntity.status(HttpStatus.OK).body(statistics);
-//	}
+	@Autowired
+	private OrderRepository orderRepository;
+	@Autowired
+	private RefundService refundService;
+	//환불하기 Insert
+	@PostMapping("/saveRefund/{orderId}")
+	public String saveRefund(Model model,RefundDto refundDto, @PathVariable Long orderId) throws Exception {
+		 RefundResponseDto refundResponseDto = refundService.saveRefund(refundDto, orderId);
+		 model.addAttribute("refundResponseDto", refundResponseDto);
+		 return "refund/refund";
+	}
 	
 	
-	//환불내역확인을 먼저 해보자
-	
+
 	
 	
 	
