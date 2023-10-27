@@ -1,13 +1,22 @@
-    <div class="container" style="display: flex;" th:fragment="filter" th:remove="tag">
-        <div class="category-section" style="flex: 1; margin: 10px; padding: 10px;">
-            <h3>분류</h3>
-            <ul id="category-list" th:each="category : ${categoryList}" style="list-style-type: none; padding: 0;">
-                <li class="category-item" data-category-id="${category.id}" th:text="${category.name}" 
-                style=" margin-bottom: 5px; cursor: pointer;">Category 1</li>
-            </ul>
-        </div>
-        <script id="subcategory-template" type="text/x-handlebars-template">
-        <div class="subcategory-section" style="flex: 1; margin: 10px; padding: 10px;">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+<div class="container padding-bottom-3x mb-1" th:fragment="filter"
+	th:remove="tag">
+	<div class="row justify-content-center">
+		<div class="col-lg-4">
+			<h3>분류</h3>
+			<ul id="category-list" th:each="category : ${categoryList}"
+				style="list-style-type: none; padding: 0;">
+				<li class="category-item" data-category-id="${category.id}"
+					th:text="${category.name}"
+					style="margin-bottom: 5px; cursor: pointer;">Category 1</li>
+			</ul>
+		</div>
+		<div class="col-lg-4">
+			<script id="subcategory-template" type="text/x-handlebars-template">
+     
             <h3>카테고리</h3>
             <ul id="subcategory-list" style="list-style-type: none; padding: 0;">
                 {{#each data}}
@@ -18,10 +27,12 @@
                 {{/if}}
                 {{/each}}
             </ul>
-        </div>
+
         </script>
-        <script id="option-choice-template" type="text/x-handlebars-template">
-            <div class="option-content-section" style="flex: 1; margin: 10px; padding: 10px;">
+		</div>
+		<div class="col-lg-4">
+			<script id="option-choice-template" type="text/x-handlebars-template">
+            
                 <h3>옵션</h3>
                 <table id="option-table" style="width: 100%; border-collapse: collapse;">
                     <tbody id="option-list">
@@ -35,6 +46,10 @@
                         {{/each}}
                     </tbody>
                 </table>
-            </div>
+           
         </script>
-    </div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
