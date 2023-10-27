@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"  
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+ 
+<head>
+	<meta charset="utf-8">
+	<title>타이틀</title>
+	<!-- SEO Meta Tags-->
+	<meta name="description"
+		content="Unishop - Universal E-Commerce Template">
+	<meta name="keywords"
+		content="shop, e-commerce, modern, flat style, responsive, online store, business, mobile, blog, bootstrap 4, html5, css3, jquery, js, gallery, slider, touch, creative, clean">
+	<meta name="author" content="Rokaux">
+	<!-- Mobile Specific Meta Tag-->
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<!-- Favicon and Apple Icons-->
+	<link rel="icon" type="image/x-icon" href="favicon.ico">
+	<link rel="icon" type="image/png" href="favicon.png">
+	<link rel="apple-touch-icon" href="touch-icon-iphone.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="touch-icon-ipad.png">
+	<link rel="apple-touch-icon" sizes="180x180"
+		href="touch-icon-iphone-retina.png">
+	<link rel="apple-touch-icon" sizes="167x167"
+		href="touch-icon-ipad-retina.png">
+	<!-- Vendor Styles including: Bootstrap, Font Icons, Plugins, etc.-->
+	 <!--Common CSS -->
+	<link rel="stylesheet" media="screen" href="css/vendor.min.css">
+	<!-- Main Template Styles-->
+	<link id="mainStyles" rel="stylesheet" media="screen"
+		href="css/styles.min.css">
+	<!-- commonJS-->
+	<script defer type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js"></script>
+	<script defer src="js/modernizr.min.js"></script>
+</head>
+ 
+
+<body>
+		<!-- Off-Canvas Category Menu-->
+	<!-- -------------------- common-top.html start -----------------------  -->
+	<div class="offcanvas-container" id="shop-categories"
+		th:insert="~{/fragment/common-top::common-top}" th:remove="tag"></div>
+	<!-- -------------------- common-top.html end      -----------------------  -->
+	<!-- Off-Canvas Wrapper-->
+	<div class="offcanvas-wrapper">
+	<!--banner 시작-->
+	<th:block th:if="${title!=''}">
+			<div class="page-title"
+				th:insert="~{/fragment/page-title::page-title(${title})}"
+				th:remove="tag"></div>
+		</th:block>	
+	<!--banner 끝-->
+    
+    <!--MyPage인 경우 추가로 들어가야할 profile card 시작-->
+	<th:block layout:fragment="mypage"></th:block>
+    <!--profile card 끝-->
+
+	<!--Content 내용 영역 시작-->
+	<th:block layout:fragment="content" />
+	<!--Content 내용 영역 끝  -->
+	
+	<!--추천상품 영역   -->
+	<th:block layout:fragment="recommendation"></th:block>
+	<!--추천상품 영역   -->
+	
+		<!-- Site Footer-->
+		<!-- common-footer.html start -->
+		<footer class="site-footer"
+			th:insert="~{fragment/common-footer::common-footer}"></footer>
+		<!-- common-footer.html end -->
+	</div>
+	<!-- Back To Top Button-->
+	<a class="scroll-to-top-btn" href="#"><i class="icon-arrow-up"></i></a>
+	<!-- Backdrop-->
+	<div class="site-backdrop"></div>
+	<!-- JavaScript (jQuery) libraries, plugins and custom scripts-->
+	<!--Common JS-->
+	<script src="js/vendor.min.js" defer="defer"></script>
+	<script src="js/scripts.min.js" defer="defer"></script>
+	<script defer src="js/custom/app.js" type="module"></script>
+	
+	<th:block layout:fragment="script" />
+</body>
+</html>
