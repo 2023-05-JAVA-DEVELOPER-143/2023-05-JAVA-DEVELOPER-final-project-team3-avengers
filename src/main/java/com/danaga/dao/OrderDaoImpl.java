@@ -90,20 +90,27 @@ public class OrderDaoImpl implements OrderDao {
 		}
 		return findOrder;
 	}
-	// 3.환불주문
-	public Orders updateStatementByRefundOrder(Long orderNo) {
+	// 3.환불주문(client)
+	public Orders updateStatementByClientRefundOrder(Long orderNo) {
 
 		Orders findOrder = orderRepository.findById(orderNo).get();
-		
 		if(findOrder.getStatement()==OrderStateMsg.배송완료) {
 			findOrder.setStatement(OrderStateMsg.환불대기중);
-		}else if(findOrder.getStatement()==OrderStateMsg.환불대기중) {
+		}
+		
+		return findOrder;
+	}
+	// 4.환불주문(admin)
+	public Orders updateStatementByAdminRefundOrder(Long orderNo) {
+		
+		Orders findOrder = orderRepository.findById(orderNo).get();
+		if(findOrder.getStatement()==OrderStateMsg.환불대기중) {
 			findOrder.setStatement(OrderStateMsg.환불완료);
 		}
 		
 		return findOrder;
 	}
-	// 4.상태리셋
+	// 5.상태리셋
 	public Orders updateStatementByResetOrder(Long orderNo) {
 		Orders findOrder = orderRepository.findById(orderNo).get();
 		findOrder.setStatement(OrderStateMsg.입금대기중);

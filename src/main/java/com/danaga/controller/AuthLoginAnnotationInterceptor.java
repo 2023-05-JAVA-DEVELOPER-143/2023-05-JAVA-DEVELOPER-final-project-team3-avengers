@@ -86,7 +86,7 @@ public class AuthLoginAnnotationInterceptor implements HandlerInterceptor {
 		4. HandlerMethod객체에 @LoginCheck어노테이션 이있는 경우, 
 		   세션이 있는지 체크
 		***************************/
-		System.out.println("### AuthLoginAnnotationInterceptor.preHandle()메써드 @LoginCheck있 는경우");
+		System.out.println("### AuthLoginAnnotationInterceptor.preHandle()메써드 @LoginCheck 있는경우");
 		//session 객체를 가져옴
 		HttpSession session = request.getSession();
 		//login처리를 담당하는 사용자 정보를 담고 있는 객체를 가져옴

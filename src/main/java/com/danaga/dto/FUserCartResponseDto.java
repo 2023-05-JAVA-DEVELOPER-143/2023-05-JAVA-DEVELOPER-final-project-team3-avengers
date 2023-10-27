@@ -25,7 +25,7 @@ public class FUserCartResponseDto {
 	private List<CartOptionDto> options = new ArrayList<>(); // 옵션 네임 밸류
 
 	public static FUserCartResponseDto toDto(OptionSet entity, Integer qty) {
-		return FUserCartResponseDto.builder().pImage(entity.getProduct().getImg()).productName(entity.getProduct().getImg())
+		return FUserCartResponseDto.builder().pImage(entity.getProduct().getImg()).productName(entity.getProduct().getName())
 				.osId(entity.getId())
 				.qty(qty)
 				.options(entity.getOptions().stream().map(t -> new CartOptionDto(t)).collect(Collectors.toList()))

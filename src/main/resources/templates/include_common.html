@@ -1,7 +1,7 @@
 <!-- Navbar-->
 
 
-	<head th:fragment="head" th:remove="tag">
+	<head th:fragment="header" th:remove="tag">
 		<meta charset="utf-8">
 		<title>다나가닷컴
 		</title>
@@ -33,7 +33,7 @@
 		
 	</head>
 
-	<header class="navbar navbar-sticky navbar-dark bg-dark" th:fragment="header" th:remove="tag">
+	<header class="navbar navbar-sticky navbar-dark bg-dark">
 		<!-- Search-->
 		<form class="site-search" method="get" url="/product/site_search">
 			<input type="text" name="site_search" placeholder="Type to search...">
@@ -54,7 +54,7 @@
 				<li><a href="http://localhost/product"><span>Shop</span></a>
 					<ul class="sub-menu">
 						<li><a href="http://localhost/product">Product</a></li>
-						<li><a href="cart.html">Cart</a></li>
+						<li><a href="http://localhost/cart/list">Cart</a></li>
 						<li class="has-children"><a href="checkout-address.html"><span>Checkout</span></a>
 							<ul class="sub-menu">
 								<li><a href="checkout-address.html">Address</a></li>
@@ -147,10 +147,10 @@
 					<div class="account" onclick="window.location.href = '/admin';"><i class="icon-head"></i></div>
 					<div class="search"><i class="icon-search"></i></div>
 					<div class="account">
-					<a th:if="${sUserId != null}" th:href="@{/member/member_info_form}"></a>
+					<a th:if="${session.sUserId != null}" th:href="@{/member/member_info_form}"></a>
 				    <!-- Thymeleaf 조건문을 사용하여 sUserId가 null인 경우 로그인 페이지로 이동 -->
-				    <a th:if="${sUserId == null}" th:href="@{/member/member_login_form}"></a><i class="icon-head"></i>
-						<ul th:if="${sUserId != null}" class="toolbar-dropdown">
+				    <a th:if="${session.sUserId == null}" th:href="@{/member/member_login_form}"></a><i class="icon-head"></i>
+						<ul th:if="${session.sUserId != null}" class="toolbar-dropdown">
 							<li class="sub-menu-user">
 								<div class="user-ava">
 								</div>
@@ -163,9 +163,9 @@
 							<li><a href="account-wishlist.html">관심 상품</a></li>
 							<li><a href="product/recent_view.html">최근 본 상품</a></li>
 							<li class="sub-menu-separator"></li>
-							<li><a href="member_logout_action"> <i class="icon-unlock"></i>로그아웃</a></li>
+							<li><a href="/member/member_logout_action"> <i class="icon-unlock"></i>로그아웃</a></li>
 						</ul>
-						<ul th:if="${sUserId == null}" class="toolbar-dropdown">
+						<ul th:if="${session.sUserId == null}" class="toolbar-dropdown">
 							<li class="sub-menu-user">
 								<div class="user-ava">
 								</div>
@@ -177,7 +177,7 @@
 							<li><a href="/member/member_join_form">회원가입</a></li>
 						</ul>
 					</div>
-					<div class="cart"><a href="cart.html"></a><i class="icon-bag"></i><span class="count">3</span><span
+					<div class="cart"><a href="http://localhost/cart/list"></a><i class="icon-bag"></i><span class="count">3</span><span
 							class="subtotal">$289.68</span>
 						<div class="toolbar-dropdown">
 							<div class="dropdown-product-item"><span class="dropdown-product-remove"><i

@@ -2,13 +2,37 @@ import * as View from "./view.js";
 import * as api from "./apiService.js"
 
 //1.하트 눌렀을때 위시리스트 추가하는 이벤트 
-$('#btn btn-outline-secondary btn-sm btn-wishlist').click(api.tapHeart($(this[data-no])));
-$('#btn btn-outline-secondary btn-sm btn-wishlist active').click(call(api,"DELETE",request));
+$('.btn btn-outline-secondary btn-sm btn-wishlist').click(function(e){
+	let optionSetId = e.target.data-no.value;
+	api.tapHeart(optionSetId);
+});
+$('.btn btn-outline-secondary btn-sm btn-wishlist active').click(api.untapHeart($(this[data-no])));
 //2. sort by  눌렀을 때 정렬 바뀌게 select 다시하는 쿼리
+$('.form-control > #sorting').click(function() {
+    var selectedValue = $('.form-control > #sorting option:selected').val();
+    var jsonData = { "orderType": selectedValue };
+    api.searchResult(jsonData);
+});
+
 
 //3. 필터 카테고리, 옵션 쿼리 
-
+$('.category-item').click(function(e){
+let categoryId= e.target.data-category-id.value;
+api.subCategory(categoryId);
+});
+$('.sub-category-item').click(function(e){
+	let categoryId= e.target.data-subcategory-id.value;
+	api.showOptions(categoryId);
+	});
 //4. x 눌렀을때 관심상품, 최근 상품 삭제하는 쿼리 
+$('.remove-from-wish').click(function(e){
+	let optionSetId=e.target.href.substring(1);
+	api.removewish(optionSetId);
+});
+$('.remove-from-recent').click(function(e){
+	let optionSetId=e.target.href.substring(1);
+	api.removeRecentView(optionSetId);
+});
 
 //5. 클리어 눌렀을 때 전체 삭제할 수 있게 url 요청 
 

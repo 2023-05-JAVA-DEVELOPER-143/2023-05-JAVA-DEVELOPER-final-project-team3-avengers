@@ -119,13 +119,13 @@ public class MemberServiceImpl implements MemberService {
 			Diamond : 35001 ~  */
 			member.setGrade("Rookie");
 		} else if (member.getGradePoint() > 1000 && member.getGradePoint() <= 5000) {
-			member.setGrade("Silver");
+			member.setGrade("Bronze");
 		} else if (member.getGradePoint() > 5000 && member.getGradePoint() <= 10000) {
-			member.setGrade("Gold");
+			member.setGrade("Silver");
 		} else if (member.getGradePoint() > 10000 && member.getGradePoint() <= 20000) {
-			member.setGrade("Platinum");
-		} else if (member.getGradePoint() > 20000 && member.getGradePoint() <= 35000) {
 			member.setGrade("Gold");
+		} else if (member.getGradePoint() > 20000 && member.getGradePoint() <= 35000) {
+			member.setGrade("Platinum");
 		} else if (member.getGradePoint() > 35000) {
 			member.setGrade("Diamond");
 		}

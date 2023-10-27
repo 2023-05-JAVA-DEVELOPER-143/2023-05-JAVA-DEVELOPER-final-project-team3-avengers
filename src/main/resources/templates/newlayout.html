@@ -2,8 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org"  
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
  
-<head th:insert="include_common::head">
-    <!--Example
+<head th:insert="~{include_common::first}">
+
+    <!--Example>
         <-Common Head->
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,11 +26,11 @@
 
 <body>
 	<!--Header 영역포함시작-->
-	<header th:insert="~{include_common::header}">header</header> 
+	<header class="navbar navbar-sticky navbar-dark bg-dark" th:insert="~{include_common::second}">header</header> 
 	<!--Header 영역포함끝-->
 
     <!--MyPage인 경우 추가로 들어가야할 profile card 시작-->
-	<th:block th:if="${#httpServletRequest.requestURI.startsWith('http://localhost:80/member/')}"></th:block>
+	<!--<th:block th:if="${title='myPage'}" th:insert="~{mypage_component::mypage}"></th:block>-->
     <!--profile card 끝-->
 
 	<!--Content 내용 영역 시작-->
@@ -37,7 +38,7 @@
 	<!--Content 내용 영역 끝  -->
 	
 	<!--Footer 영역포함시작.-->
-	<footer th:insert="~{include_common::footer}">footer</footer>
+	<footer th:insert="~{include_common::third}">footer</footer>
 	<!--Footer 영역포함끝-->
 	<th:block layout:fragment="script" />
 </body>
