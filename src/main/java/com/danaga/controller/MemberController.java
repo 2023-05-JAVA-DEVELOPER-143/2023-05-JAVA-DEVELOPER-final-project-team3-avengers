@@ -6,7 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.danaga.dto.MemberResponseDto;
 import com.danaga.dto.MemberUpdateDto;
@@ -19,7 +18,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/member")
 public class MemberController {
 
 	@Autowired
@@ -38,7 +36,7 @@ public class MemberController {
 		try {
 			memberService.login(member.getUserName(), member.getPassword());
 			session.setAttribute("sUserId", member.getUserName());
-			forwardPath = "redirect:../index";
+			forwardPath = "redirect:/index";
 		} catch (MemberNotFoundException e) {
 			e.printStackTrace();
 			model.addAttribute("msg1", e.getMessage());
@@ -65,7 +63,7 @@ public class MemberController {
 		} catch (ExistedMemberException e) {
 			model.addAttribute("msg", e.getMessage());
 			model.addAttribute("fuser", member);
-			forward_path = "member_join_form";
+			forward_path = "member/member_join_form";
 		}
 		return forward_path;
 	}
@@ -97,7 +95,7 @@ public class MemberController {
 		member.setId(sUserLongId);
 
 		memberService.updateMember(member);
-		return "redirect:member_info_form";
+		return "redirect:member/member_info_form";
 	}
 
 	@LoginCheck
@@ -108,7 +106,7 @@ public class MemberController {
 		/****************************************/
 		request.getSession(false).invalidate();
 
-		return "redirect:../index";
+		return "redirect:index";
 	}
 
 	@LoginCheck
@@ -119,12 +117,12 @@ public class MemberController {
 		String sUserId = (String) request.getSession().getAttribute("sUserId");
 		memberService.deleteMember(sUserId);
 		request.getSession().invalidate();
-		return "redirect:../index";
+		return "redirect:index";
 	}
 
 	@GetMapping({ "/member_join_action", "/member_login_action", "/member_modify_action", "/member_remove_action" })
 	public String user_get() {
-		String forwardPath = "redirect:../index";
+		String forwardPath = "redirect:/index";
 		return forwardPath;
 	}
 
