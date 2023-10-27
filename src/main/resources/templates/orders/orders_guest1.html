@@ -14,12 +14,12 @@
             <div class="col-lg-8">
                 <div class="padding-top-2x mt-2 hidden-lg-up"></div>
                 <!-- 주문 리스트 출력 부분 -->
-                <div th:each="ordersDto : ${orderDtoList}">
+                <div th:each="orderDto : ${ordersDtoList}">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="account-fn" th:text="${ordersDto.getDescription()}"></label>
-                                <input class="form-control" type="text" id="account-fn" th:value="${ordersDto.getPrice()}" required>
+                                <label for="account-fn" th:text="${orderDto.getDescription()}"></label>
+                                <input class="form-control" type="text" id="account-fn" th:value="${orderDto.getPrice()}" required>
                             </div>
                         </div>
                     </div>
