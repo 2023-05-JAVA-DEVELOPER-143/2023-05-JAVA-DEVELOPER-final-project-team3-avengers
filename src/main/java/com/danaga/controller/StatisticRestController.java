@@ -16,33 +16,30 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.danaga.entity.Member;
 import com.danaga.entity.Statistic;
+import com.danaga.service.BoardService;
 import com.danaga.service.MemberService;
+import com.danaga.service.OrderService;
 import com.danaga.service.StatisticService;
 
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/admin_data")
 public class StatisticRestController {
 	@Autowired
 	private StatisticService statisticService;
-	
 	@Autowired
 	private MemberService memberService;
+	@Autowired
+	private OrderService orderService;
+	@Autowired
+	private BoardService boardService;
 	
 	@Operation(summary = "admin : 전체 통계 호출")
 	@GetMapping("/list")
 	public ResponseEntity<List<Statistic>> getStatisticListAll() {
 		List<Statistic> statistics = statisticService.thisMonthStatistic();
 		return ResponseEntity.status(HttpStatus.OK).body(statistics);
-	}
-	@Operation(summary = "admin : 전체 통계 호출")
-	@GetMapping
-	public ModelAndView getStatisticList() {
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("admin/admin");
-		modelAndView.addObject("statisticList",statisticService.Statistics());
-		return modelAndView;
 	}
 	@Operation(summary = "admin : ")
 	@GetMapping("/daily")
@@ -77,30 +74,4 @@ public class StatisticRestController {
 		List<Statistic> statistics = statisticService.thisMonthStatistic();
 		return ResponseEntity.status(HttpStatus.OK).body(statistics);
 	}
-	@GetMapping("/admin_product_insert")
-	public ModelAndView adminProductInsert() {
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("admin/admin_product_insert");
-		return modelAndView;
-	}
-	@GetMapping("/admin_product_list")
-	public ModelAndView adminProductList() {
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("admin/admin_product_list");
-		return modelAndView;
-	}
-	@Operation(summary = "admin : 회원리스트 출력")
-	@GetMapping("/admin_member_list")
-	public ModelAndView adminMemberList() {
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("admin/admin_member_list");
-		return modelAndView;
-	}
-	@GetMapping("/admin_board_list")
-	public ModelAndView adminBoardList() {
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("admin/admin_board_list");
-		return modelAndView;
-	}
-	
 }

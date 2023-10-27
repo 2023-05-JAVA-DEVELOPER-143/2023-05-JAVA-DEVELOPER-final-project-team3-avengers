@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.danaga.entity.Statistic;
@@ -67,5 +68,6 @@ public class StatisticServiceImpl implements StatisticService{
 		List<Statistic> statisticList = statisticRepository.findByIdStartsWith(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMM")));
 		return statisticList;
 	}
+	
 	
 }
