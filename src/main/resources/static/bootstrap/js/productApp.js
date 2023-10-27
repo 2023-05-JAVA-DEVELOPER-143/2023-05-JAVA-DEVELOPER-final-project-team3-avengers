@@ -1,12 +1,11 @@
-import * as View from "./view.js";
 import * as api from "./apiService.js"
 
 //1.하트 눌렀을때 위시리스트 추가하는 이벤트 
-$('.btn btn-outline-secondary btn-sm btn-wishlist').click(function(e){
+$('.btn btn-outline-secondary btn-sm btn-wishlist').button(function(e){
 	let optionSetId = e.target.data-no.value;
 	api.tapHeart(optionSetId);
 });
-$('.btn btn-outline-secondary btn-sm btn-wishlist active').click(api.untapHeart($(this[data-no])));
+$('.btn btn-outline-secondary btn-sm btn-wishlist active').button(api.untapHeart($(this[data-no])));
 //2. sort by  눌렀을 때 정렬 바뀌게 select 다시하는 쿼리
 $('.form-control > #sorting').click(function() {
     var selectedValue = $('.form-control > #sorting option:selected').val();
@@ -25,11 +24,11 @@ $('.sub-category-item').click(function(e){
 	api.showOptions(categoryId);
 	});
 //4. x 눌렀을때 관심상품, 최근 상품 삭제하는 쿼리 
-$('.remove-from-wish').click(function(e){
+$('.remove-from-wish').button(function(e){
 	let optionSetId=e.target.href.substring(1);
 	api.removewish(optionSetId);
 });
-$('.remove-from-recent').click(function(e){
+$('.remove-from-recent').button(function(e){
 	let optionSetId=e.target.href.substring(1);
 	api.removeRecentView(optionSetId);
 });

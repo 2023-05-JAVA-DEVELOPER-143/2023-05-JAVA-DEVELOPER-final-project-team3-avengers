@@ -1,6 +1,6 @@
 import {API_BASE_URL,REMOVE_RECENT_VIEW,ADD_WISHLIST,REMOVE_WISHLIST,
     TAP_HEART,UNTAP_HEART,CHILD_CATEGORY,SHOW_OPTIONS,SEARCH} from "./api-config.js";
-import * as View from "./view.js";
+import {render} from "./view.js";
 function call(api, method,request){
     let headers = new Headers({
         "Content-Type": "application/json",
@@ -68,8 +68,8 @@ export function subCategory(categoryId){//대분류 선택하면 발생할 api
     return call(CHILD_CATEGORY.url.replace("@categoryId",categoryId),CHILD_CATEGORY.method,null)
     .then((response)=>{
         //옆 섹션에 자식카테고리들 뿌리기 (templateId="#guest-main-template",jsonResult={},contentId="#content")
-        View.render("#subcategory-template",response,"#subcategory-template");
-        View.render("#option-choice-template",{},"option-choice-template");
+        render("#subcategory-template",response,"#subcategory-template");
+        render("#option-choice-template",{},"option-choice-template");
     });
 }
 
@@ -77,7 +77,7 @@ export function showOptions(categoryId){
     return call(SHOW_OPTIONS.url.replace("@categoryId",categoryId),SHOW_OPTIONS.method,null)
     .then((response)=>{
         //옆 섹션에 선택 가능한 옵션들 뿌리기
-        View.render("#option-choice-template",response,"option-choice-template");
+        render("#option-choice-template",response,"option-choice-template");
     });
 }
 export function searchResult(filterDto){//검색결과 보여주기
