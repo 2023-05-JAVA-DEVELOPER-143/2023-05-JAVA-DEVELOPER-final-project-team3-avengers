@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
- layout:decorate="layout/layout(title='')">
+ layout:decorate="layout/layout(title='장바구니')">
   <!-- Body-->
 	  <!-- Header -->
 <head>
+	<link rel="stylesheet" media="screen" href="bootstrap/css/cart.css">
 </head>
 <body>
       <!-- Page Content-->
@@ -244,8 +245,6 @@
  </th:block>
 <th:block layout:fragment="script">
 
-
-
 <script th:inline="javascript">
 
 /* 옵션 변경때 사용해야할듯싶다..
@@ -294,18 +293,20 @@ function deleteCart(obj) {
 	
 }
 */
-/*
+
+let osId = "${cart.osId}";
+
+/* 선택한 제품 삭제 */
 function selectdelete() {
-	let osId = $('input[name=cart_osId]').val();
 	
 	let osIdArr = [];
-	osIdArr.push($(osId).val());
+	osIdArr.push(osId);
 	console.log(osIdArr);
 	let url = "/cart/check/" + osIdArr;
 	
 	$(".cart_info").each(function(index, element) {
-		if(confirm("장바구니를 삭제하시겠습니까?")) {
-			if($(element).find(".checkbox").is(":checked") === true) {
+		if($(element).find(".checkbox").is(":checked") === true) {
+			if(confirm("장바구니를 삭제하시겠습니까?")) {
 				$.ajax({
 				url : url,
 				type : "DELETE",
@@ -324,7 +325,7 @@ function selectdelete() {
 	
 	
 }
-*/
+
 
 /*
 $('.checkbox').click(function() {
@@ -360,8 +361,8 @@ function setTotalInfo() {
 	// 총 가격
 	$(".text-medium").text(totalPrice.toLocaleString);
 }
-	*/
+*/
 </script>
- </th:block>
-  </body>
+</th:block>
+ </body>
 </html>
