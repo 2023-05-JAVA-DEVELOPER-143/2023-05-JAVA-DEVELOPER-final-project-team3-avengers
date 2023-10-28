@@ -50,7 +50,7 @@ public class OrderController {
 	 */
 //로그인 한 후에 메뉴에서 주문목록보기 클릭하면 나오게하기
 	@GetMapping("/member_order_List")
-	public String memberOrderList(Model model, HttpSession session) {// 세션으로 userName받음
+	public String memberOrderList(Model model, HttpSession session) {//model은 데이터를 담아서 넘겨주는역활
 		try {
 //		   String sUserId = "User1";
 			String sUserId = (String) session.getAttribute("sUserId");
@@ -65,22 +65,22 @@ public class OrderController {
 	}
 
 	/*
-	 * 상품에서 주문(form)(회원)
+	 * 상품에서 주문(form)(공통)
 	 */
-	@GetMapping("/member_product_order_save_form")
+	@GetMapping("/product_order_save_form")
 	public String memberProductOrderAddForm(@ModelAttribute("cartDto") CartDto cartDto, Model model) {
 		
 		model.addAttribute(cartDto.getId());
 		model.addAttribute(cartDto.getQty());
 
-		return "orders/member_order_save_form";
+		return "orders/order_save_form";
 
 	}
 
 	/*
 	 * 상품에서 주문(action)(회원)
 	 */
-	@PostMapping("/member_product_order_save_action")
+	@PostMapping("/member_product_order_save_action")//modelAttribute html에서 보낸 데이터를 받는곳
 	public String memberProductOrderAddAction(@ModelAttribute OrdersProductDto ordersProductDto, Model model,
 			HttpSession session) {
 
@@ -96,18 +96,25 @@ public class OrderController {
 	}
 
 	/*
-	 * 카트에서 주문(form)(회원)
+	 * 카트에서 주문(form)(공통) //form에서 sUserId에 유무에 따라서 뿌려지는 data가 달라지게해야함(회원,비회원)
 	 */
 	@GetMapping("/member_cart_order_save_form")
 	public String memberCartOrderAddForm(Model model, HttpSession session) throws Exception {
 
 		String sUserId = (String) session.getAttribute("sUserId");
 
-		List<SUserCartResponseDto> cartDto = cartService.findsUserCartList(sUserId);
+		if(sUserId.isEmpty()) {
+			List<CartDto> fUserCarts =(List<CartDto>)session.getAttribute("cartDtoList");
+			
+			model.addAttribute("fUserCarts",fUserCarts);
+		}else {
+			
+			List<SUserCartResponseDto> cartDto = cartService.findsUserCartList(sUserId);
+			
+			model.addAttribute("cartDto", cartDto);
+		}
 
-		model.addAttribute("cartDto", cartDto);
-
-		return "orders/member_order_save_form";
+		return "orders/order_save_form";
 	}
 
 	/*
@@ -129,10 +136,84 @@ public class OrderController {
 	}
 	
 	/*
+	 * 카트에서 선택주문(action)(회원)
+	 */
+	@PostMapping("/member_cart_select_order_save_action")
+	public String memberCartSelectOrderAddAction(@ModelAttribute List<CartDto> cartDtoList,
+			@ModelAttribute DeliveryDto deliveryDto, Model model, HttpSession session) {
+
+		String sUserId = (String) session.getAttribute("sUserId");
+		try {
+			orderService.memberCartSelectOrderSave(sUserId, deliveryDto, cartDtoList);
+			return "redirect:orders/order_list";
+		} catch (Exception e) {
+			model.addAttribute("msg", e.getMessage());
+			e.printStackTrace();
+			return "cart/list";
+		}
+	}
+
+	/******************************* 비회원 ****************************/
+	/*
+	 * 주문+주문아이템 목록(비회원) //아직안함!
+	 */
+	@GetMapping("/guest_orderList/{orderNo},{phoneNumber}")
+	public String guestOrderList(Model model, @PathVariable Long orderNo, @PathVariable String phoneNumber) {
+		try {
+			// 원래는 @PathVariable로 인자 두개 받아서 해야됌
+			// orderNo 32
+			// phoneNumber 123-123123232322
+			List<OrdersDto> ordersDtoList = orderService.guestOrderList(orderNo, phoneNumber);
+			model.addAttribute("ordersDtoList", ordersDtoList);
+			return "orders/orders_guest";
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("errorMsg", e.getMessage());
+			return null;
+		}
+	}
+
+	/*
+	 * 상품에서 주문(action)(비회원)
+	 */
+	@PostMapping("/guest_product_order_save_action")//modelAttribute html에서 보낸 데이터를 받는곳
+	public String guestProductOrderAddAction(@ModelAttribute OrdersProductDto ordersProductDto, @ModelAttribute OrderGuestDto orderGuestDto
+			, Model model) {
+
+		try {
+			orderService.guestProductOrderSave(ordersProductDto,orderGuestDto);
+			return "redirect:orders/guest/order_list";
+		} catch (Exception e) {
+			model.addAttribute("msg", e.getMessage());
+			e.printStackTrace();
+			return "product/product_detail/" + ordersProductDto.getOptionSetId();
+		}
+	}
+
+	/*
+	 * 카트에서 주문(action)(회원) 
+	 */
+	@PostMapping("/guest_cart_order_save_action")
+	public String guestCartOrderAddAction(@ModelAttribute("deliveryDto") DeliveryDto deliveryDto,@ModelAttribute OrderGuestDto orderGuestDto, Model model, HttpSession session)
+			throws Exception {
+
+		List<CartDto> fUserCarts =(List<CartDto>)session.getAttribute("cartDtoList");
+		try {
+			orderService.guestCartOrderSave(fUserCarts, deliveryDto, orderGuestDto);
+			return "redirect:orders/guest/order_list";
+		} catch (Exception e) {
+			model.addAttribute("msg", e.getMessage());
+			e.printStackTrace();
+			return "cart/list";
+		}
+	}
+	
+	/*
 	 * 카트에서 선택주문(form)(회원)
 	 */
-	@GetMapping("/member_cart_select_order_save_form")
-	public String memberCartSelectOrderAddForm(@ModelAttribute List<CartDto> cartDtoList, Model model) {
+	@GetMapping("/guest_cart_select_order_save_form")
+	public String guestCartSelectOrderAddForm(@ModelAttribute List<CartDto> cartDtoList, Model model) {
 
 		String forward_path = "";
 		try {
@@ -151,8 +232,8 @@ public class OrderController {
 	/*
 	 * 카트에서 선택주문(action)(회원)
 	 */
-	@PostMapping("/member_cart_select_order_save_action")
-	public String memberCartSelectOrderAddAction(@ModelAttribute List<CartDto> cartDtoList,
+	@PostMapping("/guest_cart_select_order_save_action")
+	public String guestCartSelectOrderAddAction(@ModelAttribute List<CartDto> cartDtoList,
 			@ModelAttribute DeliveryDto deliveryDto, Model model, HttpSession session) {
 
 		String sUserId = (String) session.getAttribute("sUserId");
@@ -164,31 +245,10 @@ public class OrderController {
 			e.printStackTrace();
 			return "cart/list";
 		}
-
-
 	}
-
-	/******************************* 비회원 ****************************/
-	/*
-	 * 주문+주문아이템 목록(비회원)
-	 */
-	@GetMapping("/guestOrderList/{orderNo},{phoneNumber}")
-	public String guestOrderList(Model model, @PathVariable Long orderNo, @PathVariable String phoneNumber) {
-		try {
-			// 원래는 @PathVariable로 인자 두개 받아서 해야됌
-			// orderNo 32
-			// phoneNumber 123-123123232322
-			List<OrdersDto> ordersDtoList = orderService.guestOrderList(orderNo, phoneNumber);
-			model.addAttribute("ordersDtoList", ordersDtoList);
-			return "orders/orders_guest";
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("errorMsg", e.getMessage());
-			return null;
-		}
-	}
-
+	
+	
+	
 	/******************************* 회원 ****************************/
 
 	// 주문상세보기(회원)(이미 완성됨)
