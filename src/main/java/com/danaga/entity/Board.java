@@ -101,7 +101,8 @@ public class Board extends BaseEntity {
 		
 	 */
 
-   
+  
+ 
   
     public void patch(BoardDto dto) {
     	if(this.id!=dto.getId()) {
@@ -112,9 +113,6 @@ public class Board extends BaseEntity {
     	}
     	if(this.getBoardGroup().getId()!=dto.getBoardGroupId()) {
     		throw new IllegalArgumentException("수정 실패!~ 게시판 선택이 잘못됬습니다.");
-    	}
-    	if(dto.getLConfigs()==null) {
-    		System.out.println("상태값이 없어요!");
     	}
     	if(dto.getTitle()!=null) {
     		this.title=dto.getTitle();
@@ -139,7 +137,9 @@ public class Board extends BaseEntity {
     	}
     }
 
-    
+    public void updateConfig(LikeConfig config) {
+    	this.lConfigs.add(config);
+    }
     public void readCountUp(Board board) {
     	board.readCount++;
     }

@@ -1,14 +1,22 @@
 package com.danaga.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.danaga.dto.BoardDto;
@@ -19,6 +27,8 @@ import com.danaga.service.BoardService;
 import com.danaga.service.LikeConfigService;
 import com.danaga.service.MemberServiceImpl;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -30,6 +40,12 @@ public class BoardController {
 	private BoardService bService;
 	@Autowired
 	private LikeConfigService lcService; 
+	
+	
+	@GetMapping("/test")
+	public String test() {
+		return "board/text";
+	}
 	
 	@GetMapping("/list/{boardGroupId}")
 	public String list(@PathVariable Long boardGroupId,Model model) {
@@ -48,13 +64,13 @@ public class BoardController {
 	public String createForm(@PathVariable Long boardGroupId ,Model model) {
 		Long boardGroupId1=boardGroupId;
 		model.addAttribute("boardGroupId",boardGroupId1);
-		return "board/create_form";
+		return "board/create";
 	}
 	
 	@PostMapping("/create")
 	public String createBoard(@PathVariable BoardDto dto,Model model) {
 		log.info("dto : {} ",dto);
-		List<LikeConfigDto> configs = lcService.create(dto.getId(),dto.getMemberId());
+		//List<LikeConfigDto> configs = lcService.create(dto.getId(),dto.getMemberId());
 		BoardDto saved = bService.createBoard(dto);
 		log.info("saved: {}",saved);
 		model.addAttribute("saved",saved);

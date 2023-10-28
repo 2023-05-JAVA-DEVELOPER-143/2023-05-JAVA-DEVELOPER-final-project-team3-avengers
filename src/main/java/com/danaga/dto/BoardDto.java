@@ -1,13 +1,12 @@
 package com.danaga.dto;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.danaga.entity.Board;
 import com.danaga.entity.BoardGroup;
-import com.danaga.entity.LikeConfig;
 import com.danaga.entity.Member;
 
 import lombok.AllArgsConstructor;
@@ -40,7 +39,7 @@ public class BoardDto {
     private Long memberId;
     private Long boardGroupId;
     @Builder.Default
-    private List<LikeConfig> lConfigs = new ArrayList<>();
+    private List<LikeConfigDto> lConfigs = new ArrayList<>();
     
     
     public static BoardDto createBoardDto(Board board) {
@@ -52,15 +51,15 @@ public class BoardDto {
     			.img2(board.getImg2()).img3(board.getImg3()).img4(board.getImg4()).img5(board.getImg5())
     			.isLike(board.getIsLike()).disLike(board.getDisLike()).readCount(board.getReadCount()).isAdmin(board.getIsAdmin())
     			.createTime(board.getCreateTime()).nickname(board.getMember().getNickname())
-    			.memberId(board.getMember().getId()).boardGroupId(board.getBoardGroup().getId()).lConfigs(board.getLConfigs())
-    			.build();
+    			.memberId(board.getMember().getId()).boardGroupId(board.getBoardGroup().getId())
+    			.lConfigs(board.getLConfigs().stream().map(t -> LikeConfigDto.responsDto(t)).collect(Collectors.toList())).build();
     }
 
 
 	public static Board toEntity(BoardDto dto, Member memberT, BoardGroup boardGroupT) {
 		
 		return Board.builder()
-				.id(dto.getId()).title(dto.getTitle()).content(dto.getContent()).img1(dto.getImg1())
+				.title(dto.getTitle()).content(dto.getContent()).img1(dto.getImg1())
     			.img2(dto.getImg2()).img3(dto.getImg3()).img4(dto.getImg4()).img5(dto.getImg5())
     			.isLike(dto.getIsLike()).disLike(dto.getDisLike()).readCount(dto.getReadCount())
     			.member(memberT).boardGroup(boardGroupT)

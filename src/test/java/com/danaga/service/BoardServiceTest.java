@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.danaga.dto.BoardDto;
-import com.danaga.entity.LikeConfig;
+import com.danaga.dto.LikeConfigDto;
+
+import jakarta.transaction.Transactional;
 
 @SpringBootTest
 class BoardServiceTest {
@@ -36,14 +38,20 @@ class BoardServiceTest {
 	}
 
 	@Test
+	@Transactional
 	void 게시물_생성() {
 		BoardDto dto = new BoardDto();
 		dto.setTitle("Test Title");
 		dto.setContent("Test Content");
 		dto.setBoardGroupId(1L);
 		dto.setMemberId(3L);
-//		List<LikeConfig> configs = lcService.create(dto);
-//		BoardDto createdBoard = service.createBoard(dto, configs);
+
+		
+		System.out.println(">>>>>>>dto : "+dto);
+		
+		
+		BoardDto createdBoard = service.createBoard(dto);
+		System.out.println(">>>>>>>>Board : "+createdBoard);
 
 		
 //		 assertNotNull(createdBoard);

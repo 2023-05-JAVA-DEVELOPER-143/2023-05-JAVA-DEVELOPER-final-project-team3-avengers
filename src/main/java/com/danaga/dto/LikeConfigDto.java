@@ -14,16 +14,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LikeConfigDto {
 
-	private Long id;
+	private Long BoardId;
+	private Long MemberId;
 	private Integer isLike;
 	private Integer disLike;
 	
-	private Long BoardId;
-	private Long MemberId;
-	
-	public static LikeConfigDto createConfigDto(LikeConfig config) {
+	public static LikeConfigDto createConfigDto(Long boardId, Long memberId) {
 		
 		return LikeConfigDto.builder()
-				.id(config.getId()).isLike(config.getIsLike()).disLike(config.getDisLike()).BoardId(config.getId()).MemberId(config.getMember().getId()).build();
+				.BoardId(boardId).MemberId(memberId).isLike(0).disLike(0).build();
+	}
+	
+	public static LikeConfigDto responsDto(LikeConfig config) {
+		return LikeConfigDto.builder()
+				.isLike(config.getIsLike()).disLike(config.getDisLike()).BoardId(config.getBoard().getId()).MemberId(config.getMember().getId())
+				.build();
+		
 	}
 }

@@ -1,66 +1,83 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-  <!-- Body-->
-	  <!-- Header -->
-    <div th:insert="include_common :: header"></div>
-  <body>
-    <!-- Off-Canvas Wrapper-->
-    <div class="offcanvas-wrapper">
-      <!-- Page Content-->
-      <!-- Main Slider-->
-      <section class="hero-slider" style="background-image: url(img/hero-slider/main-bg.jpg);">
+<!-- Body-->
+<!-- Header -->
+<div th:insert="include_common :: header"></div>
 
-        <!-- Page Content-->
-	      <div class="container padding-bottom-3x mb-2">
-	        <div class="row">
-	          <div class="col-lg-12">
-	            <div class="padding-top-2x mt-2 hidden-lg-up"></div>
-	            <div class="table-responsive">
-	              <table class="table table-hover margin-bottom-none">
-	                <thead>
-	                  <tr>
-	                    <th>게시물 번호</th>
-	                    <th>글 제목</th>
-	                    <th>내용</th>
-	                    <th>작성자</th>
-	                    <th>조회수</th>
-	                    <th>좋아요</th>
-	                    <th>작성일</th>
-	                  </tr>
-	                </thead>
-	                <tbody>
-	                  <tr th:each="list : ${boardList}">
-						
-	                    <td th:text="${list.id}"><a class="text-medium navi-link" th:href="@{/board/${id}/show(id=${list.id})}">78A643CD409</a></td>
-	                    <td th:text="${list.title}"><a class="text-medium navi-link" th:href="@{/board/${id}/show(id=${list.id})}">st 08, 2017</a></td>
-	                    <td th:text="${list.content}"><a class="text-medium navi-link" th:href="@{/board/${id}/show(id=${list.id})}">August 08, 2017</a></td>
-	                    <td th:text="${list.nickname}">August 08, 2017</td>
-	                    <td><span class="text-danger" th:text="${list.readCount}">Canceled</span></td>
-	                    <td><span class="text-medium" th:text="${list.isLike}">$760.50</span></td>
-	                    <td><span th:text="${#dates.format(list.createTime, 'yyyy-MM-dd HH:mm')}"></span>August 08, 2017</td>
-	                 
-	                  </tr>
-	                </tbody>
-	              </table>
-	            </div>
-	            <hr>
-	            <div class="text-right"><a class="btn btn-link-primary margin-bottom-none" href="#"><i class="icon-download"></i>&nbsp;Order Details</a></div>
-	          </div>
-	        </div>
-	      </div>
-        
-        
-      </section>
-      <div th:insert="include_common :: footer"></div>
-    </div>
-    
-    
-    <!-- Back To Top Button-->
-    <a class="scroll-to-top-btn" href="#"><i class="icon-arrow-up"></i></a>
-    <!-- Backdrop-->
-    <div class="site-backdrop"></div>
-    <!-- JavaScript (jQuery) libraries, plugins and custom scripts-->
-    <script src="/bootstrap/js/vendor.min.js"></script>
-    <script src="/bootstrap/js/scripts.min.js"></script>
-  </body>
+<body>
+	<!-- Off-Canvas Wrapper-->
+	
+	<!-- Main Slider-->
+	<div class="container padding-bottom-3x mb-1">
+		<div class="row">
+			<section class="hero-slider" style="background-image: url(img/hero-slider/main-bg.jpg);">
+
+				<!-- Page Content-->
+				<div class="container padding-bottom-3x mb-2">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="padding-top-2x mt-2 hidden-lg-up"></div>
+							<div class="table-responsive">
+								<table class="table table-hover margin-bottom-none">
+									<thead>
+										<tr>
+											<th>게시물 번호</th>
+											<th>글 제목</th>
+											<th>내용</th>
+											<th>작성자</th>
+											<th>조회수</th>
+											<th>좋아요</th>
+											<th>작성일</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="list : ${boardList}">
+
+											<td><a class="text-medium navi-link" th:text="${list.id}"
+													th:href="@{/board/{id}/show(id=${list.id})}">78A643CD409</a></td>
+											<td><a class="text-medium navi-link" th:text="${list.title}"
+													th:href="@{/board/{id}/show(id=${list.id})}">st 08, 2017</a></td>
+											<td><a class="text-medium navi-link" th:text="${list.content}"
+													th:href="@{/board/{id}/show(id=${list.id})}">August 08, 2017</a>
+											</td>
+											<td th:text="${list.nickname}">August 08, 2017</td>
+											<td><span class="text-danger" th:text="${list.readCount}">Canceled</span>
+											</td>
+											<td><span class="text-medium" th:text="${list.isLike}">$760.50</span></td>
+											<td><span
+													th:text="${#temporals.format(list.createTime,'yyyy-MM-dd HH:mm:ss')}">August
+													08, 2017</span></td>
+
+
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<hr>
+							<div class="text-right"><a class="btn btn-link-primary margin-bottom-none"
+									href="create.html" th:href="@{/board/create/{boardGroupId} (boardGroupId=${1})}"><i
+										class="icon-download"></i>&nbsp;글쓰기</a></div>
+						</div>
+					</div>
+				</div>
+
+
+			</section>
+		</div>
+	</div>
+	<div th:insert="include_common :: footer"></div>
+	</div>
+
+
+	<!-- Back To Top Button-->
+	<a class="scroll-to-top-btn" href="#"><i class="icon-arrow-up"></i></a>
+	<!-- Backdrop-->
+	<div class="site-backdrop"></div>
+	<!-- JavaScript (jQuery) libraries, plugins and custom scripts-->
+	<script src="/bootstrap/js/vendor.min.js"></script>
+	<script src="/bootstrap/js/scripts.min.js"></script>
+	<script src="/bootstrap/js/card.min.js"></script>
+	<script src="/bootstrap/js/modernizr.min.js"></script>
+</body>
+
 </html>
