@@ -1,5 +1,7 @@
 package com.danaga.entity;
 
+import java.util.List;
+
 import org.hibernate.annotations.ColumnDefault;
 
 import com.danaga.dto.LikeConfigDto;
@@ -50,9 +52,11 @@ public class LikeConfig {
     @ToString.Exclude
     private Member member;
 
+    
+    
     public static LikeConfig createConfig(Board board, Member member) {
     	return LikeConfig.builder()
-    			.isLike(0).disLike(0).board(board).member(member)
+    			.id(0L).isLike(0).disLike(0).board(board).member(member)
     			.build();
     }
     
@@ -60,4 +64,5 @@ public class LikeConfig {
     	this.isLike=dto.getIsLike();
     	this.disLike=dto.getDisLike();
     }
+
 }

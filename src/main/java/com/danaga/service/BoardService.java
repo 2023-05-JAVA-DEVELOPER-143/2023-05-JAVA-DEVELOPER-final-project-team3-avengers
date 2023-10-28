@@ -19,9 +19,9 @@ import com.danaga.repository.LikeConfigRepository;
 import com.danaga.repository.MemberRepository;
 
 import jakarta.transaction.Transactional;
-
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @Service
-@Transactional
 public class BoardService {
 
 	@Autowired
@@ -33,40 +33,54 @@ public class BoardService {
 	@Autowired
 	private LikeConfigRepository lcRepository;
 
+	//인기 게시물 출력
+	public List<BoardDto> popularPost(){
+		return bRepository.findTop10ByOrderByReadCountDesc().stream().map(t -> BoardDto.responseDto(t)).collect(Collectors.toList());
+	}
+	
 	// 게시물별 출력
 	public List<BoardDto> boards(Long boardGroupId) {
 		return bRepository.findByBoardGroupIdOrderByCreateTimeDesc(boardGroupId).stream()
-				.map(board -> BoardDto.createBoardDto(board)).collect(Collectors.toList());
+				.map(board -> BoardDto.responseDto(board)).collect(Collectors.toList());
 	}
 
 	public BoardDto boardDetail(Long id) {
 		Board target = bRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("대상이없습니다."));
 		target.readCountUp(target);
 		bRepository.save(target);
-		BoardDto temp = BoardDto.createBoardDto(target);
+		BoardDto temp = BoardDto.responseDto(target);
 		return temp;
 	}
 
 	// 생성
 	@Transactional
 	public BoardDto createBoard(BoardDto dto) {
-		// 게시글 조회 및 예외처리
-		Member memberT = mRepository.findById(dto.getMemberId())
-				.orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-		BoardGroup boardGroupT = bgRepository.findById(dto.getBoardGroupId())
-				.orElseThrow(() -> new IllegalArgumentException("게시판을 찾을 수 없습니다."));
-		List<LikeConfigDto> configs= dto.getLConfigs();
-		if (dto.getId() != null) {
-			throw new IllegalArgumentException("이미 존재하는 게시물ID입니다.");
-		}
-		// 게시글 엔티티 생성
-		Board board = BoardDto.toEntity(dto, memberT, boardGroupT);
+	    // 게시글 조회 및 예외처리
+	    Member memberT = mRepository.findById(dto.getMemberId())
+	            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+	    BoardGroup boardGroupT = bgRepository.findById(dto.getBoardGroupId())
+	            .orElseThrow(() -> new IllegalArgumentException("게시판을 찾을 수 없습니다."));
+	    BoardDto create=BoardDto.createDto(dto);
+	    log.info("create : {}",create);
+		/*
+		 * if (create.getId() != null) { throw new
+		 * IllegalArgumentException("이미 존재하는 게시물ID입니다."); }
+		 */
+	    
+	    // 게시글 엔티티 생성
+	    Board board = Board.toEntity(create, memberT, boardGroupT);
+	    log.info("board : {} ",board);
+	    // 게시글 엔티티를 DB에 저장
+	    Board created = bRepository.save(board);
 
-		// 게시글 엔티티를 DB에 저장
-		Board created = bRepository.save(board);
-		// 게시글 엔티티를 DTO로 변환 및 반환
-		return BoardDto.createBoardDto(board);
+	    // LikeConfig 엔티티 생성 및 저장
+	    LikeConfig likeConfig = LikeConfig.createConfig(created, memberT);
+	    lcRepository.save(likeConfig);
+
+	    // 게시글 엔티티를 DTO로 변환 및 반환
+	    return BoardDto.responseDto(board);
 	}
+
 
 	// 좋아요
 	@Transactional
@@ -103,7 +117,7 @@ public class BoardService {
 		Board response = bRepository.save(board);
 
 		// 저장후 dto객체로 변환 및 반환
-		BoardDto responseDto = BoardDto.createBoardDto(response);
+		BoardDto responseDto = BoardDto.responseDto(response);
 		return responseDto;
 
 	}
@@ -143,7 +157,7 @@ public class BoardService {
 		Board response = bRepository.save(board);
 
 		// 저장후 dto객체로 변환 및 반환
-		BoardDto responseDto = BoardDto.createBoardDto(response);
+		BoardDto responseDto = BoardDto.responseDto(response);
 		return responseDto;
 	}
 
@@ -160,7 +174,7 @@ public class BoardService {
 		Board updated = bRepository.save(target);
 
 		// 게시물 엔티티를 DTO로 변환 및 반환
-		return BoardDto.createBoardDto(updated);
+		return BoardDto.responseDto(updated);
 	}
 
 	// 게시물 삭제
@@ -176,6 +190,6 @@ public class BoardService {
 		bRepository.delete(target);
 
 		// 삭제된 댓글을 dto로 반환
-		return BoardDto.createBoardDto(target);
+		return BoardDto.responseDto(target);
 	}
 }

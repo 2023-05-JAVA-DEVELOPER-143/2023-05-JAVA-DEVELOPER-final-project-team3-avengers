@@ -41,8 +41,17 @@ public class BoardDto {
     @Builder.Default
     private List<LikeConfigDto> lConfigs = new ArrayList<>();
     
+    public static BoardDto createDto(BoardDto dto) {
+    	return BoardDto.builder()
+    			.id(0L).title(dto.getTitle()).content(dto.getContent()).img1(dto.getImg1())
+    			.img2(dto.getImg2()).img3(dto.getImg3()).img4(dto.getImg4()).img5(dto.getImg5())
+    			.isLike(0).disLike(0).readCount(0).isAdmin(1)
+    			.createTime(dto.getCreateTime()).nickname(dto.getNickname())
+    			.memberId(dto.getMemberId()).boardGroupId(dto.getBoardGroupId())
+    			.build();
+    }
     
-    public static BoardDto createBoardDto(Board board) {
+    public static BoardDto responseDto(Board board) {
     	if(board.getMember().getRole().equals("ADMIN")) {
     		board.setIsAdmin(2);
     	}
@@ -55,15 +64,4 @@ public class BoardDto {
     			.lConfigs(board.getLConfigs().stream().map(t -> LikeConfigDto.responsDto(t)).collect(Collectors.toList())).build();
     }
 
-
-	public static Board toEntity(BoardDto dto, Member memberT, BoardGroup boardGroupT) {
-		
-		return Board.builder()
-				.title(dto.getTitle()).content(dto.getContent()).img1(dto.getImg1())
-    			.img2(dto.getImg2()).img3(dto.getImg3()).img4(dto.getImg4()).img5(dto.getImg5())
-    			.isLike(dto.getIsLike()).disLike(dto.getDisLike()).readCount(dto.getReadCount())
-    			.member(memberT).boardGroup(boardGroupT)
-    			.build();
-	}
-    
 }

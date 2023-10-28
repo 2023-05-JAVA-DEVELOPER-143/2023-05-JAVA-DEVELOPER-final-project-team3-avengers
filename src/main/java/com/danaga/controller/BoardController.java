@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,39 +43,42 @@ public class BoardController {
 	private LikeConfigService lcService; 
 	
 	
-	@GetMapping("/test")
-	public String test() {
-		return "board/text";
-	}
-	
 	@GetMapping("/list/{boardGroupId}")
 	public String list(@PathVariable Long boardGroupId,Model model) {
 		List<BoardDto>boardList=bService.boards(boardGroupId);
+		List<BoardDto> top10List = bService.popularPost();
 		for (BoardDto boardDto : boardList) {
 			if(boardDto.getContent().length()>15) {
-				String contentTemp=boardDto.getContent().substring(15)+"...";
+				String contentTemp=boardDto.getContent().substring(0,15)+"...";
 				boardDto.setContent(contentTemp);
 			}
 		}
-		log.info("boardList : {} "+boardList.toString());
+		for (BoardDto boardDto : top10List) {
+			if(boardDto.getContent().length()>15) {
+				String contentTemp=boardDto.getContent().substring(0,15)+"...";
+				boardDto.setContent(contentTemp);
+			}
+		}
 		model.addAttribute("boardList",boardList);
+		model.addAttribute("top10",top10List);
 		return "board/board";
 	}
 	@GetMapping("/create/{boardGroupId}")
 	public String createForm(@PathVariable Long boardGroupId ,Model model) {
 		Long boardGroupId1=boardGroupId;
 		model.addAttribute("boardGroupId",boardGroupId1);
-		return "board/create";
+		model.addAttribute("board",new BoardDto());
+		return "board/create_test";
 	}
 	
-	@PostMapping("/create")
-	public String createBoard(@PathVariable BoardDto dto,Model model) {
+	@PostMapping("/create/{boardGroupId}")
+	public String createBoard(@PathVariable("boardGroupId")Long boardGruopId, @ModelAttribute("board") BoardDto dto,Model model) {
 		log.info("dto : {} ",dto);
 		//List<LikeConfigDto> configs = lcService.create(dto.getId(),dto.getMemberId());
 		BoardDto saved = bService.createBoard(dto);
 		log.info("saved: {}",saved);
 		model.addAttribute("saved",saved);
-		return "redirect:/board/show"+saved.getId();
+		return "redirect:/board/list/"+saved.getBoardGroupId();
 	}
 	
 	@GetMapping("/{id}/show")

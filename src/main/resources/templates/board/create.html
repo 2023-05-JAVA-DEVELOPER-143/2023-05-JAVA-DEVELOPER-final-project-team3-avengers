@@ -35,17 +35,23 @@
 
 					<h1>자유게시판</h1>
 
-					<select class="form-select" aria-label="Default select example">
-						<option selected>원하는 게시판을 선택해주세요!</option>
-						<option value="1">자유게시판</option>
-						<option value="2">1:1문의</option>
-
-					</select>
-					<div id="editor">
-						<p>This is some sample content.</p>
-					</div>
+					
+					<form action="/board/create" th:object="${board}" method="post">
+						<select class="form-select" aria-label="Default select example" id="boardGroupId" name="boardGroupId">
+							<option selected>원하는 게시판을 선택해주세요!</option>
+							<option value="1">자유게시판</option>
+							<option value="2">1:1문의</option>
+						</select>
+						<input type="text" placeholder="제목을 입력하세요" id="title" name="title"/>
+						<textarea name="content" id="editor" th:field="*{content}">
+            				&lt;p&gt;This is some sample content.&lt;/p&gt;
+        				</textarea>
+						<p><input type="submit" value="Submit"></p>
+					</form>
+					<button th:href="@{/board/list/1}">돌아가기</button>
 			</div>
 		</div>
+		</section>
 		<script>
 			ClassicEditor
 				.create(document.querySelector('#editor'))
@@ -234,6 +240,10 @@
 					'PasteFromOfficeEnhanced'
 				]
 			});
+
+			const data = editor.getData();
+			console.log(data.name);
+
 		</script>
 
 		</section>

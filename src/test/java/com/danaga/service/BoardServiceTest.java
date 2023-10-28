@@ -1,69 +1,48 @@
 package com.danaga.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.RETURNS_MOCKS;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import java.util.List;
+import java.util.Optional;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.danaga.dto.BoardDto;
-import com.danaga.dto.LikeConfigDto;
-
-import jakarta.transaction.Transactional;
+import com.danaga.entity.Board;
+import com.danaga.entity.BoardGroup;
+import com.danaga.entity.Member;
+import com.danaga.repository.BoardGroupRepository;
+import com.danaga.repository.BoardRepository;
+import com.danaga.repository.MemberRepository;
 
 @SpringBootTest
-class BoardServiceTest {
+public class BoardServiceTest {
 
-	@Autowired
-	BoardService service;
-	@Autowired
-	LikeConfigService lcService;
+    @Autowired
+    private BoardService boardService;
 
-	@Test
-	@Disabled
-	void 자유게시판_리스트들() {
-		List<BoardDto> list = service.boards(1L);
-		System.out.println(">>>>>>>>>>>> " + list);
-	}
+    @Test
+    public void testCreateBoard() {
+        // Mock necessary data
+        BoardDto boardDto = BoardDto.builder()
+                .boardGroupId(1L)
+                .title("test title")
+                .content("test content")
+                .memberId(7L)
+                .build();
 
-	@Test
-	@Disabled
-	void 게시글_디테일() {
-		 BoardDto board= service.boardDetail(3L);
-		 System.out.println(">>>>> 3번글 :"+board);
-	}
-
-	@Test
-	@Transactional
-	void 게시물_생성() {
-		BoardDto dto = new BoardDto();
-		dto.setTitle("Test Title");
-		dto.setContent("Test Content");
-		dto.setBoardGroupId(1L);
-		dto.setMemberId(3L);
-
-		
-		System.out.println(">>>>>>>dto : "+dto);
-		
-		
-		BoardDto createdBoard = service.createBoard(dto);
-		System.out.println(">>>>>>>>Board : "+createdBoard);
-
-		
-//		 assertNotNull(createdBoard);
-//		 assertEquals("Test Title",createdBoard.getTitle());
-//		 assertEquals("Test Content",createdBoard.getContent());
-//		 System.out.println(createdBoard);
-		 
-	}
-
-	@Test
-	@Disabled
-	void 좋아요_누르기() {
-		
-	}
+       
+        
+        BoardDto result = boardService.createBoard(boardDto);
+        System.out.println(">>>>>>>>board : "+result);
+        
+    }
 }
+
+
+

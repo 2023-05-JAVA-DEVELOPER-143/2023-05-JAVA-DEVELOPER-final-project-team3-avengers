@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LikeConfigDto {
 
+	private Long id;
 	private Long BoardId;
 	private Long MemberId;
 	private Integer isLike;
@@ -27,7 +28,7 @@ public class LikeConfigDto {
 	
 	public static LikeConfigDto responsDto(LikeConfig config) {
 		return LikeConfigDto.builder()
-				.isLike(config.getIsLike()).disLike(config.getDisLike()).BoardId(config.getBoard().getId()).MemberId(config.getMember().getId())
+				.id(config.getId()).isLike(config.getIsLike()).disLike(config.getDisLike()).BoardId(config.getBoard().getId()).MemberId(config.getMember().getId())
 				.build();
 		
 	}
