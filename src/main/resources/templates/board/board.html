@@ -29,16 +29,17 @@
 				</div>
 			</div>
 			<!-- Page Content-->
+			
 			<div class="container padding-bottom-3x mb-2">
 				<div class="row">
-					<div class="col-lg-4">
-						<h3>인기게시물</h3>
+					<div class="col-lg-4 col-md-8 order-md-2">
+						<h6 class="text-muted text-normal text-uppercase">인기 게시물</h6>
+						<div class="padding-top-2x mt-2 hidden-lg-up"></div>
+            			<div class="table-responsive">
 						<table class="table table-hover margin-bottom-none">
 							<thead>
 								<tr>
 									<th>글 제목</th>
-									<th>내용</th>
-									<th>작성자</th>
 									<th>조회수</th>
 									<th>좋아요</th>
 								</tr>
@@ -47,21 +48,26 @@
 								<tr th:each="top : ${top10}">
 									<td><a class="text-medium navi-link" th:text="${top.title}"
 											th:href="@{/board/{id}/show(id=${top.id})}">st 08, 2017</a></td>
-									<td><a class="text-medium navi-link" th:text="${top.content}"
-											th:href="@{/board/{id}/show(id=${top.id})}">August 08, 2017</a>
-									</td>
-									<td th:text="${top.nickname}">August 08, 2017</td>
-									<td><span class="text-danger" th:text="${top.readCount}">Canceled</span>
+									<td><span class="text-large" th:text="${top.readCount}">Canceled</span>
 									</td>
 									<td><span class="text-medium" th:text="${top.isLike}">$760.50</span></td>
 								</tr>
 							</tbody>
 						</table>
+						</div>
 					</div>
-					<div class="col-lg-8">
+					<div class="col-lg-8 col-md-8 order-md-2">
+						<div class="text-right"><a class="btn btn-success" href="create.html"
+							th:href="@{/board/create/{boardGroupId} (boardGroupId=${1})}">&nbsp;글쓰기</a>
+						</div>
+						<h6 class="text-muted text-normal text-uppercase" th:if="${boardGroupId} eq 1">자유게시판</h6>
+						<h6 class="text-muted text-normal text-uppercase" th:if="${boardGroupId} eq 2">1:1문의</h6>
+						<h6 class="text-muted text-normal text-uppercase" th:if="${boardGroupId} eq 3">공지사항</h6>
+						<h6 class="text-muted text-normal text-uppercase" th:if="${boardGroupId} eq 4">자주묻는질문</h6>
+						<hr class="margin-bottom-1x">
 						<div class="padding-top-2x mt-2 hidden-lg-up"></div>
 						<div class="table-responsive">
-							<table class="table table-hover margin-bottom-none">
+							<table class="table table-inverse">
 								<thead>
 									<tr>
 										<th>게시물 번호</th>
@@ -76,28 +82,25 @@
 								<tbody>
 									<tr th:each="list : ${boardList}">
 
-										<td><a class="text-medium navi-link" th:text="${list.id}"
+										<td ><a class="text-medium navi-link" th:text="${list.id}" 
 												th:href="@{/board/{id}/show(id=${list.id})}">78A643CD409</a></td>
-										<td><a class="text-medium navi-link" th:text="${list.title}"
+										<td ><a class="text-medium navi-link" th:text="${list.title}"
 												th:href="@{/board/{id}/show(id=${list.id})}">st 08, 2017</a></td>
-										<td><a class="text-medium navi-link" th:text="${list.content}"
+										<td ><a class="text-medium navi-link" th:text="${list.content}"
 												th:href="@{/board/{id}/show(id=${list.id})}">August 08, 2017</a>
 										</td>
-										<td th:text="${list.nickname}">August 08, 2017</td>
+										<td class="text-large" th:text="${list.nickname}">August 08, 2017</td>
 										<td><span class="text-danger" th:text="${list.readCount}">Canceled</span>
 										</td>
-										<td><span class="text-medium" th:text="${list.isLike}">$760.50</span></td>
-										<td><span
+										<td><span class="text-large" th:text="${list.isLike}">$760.50</span></td>
+										<td><span class="text-large"
 												th:text="${#temporals.format(list.createTime,'yyyy-MM-dd HH:mm:ss')}">August
 												08, 2017</span></td>
 									</tr>
 								</tbody>
 							</table>
 						</div>
-						<hr>
-						<div class="text-right"><a class="btn btn-link-primary margin-bottom-none" href="create.html"
-							th:href="@{/board/create/{boardGroupId} (boardGroupId=${1})}"><i class="icon-download"></i>&nbsp;글쓰기</a>
-						</div>
+						
 					</div>
 				</div>
 			</div>

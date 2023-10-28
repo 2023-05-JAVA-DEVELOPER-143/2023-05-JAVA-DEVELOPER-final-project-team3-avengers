@@ -1,265 +1,175 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <!-- Body-->
+<div th:insert="include_common :: header"></div>
 
-<script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
+
 <!-- Header -->
 
 <body>
-
-
-	<div th:insert="include_common :: header"></div>
-	<!-- Off-Canvas Wrapper-->
-	<div class="page-title">
-		<div class="container">
-			<div class="column">
-				<h1>글 쓰 기</h1>
-			</div>
-			<div class="column">
-				<ul class="breadcrumbs">
-					<li><a href="index.html">Home</a>
-					</li>
-					<li class="separator">&nbsp;</li>
-					<li></li>
-				</ul>
+	<div class="offcanvas-wrapper">
+		<!-- Page Title-->
+		<div class="page-title">
+			<div class="container">
+				<div class="column">
+					<h1>게시판</h1>
+				</div>
+				<div class="column">
+					<ul class="breadcrumbs">
+						<li><a href="/board/list/1">자유게시판</a></li>
+						<li class="separator">&nbsp;</li>
+						<li><a href="/board/list/2">1:1문의</a></li>
+						<li class="separator">&nbsp;</li>
+						<li><a href="/board/list/3">공지사항</a></li>
+						<li class="separator">&nbsp;</li>
+						<li><a href="/board/list/4">자주하는질문</a></li>
+						<li class="separator">&nbsp;</li>
+						<li>게시판</li>
+					</ul>
+				</div>
 			</div>
 		</div>
-	</div>
-	<div class="container padding-bottom-3x mb-1">
+		<hr class="my-4">
+		<div class="container padding-bottom-2x">
+			<div class="row">
+				<div class="col-lg-9 col-md-8 order-md-2">
+					<h6 class="text-muted text-normal text-uppercase margin-top-2x">Input types</h6>
+					<hr class="margin-bottom-1x">
+					<form>
+						<div class="form-group row">
+							<label class="col-2 col-form-label" for="text-input">Text</label>
+							<div class="col-10">
+								<input class="form-control" type="text" id="text-input" value="Artisanal kale">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-2 col-form-label" for="search-input">Search</label>
+							<div class="col-10">
+								<input class="form-control" type="search" id="search-input" value="How do I shoot web">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-2 col-form-label" for="email-input">Email</label>
+							<div class="col-10">
+								<input class="form-control" type="email" id="email-input" value="email@example.com">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-2 col-form-label" for="url-input">URL</label>
+							<div class="col-10">
+								<input class="form-control" type="url" id="url-input" value="https://getbootstrap.com">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-2 col-form-label" for="tel-input">Phone</label>
+							<div class="col-10">
+								<input class="form-control" type="tel" id="tel-input" value="1-(770)-334-2518">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-2 col-form-label" for="pass-input">Password</label>
+							<div class="col-10">
+								<input class="form-control" type="password" id="pass-input" value="mypasswordexample">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-2 col-form-label" for="textarea-input">Textarea</label>
+							<div class="col-10">
+								<textarea class="form-control" id="textarea-input" rows="5">Hello World!</textarea>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-2 col-form-label" for="select-input">Select</label>
+							<div class="col-10">
+								<select class="form-control" id="select-input">
+									<option>Choose option...</option>
+									<option>Option item 1</option>
+									<option>Option item 2</option>
+									<option>Option item 3</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-2 col-form-label" for="file-input">File</label>
+							<div class="col-10">
+								<div class="custom-file">
+									<input class="custom-file-input" type="file" id="file-input">
+									<label class="custom-file-label" for="file-input">Choose file...</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-2 col-form-label" for="number-input">Number</label>
+							<div class="col-10">
+								<input class="form-control" type="number" id="number-input" value="37">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-2 col-form-label" for="date-time-input">Date and time</label>
+							<div class="col-10">
+								<input class="form-control" type="datetime-local" id="date-time-input">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-2 col-form-label" for="date-input">Date</label>
+							<div class="col-10">
+								<input class="form-control" type="date" id="date-input" value="2017-06-13">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-2 col-form-label" for="month-input">Month</label>
+							<div class="col-10">
+								<input class="form-control" type="month" id="month-input" value="2017-06">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-2 col-form-label" for="week-input">Week</label>
+							<div class="col-10">
+								<input class="form-control" type="week" id="week-input" value="2017-W33">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-2 col-form-label" for="time-input">Time</label>
+							<div class="col-10">
+								<input class="form-control" type="time" id="time-input" value="14:45:00">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-2 col-form-label" for="color-input">Color</label>
+							<div class="col-10">
+								<input class="form-control" type="color" id="color-input" value="#f5f5f5">
+							</div>
+						</div>
+						<hr class="my-4">
 
-		<div class="row">
-			<div class="offcanvas-wrapper">
-				<!-- Main Slider-->
-				<section class="hero-slider" style="background-image: url(img/hero-slider/main-bg.jpg);">
-					<!-- Page Content-->
+						<div class="row">
+							<div class="col">
+								<button class="w-100 btn btn-primary btn-lg" type="submit">등록</button>
+							</div>
+							<div class="col">
+								<button class="w-100 btn btn-secondary btn-lg" onclick="location.href='board.html'"
+									th:onclick="|location.href='@{/board/list/1}'|" type="button">돌아가기</button>
+							</div>
+						</div>
 
-					<h1>자유게시판</h1>
-
-					
-					<form action="/board/create" th:object="${board}" method="post">
-						<select class="form-select" aria-label="Default select example" id="boardGroupId" name="boardGroupId">
-							<option selected>원하는 게시판을 선택해주세요!</option>
-							<option value="1">자유게시판</option>
-							<option value="2">1:1문의</option>
-						</select>
-						<input type="text" placeholder="제목을 입력하세요" id="title" name="title"/>
-						<textarea name="content" id="editor" th:field="*{content}">
-            				&lt;p&gt;This is some sample content.&lt;/p&gt;
-        				</textarea>
-						<p><input type="submit" value="Submit"></p>
 					</form>
-					<button th:href="@{/board/list/1}">돌아가기</button>
+				</div>
 			</div>
 		</div>
-		</section>
-		<script>
-			ClassicEditor
-				.create(document.querySelector('#editor'))
-				.catch(error => {
-					console.error(error);
-				});
-		</script>
-
-		<style>
-			#container {
-				width: 1000px;
-				margin: 20px auto;
-			}
-
-			.ck-editor__editable[role="textbox"] {
-				/* editing area */
-				min-height: 200px;
-			}
-
-			.ck-content .image {
-				/* block images */
-				max-width: 80%;
-				margin: 20px auto;
-			}
-		</style>
-		<div id="container">
-			<div id="editor">
-			</div>
-		</div>
-		<!--
-            The "super-build" of CKEditor&nbsp;5 served via CDN contains a large set of plugins and multiple editor types.
-            See https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/quick-start.html#running-a-full-featured-editor-from-cdn
-        -->
-		<script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/super-build/ckeditor.js"></script>
-		<!--
-            Uncomment to load the Spanish translation
-            <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/super-build/translations/es.js"></script>
-        -->
-		<script>
-			// This sample still does not showcase all CKEditor&nbsp;5 features (!)
-			// Visit https://ckeditor.com/docs/ckeditor5/latest/features/index.html to browse all the features.
-			CKEDITOR.ClassicEditor.create(document.getElementById("editor"), {
-				// https://ckeditor.com/docs/ckeditor5/latest/features/toolbar/toolbar.html#extended-toolbar-configuration-format
-				toolbar: {
-					items: [
-						'exportPDF', 'exportWord', '|',
-						'findAndReplace', 'selectAll', '|',
-						'heading', '|',
-						'bold', 'italic', 'strikethrough', 'underline', 'code', 'subscript', 'superscript', 'removeFormat', '|',
-						'bulletedList', 'numberedList', 'todoList', '|',
-						'outdent', 'indent', '|',
-						'undo', 'redo',
-						'-',
-						'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|',
-						'alignment', '|',
-						'link', 'insertImage', 'blockQuote', 'insertTable', 'mediaEmbed', 'codeBlock', 'htmlEmbed', '|',
-						'specialCharacters', 'horizontalLine', 'pageBreak', '|',
-						'textPartLanguage', '|',
-						'sourceEditing'
-					],
-					shouldNotGroupWhenFull: true
-				},
-				// Changing the language of the interface requires loading the language file using the <script> tag.
-				// language: 'es',
-				list: {
-					properties: {
-						styles: true,
-						startIndex: true,
-						reversed: true
-					}
-				},
-				// https://ckeditor.com/docs/ckeditor5/latest/features/headings.html#configuration
-				heading: {
-					options: [
-						{model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph'},
-						{model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1'},
-						{model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2'},
-						{model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3'},
-						{model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4'},
-						{model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5'},
-						{model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6'}
-					]
-				},
-				// https://ckeditor.com/docs/ckeditor5/latest/features/editor-placeholder.html#using-the-editor-configuration
-				placeholder: 'Welcome to CKEditor&nbsp;5!',
-				// https://ckeditor.com/docs/ckeditor5/latest/features/font.html#configuring-the-font-family-feature
-				fontFamily: {
-					options: [
-						'default',
-						'Arial, Helvetica, sans-serif',
-						'Courier New, Courier, monospace',
-						'Georgia, serif',
-						'Lucida Sans Unicode, Lucida Grande, sans-serif',
-						'Tahoma, Geneva, sans-serif',
-						'Times New Roman, Times, serif',
-						'Trebuchet MS, Helvetica, sans-serif',
-						'Verdana, Geneva, sans-serif'
-					],
-					supportAllValues: true
-				},
-				// https://ckeditor.com/docs/ckeditor5/latest/features/font.html#configuring-the-font-size-feature
-				fontSize: {
-					options: [10, 12, 14, 'default', 18, 20, 22],
-					supportAllValues: true
-				},
-				// Be careful with the setting below. It instructs CKEditor to accept ALL HTML markup.
-				// https://ckeditor.com/docs/ckeditor5/latest/features/general-html-support.html#enabling-all-html-features
-				htmlSupport: {
-					allow: [
-						{
-							name: /.*/,
-							attributes: true,
-							classes: true,
-							styles: true
-						}
-					]
-				},
-				// Be careful with enabling previews
-				// https://ckeditor.com/docs/ckeditor5/latest/features/html-embed.html#content-previews
-				htmlEmbed: {
-					showPreviews: true
-				},
-				// https://ckeditor.com/docs/ckeditor5/latest/features/link.html#custom-link-attributes-decorators
-				link: {
-					decorators: {
-						addTargetToExternalLinks: true,
-						defaultProtocol: 'https://',
-						toggleDownloadable: {
-							mode: 'manual',
-							label: 'Downloadable',
-							attributes: {
-								download: 'file'
-							}
-						}
-					}
-				},
-				// https://ckeditor.com/docs/ckeditor5/latest/features/mentions.html#configuration
-				mention: {
-					feeds: [
-						{
-							marker: '@',
-							feed: [
-								'@apple', '@bears', '@brownie', '@cake', '@cake', '@candy', '@canes', '@chocolate', '@cookie', '@cotton', '@cream',
-								'@cupcake', '@danish', '@donut', '@dragée', '@fruitcake', '@gingerbread', '@gummi', '@ice', '@jelly-o',
-								'@liquorice', '@macaroon', '@marzipan', '@oat', '@pie', '@plum', '@pudding', '@sesame', '@snaps', '@soufflé',
-								'@sugar', '@sweet', '@topping', '@wafer'
-							],
-							minimumCharacters: 1
-						}
-					]
-				},
-				// The "super-build" contains more premium features that require additional configuration, disable them below.
-				// Do not turn them on unless you read the documentation and know how to configure them and setup the editor.
-				removePlugins: [
-					// These two are commercial, but you can try them out without registering to a trial.
-					// 'ExportPdf',
-					// 'ExportWord',
-					'CKBox',
-					'CKFinder',
-					'EasyImage',
-					// This sample uses the Base64UploadAdapter to handle image uploads as it requires no configuration.
-					// https://ckeditor.com/docs/ckeditor5/latest/features/images/image-upload/base64-upload-adapter.html
-					// Storing images as Base64 is usually a very bad idea.
-					// Replace it on production website with other solutions:
-					// https://ckeditor.com/docs/ckeditor5/latest/features/images/image-upload/image-upload.html
-					// 'Base64UploadAdapter',
-					'RealTimeCollaborativeComments',
-					'RealTimeCollaborativeTrackChanges',
-					'RealTimeCollaborativeRevisionHistory',
-					'PresenceList',
-					'Comments',
-					'TrackChanges',
-					'TrackChangesData',
-					'RevisionHistory',
-					'Pagination',
-					'WProofreader',
-					// Careful, with the Mathtype plugin CKEditor will not load when loading this sample
-					// from a local file system (file://) - load this site via HTTP server if you enable MathType.
-					'MathType',
-					// The following features are part of the Productivity Pack and require additional license.
-					'SlashCommand',
-					'Template',
-					'DocumentOutline',
-					'FormatPainter',
-					'TableOfContents',
-					'PasteFromOfficeEnhanced'
-				]
-			});
-
-			const data = editor.getData();
-			console.log(data.name);
-
-		</script>
-
-		</section>
 		<div th:insert="include_common :: footer"></div>
-	</div>
 
 
-	<!-- Back To Top Button-->
-	<a class="scroll-to-top-btn" href="#"><i class="icon-arrow-up"></i></a>
-	<!-- Backdrop-->
-	<div class="site-backdrop"></div>
-	<!-- JavaScript (jQuery) libraries, plugins and custom scripts-->
-	<script src="/bootstrap/js/vendor.min.js"></script>
-	<script src="/bootstrap/js/scripts.min.js"></script>
-	<script src="/bootstrap/js/card.min.js"></script>
-	<script src="/bootstrap/js/modernizr.min.js"></script>
+
+		<!-- Back To Top Button-->
+		<a class="scroll-to-top-btn" href="#"><i class="icon-arrow-up"></i></a>
+		<!-- Backdrop-->
+		<div class="site-backdrop"></div>
+		<!-- JavaScript (jQuery) libraries, plugins and custom scripts-->
+		<script src="/bootstrap/js/vendor.min.js"></script>
+		<script src="/bootstrap/js/scripts.min.js"></script>
+		<script src="/bootstrap/js/card.min.js"></script>
+		<script src="/bootstrap/js/modernizr.min.js"></script>
+
 </body>
 
 </html>

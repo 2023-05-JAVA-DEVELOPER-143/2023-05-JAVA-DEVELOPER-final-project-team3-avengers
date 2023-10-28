@@ -54,8 +54,8 @@ public class BoardController {
 			}
 		}
 		for (BoardDto boardDto : top10List) {
-			if(boardDto.getContent().length()>15) {
-				String contentTemp=boardDto.getContent().substring(0,15)+"...";
+			if(boardDto.getTitle().length()>10) {
+				String contentTemp=boardDto.getTitle().substring(0,10)+"...";
 				boardDto.setContent(contentTemp);
 			}
 		}
@@ -68,7 +68,7 @@ public class BoardController {
 		Long boardGroupId1=boardGroupId;
 		model.addAttribute("boardGroupId",boardGroupId1);
 		model.addAttribute("board",new BoardDto());
-		return "board/create_test";
+		return "board/create";
 	}
 	
 	@PostMapping("/create/{boardGroupId}")
@@ -111,6 +111,7 @@ public class BoardController {
 		
 		//2. 대상을 삭제한다~
 		if(target!=null) {
+			lcService.deleteConfigs(target);
 			bService.delete(target);
 			rttr.addFlashAttribute("msg","삭제가 완료 되어따~!"); 
 		}
