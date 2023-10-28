@@ -81,7 +81,7 @@ public class Member {
 
 	public static Member toGuestEntity(MemberInsertGuestDto memberInsertGuestDto) {
 		return Member.builder().id(memberInsertGuestDto.getId()).name(memberInsertGuestDto.getName())
-				.phoneNo(memberInsertGuestDto.getPhoneNo()).role(memberInsertGuestDto.getRole()).build();
+				.phoneNo(memberInsertGuestDto.getPhoneNo()).userName(memberInsertGuestDto.getUserName()).role(memberInsertGuestDto.getRole()).build();
 	}
 	// 관계설정
 
