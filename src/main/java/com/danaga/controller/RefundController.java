@@ -44,7 +44,7 @@ public class RefundController {
 	}
 
 	// 환불하기 Insert
-	@PostMapping("/saveRefund/{orderId}")
+	@PostMapping("saveRefund{orderId}")
 	public String saveRefund(Model model, RefundDto refundDto, @PathVariable Long orderId, HttpSession session)
 			throws Exception {
 
