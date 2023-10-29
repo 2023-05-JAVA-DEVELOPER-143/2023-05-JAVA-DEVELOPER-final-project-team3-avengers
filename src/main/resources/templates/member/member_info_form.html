@@ -1,88 +1,84 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
- xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
- layout:decorate="layout/layout(title='내 정보')">
-  <!-- Body-->
-	  <!-- Header -->
-    <head></head>
-  
-        
-        <body>
-        <th:block layout:fragment="content">
-        <div class="container padding-bottom-3x mb-2">
-				<div class="row">
-					<div class="col-lg-4" th:insert="mypage_component :: mypage">
-						
-					</div>
-					<div class="col-lg-8">
-						<div class="padding-top-2x mt-2 hidden-lg-up"></div>
-						<form class="row" name="f" th:object="${loginUser}" method="post" >
-						<input type="hidden" name="userName" value="guard" th:value="*{userName}"/>
-							<div class="col-sm-6">
-								<div class="form-group">
-									<label for="reg-email">E-mail 주소</label> <input name="email" value="guard" th:value="*{email}"
-										class="form-control" type="email" id="reg-email" disabled>
-								</div>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="layout/layout(title='내 정보')">
+<!-- Body-->
+<!-- Header -->
+
+<head></head>
+
+
+<body>
+	<th:block layout:fragment="content">
+		<div class="container padding-bottom-3x mb-2">
+			<div class="row">
+				<div class="col-lg-4" th:insert="mypage_component :: mypage">
+
+				</div>	
+				<div class="col-lg-8">
+					<div class="padding-top-2x mt-2 hidden-lg-up"></div>
+					<form class="row" name="f" th:object="${loginUser}" method="post">
+						<input type="hidden" name="userName" value="guard" th:value="*{userName}" />
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label for="reg-email">E-mail 주소</label> <input name="email" value="guard"
+									th:value="*{email}" class="form-control" type="email" id="reg-email" disabled>
 							</div>
-							<div class="col-sm-6">
-								<div class="form-group">
-									<label for="reg-phone">휴대폰 번호</label> <input name="phoneNo" value="guard" th:value="*{phoneNo}"
-										class="form-control" type="text" id="reg-phone" disabled>
-								</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label for="reg-phone">휴대폰 번호</label> <input name="phoneNo" value="guard"
+									th:value="*{phoneNo}" class="form-control" type="text" id="reg-phone" disabled>
 							</div>
-							<div class="col-sm-6">
-								<div class="form-group">
-									<label for="reg-nickname">닉네임</label> <input name="nickname" value="guard" th:value="*{nickname}"
-										class="form-control" type="text" id="reg-nickname" required>
-								</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label for="reg-nickname">닉네임</label> <input name="nickname" value="guard"
+									th:value="*{nickname}" class="form-control" type="text" id="reg-nickname" required>
 							</div>
-							<div class="col-sm-6">
-								<div class="form-group">
-									<label for="reg-birthday">생년월일</label> <input name="birthday" value="guard" th:value="*{birthday}"
-										class="form-control" type="text" id="reg-birthday" disabled>
-								</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label for="reg-birthday">생년월일</label> <input name="birthday" value="guard"
+									th:value="*{birthday}" class="form-control" type="text" id="reg-birthday" disabled>
 							</div>
-							<div class="col-sm-6">
-								<div class="form-group">
-									<label for="reg-pass">비밀번호</label> <input name="password" value="guard" th:value="*{password}"
-									class="form-control" type="password" id="reg-pass" required>
-								</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label for="reg-pass">비밀번호</label> <input name="password" value="guard"
+									th:value="*{password}" class="form-control" type="password" id="reg-pass" required>
 							</div>
-							<div class="col-sm-6">
-								<div class="form-group">
-									<label for="reg-pass-confirm">비밀번호 확인</label> <input
-										name="password2" class="form-control" type="password" id="reg-pass-confirm"
-										required>
-								</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label for="reg-pass-confirm">비밀번호 확인</label> <input name="password2"
+									class="form-control" type="password" id="reg-pass-confirm" required>
 							</div>
-							<div class="col-sm-12">
-			                <div class="form-group">
-			                  <label for="reg-address">주소</label>
-			                  <input class="form-control" name="address" value="guard" th:value="*{address}"
-			                  type="text" id="reg-address" required>
-			                </div>
-			              </div>
-							<div class="col-12">
-								<hr class="mt-2 mb-3">
-								<div
-									class="d-flex flex-wrap justify-content-between align-items-center">
-									<div class="custom-control custom-checkbox d-block"></div>
-									<button class="btn btn-primary margin-right-none" type="button"
-										data-toast data-toast-position="topRight"
-										data-toast-type="success" data-toast-icon="icon-circle-check"
-										data-toast-title="Success!"
-										data-toast-message="수정되었습니다!"
-										onclick="modify()">수정하기</button>
-								</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label for="reg-address">주소</label>
+								<input class="form-control" name="address" value="guard" th:value="*{address}"
+									type="text" id="reg-address" required>
+							</div>	
+						</div>
+						<div class="col-12">
+							<hr class="mt-2 mb-3">
+							<div class="d-flex flex-wrap justify-content-between align-items-center">
+								<div class="custom-control custom-checkbox d-block"></div>
+								<button class="btn btn-primary margin-right-none" type="button" data-toast
+									data-toast-position="topRight" data-toast-type="success"
+									data-toast-icon="icon-circle-check" data-toast-title="Success!"
+									data-toast-message="수정되었습니다!" onclick="modify()">수정하기</button>
 							</div>
-						</form>
-					</div>
+						</div>
+					</form>
 				</div>
 			</div>
-		</th:block>
-		<th:block layout:fragment="script" >
-		   <script type="text/javascript">
-		
+		</div>
+	</th:block>
+	<th:block layout:fragment="script">
+		<script type="text/javascript">
+
 			function modify() {
 				if (document.f.password.value == "") {
 					alert("비밀번호를 입력하십시요.");
@@ -109,10 +105,10 @@
 				document.f.action = "/member_modify_action";
 				document.method = 'POST';
 				document.f.submit();
-				
+
 			}
-			
-			
+
+
 		</script>
-		</th:block>
-		</body>
+	</th:block>
+</body>

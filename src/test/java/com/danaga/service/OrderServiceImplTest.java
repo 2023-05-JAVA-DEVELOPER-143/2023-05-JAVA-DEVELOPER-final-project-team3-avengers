@@ -227,12 +227,12 @@ class OrderServiceImplTest {
 		orderService.updateStatementByCancleOrder(19L);
 	}
 	@Test
-	@Disabled
+//	@Disabled
 	void testUpdateStatementByRefundOrder() {
 		
-	//	orderService.updateStatementByClientRefundOrder(21L);
-	//orderService.updateStatementByAdminRefundOrder(23L);
-//		orderService.updateStatementByAdminRefundOrder(4L);
+//		orderService.updateStatementByClientRefundOrder(21L);
+//		orderService.updateStatementByAdminRefundOrder(23L);
+		orderService.updateStatementByAdminRefundOrder(21L);
 	}
 	@Test
 	@Disabled
