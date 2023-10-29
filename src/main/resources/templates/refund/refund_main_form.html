@@ -128,9 +128,9 @@
 		function insertRefund(orderId) {
 			// 세션에서 orderId 가져오기
 			console.log('orderId=  ' + orderId);
-			var form = document.createElement('form');
+			let form = document.createElement('form');
 			form.method = 'POST';
-			form.action = '/saveRefund/' + orderId;
+			form.action = '/saveRefund' + orderId;
 			document.body.appendChild(form);
 			form.submit();
 		}
