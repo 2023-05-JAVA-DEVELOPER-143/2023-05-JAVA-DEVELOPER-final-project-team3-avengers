@@ -1,14 +1,20 @@
 package com.danaga.controller;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.danaga.dto.MemberLoginDto;
 import com.danaga.dto.MemberResponseDto;
 import com.danaga.dto.MemberUpdateDto;
+import com.danaga.entity.Member;
 import com.danaga.exception.ExistedMemberException;
 import com.danaga.exception.MemberNotFoundException;
 import com.danaga.exception.PasswordMismatchException;
@@ -30,7 +36,7 @@ public class MemberController {
 
 	@LoginCheck
 	@PostMapping("/member_login_action")
-	public String member_login_action(@ModelAttribute("fuser") MemberResponseDto member, Model model, HttpSession session)
+	public String member_login_action(@ModelAttribute("fuser") MemberLoginDto member, Model model, HttpSession session)
 			throws Exception {
 		String forwardPath = "";
 		try {
@@ -55,9 +61,12 @@ public class MemberController {
 	}
 
 	@PostMapping("/member_join_action")
-	public String user_write_action(@ModelAttribute("fuser") MemberResponseDto member, Model model) throws Exception {
+	public String member_write_action(@ModelAttribute("fuser") Member member, Model model, 
+			@RequestParam("birthday") @DateTimeFormat(pattern = "yyyy-MM-dd") Date birthday) throws Exception {
 		String forward_path = "";
 		try {
+			System.out.println("#################################"+birthday);
+			member.setBirthday(birthday);
 			memberService.joinMember(member);
 			forward_path = "redirect:member_login_form";
 		} catch (ExistedMemberException e) {
@@ -80,16 +89,16 @@ public class MemberController {
 		/****************************************/
 		String loginUser = (String) request.getSession().getAttribute("sUserId");
 		MemberResponseDto member = memberService.getMemberBy(loginUser);
-		System.out.println(member);
 		model.addAttribute("loginUser", member);
 		return "member/member_info_form";
 	}
 
 	@LoginCheck
 	@PostMapping("/member_modify_action")
-	public String user_modify_action(@ModelAttribute MemberUpdateDto member, HttpServletRequest request) throws Exception {
+	public String member_modify_action(@ModelAttribute MemberUpdateDto member, HttpServletRequest request) throws Exception {
 		/************** login check **************/
 		/****************************************/
+		
 		String sUserId = (String) request.getSession().getAttribute("sUserId");
 		Long sUserLongId = memberService.getMemberBy(sUserId).getId();
 		member.setId(sUserLongId);
