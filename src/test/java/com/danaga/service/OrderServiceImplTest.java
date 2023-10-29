@@ -44,7 +44,7 @@ class OrderServiceImplTest {
 	@Transactional
 	@Rollback(false)
 	@Test
-	@Disabled
+	//@Disabled
 	void testGuestCartOrderSave() throws Exception {
 		// List<CartCreateDto> fUserCarts, DeliveryDto deliveryDto
 		
@@ -62,8 +62,8 @@ class OrderServiceImplTest {
 				.name("누군가10")
 				.build();
 		OrderGuestDto orderGuestDto = OrderGuestDto.builder()
-				.name("주문자명1")
-				.phoneNo("123-123123232322")
+				.name("주문자명2")
+				.phoneNo("123-1231wewe22")
 				.build();
 		orderService.guestCartOrderSave(fUserCarts, deliveryDto,orderGuestDto);
 		
@@ -86,7 +86,7 @@ class OrderServiceImplTest {
 		
 		OrderGuestDto orderGuestDto = OrderGuestDto.builder()
 													.name("주문자명1")
-													.phoneNo("123-123123232322")
+													.phoneNo("55551235---2322")
 													.build();
 		orderService.guestProductOrderSave(ordersProductDto,orderGuestDto);
 		
@@ -194,10 +194,24 @@ class OrderServiceImplTest {
 				.phoneNumber("010-3023-323232")
 				.build();
 		
+		CartDto cartDto = CartDto.builder()
+								.id(2L)
+								.qty(3)
+								.build();
+		CartDto cartDto2 = CartDto.builder()
+				.id(3L)
+				.qty(3)
+				.build();
+		CartDto cartDto3 = CartDto.builder()
+				.id(4L)
+				.qty(3)
+				.build();
 		
-		List<Long> optionSetIdArray = new ArrayList<>();
-		optionSetIdArray.add(1L);
-		optionSetIdArray.add(2L);
+		
+		List<CartDto> optionSetIdArray = new ArrayList<>();
+		optionSetIdArray.add(cartDto);
+		optionSetIdArray.add(cartDto2);
+		optionSetIdArray.add(cartDto3);
 //		optionSetIdArray.add(3L);
 //		optionSetIdArray.add(4L);
 //		optionSetIdArray.add(5L);
