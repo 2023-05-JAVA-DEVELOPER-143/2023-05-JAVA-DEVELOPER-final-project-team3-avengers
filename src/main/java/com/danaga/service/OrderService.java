@@ -24,40 +24,43 @@ public interface OrderService {
 	/*
 	 * cart에서 선택주문(비회원)
 	 */
-	OrdersDto guestCartSelectOrderSave(DeliveryDto deliveryDto,List<CartDto> fUserCarts,OrderGuestDto orderGuestDto)throws Exception;
+//	OrdersDto guestCartSelectOrderSave(DeliveryDto deliveryDto,List<CartDto> fUserCarts,OrderGuestDto orderGuestDto)throws Exception;
 	/*
 	 * 주문+주문아이템 목록(비회원)
 	 */
 	List<OrdersDto> guestOrderList(Long orderNo, String phoneNumber)throws Exception;
+	/*
+	 * 주문 디테일(비회원)
+	 */
+	OrdersDto guestOrderDetail(Long orderNo,String name, String phoneNo)throws Exception;
+	
+	
 	/*****************************회원**************************/
 	
 	/*
-	 * 상품에서 직접주문
+	 * 상품에서 직접주문(회원)
 	 */
 	OrdersDto memberProductOrderSave(String sUserId,OrdersProductDto ordersProductDto) throws Exception;
 
 	/*
-	 * cart에서 주문
+	 * cart에서 주문(회원)
 	 */
 	OrdersDto memberCartOrderSave(String sUserId,DeliveryDto deliveryDto) throws Exception;
 
 	/*
-	 * cart에서 선택주문
+	 * cart에서 선택주문(회원)
 	 */
 	OrdersDto memberCartSelectOrderSave(String sUserId,DeliveryDto deliveryDto,List<CartDto> optionSetIdArray)throws Exception;
 	/*
-	 * 주문+주문아이템 목록
+	 * 주문+주문아이템 목록(회원)
 	 */
 	List<OrdersDto> memberOrderList(String userName)throws Exception;
-	
-	
-	/**********************공용*******************/
-	
 	/*
-	 * 주문상세보기
+	 * 주문상세보기(회원)
 	 */
 	OrdersDto memberOrderDetail(Long orderNo) throws Exception;
-
+	
+	/**********************공용*******************/
 	// 주문상태업데이트(특정주문)
 	// 1.정상주문
 	OrdersDto updateStatementByNormalOrder(Long orderNo);

@@ -24,7 +24,21 @@ public class OrderRestController {
 	
 	private final OrderService orderService;
 	
-	
+	/*
+	 * 주문상세보기(회원)
+	 */
+	@GetMapping("/member_order_detail/{orderNo}")
+	public ResponseEntity<?> memberOrderDetail(@PathVariable Long orderNo){
+		
+		try {
+			OrdersDto ordersDto= orderService.memberOrderDetail(orderNo);
+			
+			return ResponseEntity.ok(ordersDto);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
 	// 주문상태업데이트(특정주문)
 	      
 	 //1.정상주문(완료)
@@ -111,14 +125,6 @@ public class OrderRestController {
 			 return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }
 //	//상품에서 직접주문(완료)

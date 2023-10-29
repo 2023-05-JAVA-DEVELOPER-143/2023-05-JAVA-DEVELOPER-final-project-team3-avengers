@@ -9,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderGuestDto {
+	private Long orderNo;
 	private String name;
 	private String phoneNo;
 
