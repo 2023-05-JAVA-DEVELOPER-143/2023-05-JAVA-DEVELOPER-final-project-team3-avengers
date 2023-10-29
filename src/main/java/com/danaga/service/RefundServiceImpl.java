@@ -39,7 +39,7 @@ public class RefundServiceImpl implements RefundService {
 			Refund refund = Refund.toEntity(refundDto);
 			//orderId로 orders객체를 만든 다음에 orderDaoImpl에서 
 			Orders orders = orderDao.updateStatementByClientRefundOrder(orderId);
-			if(orders.getStatement()==OrderStateMsg.환불대기중) {
+			if(orders.getStatement()==OrderStateMsg.배송완료) {
 				Refund insertRefund = refundDao.insertRefund(refund, orderId);
 				RefundResponseDto refundResponseDto = RefundResponseDto.toDto(insertRefund);
 				orderService.updateStatementByClientRefundOrder(orderId);
