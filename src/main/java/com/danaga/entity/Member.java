@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.danaga.dto.MemberInsertGuestDto;
 import com.danaga.dto.MemberResponseDto;
@@ -15,7 +16,6 @@ import com.danaga.dto.MemberUpdateDto;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -48,6 +48,7 @@ public class Member {
 	@Column(unique = true)
 	private String nickname;
 	private String address;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date birthday;
 	@Column(unique = true)
 	private String phoneNo;

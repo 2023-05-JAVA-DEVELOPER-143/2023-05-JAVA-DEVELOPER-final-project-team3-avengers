@@ -1,7 +1,9 @@
 package com.danaga.controller;
 
 import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -16,10 +18,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.danaga.dto.MemberResponseDto;
 import com.danaga.dto.MemberUpdateDto;
+import com.danaga.entity.Member;
 import com.danaga.exception.ExistedMemberException;
 import com.danaga.exception.MemberNotFoundException;
 import com.danaga.exception.PasswordMismatchException;
@@ -35,6 +39,16 @@ import jakarta.servlet.http.HttpSession;
 public class MemberRestController {
 	@Autowired
 	private MemberService memberService;
+	
+	@GetMapping("/checkDuplicate")
+    public Map<String, Boolean> checkDuplicate(@RequestParam String userName) throws Exception {
+        Map<String, Boolean> response = new HashMap<>();
+        boolean isDuplicate = memberService.isDuplicate(userName);
+        System.out.println("###############"+isDuplicate);
+        response.put("isDuplicate", isDuplicate);
+        return response;
+    }
+
 
 	@PostMapping("/login")
 	public ResponseEntity<MemberResponse> member_login_action(@RequestBody MemberResponseDto memberResponseDto, HttpSession session) throws Exception {
@@ -64,7 +78,7 @@ public class MemberRestController {
 	}
 
 	@PostMapping("/join")
-	public ResponseEntity<MemberResponse> member_join_action(@RequestBody MemberResponseDto memberResponseDto) throws Exception {
+	public ResponseEntity<MemberResponse> member_join_action(@RequestBody Member memberResponseDto) throws Exception {
 		memberService.joinMember(memberResponseDto);
 
 		MemberResponse response = new MemberResponse();

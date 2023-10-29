@@ -3,7 +3,6 @@ package com.danaga.dto;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-import org.hibernate.annotations.CreationTimestamp;
 
 import com.danaga.entity.Member;
 

@@ -41,25 +41,25 @@ public class MemberServiceImpl implements MemberService {
 		return MemberResponseDto.toDto(memberDao.findMember(value));
 	}
 	@Transactional
-	public MemberResponseDto joinMember(MemberResponseDto memberResponseDto) throws Exception, ExistedMemberException {
+	public MemberResponseDto joinMember(Member member) throws Exception, ExistedMemberException {
 		// 1.중복체크
-		if (memberDao.existedMemberBy(memberResponseDto.getUserName())) {
+		if (memberDao.existedMemberBy(member.getUserName())) {
 			// 중복
-			throw new ExistedMemberException(memberResponseDto.getUserName() + " 는 이미 존재하는 아이디 입니다.");
-		} else if (memberDao.existedMemberBy(memberResponseDto.getEmail())) {
-			throw new ExistedMemberException(memberResponseDto.getEmail() + " 는 이미 등록된 이메일 입니다.");
-		} else if (memberDao.existedMemberBy(memberResponseDto.getPhoneNo())
-				&& (memberDao.findMember(memberResponseDto.getPhoneNo()).getRole().equals("Guest"))) {
-			memberResponseDto.setRole("Member");
-			return MemberResponseDto.toDto((memberDao.update(Member.toResponseEntity(memberResponseDto))));
-		} else if (memberDao.existedMemberBy(memberResponseDto.getPhoneNo())) {
-			throw new ExistedMemberException(memberResponseDto.getPhoneNo() + " 는 이미 등록된 번호 입니다.");
-		} else if (memberRepository.findByNickname(memberResponseDto.getNickname()).isPresent()) {
-			throw new ExistedMemberException(memberResponseDto.getNickname() + "는 사용중인 닉네임 입니다.");
+			throw new ExistedMemberException(member.getUserName() + " 는 이미 존재하는 아이디 입니다.");
+		} else if (memberDao.existedMemberBy(member.getEmail())) {
+			throw new ExistedMemberException(member.getEmail() + " 는 이미 등록된 이메일 입니다.");
+		} else if (memberDao.existedMemberBy(member.getPhoneNo())
+				&& (memberDao.findMember(member.getPhoneNo()).getRole().equals("Guest"))) {
+			member.setRole("Member");
+			return MemberResponseDto.toDto((memberDao.update(member)));
+		} else if (memberDao.existedMemberBy(member.getPhoneNo())) {
+			throw new ExistedMemberException(member.getPhoneNo() + " 는 이미 등록된 번호 입니다.");
+		} else if (memberRepository.findByNickname(member.getNickname()).isPresent()) {
+			throw new ExistedMemberException(member.getNickname() + "는 사용중인 닉네임 입니다.");
 		}
 		// 안중복
 		// 2.회원가입
-		return MemberResponseDto.toDto(memberDao.insert(Member.toResponseEntity(memberResponseDto)));
+		return MemberResponseDto.toDto(memberDao.insert(member));
 	}
 
 	@Transactional

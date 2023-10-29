@@ -13,7 +13,7 @@ import jakarta.transaction.Transactional;
 public interface MemberService {
 	public List<MemberResponseDto> getMembers();
 	public MemberResponseDto getMemberBy(String value) throws Exception;
-	public MemberResponseDto joinMember(MemberResponseDto memberResponseDto) throws Exception;
+	public MemberResponseDto joinMember(Member member) throws Exception;
 	public MemberResponseDto joinGuest(MemberInsertGuestDto memberInsertGuestDto) throws Exception;
 	public MemberResponseDto updateMember(MemberUpdateDto memberUpdateDto) throws Exception;
 	public void deleteMember(String value) throws Exception;
