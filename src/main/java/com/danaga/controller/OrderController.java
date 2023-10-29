@@ -13,8 +13,10 @@ import org.springframework.ui.*;
 import org.springframework.web.bind.annotation.*;
 
 import com.danaga.dto.*;
+import com.danaga.dto.product.ProductDto;
 import com.danaga.entity.*;
 import com.danaga.service.*;
+import com.danaga.service.product.OptionSetService;
 
 import jakarta.servlet.http.*;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +27,7 @@ public class OrderController {
 
 	private final OrderService orderService;
 	private final CartService cartService;
-
+	private final OptionSetService optionSetService;
 	/******************************* 회원 ****************************/
 	/*
 	 * 주문상세보기(회원)
@@ -70,8 +72,14 @@ public class OrderController {
 	@GetMapping("/product_order_save_form")
 	public String memberProductOrderAddForm(@ModelAttribute("cartDto") CartDto cartDto, Model model) {
 		
+		ResponseDto<?> responseDto= optionSetService.findById(cartDto.getId());
+		List<ProductDto> productDtoList = (List<ProductDto>) responseDto.getData();
+		ProductDto productDto = productDtoList.get(0);
+		
 		model.addAttribute(cartDto.getId());
 		model.addAttribute(cartDto.getQty());
+		model.addAttribute(productDto.getTotalPrice());
+		
 //가격넣기ㄴ
 		return "orders/order_save_form";
 
@@ -81,7 +89,7 @@ public class OrderController {
 	 * 상품에서 주문(action)(회원)
 	 */
 	@PostMapping("/member_product_order_save_action")//modelAttribute html에서 보낸 데이터를 받는곳
-	public String memberProductOrderAddAction(@ModelAttribute OrdersProductDto ordersProductDto, Model model,
+	public String memberProductOrderAddAction(@ModelAttribute("ordersProductDto") OrdersProductDto ordersProductDto, Model model,
 			HttpSession session) {
 
 		String sUserId = (String) session.getAttribute("sUserId");
@@ -139,30 +147,44 @@ public class OrderController {
 	 * 카트에서 선택주문(action)(회원)
 	 */
 	@PostMapping("/member_cart_select_order_save_action")
-	public String memberCartSelectOrderAddAction(@ModelAttribute DeliveryDto deliveryDto, Model model, HttpSession session) {
+	public String memberCartSelectOrderAddAction(@ModelAttribute("deliveryDto") DeliveryDto deliveryDto, Model model, HttpSession session) {
 
 		String sUserId = (String) session.getAttribute("sUserId");
 		try {
 			List<CartDto> fUserCarts =(List<CartDto>)session.getAttribute("cartDtoList");
 			orderService.memberCartSelectOrderSave(sUserId, deliveryDto, fUserCarts);
+			for (CartDto cartDto : fUserCarts) {
+				cartService.deleteCart(cartDto.getId(), sUserId);
+			}
 			return "redirect:orders/order_list";
 		} catch (Exception e) {
 			model.addAttribute("msg", e.getMessage());
 			e.printStackTrace();
-			return "cart/list";
+			return "cart/cart_form";
 		}
 	}
 
 	/******************************* 비회원 ****************************/
 	/*
-	 * 주문+주문아이템 목록(비회원) //아직안함!
+	 * 주문상세보기(비회원)
+	 */
+	public String guestDetail(@ModelAttribute("orderGuestDto") OrderGuestDto orderGuestDto ,Model model) {
+		try {
+			orderService.guestOrderDetail(orderGuestDto.getOrderNo(),orderGuestDto.getName(),orderGuestDto.getPhoneNo());
+			return "orders/order_guest_list";
+		}catch (Exception e) {
+			e.getStackTrace();
+			model.addAttribute("errorMsg",e.getMessage());
+			return null;
+		}
+	}
+	
+	/*
+	 * 주문+주문아이템 목록(비회원) 
 	 */
 	@GetMapping("/guest_orderList/{orderNo},{phoneNumber}")
 	public String guestOrderList(Model model, @PathVariable Long orderNo, @PathVariable String phoneNumber) {
 		try {
-			// 원래는 @PathVariable로 인자 두개 받아서 해야됌
-			// orderNo 32
-			// phoneNumber 123-123123232322
 			List<OrdersDto> ordersDtoList = orderService.guestOrderList(orderNo, phoneNumber);
 			model.addAttribute("ordersDtoList", ordersDtoList);
 			return "orders/orders_guest";
@@ -178,7 +200,7 @@ public class OrderController {
 	 * 상품에서 주문(action)(비회원)
 	 */
 	@PostMapping("/guest_product_order_save_action")//modelAttribute html에서 보낸 데이터를 받는곳
-	public String guestProductOrderAddAction(@ModelAttribute OrdersProductDto ordersProductDto, @ModelAttribute OrderGuestDto orderGuestDto
+	public String guestProductOrderAddAction(@ModelAttribute("ordersProductDto") OrdersProductDto ordersProductDto, @ModelAttribute("orderGuestDto") OrderGuestDto orderGuestDto
 			, Model model) {
 
 		try {
@@ -192,41 +214,42 @@ public class OrderController {
 	}
 
 	/*
-	 * 카트에서 주문(action)(비회원) 
+	 * 카트에서 주문(action)(비회원) (선택주문까지됨)
 	 */
 	@PostMapping("/guest_cart_order_save_action")
-	public String guestCartOrderAddAction(@ModelAttribute("deliveryDto") DeliveryDto deliveryDto,@ModelAttribute OrderGuestDto orderGuestDto, Model model, HttpSession session)
+	public String guestCartOrderAddAction(@ModelAttribute("deliveryDto") DeliveryDto deliveryDto,@ModelAttribute("orderGuestDto") OrderGuestDto orderGuestDto, Model model, HttpSession session)
 			throws Exception {
 
 		List<CartDto> fUserCarts =(List<CartDto>)session.getAttribute("cartDtoList");
 		try {
 			orderService.guestCartOrderSave(fUserCarts, deliveryDto, orderGuestDto);
+//			session.invalidate();
 			return "redirect:orders/guest/order_list";
 		} catch (Exception e) {
 			model.addAttribute("msg", e.getMessage());
 			e.printStackTrace();
-			return "cart/list";
+			return "cart/cart_form";
 		}
 	}
-	
-	/*
-	 * 카트에서 선택주문(action)(비회원)
-	 */
-	@PostMapping("/guest_cart_select_order_save_action")
-	public String guestCartSelectOrderAddAction(@ModelAttribute List<CartDto> cartDtoList,
-			@ModelAttribute DeliveryDto deliveryDto, Model model, HttpSession session) {
-
-		String sUserId = (String) session.getAttribute("sUserId");
-		try {
-			orderService.memberCartSelectOrderSave(sUserId, deliveryDto, cartDtoList);
-			return "redirect:orders/order_list";
-		} catch (Exception e) {
-			model.addAttribute("msg", e.getMessage());
-			e.printStackTrace();
-			return "cart/list";
-		}
-	}
-	
+//	
+//	/*
+//	 * 카트에서 선택주문(action)(비회원)
+//	 */
+//	@PostMapping("/guest_cart_select_order_save_action")
+//	public String guestCartSelectOrderAddAction(@ModelAttribute List<CartDto> cartDtoList,
+//			@ModelAttribute DeliveryDto deliveryDto, Model model, HttpSession session) {
+//
+//		String sUserId = (String) session.getAttribute("sUserId");
+//		try {
+//			orderService.memberCartSelectOrderSave(sUserId, deliveryDto, cartDtoList);
+//			return "redirect:orders/order_list";
+//		} catch (Exception e) {
+//			model.addAttribute("msg", e.getMessage());
+//			e.printStackTrace();
+//			return "cart/list";
+//		}
+//	}
+//	
 	
 	
 	/******************************* 회원 ****************************/
@@ -248,19 +271,16 @@ public class OrderController {
 
 	/******************************* 비회원 ****************************/
 
-	// 주문상세보기(비회원)
+	// 주문상세보기(비회원)(완료) 테스트x
 // guestOrderList
 
-	// 주문+주문아이템 목록(비회원)
+	// 주문+주문아이템 목록(비회원)(완료) 테스트x
 //   memberOrderList
-
-	// 카트 선택주문(비회원)(완료) 테스트x
-//   guestOrderList
 
 	// 상품에서 주문(비회원)(완료) 테스트x
 //   guestProductOrderSave
 
-	// 카트에서 주문(비회원)
+	// 카트에서 주문(비회원)(완료) 테스트x
 //   guestCartOrderSave
 
 }
