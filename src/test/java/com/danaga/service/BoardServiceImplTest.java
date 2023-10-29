@@ -21,10 +21,10 @@ import com.danaga.repository.BoardRepository;
 import com.danaga.repository.MemberRepository;
 
 @SpringBootTest
-public class BoardServiceTest {
+public class BoardServiceImplTest {
 
     @Autowired
-    private BoardService boardService;
+    private BoardServiceImpl boardService;
 
     @Test
     public void testCreateBoard() {

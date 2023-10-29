@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.danaga.entity.Statistic;
-import com.danaga.service.BoardService;
+import com.danaga.service.BoardServiceImpl;
 import com.danaga.service.MemberService;
 import com.danaga.service.OrderService;
 import com.danaga.service.StatisticService;
@@ -25,7 +25,7 @@ public class StatisticController {
 	private final StatisticService statisticService;
 	private final MemberService memberService;
 	private final OrderService orderService;
-	private final BoardService boardService;
+	private final BoardServiceImpl boardService;
 	
 	@GetMapping
 	public String main(Model model) {

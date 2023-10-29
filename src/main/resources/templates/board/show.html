@@ -51,6 +51,41 @@
 												ipsum</span></p>
 									</div>
 								</div>
+								<div th:text="${board.isLike}">23913</div>
+								<a id="up-is-like-btn" class="btn btn-primary" onclick="upIsLike('IsLike')">좋아요</a>
+								<div th:text="${board.DisLike}">23913</div>
+								<a id="up-dis-like-btn" class="btn btn-primary" onclick="upIsLike('DisLike')">싫어요</a>
+
+								<script th:inline="javascript">
+									const upIsLikeBtn = document.querySelector("#up-is-like-btn");
+									const upDisLikeBtn = document.querySelector("#up-dis-like-btn");
+
+									function upIsLike(action) {
+										const boardId = '1'; // 여기에 게시물 ID를 동적으로 설정
+										const memberId = '1'; // 여기에 회원 ID를 동적으로 설정
+
+										// AJAX 요청
+										$.ajax({
+											type: 'PATCH',
+											url: `/board/${boardId}/up${action}`,
+											data: {memberId: memberId},
+											success: function (response) {
+												if (response.status === 'ok') {
+													// 서버 응답이 OK일 경우 숫자 업데이트
+													const numberElement = document.querySelector('[th\\:text="${board.' + action + '}"]');
+													numberElement.textContent = response.newCount;
+												} else {
+													console.error('서버 응답 오류:', response.message);
+												}
+											},
+											error: function (xhr, status, error) {
+												console.error('AJAX 오류:', error);
+											}
+										});
+									}
+								</script>
+
+
 							</div>
 							<h3> 댓글</h3>
 							<hr>
@@ -151,8 +186,9 @@
 							</div>
 
 							<!-- modal event 처리 -->
-
 							<script>
+
+
 								// 모달 요소 선택
 								const commentEditModal = document.querySelector("#comment-edit-modal");
 
