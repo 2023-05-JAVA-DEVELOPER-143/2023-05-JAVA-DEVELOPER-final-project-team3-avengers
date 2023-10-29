@@ -72,7 +72,7 @@ public class OrderController {
 		
 		model.addAttribute(cartDto.getId());
 		model.addAttribute(cartDto.getQty());
-
+//가격넣기ㄴ
 		return "orders/order_save_form";
 
 	}
@@ -139,12 +139,12 @@ public class OrderController {
 	 * 카트에서 선택주문(action)(회원)
 	 */
 	@PostMapping("/member_cart_select_order_save_action")
-	public String memberCartSelectOrderAddAction(@ModelAttribute List<CartDto> cartDtoList,
-			@ModelAttribute DeliveryDto deliveryDto, Model model, HttpSession session) {
+	public String memberCartSelectOrderAddAction(@ModelAttribute DeliveryDto deliveryDto, Model model, HttpSession session) {
 
 		String sUserId = (String) session.getAttribute("sUserId");
 		try {
-			orderService.memberCartSelectOrderSave(sUserId, deliveryDto, cartDtoList);
+			List<CartDto> fUserCarts =(List<CartDto>)session.getAttribute("cartDtoList");
+			orderService.memberCartSelectOrderSave(sUserId, deliveryDto, fUserCarts);
 			return "redirect:orders/order_list";
 		} catch (Exception e) {
 			model.addAttribute("msg", e.getMessage());
@@ -192,7 +192,7 @@ public class OrderController {
 	}
 
 	/*
-	 * 카트에서 주문(action)(회원) 
+	 * 카트에서 주문(action)(비회원) 
 	 */
 	@PostMapping("/guest_cart_order_save_action")
 	public String guestCartOrderAddAction(@ModelAttribute("deliveryDto") DeliveryDto deliveryDto,@ModelAttribute OrderGuestDto orderGuestDto, Model model, HttpSession session)
@@ -210,27 +210,7 @@ public class OrderController {
 	}
 	
 	/*
-	 * 카트에서 선택주문(form)(회원)
-	 */
-	@GetMapping("/guest_cart_select_order_save_form")
-	public String guestCartSelectOrderAddForm(@ModelAttribute List<CartDto> cartDtoList, Model model) {
-
-		String forward_path = "";
-		try {
-			model.addAttribute("cartDtoList", cartDtoList);
-			forward_path = "orders/member_order_save_form";
-		} catch (Exception e) {
-			model.addAttribute("msg", e.getMessage());
-			e.printStackTrace();
-			forward_path = "cart/list";
-		}
-
-		return forward_path;
-
-	}
-	
-	/*
-	 * 카트에서 선택주문(action)(회원)
+	 * 카트에서 선택주문(action)(비회원)
 	 */
 	@PostMapping("/guest_cart_select_order_save_action")
 	public String guestCartSelectOrderAddAction(@ModelAttribute List<CartDto> cartDtoList,
@@ -260,24 +240,24 @@ public class OrderController {
 	// 상품에서 직접주문(완료) 테스트x
 //   memberProductOrderAdd
 
-	// cart에서 주문
+	// cart에서 주문(완료) 테스트x
 //   memberCartOrderSave
 
-	// cart에서 선택주문
+	// cart에서 선택주문(완료) 테스트x
 //   memberCartSelectOrderSave
 
 	/******************************* 비회원 ****************************/
 
-	// 주문상세보기(비회원)(이미 완성됨)
+	// 주문상세보기(비회원)
 // guestOrderList
 
-	// 주문+주문아이템 목록(비회원)(완료)
+	// 주문+주문아이템 목록(비회원)
 //   memberOrderList
 
-	// 카트 선택주문(비회원)
+	// 카트 선택주문(비회원)(완료) 테스트x
 //   guestOrderList
 
-	// 상품에서 주문(비회원)
+	// 상품에서 주문(비회원)(완료) 테스트x
 //   guestProductOrderSave
 
 	// 카트에서 주문(비회원)

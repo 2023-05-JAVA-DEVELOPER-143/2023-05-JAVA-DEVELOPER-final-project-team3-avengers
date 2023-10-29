@@ -49,20 +49,20 @@ class MemberServiceImplTest {
 				.role("Guest")
 				.build());
 	}
-	
-	@Test
-	@Disabled
-	void update() throws Exception {
-		memberService.updateMember(MemberUpdateDto.builder()
-				.id(1L)
-				.userName("USER11")
-				.password("password11")
-				.email("agdslfkj@google.com")
-				.nickname("닉네임11")
-				.address("주소11")
-				.phoneNo("010-1123-3512")
-				.build());
-	}
+//	
+//	@Test
+//	@Disabled
+//	void update() throws Exception {
+//		memberService.updateMember(MemberUpdateDto.builder()
+//				.id(1L)
+//				.userName("USER11")
+//				.password("password11")
+//				.email("agdslfkj@google.com")
+//				.nickname("닉네임11")
+//				.address("주소11")
+//				.phoneNo("010-1123-3512")
+//				.build());
+//	}
 	@Test
 	@Disabled
 	void delete() throws Exception {
