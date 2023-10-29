@@ -30,26 +30,26 @@ class RefundServiceImplTest {
 	private OrderRepository orderRepository;
 
 	@Test
-	//@Disabled
+	@Disabled
 	@Transactional
 	@Rollback(false)
 	void testFindRefundByOrdersId() throws Exception{
-		Long orderId = 23L;
+		Long orderId = 21L;
 		RefundResponseDto refundResponseDto = refundService.findRefundByOrdersId(orderId);
 		
 		System.out.println("##################" + refundResponseDto);
 	}
 
 	@Test
-	 @Disabled
+//	 @Disabled
 	@Transactional
 	@Rollback(false)
 	void testsaveRefund() throws Exception{
-		String description = "환불사유16";
-		String acNo = "환불계좌번호16";
+		String description = "환불사유21";
+		String acNo = "환불계좌번호21";
 		String bankName = "국민은행";
 	    String accountName = "박땡땡";
-		Long orderId = 23L;
+		Long orderId = 21L;
 		
 		RefundDto refundDto = new RefundDto();/////////////////
 		refundDto.setAcNo(acNo);
