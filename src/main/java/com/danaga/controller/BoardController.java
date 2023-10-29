@@ -78,6 +78,7 @@ public class BoardController {
 		BoardDto saved = bService.createBoard(dto);
 		log.info("saved: {}",saved);
 		model.addAttribute("saved",saved);
+		model.addAttribute("msg","새로운 글이 생성 되었습니다.");
 		return "redirect:/board/list/"+saved.getBoardGroupId();
 	}
 	
@@ -100,7 +101,7 @@ public class BoardController {
 		BoardDto board= bService.boardDetail(id);
 		board = bService.update(dto);
 		model.addAttribute("board",board);
-		rttr.addFlashAttribute("upd","수정이 완료 되어따!~");
+		rttr.addFlashAttribute("upd","수정이 완료 되었습니다.");
 		return "redirect:/board/"+board.getId()+"/show";
 	}
 	
@@ -113,7 +114,7 @@ public class BoardController {
 		if(target!=null) {
 			lcService.deleteConfigs(target);
 			bService.delete(target);
-			rttr.addFlashAttribute("msg","삭제가 완료 되어따~!"); 
+			rttr.addFlashAttribute("msg","삭제가 완료 되었습니다."); 
 		}
 		//3. 결과페이지로 리다이렉트한다.
 		return "redirect:/board/list/"+target.getBoardGroupId();
