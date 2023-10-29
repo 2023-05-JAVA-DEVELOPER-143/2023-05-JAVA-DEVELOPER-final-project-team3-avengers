@@ -57,12 +57,14 @@
 							<div class="col-md-6">
 								<form class="form-group">
 									<label for="account-fn">은행이름</label>
-									<input class="form-control" type="text" name="bankName"  id="bankName" value="은행이름" required>
+									<input class="form-control" type="text" name="bankName" id="bankName" value="은행이름"
+										required>
 								</form>
 
 								<form class="form-group">
 									<label for="account-ln">계좌주</label>
-									<input class="form-control" type="text" name="accountName"  id="accountName" value="계좌주" required>
+									<input class="form-control" type="text" name="accountName" id="accountName"
+										value="계좌주" required>
 								</form>
 							</div>
 
@@ -75,7 +77,8 @@
 
 								<form class="form-group">
 									<label for="refund-reason">환불 사유</label>
-									<input class="form-control" type="text" name="description" id="description" value="환불 사유" required>
+									<input class="form-control" type="text" name="description" id="description"
+										value="환불 사유" required>
 								</form>
 							</div>
 						</div>
@@ -85,37 +88,16 @@
 						<!-- 네, 아니오 버튼 추가 -->
 						<div class="row">
 							<div class="col-md-6 text-right">
-								<button type="button" class="btn btn-secondary ml-2" onclick="insertRefund()">네</button>
+								<button type="button" class="btn btn-secondary ml-2"
+									th:onclick="insertRefund([[${ordersDto.getId()}]])">네</button>
 								<button type="button" class="btn btn-secondary ml-5">아니오</button>
 							</div>
 						</div>
 					</div>
-
-
 				</div>
 			</div>
 </div>
 
-</th:block>
-
-
-<th:block layout:fragment="script" >
-   <script type="text/javascript">
-
-function insertRefund() {
-    // 세션에서 orderId 가져오기
-    var orderId = [[${session.orderId}]];
-
-    if (orderId !== null) {
-        document.f.action = "/refund/saveRefund/" + orderId;
-        document.f.method = 'POST';
-        document.f.submit();
-    } else {
-        console.error('세션에 orderId가 없습니다.');
-        // 필요한 예외 처리를 수행합니다.
-    }
-}
-</script>
 </th:block>
 
 
@@ -136,6 +118,28 @@ function insertRefund() {
 	<script src="/bootstrap/js/vendor.min.js"></script>
 	<script src="/bootstrap/js/scripts.min.js"></script>
 </th:block>
+
+
+
+
+<th:block layout:fragment="script">
+	<script type="text/javascript">
+
+		function insertRefund(orderId) {
+			// 세션에서 orderId 가져오기
+			console.log('orderId=  ' + orderId);
+			var form = document.createElement('form');
+			form.method = 'POST';
+			form.action = '/saveRefund/' + orderId;
+			document.body.appendChild(form);
+			form.submit();
+		}
+	</script>
+</th:block>
+
+
+
+
 </body>
 
 </html>
