@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.danaga.entity.Member;
 import com.danaga.entity.Statistic;
-import com.danaga.service.BoardService;
+import com.danaga.service.BoardServiceImpl;
 import com.danaga.service.MemberService;
 import com.danaga.service.OrderService;
 import com.danaga.service.StatisticService;
@@ -33,7 +33,7 @@ public class StatisticRestController {
 	@Autowired
 	private OrderService orderService;
 	@Autowired
-	private BoardService boardService;
+	private BoardServiceImpl boardService;
 	
 	@Operation(summary = "admin : 전체 통계 호출")
 	@GetMapping("/list")

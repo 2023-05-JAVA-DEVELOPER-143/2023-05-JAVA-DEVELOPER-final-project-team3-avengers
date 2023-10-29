@@ -5,6 +5,17 @@
 <div th:insert="include_common :: header"></div>
 
 <body>
+	<div class="row" th:if="${msg !=null}">
+		<div class="col-sm-6">
+			<div class="iziToast iziToast-success">
+				<div class="iziToast-body" style="padding-left: 33px;"><i
+						class="iziToast-icon icon-circle-check"></i><strong>성공</strong>
+					<p th:text="${msg}">toast notification with icon</p>
+				</div>
+				<button class="iziToast-close"></button>
+			</div>
+		</div>
+	</div>
 			<!-- Off-Canvas Wrapper-->
 		<div class="offcanvas-wrapper">
 			<!-- Page Title-->
