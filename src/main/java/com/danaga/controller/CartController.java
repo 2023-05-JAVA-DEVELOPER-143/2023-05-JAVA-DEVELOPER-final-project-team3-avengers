@@ -20,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequiredArgsConstructor
-//@RequestMapping("/cart")
 public class CartController {
 	private final CartService cartService;
 

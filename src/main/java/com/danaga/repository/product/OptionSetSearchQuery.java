@@ -4,7 +4,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.danaga.dto.product.CategoryDto;
 import com.danaga.dto.product.OptionDto;
+import com.danaga.dto.product.OptionNameValueMapDto;
 import com.danaga.dto.product.QueryStringDataDto;
 import com.danaga.entity.Category;
 import com.danaga.entity.Options;
@@ -27,7 +29,9 @@ public class OptionSetSearchQuery {
 	}
 	public OptionSetSearchQuery(QueryStringDataDto searchDto) {
 		if(searchDto.getCategory()!=null) {
-		String category=searchDto.getCategory();
+		CategoryDto category=searchDto.getCategory();
+		Long categoryId = category.getId();
+		String categoryName = category.getName();
 		
 		this.searchQuery="SELECT os "
 				+ "FROM OptionSet os "
@@ -35,7 +39,7 @@ public class OptionSetSearchQuery {
 				+ " join fetch p.categorySets cs  "
 				+ " join fetch cs.category c " 
 				+ " WHERE os.stock >0 ";
-		categoryFilter(category);
+		categoryFilter(categoryId,categoryName);
 		}else {
 			this.searchQuery="SELECT os "
 					+ "FROM OptionSet os "
@@ -43,11 +47,11 @@ public class OptionSetSearchQuery {
 					+ " WHERE os.stock >0 ";
 		}
 		if(searchDto.getOptionset()!=null) {
-			Map<String,List<String>> optionset = searchDto.getOptionset();
+			List<OptionNameValueMapDto> optionset = searchDto.getOptionset();
 			
-			for (Iterator<String> iterator = optionset.keySet().iterator(); iterator.hasNext();) {
-				String key = (String) iterator.next();
-				optionFilter(key, optionset.get(key));
+			for (int i = 0; i < optionset.size(); i++) {
+				String key=optionset.get(i).getName();
+				optionFilter(key,optionset.get(i).getValue());
 			}
 		}
 		if(searchDto.getNameKeyword()!=null) {
@@ -82,7 +86,8 @@ public class OptionSetSearchQuery {
 	}
 	public OptionSetSearchQuery(QueryStringDataDto searchDto,String username) {
 		if(searchDto.getCategory()!=null) {
-			String category=searchDto.getCategory();
+			Long categoryId=searchDto.getCategory().getId();
+			String categoryName=searchDto.getCategory().getName();
 			
 			this.searchQuery="SELECT os "
 					+ "FROM OptionSet os "
@@ -91,7 +96,7 @@ public class OptionSetSearchQuery {
 					+ " join fetch cs.category c "
 					+ " join fetch os.interests i " 
 					+ " WHERE os.stock >0 ";
-			categoryFilter(category);
+			categoryFilter(categoryId,categoryName);
 		}else {
 			this.searchQuery="SELECT os "
 					+ "FROM OptionSet os "
@@ -100,11 +105,11 @@ public class OptionSetSearchQuery {
 					+ " WHERE os.stock >0 ";
 		}
 		if(searchDto.getOptionset()!=null) {
-			Map<String,List<String>> optionset = searchDto.getOptionset();
+			List<OptionNameValueMapDto> optionset = searchDto.getOptionset();
 			
-			for (Iterator<String> iterator = optionset.keySet().iterator(); iterator.hasNext();) {
-				String key = (String) iterator.next();
-				optionFilter(key, optionset.get(key));
+			for (int i = 0; i < optionset.size(); i++) {
+				String key=optionset.get(i).getName();
+				optionFilter(key,optionset.get(i).getValue());
 			}
 		}
 		if(searchDto.getNameKeyword()!=null) {
@@ -137,9 +142,15 @@ public class OptionSetSearchQuery {
 			setOrderType(OptionSetQueryData.BY_ORDER_COUNT);
 		}
 	}
-	public void categoryFilter(String category) {
-		String category_filter = "AND c.name = :categoryFilter ";
-		category_filter = category_filter.replace(":categoryFilter", "'"+category+"'");
+	public void categoryFilter(Long categoryId, String category) {
+		String category_filter="";
+		if(category.equals("전체")) {
+			category_filter = "AND c.parentId = :categoryFilter ";
+			category_filter = category_filter.replace(":categoryFilter", ""+categoryId+"");
+		}else {
+			category_filter = "AND c.id = :categoryFilter ";
+			category_filter = category_filter.replace(":categoryFilter", ""+categoryId+"");
+		}
 		this.searchQuery+=category_filter;
 	}
 	public void brandFilter(String brand) {
@@ -149,9 +160,9 @@ public class OptionSetSearchQuery {
 	}
 	public void optionFilter(String optionName,List<String> optionValue) {
 		String valueString = "o.value= :optionValue1";
-		if(optionValue.size()==1) {
+		if(optionValue!=null&&optionValue.size()==1) {
 			valueString.replace(":optionValue1", optionValue.get(0));
-		}else if(optionValue.size()>1) {
+		}else if(optionValue!=null&&optionValue.size()>1) {
 			valueString.replace(":optionValue1", optionValue.get(0));
 			for (int i = 1; i < optionValue.size(); i++) {
 				valueString+="OR o.value="+optionValue.get(i);

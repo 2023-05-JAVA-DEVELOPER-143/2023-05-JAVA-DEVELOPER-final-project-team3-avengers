@@ -12,37 +12,10 @@
         <th:block layout:fragment="content">
       <!-- Main Slider-->
         
-         <!-- Modal 시작-->
-	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-	  		<div class="modal-content">
-			 <div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">옵션변경</h5>
-				  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				     <span aria-hidden="true">&times;</span>
-				     </button>
-			 </div>
-				 <div class="modal-body">
-				  <select id="selectbox" class="form-control">
-                    <option>1</option> 
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                  </select>
-				 </div>
-					<div class="modal-footer">
-					 	<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-					  	<button type="button" class="btn btn-primary">변경</button>
-					</div>
-			</div>
-		</div>
-	</div>
-	<!-- Modal 끝-->
 	
-      <!-- Page Content-->
+    <!-- Page Content-->
         
-      <!-- content 시작 -->
+    <!-- content 시작 -->
     <!-- Page Content-->
     <div class="container padding-bottom-3x mb-1">
       <!-- Shopping Cart-->
@@ -52,7 +25,7 @@
             <tr>
               <th class="cartAllCheck">
                 <label><input type="checkbox" checked="checked" id="chkBasketAll" name="chkBasketAll"
-                    class="basket_CheckBox" onclick="selectAll(this)"></label>
+                    class="basket_CheckBox"></label>
               </th>
               <th class="product-title-name">상품명</th>
               <th class="text-center">수량</th>
@@ -63,15 +36,14 @@
             </tr>
           </thead>
           <tbody>
-			  
+			 
 			  <!-- 반복문 가즈아 -->
             <tr class="cart_info" th:each="cart:${cart}">
+				 <input type="hidden" class="totalqty" th:value="${cart.qty}">
+                 <input type="hidden" class="totalprice" th:value="${cart.totalPrice}">
               <td class="prd-check-td">
                 <div class="prd-check">
-                  <input type="checkbox" class="checkbox" checked="checked" name="checkbox">
-                  <input type="hidden" class="totalPrice" th:value="${cart.totalPrice}">
-			 	  <input type="hidden" class="cart_qty" th:value="${cart.qty}">
-			 	  <input type="hidden" class="cart_osId" name="cart_osId" th:value="${cart.osId}">
+                  <input type="checkbox" checked="checked" class="checkbox" th:data-selectid="${cart.osId}">
                 </div>
               </td>
               <td>
@@ -92,23 +64,32 @@
               </td>
               <td class="text-center">
                 <div class="count-input">
-                  <select id="selectbox" class="form-control">
-                    <option th:text="${cart.qty}">1</option> 
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
+                  <select id="selectbox" class="form-control" th:data-id="${cart.osId}" onchange="getSelectValue(this);">
+					<option disabled hidden th:selected="${cart.qty}"></option>
+					<option th:selected="${cart.qty} == '1'">1</option>	   
+					<option th:selected="${cart.qty} == '2'">2</option>	   
+					<option th:selected="${cart.qty} == '3'">3</option>	   
+					<option th:selected="${cart.qty} == '4'">4</option>	   
+					<option th:selected="${cart.qty} == '5'">5</option>	   
+					<option th:selected="${cart.qty} == '6'">6</option>	   
+					<option th:selected="${cart.qty} == '7'">7</option>	   
+					<option th:selected="${cart.qty} == '8'">8</option>	   
+					<option th:selected="${cart.qty} == '9'">9</option>	   
+					<option th:selected="${cart.qty} == '10'">10</option>	 
+						 
                   </select>
+                 
+				  
                 </div>
               </td>
               <td class="text-center text-lg text-medium" th:text="${cart.totalPrice} * ${cart.qty}">2,332,000</td>
               <td class="text-center text-lg text-medium" th:text="${cart.totalPrice}">332,000</td>
               <td class="text-center">
-                <a class="plain-btn optionchange" data-toggle="modal" data-target="#exampleModal">옵션변경</a>
-                <a href="javascript:void(0)" class="plain-btn" onclick="deleteCart(this)" >삭제하기</a>
+                <a class="plain-btn" data-toggle="modal" data-target="#exampleModal">옵션변경</a>
+                <a href="javascript:void(0)" class="plain-btn" id="deletebtn" th:data-osId="${cart.osId}" onclick="deleteCart(this)">삭제하기</a>
+               
               </td>
             </tr>
-            
             <!-- 반복문 끝 --> 
             
           </tbody>
@@ -117,17 +98,21 @@
       <div class="shopping-cart-footer">
 
         <div class="column text-lg"> 총 결제금액: 
-			<span class="text-medium">$289.68</span>
+			<span class="text-medium" id="finalTotalPrice">$289.68</span>
 		</div>
       </div>
       <div class="shopping-cart-footer">
         <div class="column"><a class="btn btn-outline-secondary" href="shop-grid-ls.html">&nbsp;쇼핑 계속하기</a></div>
         <div class="column"></div>
         <div class="column">
-          <a href="javascript:void(0)" class="btn btn-selectdelete" onclick="selectdelete()">선택삭제</a>
+          <a href="javascript:void(0)" class="btn btn-selectdelete" id="selectAllcheck" onclick="selectAlldelete()">선택삭제</a>
           <a class="btn btn-success" href="checkout-address.html">주문하기</a>
         </div>
       </div>
+      
+      
+      
+		  
       <!-- Related Products Carousel-->
       <h3 class="text-center padding-top-2x mt-2 padding-bottom-1x">이런 상품은 어떠세요?</h3>
       <!-- Carousel-->
@@ -246,6 +231,116 @@
 <th:block layout:fragment="script">
 
 <script th:inline="javascript">
+$(document).ready(function() {
+	let totalPrice = 0;
+	let totalqty = 0;
+	let qtyprice=0;
+	
+	$(".cart_info").each(function(index, element) {
+		if($("input[class='checkbox']:checked" == true)) {
+			// 총 가격
+			totalPrice = parseInt($(element).find(".totalprice").val());
+			totalqty = parseInt($(element).find(".totalqty").val());
+			qtyprice += totalPrice * totalqty;
+			
+		}
+		console.log(totalPrice);
+		console.log(totalqty);
+		// 총 가격
+		$("#finalTotalPrice").html(qtyprice);
+	});
+	
+	
+});
+
+
+/* 전체 선택 체크 유무 */
+$(".basket_CheckBox").click(function() {
+	let check = $(".basket_CheckBox").prop("checked");
+	if(check) {
+		$(".checkbox").prop("checked", true);
+	} else {
+		$(".checkbox").prop("checked", false);
+	}
+});
+
+/* 선택 체크 해제시 전체 선택 체크 false */
+$(".checkbox").click(function() {
+	$("#chkBasketAll").prop("checked", false);
+});
+	
+
+/* 수량변경 (테스트완료)  */
+function getSelectValue(obj) {
+		let selectosId = obj.dataset.id;
+		console.log(selectosId);
+		let selectedValue = $(obj).val();
+		console.log(selectedValue);
+		
+						
+		let data = {
+			qty : selectedValue,
+			id : selectosId
+		};
+				
+		$.ajax({
+		url : "/cart/qty",
+			method : "put",
+			contentType : 'application/json',
+			data : JSON.stringify(data),
+			success : function() {
+				console.log(data);
+				location.href = "http://localhost:80/cart_list";
+			}
+		});
+}
+
+
+
+/* 카트 삭제 */
+
+function deleteCart(obj) {
+	let confirm_val = confirm("정말 삭제하시겠습니까?");
+	if(confirm_val) {
+		let deleteArr = new Array();
+			deleteArr.push($(obj).attr("data-osId"));
+			console.log(deleteArr);
+		$.ajax({
+			url : "/cart/deletecart",
+			type : "delete",
+			data : { idlist : deleteArr },
+			success : function() {
+				alert('삭제완료');
+				location.href = "http://localhost:80/cart_list";
+			} 
+		});
+	} 
+}
+
+
+/* 선택된 카트 삭제 */
+function selectAlldelete() {
+	 let confirm_val = confirm("선택한 제품을 삭제하시겠습니까?");
+	 if(confirm_val) {
+		 let checkArr = new Array();
+		 $("input[class='checkbox']:checked").each(function() {
+			checkArr.push($(this).attr("data-selectid")); 
+		 });
+		 console.log(checkArr);
+					 
+		 $.ajax({
+			url : "/cart/deletecart",
+			type : "delete",
+			data : { idlist : checkArr },
+			success : function() {
+				alert('삭제완료');
+				location.href = "http://localhost:80/cart_list";
+			} 
+		 });
+	 } 
+}
+
+
 
 /* 옵션 변경때 사용해야할듯싶다..
 $('#modalLarge').on('show.bs.modal',function(e) {
@@ -260,108 +355,6 @@ $('#modalLarge').on('show.bs.modal',function(e) {
 */
 
 
-
-/* 선택한 상품의 최종 정보 */
-/*
-$(".checkbox").on("click",function() {
-	setTotalInfo($(".cart_info"));
-});
-	*/
-
-/* 카트 1개 삭제 */	
-
-/*
-function deleteCart(obj) {
-	let osId = obj.dataset.id;
-	
-	let url = "/cart/check/" + osId;
-	console.log(osId);
-	
-
-	if(confirm("장바구니를 삭제하시겠습니까?")) {
-		$.ajax({
-		url : url,
-		type : "DELETE",
-		dataType : "json",
-		cache: false,
-		success: function() {}
-		});
-		alert('삭제완료');
-		location.href='http://localhost:80/cart/list';
-	} 
-	
-	
-}
-*/
-
- let osId = "${cart.osId}";
-
-/* 선택한 제품 삭제 */
-function selectdelete() {
-	
-	let osIdArr = [];
-	osIdArr.push(osId);
-	console.log(osIdArr);
-	let url = "/cart/check/" + osIdArr;
-	
-	$(".cart_info").each(function(index, element) {
-		if($(element).find(".checkbox").is(":checked") === true) {
-			if(confirm("장바구니를 삭제하시겠습니까?")) {
-				$.ajax({
-				url : url,
-				type : "DELETE",
-				data : JSON.stringify(osIdArr),
-				dataType : "json",
-				cache: false,
-				success: function() {}
-				});
-				alert('삭제완료');
-				location.href='http://localhost:80/cart/list';
-			} 
-	
-		}
-	});
-	
-	
-	
-}
-
-
-/*
-$('.checkbox').click(function() {
-	if(confirm("선택한 장바구니 삭제하시겠습니까?")) { 
-		let checkArr = new Array();
-		
-	}
-});
-	
-*/
-<!-- 체크박스 전체 선택-->
-function selectAll(selectAll) {
-	const checkboxes = document.getElementsByName('checkbox');
-	
-	checkboxes.forEach((checkbox) => {
-		checkbox.checked = selectAll.checked;
-	})
-}
-
-
-/*
-function setTotalInfo() {
-	let totalPrice = 0;
-	let qty = 0;
-	
-	$(".cart_info").each(function(index, element) {
-		if($(element).find(".checkbox").is(":checked") === true) {
-			// 총 가격
-			totalPrice += parseInt($(element).find(".totalPrice").val());
-		}
-	});
-	
-	// 총 가격
-	$(".text-medium").text(totalPrice.toLocaleString);
-}
-*/
 </script>
 </th:block>
  </body>

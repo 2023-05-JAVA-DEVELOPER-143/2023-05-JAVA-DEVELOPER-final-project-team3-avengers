@@ -123,8 +123,8 @@ public class CartRestController {
 	// 회원,비회원 테스트 성공
 	// 선택삭제 optionsetId 리스트로 받기 --> 체크박스 2개 이상 선택시 여러개 존재
 	@Operation(summary = "카트 선택삭제")
-	@DeleteMapping("check/{osId}")
-	public void deleteCart(@PathVariable(name = "osId") List<Long> idList, HttpSession session) throws Exception {
+	@DeleteMapping(value = "/deletecart")
+	public void deleteCart(@RequestParam(name = "idlist[]") List<Long> idList, HttpSession session) throws Exception {
 		// Long id == 회원일시 카트 pk , 비회원 일시 optionsetId
 //		sUserId = (String) session.getAttribute("sUserId");
 		sUserId = "User3";
