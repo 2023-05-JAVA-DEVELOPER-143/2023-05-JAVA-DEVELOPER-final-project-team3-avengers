@@ -76,8 +76,8 @@ public class CartServiceImpl implements CartService {
 
 	// 옵션셋 변경
 	@Override
-	public List<CartDto> updateCartOptionSet(List<Long> ids, String sUserId) throws Exception {
-		List<CartDto> updateCarts = new ArrayList<>();
+	public List<SUserCartResponseDto> updateCartOptionSet(List<Long> ids, String sUserId) throws Exception {
+		List<SUserCartResponseDto> updateCarts = new ArrayList<>();
 		Long memberId = memberDao.findMember(sUserId).getId(); // 회원의 MemberPk
 		Long oldOptionsetId = ids.get(0); // 기존 카트에 담겨있던 OptionsetId
 		Long changeOptionsetId = ids.get(1); // 변경하고자 하는 OptionsetId
@@ -89,7 +89,7 @@ public class CartServiceImpl implements CartService {
 				.build(); // 변경된 옵션셋
 
 		// 변경하고자하는 옵션셋과 멤버아이디로 이미 존재하는지 체크
-		Cart findDuplicateCart = cartRepository.findByOptionSetIdAndMemberId(ids.get(1), findCart.getMember().getId());
+		Cart findDuplicateCart = cartRepository.findByOptionSetIdAndMemberId(changeOptionsetId,memberId );
 
 		if (findDuplicateCart == null) {
 			// 변경할 카트 수량 1일시 findCart == 옵션셋이 변경된 카트
@@ -97,16 +97,15 @@ public class CartServiceImpl implements CartService {
 				// 기존 옵션셋아이디와 멤버아이디로 찾은 카트의 옵션셋을 변경 후 세이브
 				findCart.setOptionSet(optionSetDao.findById(changeOptionsetId));
 				cartRepository.save(findCart);
-
-				// updateCarts.add(CartUpdateResponseDto.toDto(findCart));
+				SUserCartResponseDto sUserCartResponseDto = SUserCartResponseDto.toDto(findCart);
+				updateCarts.add(sUserCartResponseDto);
 			} else if (findCart.getQty() >= 2) {
 				// 기존 카트의 수량이 2 이상 , 중복 옵션셋 카트 X == 수량 변경시 기존 카트 수량 -1 후 세이브 , 변경 카트 인써트
 				findCart.setQty(findCart.getQty() - 1);
 				cartRepository.save(findCart);
 				cartRepository.save(newCart);
-
-				// updateCarts.add(CartUpdateResponseDto.toDto(newCart));
-				// updateCarts.add(CartUpdateResponseDto.toDto(findCart));
+				updateCarts.add(SUserCartResponseDto.toDto(findCart));
+				updateCarts.add(SUserCartResponseDto.toDto(newCart));
 			}
 		} else {
 			if (findCart.getQty() == 1) {
@@ -114,19 +113,18 @@ public class CartServiceImpl implements CartService {
 				findDuplicateCart.setQty(findDuplicateCart.getQty() + 1);
 				cartRepository.save(findDuplicateCart);
 				cartRepository.deleteById(findCart.getId());
-
+				updateCarts.add(SUserCartResponseDto.toDto(findDuplicateCart));
 			} else if (findCart.getQty() >= 2) {
 				// 기존 카트의 수량 2 이상 , 중복 옵션셋 카트 O == 중복 옵션셋 카트 수량 + 1 , 기존 변경전 옵션셋 수량 -1
 				findCart.setQty(findCart.getQty() - 1);
 				findDuplicateCart.setQty(findDuplicateCart.getQty() + 1);
 				cartRepository.save(findCart);
 				cartRepository.save(findDuplicateCart);
-
-				// updateCarts.add(CartUpdateResponseDto.toDto(findCart));
-				// updateCarts.add(CartUpdateResponseDto.toDto(findDuplicateCart));
+				updateCarts.add(SUserCartResponseDto.toDto(findDuplicateCart));
+				updateCarts.add(SUserCartResponseDto.toDto(findCart));
 			}
 		}
-		return null;
+		return updateCarts;
 	}
 
 	/*
