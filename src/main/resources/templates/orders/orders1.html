@@ -6,15 +6,26 @@
 
 <head>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<style>
+    button.order-Link {
+        background-color: rgba(255, 255, 255, 0.5); /* 배경색을 투명한 흰색으로 설정 */
+        border: none; /* 테두리 제거 */
+        padding: 0; /* 패딩 제거 */
+        text-decoration: none; /* 밑줄 제거 */
+        cursor: pointer; /* 커서를 포인터로 변경하여 클릭 가능하다는 표시 */
+        font-size: inherit; /* 폰트 크기를 상속받음 */
+        color: #000; /* 텍스트 색상 (예: 검은색) */
+        outline: none; /* 포커스 효과 제거 */
+    }
+
+    button.order-Link:hover {
+        background-color: rgba(255, 255, 255, 0.7); /* 마우스 오버시 미세하게 밝아지도록 설정 */
+    }
+</style>
+
 </head>
 
 <body>
-
-
-
-
-
-
 
 	<!-- Open Ticket Modal-->
 	<div class="modal fade" id="orderDetails" tabindex="-1">
@@ -36,15 +47,6 @@
 
 		</div>
 	</div>
-
-
-
-
-
-
-
-
-
 
 	<!-- Page Content-->
 	<!-- Main Slider-->
@@ -69,16 +71,17 @@
 							</thead>
 							<tbody>
 								<tr th:each="ordersDto : ${orderDtoList}">
-									<td th:text="${ordersDto.getId()}"><a class="text-medium navi-link" href="#"
-											th:onclick="showOrderDetails([[${ordersDto.getId()}]])">
-											1234 </a></td>
+									<td >
+										<button class="order-Link" type="button"data-toggle="modal" data-target="#orderDetails"   data-order-id="${ordersDto.getId()}"><span th:text="${ordersDto.getId()}">주문번호</span></button>
+									</td>
 									<td th:text="${ordersDto.getDescription()}">주문 내역</td>
 									<td th:text="${ordersDto.getStateMsg()}">주문 상태</td>
 									<td th:text="${ordersDto.getPrice()}"><span class="text-medium">$760.50</span></td>
 									<td>
 										<button class="refund-button"
 											th:onclick="requestRefund([[${ordersDto.getId()}]])">환불</button>
-										<button class="cancel-button" th:onclick="cancelOrder([[${ordersDto.getId()}]])">취소</button>
+										<button class="cancel-button"
+											th:onclick="cancelOrder([[${ordersDto.getId()}]])">취소</button>
 
 									</td>
 
@@ -107,39 +110,46 @@
 				form.submit();
 			}
 		</script>
+		
+		
+		
+		
+		
+		
+		
+		
 		<script th:inline="javascript">
-			function showOrderDetails(orderId) {
-				console.log('Showing order details for orderId=' + orderId);
-
-				// AJAX를 사용하여 주문 상세 정보를 불러옵니다.
-				$.ajax({
-					url: '/order/member_order_detail/' + orderId, // 해당 URL을 변경하세요.
-					type: 'GET',
-					success: function (data) {
-						// 성공적으로 데이터를 받았을 때 실행되는 함수
-						console.log('Received data:', data);
-
-						// 모달 내용을 업데이트합니다.
-						var modalBody = $('#orderDetails').find('.modal-body');
-						modalBody.empty(); // 모달 내용 초기화
-
-						// data를 이용하여 모달 내용을 생성
-						var orderDetailsHTML = '<h5>Order Details</h5>';
-						orderDetailsHTML += '<p>Order ID: ' + data.id + '</p>';
-						// 여기에 필요한 정보를 추가하세요.
-
-						modalBody.append(orderDetailsHTML);
-
-						// 모달 열기
-						$('#orderDetails').modal('show');
-					},
-					error: function (error) {
-						// AJAX 요청 중 에러가 발생했을 때 실행되는 함수
-						console.error('Error fetching order details:', error);
-					}
+			$(document).ready(function () {
+				$('.order-Link').click(function (e) {
+					e.preventDefault();
+					var orderId = $(this).data('order-id');
+					console.log("@@@@orderId: "+orderId);// 안들어가
+					requestOrderDetails(orderId);
 				});
-			}
+
+				function requestOrderDetails(orderId) {
+					$.ajax({
+						url: 'order/member_order_detail/' + orderId,
+						type: 'GET',
+						success: function (data) {
+							// 주문 상세 정보로 모달을 채웁니다.
+							$('.modal-body').html(data.description); // 데이터 구조에 따라 수정하세요.
+							$('#orderDetails').modal('show'); // 모달을 표시합니다.
+						},
+						error: function (error) {
+							console.error('주문 상세 정보를 불러오는 중 오류 발생:', error);
+							// 여기에 오류 처리 로직을 추가하세요.
+						}
+					});
+				}
+			});
 		</script>
+
+
+
+
+
+
 		<script th:inline="javascript">
 			function cancelOrder(orderId) {
 				console.log(orderId);
@@ -149,18 +159,18 @@
 					success: function (data) {
 						console.log('Order canceled successfully:', data);
 						// 주문 취소 후 1초 뒤에 페이지 새로고침
-            			setTimeout(function() {
-               				 location.reload();
-            			}, 1000); // 1초 (1000 milliseconds)
-						
+						setTimeout(function () {
+							location.reload();
+						}, 1000); // 1초 (1000 milliseconds)
+
 					},
 					error: function (error) {
 						console.error('Error canceling order:', error);
 						// 에러 처리 로직을 추가하세요.
 					}
 				});
-				
-				
+
+
 			}
 		</script>
 
