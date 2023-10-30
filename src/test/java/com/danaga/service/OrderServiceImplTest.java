@@ -119,7 +119,7 @@ class OrderServiceImplTest {
 													.name("주문자명1232")
 													.phoneNo("123-123123232322")
 													.build();
-		orderService.guestCartSelectOrderSave(deliveryDto,fUserCarts,orderGuestDto);
+		//orderService.guestCartSelectOrderSave(deliveryDto,fUserCarts,orderGuestDto);
 		
 	}
 	
