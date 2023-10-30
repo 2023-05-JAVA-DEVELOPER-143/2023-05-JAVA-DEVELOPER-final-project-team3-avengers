@@ -91,6 +91,9 @@ public class MemberServiceImpl implements MemberService {
 	public boolean isDuplicate(String value) throws Exception {
 		return memberDao.existedMemberBy(value);
 	}
+	public boolean isDuplicateByNickname(String nickname) throws Exception {
+		return memberDao.existedMemberBy(nickname);
+	}
 
 	public boolean login(String userName, String password) throws Exception {
 		// 비회원 세션 카트에서 로그인하면 세션 카트를 로그인한 멤버의 카트DB에 담게 구현?

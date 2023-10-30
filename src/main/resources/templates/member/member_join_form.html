@@ -8,22 +8,7 @@
   
   <th:block layout:fragment="content">
   <body>
-	  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">모달 제목</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- 모달 내용 -->
-                <p>모달 내용이 여기에 들어갑니다.</p>
-            </div>
-        </div>
-    </div>
-</div>
+
       <!-- Page Content-->
       <div class="container padding-bottom-3x mb-2" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
           <div class="col-md-6">
@@ -34,7 +19,7 @@
                 <div class="form-group">
                   <label for="reg-username">아이디</label>
                   <input class="form-control"  name="userName" type="text" placeholder="@ 와 - 는 사용할수 없습니다" id="reg-username" required>
-                  <button class="btn btn-primary" type="button" onclick="checkDuplicate()">아이디 중복 확인</button>
+                  <button class="btn btn-primary" type="button" onclick="checkDuplicate('userName')">아이디 중복 확인</button>
                   <div></div>
                   <span id="username-error" style="color: red;"></span>
                 </div>
@@ -49,18 +34,22 @@
                 <div class="form-group">
                   <label for="reg-nickname">닉네임</label>
                   <input class="form-control"  name="nickname" type="text" id="reg-nickname" required>
+                  <button class="btn btn-primary" type="button" onclick="checkDuplicateNickname()">닉네임 중복 확인</button>
+                  <span id="nickname-error" style="color: red;"></span>
                 </div>
               </div>
               <div class="col-sm-6">
                 <div class="form-group">
                   <label for="reg-email">E-mail 주소</label>
                   <input class="form-control"  name="email" type="email" placeholder="ex) email@google.com" id="reg-email" required>
+                  <button class="btn btn-primary" type="button" onclick="checkDuplicate('email')">이메일 중복 확인</button>
                 </div>
               </div>
               <div class="col-sm-6">
                 <div class="form-group">
                   <label for="reg-phone">휴대폰 번호</label>
                   <input class="form-control"  name="phoneNo" type="text" placeholder="ex) 010-1111-1111" id="reg-phone" required>
+                  <button class="btn btn-primary" type="button" onclick="checkDuplicate('phoneNo')">휴대폰 번호 중복 확인</button>
                 </div>
               </div>
               <div class="col-sm-6">
@@ -104,42 +93,42 @@
 			return false;
 		}
 		if (document.f.password.value == "") {
-			alert("비밀번호를 입력하십시요.");
+			openModal("비밀번호를 입력하십시요.");
 			f.password.focus();
 			return false;
 		}
-		if (validatePassword(document.f.password.value)) {
+		if (validPassword(document.f.password.value)) {
 		    // 비밀번호가 유효합니다.
 		    // 이곳에서 서버로 전송하거나 다른 작업을 수행할 수 있습니다.
 		} else {
 		    // 비밀번호가 유효하지 않음
-		    alert("비밀번호는 8~20자이어야 하며, 최소한 하나의 문자, 하나의 숫자, 그리고 하나의 특수 문자를 포함해야 합니다.");
+		    openModal("비밀번호는 8~20자이어야 하며, 최소한 하나의 문자, 하나의 숫자, 그리고 하나의 특수 문자를 포함해야 합니다.");
 		}
 		if (document.f.password2.value == "") {
-			alert("비밀번호확인을 입력하십시요.");
+			openModal("비밀번호확인을 입력하십시요.");
 			f.password2.focus();
 			return false;
 		}
 		if (document.f.name.value == "") {
-			alert("이름을 입력하십시요.");
+			openModal("이름을 입력하십시요.");
 			f.name.focus();
 			return false;
 		}
 		if (document.f.email.value == "") {
-			alert("이메일 주소를 입력하십시요.");
+			openModal("이메일 주소를 입력하십시요.");
 			f.email.focus();
 			return false;
 		}
 		if (document.f.birthday.value == "") {
-			alert("생년월일을 선택하십시요.");
+			openModal("생년월일을 선택하십시요.");
 			return false;
 		}
 		if (document.f.address.value == "") {
-			alert("주소를 입력하십시요.");
+			openModal("주소를 입력하십시요.");
 			return false;
 		}
 		if (document.f.password.value != document.f.password2.value) {
-			alert("비밀번호와 비밀번호확인은 일치하여야합니다.");
+			openModal("비밀번호와 비밀번호확인은 일치하여야합니다.");
 			f.password.focus();
 			f.password.select();
 			return false;
@@ -148,33 +137,94 @@
 		document.f.method='POST';
 		document.f.submit();
 	}
-	function checkDuplicate() {
-    const userName = document.f.userName.value;
+	function checkDuplicateNickname() {
+   	let nickname = document.f.nickname.value;
 
-    if (!userName) {
-        alert("아이디를 입력하세요.");
+    if (!nickname) {
+        openModal("닉네임을 입력하세요.");
         return;
     }
 	// Check for @ or - in the username
-    if (userName.includes('@') || userName.includes('-')) {
-        document.getElementById('username-error').textContent = "@ 또는 - 는 사용할 수 없습니다.";
+    if (nickname.includes('@') || nickname.includes('-')) {
+        document.getElementById('nickname-error').textContent = "@ 또는 - 는 사용할 수 없습니다.";
         return;
     }
     // 서버로 아이디 중복 확인 요청을 보냅니다.
-    fetch(`/checkDuplicate?userName=${userName}`)
+    fetch(`/member/checkDuplicateNickname?nickname=${nickname}`)
         .then(response => response.json())
         .then(data => {
             if (data.isDuplicate) {
-                alert("아이디가 이미 사용 중입니다.");
+                openModal("이미 사용 중인 닉네임입니다.");
             } else {
-                alert("아이디를 사용할 수 있습니다.");
+                openModal("사용할 수 있는 닉네임입니다.");
             }
         })
         .catch(error => {
-            console.error("아이디 중복 확인에 실패했습니다:", error);
+            console.error("중복 확인에 실패했습니다:", error);
         });
 }
-function validatePassword(password) {
+function checkDuplicate(type) {
+    let value = "";
+    let errorMessage = "";
+
+    if (type === "userName") {
+        value = document.f.userName.value;
+        if(value==""){
+        errorMessage = "아이디를 입력하세요.";
+        } else if(validUserName(value)) {
+        errorMessage = "아이디는 8 ~ 20자 이내여야 합니다.";
+        document.f.phoneNo.focus();
+		}
+    } else if (type === "email") {
+        value = document.f.email.value;
+        if(value==""){
+        errorMessage = "이메일을 입력하세요.";
+        } else if(isValidEmail(value)) {
+        errorMessage = "올바른 형식이 아닙니다.";
+        document.f.phoneNo.focus();
+		}
+    } else if (type === "phoneNo") {
+        value = document.f.phoneNo.value;
+        if(value==""){
+        errorMessage = "휴대폰 번호를 입력하세요.";
+        } else if(isValidPhoneNumber(value)) {
+        errorMessage = "올바른 형식이 아닙니다.";
+        document.f.phoneNo.focus();
+		}
+    }
+
+    if (!value) {
+        openModal(errorMessage);
+        return;
+    }
+
+    // 서버로 중복 확인 요청을 보냅니다.
+    fetch(`/member/checkDuplicate?type=${type}&value=${value}`)
+    .then(response => response.json())
+    .then(data => {
+        if (data.isDuplicate) {
+            openModal(data.message); // 서버에서 전달된 메시지를 표시
+        } else {
+            openModal(data.message); // 서버에서 전달된 메시지를 표시
+        }
+    })
+    .catch(error => {
+        console.error("중복 확인에 실패했습니다:", error);
+    });
+}
+function openModal(message) {
+    const modal = document.getElementById("myModal");
+    const modalBody = modal.querySelector(".modal-body");
+    modalBody.textContent = message;
+    $(modal).modal("show");
+}
+function validUserName(userName) {
+    // 비밀번호 길이가 8에서 20 사이여야 함
+    if (userName.length < 8 || userName.length > 20) {
+        return false;
+    }
+}
+function validPassword(password) {
     // 비밀번호 길이가 8에서 20 사이여야 함
     if (password.length < 8 || password.length > 20) {
         return false;
@@ -187,19 +237,16 @@ function validatePassword(password) {
 
     return hasLetter && hasNumber && hasSpecialChar;
 }
-function openModal(message) {
-    const modal = document.getElementById("myModal");
-    const modalBody = modal.querySelector(".modal-body");
-    modalBody.textContent = message;
-    $(modal).modal("show");
+function isValidPhoneNumber(phoneNumber) {
+    // 010-1234-1234 형식의 휴대폰 번호 유효성 검사를 수행합니다.
+    const phoneRegex = /^01[0-9]-\d{3,4}-\d{4}$/;
+    return phoneRegex.test(phoneNumber);
 }
-
-// 모달 대화 상자 닫기
-function closeModal() {
-    const modal = document.getElementById("myModal");
-    $(modal).modal("hide");
+function isValidEmail(email) {
+    // 간단한 이메일 유효성 검사를 수행합니다.
+    const emailRegex = /^[A-Z0-9._%+]+@[A-Z0-9.]+\.[A-Z]{2,}$/i;
+    return emailRegex.test(email);
 }
-
 	
 </script>
 </th:block>
