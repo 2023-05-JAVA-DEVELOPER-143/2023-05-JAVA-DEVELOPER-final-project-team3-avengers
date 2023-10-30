@@ -171,7 +171,7 @@ public class OrderController {
 	public String guestDetail(@ModelAttribute("orderGuestDto") OrderGuestDto orderGuestDto ,Model model) {
 		try {
 			orderService.guestOrderDetail(orderGuestDto.getOrderNo(),orderGuestDto.getName(),orderGuestDto.getPhoneNo());
-			return "orders/order_guest_list";
+			return "orders/order_guest_detail";
 		}catch (Exception e) {
 			e.getStackTrace();
 			model.addAttribute("errorMsg",e.getMessage());

@@ -3,6 +3,7 @@ package com.danaga.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,32 +20,28 @@ import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequiredArgsConstructor
+//@RequestMapping("/cart")
 public class CartController {
 	private final CartService cartService;
 
-	static List<CartDto> fUserCarts = new ArrayList<>(); // 비회원 장바구니(세션)
-	static String sUserId = null; // 로그인 유저 아이디
+	static String sUserId; // 로그인 유저 아이디
+	static List<CartDto> fUserCarts; // 비회원 장바구니(세션)
 
 	@GetMapping("/cart_list")
 	public String findCarts(HttpSession session, Model model) throws Exception {
 		//sUserId = (String) session.getAttribute("sUserId");
 		sUserId= "User3";
-		//session.setAttribute("sUserId", sUserId);
-		if (sUserId != null) {
+		if (sUserId != null) { // 회원
 			List<SUserCartResponseDto> carts = cartService.findsUserCartList(sUserId);
 			model.addAttribute("cart", carts);
-			return "cart/cart_form";
+		} else if (fUserCarts != null) {
+			List<FUserCartResponseDto> responseDto = new ArrayList<>();
+			for (int i = 0; i < fUserCarts.size(); i++) {
+				responseDto.add(cartService.findfUserCartList(fUserCarts.get(i)));
+			}
+			model.addAttribute("cart", responseDto);
 		}
-
-		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
-
-		List<FUserCartResponseDto> responseDto = new ArrayList<>();
-		for (int i = 0; i < fUserCarts.size(); i++) {
-			responseDto.add(cartService.findfUserCartList(fUserCarts.get(i)));
-		}
-		model.addAttribute("cart", responseDto);
-
 		return "cart/cart_form";
-
 	}
 }
+

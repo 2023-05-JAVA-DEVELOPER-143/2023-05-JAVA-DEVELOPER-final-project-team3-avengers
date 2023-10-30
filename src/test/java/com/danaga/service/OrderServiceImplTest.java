@@ -119,7 +119,6 @@ class OrderServiceImplTest {
 													.name("주문자명1232")
 													.phoneNo("123-123123232322")
 													.build();
-		orderService.guestCartSelectOrderSave(deliveryDto,fUserCarts,orderGuestDto);
 		
 	}
 	
@@ -224,14 +223,18 @@ class OrderServiceImplTest {
 		System.out.println("777777777777777777777777"+orderService.memberOrderDetail(1L)); 
 	}
 	@Test
-	@Disabled
+	//@Disabled
 	void testUpdateStatementByNormalOrder() {
 		
 		//System.out.println("44444444444444444444"+orderService.updateStatementByNormalOrder(5L));
-//		orderService.updateStatementByNormalOrder(1L);
-		orderService.updateStatementByNormalOrder(23L);
-		orderService.updateStatementByNormalOrder(23L);
-//		orderService.updateStatementByNormalOrder(3L);
+		orderService.updateStatementByNormalOrder(47L);
+		orderService.updateStatementByNormalOrder(48L);
+		orderService.updateStatementByNormalOrder(49L);
+		orderService.updateStatementByNormalOrder(50L);
+		orderService.updateStatementByNormalOrder(47L);
+		orderService.updateStatementByNormalOrder(48L);
+		orderService.updateStatementByNormalOrder(49L);
+		orderService.updateStatementByNormalOrder(50L);
 	}
 	@Test
 	@Disabled

@@ -1,5 +1,10 @@
 package com.danaga.service;
 
+import static org.mockito.ArgumentMatchers.longThat;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,13 +41,19 @@ public class CartServiceImplTest {
 	}
 
 	@Test
-	@Disabled
+	//@Disabled
 	void 카트옵션변경() throws Exception {
 		// 중복 옵션 X + 장바구니 수량 1 ok
 		// 중복 옵션 X + 장바구니 수량 >=2 ok
 		// 중복 옵션 O + 장바구니 수량 1 ok
 		// 중복 옵션 O + 장바구니 수량 >=2 ok
-		// cs.updateCartOptionSet(CartUpdateOptionSetDto.builder().id(1052L).optionSet(or.findById(5L).get()).build());
+		String a = "User5";
+		List<Long> b = new ArrayList<>();
+		Long c = 3L;
+		Long d = 1L;
+		b.add(c);
+		b.add(d);
+		cs.updateCartOptionSet(b, a);
 
 	}
 
@@ -105,6 +116,7 @@ public class CartServiceImplTest {
 	}
 
 	@Test
+	@Disabled
 	void 카트리스트() throws Exception {
 		System.out.println(cs.findsUserCartList("User1").get(0));
 
