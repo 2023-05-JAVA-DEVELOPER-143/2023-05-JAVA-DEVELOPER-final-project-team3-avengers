@@ -1,29 +1,97 @@
 import * as View from "./view.js";
-import * as api from "./apiService.js"
+import * as api from "./p_apiService.js"
+
+
+let hash = window.location.hash
+let path = hash.substring(1);
+let html = '';
+/*
+초기실행메쏘드
+*/
+function init() {
+	registEvent();
+	navigate();
+	//common_header_user_cart();
+}
+
+function registEvent() {
+	
+	$(window).on('hashchange', function(e) {
+		alert('hashchange event:' + e);
+		hash = window.location.hash
+		path = hash.substring(1);
+		navigate();
+	});
+	$(document).on('click', function(e) {
+		console.log(e.target);
+		if ($(e.target).attr('categoryId')) {
+			let categoryId= $(e.target).attr('categoryId');
+			api.subCategory(categoryId);
+		}else if($(e.target).attr('sub-categoryId')){
+			let categoryId=$(e.target).attr('sub-categoryId');
+			api.showOptions(categoryId);
+		}else if($(e.target).atttr('product-heart')){
+			let optionSetId=$(e.target).attr('product-heart');
+			if(e.target.class=='btn btn-outline-secondary btn-sm btn-wishlist'){
+				api.tapHeart(optionSetId);
+			}else if(e.target.class=='btn btn-outline-secondary btn-sm btn-wishlist active'){
+				api.untapHeart(optionSetId);//비회원 로그인경고처리
+			}
+		}else if($(e.target).attr('data-wishlist-remove')){
+			let optionSetId=$(e.target).attr('data-wishlist-remove');
+			api.removewish(optionSetId,function callback(){
+			$(e.target).closest("tr").remove();
+			});
+		}else if($(e.target).attr('data-recentview-remove')){
+			let optionSetId=$(e.target).attr('data-recentview-remove');
+			api.removeRecentView(optionSetId,function callback(){
+			$(e.target).closest("tr").remove();
+			});
+		}
+	});
+ 	
+
+}
+
+function navigate() {
+	if (path == '/api/shop-list-ns') {
+		/**************** /shop-list-ns******************/
+		//let resultJsonObject=ajaxRequest("GET","");
+		html = product_list_list_view();
+		$('#page_list_content').html(html);
+	} else if (path == '/api/shop-grid-ns') {
+		/**************** /shop-grid-ns******************/
+		html = product_list_grid_view();
+		$('#page_list_content').html(html);
+	} 
+}
+
+
 
 //1.하트 눌렀을때 위시리스트 추가하는 이벤트 
-$('.btn btn-outline-secondary btn-sm btn-wishlist').click(function(e){
+$('.btn btn-outline-secondary btn-sm btn-wishlist').on("click",function(e){
 	let optionSetId = e.target.data-no.value;
 	api.tapHeart(optionSetId);
 });
-$('.btn btn-outline-secondary btn-sm btn-wishlist active').click(api.untapHeart($(this[data-no])));
+//$('.btn btn-outline-secondary btn-sm btn-wishlist active').click(api.untapHeart($(this[data-no])));
 //2. sort by  눌렀을 때 정렬 바뀌게 select 다시하는 쿼리
-$('.form-control > #sorting').click(function() {
-    var selectedValue = $('.form-control > #sorting option:selected').val();
-    var jsonData = { "orderType": selectedValue };
+$('#orderTypeSearch').click(function() {
+    let selectedValue = $('orderTypeSearch:selected').val();
+    let minPriceSearch = $('minPriceSearch').val();
+    let maxPriceSearch = $('maxPriceSearch').val();
+    let nameKeywordSearch = $('nameKeywordSearch').val();
+    let jsonData = { 
+		"orderType": selectedValue,
+		"": 1
+		};
+		
+		//카테고리는 어캐? 넘버를 name으로 교환하는거 
+		//옵션리스트 가져오는것도
     api.searchResult(jsonData);
 });
 
 
-//3. 필터 카테고리, 옵션 쿼리 
-$('.category-item').click(function(e){
-let categoryId= e.target.data-category-id.value;
-api.subCategory(categoryId);
-});
-$('.sub-category-item').click(function(e){
-	let categoryId= e.target.data-subcategory-id.value;
-	api.showOptions(categoryId);
-	});
+//3. 필터 카테고리, 옵션 쿼리 ㅇㅇ 
 //4. x 눌렀을때 관심상품, 최근 상품 삭제하는 쿼리 
 $('.remove-from-wish').click(function(e){
 	let optionSetId=e.target.href.substring(1);
@@ -302,7 +370,7 @@ window.addEventListener('hashchange',function(e){
 
 
 
-
+init();
 
 
 

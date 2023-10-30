@@ -32,6 +32,7 @@ import com.danaga.repository.product.OptionSetQueryData;
 import com.danaga.repository.product.OptionSetSearchQuery;
 import com.danaga.service.MemberService;
 import com.danaga.service.product.CategoryService;
+import com.danaga.service.product.InterestService;
 import com.danaga.service.product.OptionSetService;
 import com.danaga.service.product.RecentViewService;
 
@@ -43,13 +44,13 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/product")
 public class ProductController {
 
 	private final OptionSetService service;
 	private final CategoryService categoryService;
 	private final RecentViewService recentViewService;
 	private final MemberService memberService;
+	private final InterestService interestService;
 	// 상품디테일에서 같은 카테고리 인기상품 노출 ㅇㅇ
 	// 상품 클릭해서 디테일 들어갈때 조회수 업뎃 ㅇㅇ
 	// product detail 조회시 recentView 추가 ㅇㅇ
@@ -63,20 +64,30 @@ public class ProductController {
 	
 	//상단바의 검색 으로 키워드 검색 하는거 만들기 
 	@GetMapping("/site_search")
-	public String site_search(Model model) {
+	public String site_search(Model model,HttpSession session) {
 		try {
 			String nameKeyword = (String) model.getAttribute("site_search");
 			//검색 메인화면에 최상위 카테고리 선택할수 있게 표시
 			ResponseDto<CategoryDto> categoryResponseDto = categoryService.AncestorCategories();
 			List<CategoryDto> categoryList = categoryResponseDto.getData();
+			if(session.getAttribute("sUserId")==null) {
 			ResponseDto<ProductDto> responseDto = service.searchProducts(//주문수로 전체상품 정렬하여 조회
 					QueryStringDataDto.builder()
 					.nameKeyword(nameKeyword)
 					.orderType(OptionSetQueryData.BY_ORDER_COUNT)
 					.build());
 			List<ProductDto> productList = responseDto.getData();
-			log.warn(productList.toString()+categoryList.toString());
 			model.addAttribute("productList",productList);
+			}else {
+				ResponseDto<ProductDto> responseDto = service.searchProductsForMember(//주문수로 전체상품 정렬하여 조회
+						QueryStringDataDto.builder()
+						.nameKeyword(nameKeyword)
+						.orderType(OptionSetQueryData.BY_ORDER_COUNT)
+						.build(),(String)session.getAttribute("sUserId"));
+				List<ProductDto> productList = responseDto.getData();
+				model.addAttribute("productList",productList);
+				
+			}
 			model.addAttribute("categoryList",categoryList);
 			return "product/product";
 		} catch (Exception e) {
@@ -87,19 +98,27 @@ public class ProductController {
 		}
 	}
 	//전체상품 
-	@GetMapping
-	public String searchProduct(Model model) {
+	@GetMapping("/product")
+	public String searchProduct(Model model,HttpSession session) {
 		try {
-			//검색 메인화면에 최상위 카테고리 선택할수 있게 표시
 			ResponseDto<CategoryDto> categoryResponseDto = categoryService.AncestorCategories();
 			List<CategoryDto> categoryList = categoryResponseDto.getData();
+			if(session.getAttribute("sUserId")!=null) {
+				ResponseDto<ProductDto> responseDto = service.searchProductsForMember(//주문수로 전체상품 정렬하여 조회
+						QueryStringDataDto.builder()
+						.orderType(OptionSetQueryData.BY_ORDER_COUNT)
+						.build(),(String)session.getAttribute("sUserId"));
+				List<ProductDto> productList = responseDto.getData();
+				model.addAttribute("productList",productList);
+			}else {
+			//검색 메인화면에 최상위 카테고리 선택할수 있게 표시
 			ResponseDto<ProductDto> responseDto = service.searchProducts(//주문수로 전체상품 정렬하여 조회
 					QueryStringDataDto.builder()
 					.orderType(OptionSetQueryData.BY_ORDER_COUNT)
 					.build());
 			List<ProductDto> productList = responseDto.getData();
-			log.warn(productList.toString()+categoryList.toString());
 			model.addAttribute("productList",productList);
+			}
 			model.addAttribute("categoryList",categoryList);
 			return "product/product";
 		} catch (Exception e) {
@@ -113,7 +132,7 @@ public class ProductController {
 	
 
 	//제품디테일 ++++++관련상품 20개 뽑기 옆으로 스크롤해서+++++같은 프로덕트의 다른 옵션들 뽑기
-	@GetMapping("/{optionSetId}")
+	@GetMapping("/product{optionSetId}")
 	public String productDetail(HttpSession session, @PathVariable Long optionSetId, Model model) {
 		try {
 			ProductDto productList =(ProductDto) service.findById(optionSetId).getData().get(0);
@@ -121,8 +140,6 @@ public class ProductController {
 			List<ProductDto> optionSets = (List<ProductDto>) service.showOtherOptionSets(optionSetId).getData();
 			service.updateViewCount(optionSetId);
 			//디테일 들어갈때 조회수도 증가
-			List<ProductDto> hits = service.displayHitProducts(optionSetId).getData();
-			//같은 카테고리의 히트상품도 표시
 			if(session.getAttribute("sUserId")!=null) {//로그인유저일시
 //				String username =(String)session.getAttribute("sUserId");
 //				Long memberId = memberService.findIdByUsername(username);
@@ -130,11 +147,19 @@ public class ProductController {
 					.memberId(1L)//memberId
 					.optionSetId(optionSetId)
 					.build());
-			}//최근본상품에 추가
-			log.warn(productList.toString()+hits.toString());
+			//최근본상품에 추가
+			List<Boolean> isInterested=(List<Boolean>) interestService.isMyInterest(optionSetId, (String)session.getAttribute("sUserId")).getData();
+			model.addAttribute("isInterested",isInterested.get(0));
+			
+			List<ProductDto>hits=service.displayHitProductsForMember(optionSetId, (String)session.getAttribute("sUserId")).getData();
+			model.addAttribute("hits",hits);
+			}else{
+			List<ProductDto> hits = service.displayHitProducts(optionSetId).getData();
+			model.addAttribute("hits",hits);
+			}
+			//같은 카테고리의 히트상품도 표시
 			model.addAttribute("productList",productList);
 			model.addAttribute("otherOptions",optionSets);
-			model.addAttribute("hits",hits);
 			return "product/product_detail";
 		} catch (Exception e) {
 			// error페이지, 페이지내 에러 메세지 넘겨주기

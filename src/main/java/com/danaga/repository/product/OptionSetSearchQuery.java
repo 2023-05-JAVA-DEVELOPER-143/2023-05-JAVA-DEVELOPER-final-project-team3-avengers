@@ -2,6 +2,7 @@ package com.danaga.repository.product;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.danaga.dto.product.OptionDto;
 import com.danaga.dto.product.QueryStringDataDto;
@@ -42,9 +43,68 @@ public class OptionSetSearchQuery {
 					+ " WHERE os.stock >0 ";
 		}
 		if(searchDto.getOptionset()!=null) {
-			List<OptionDto> optionset = searchDto.getOptionset();
-			for(int i=0; i<optionset.size();i++) {
-				optionFilter(optionset.get(i).getName(), optionset.get(i).getValue());
+			Map<String,List<String>> optionset = searchDto.getOptionset();
+			
+			for (Iterator<String> iterator = optionset.keySet().iterator(); iterator.hasNext();) {
+				String key = (String) iterator.next();
+				optionFilter(key, optionset.get(key));
+			}
+		}
+		if(searchDto.getNameKeyword()!=null) {
+			nameKeyword(searchDto.getNameKeyword());
+		}
+		if(searchDto.getBrand()!=null) {
+			brandFilter(searchDto.getBrand());
+		}
+		if(searchDto.getMinPrice()!=null&&searchDto.getMaxPrice()!=null) {
+			priceRange(searchDto.getMinPrice(), searchDto.getMaxPrice());
+		}
+		
+		this.searchQuery+= " Order By :orderType ";
+		if(searchDto.getOrderType()!=null) {
+			String orderType=searchDto.getOrderType();
+			if(orderType.equals("판매순")) {
+				setOrderType(OptionSetQueryData.BY_ORDER_COUNT);
+			}else if(orderType.equals("조회순")) {
+				setOrderType(OptionSetQueryData.BY_VIEW_COUNT);
+			}else if(orderType.equals("최신순")) {
+				setOrderType(OptionSetQueryData.BY_CREATE_TIME);
+			}else if(orderType.equals("평점순")) {
+				setOrderType(OptionSetQueryData.BY_RATING);
+			}else if(orderType.equals("최저가순")) {
+				setOrderType(OptionSetQueryData.BY_TOTAL_PRICE);
+			}else {//default
+				setOrderType(OptionSetQueryData.BY_ORDER_COUNT);
+			}
+		}else{
+			setOrderType(OptionSetQueryData.BY_ORDER_COUNT);
+		}
+	}
+	public OptionSetSearchQuery(QueryStringDataDto searchDto,String username) {
+		if(searchDto.getCategory()!=null) {
+			String category=searchDto.getCategory();
+			
+			this.searchQuery="SELECT os "
+					+ "FROM OptionSet os "
+					+ " join fetch os.product p "
+					+ " join fetch p.categorySets cs  "
+					+ " join fetch cs.category c "
+					+ " join fetch os.interests i " 
+					+ " WHERE os.stock >0 ";
+			categoryFilter(category);
+		}else {
+			this.searchQuery="SELECT os "
+					+ "FROM OptionSet os "
+					+ " join fetch os.product p "
+					+ " join fetch os.interests i "
+					+ " WHERE os.stock >0 ";
+		}
+		if(searchDto.getOptionset()!=null) {
+			Map<String,List<String>> optionset = searchDto.getOptionset();
+			
+			for (Iterator<String> iterator = optionset.keySet().iterator(); iterator.hasNext();) {
+				String key = (String) iterator.next();
+				optionFilter(key, optionset.get(key));
 			}
 		}
 		if(searchDto.getNameKeyword()!=null) {
@@ -87,10 +147,18 @@ public class OptionSetSearchQuery {
 		brand_filter = brand_filter.replace(":brandFilter", "'%"+brand+"%'");
 		this.searchQuery+=brand_filter;
 	}
-	public void optionFilter(String optionName,String optionValue) {
-		String option_filter = "AND EXISTS ( SELECT 1 FROM Options o WHERE o.optionSet = os AND o.name = :optionName AND o.value = :optionValue )";
+	public void optionFilter(String optionName,List<String> optionValue) {
+		String valueString = "o.value= :optionValue1";
+		if(optionValue.size()==1) {
+			valueString.replace(":optionValue1", optionValue.get(0));
+		}else if(optionValue.size()>1) {
+			valueString.replace(":optionValue1", optionValue.get(0));
+			for (int i = 1; i < optionValue.size(); i++) {
+				valueString+="OR o.value="+optionValue.get(i);
+			}
+		}
+		String option_filter = "AND EXISTS ( SELECT 1 FROM Options o WHERE o.optionSet = os AND o.name = :optionName AND ("+valueString+") )";
 		option_filter = option_filter.replace(":optionName", "'"+optionName+"'");
-		option_filter = option_filter.replace(":optionValue", "'"+optionValue+"'");
 		this.searchQuery+=option_filter;
 	}
 	public void priceRange(int minPrice,int maxPrice) {

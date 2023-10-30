@@ -106,7 +106,7 @@ class OptionSetServiceImplTest {
 	}
 
 	@Test
-	@Disabled//쿼리 실행 결과에 이상있음  
+	@Disabled
 	void testShowOptionNameValues() {
 		System.out.println(service.showOptionNameValues(13L));
 	}

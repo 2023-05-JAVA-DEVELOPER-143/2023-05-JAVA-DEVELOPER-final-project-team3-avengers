@@ -32,27 +32,22 @@
 						customer reviews</span>
 					<h2 class="padding-top-1x text-normal" th:text="*{name}">Product Name</h2>
 					<span class="h2 d-block" th:text="*{totalPrice}">멤버등급할인된가격</span>
+					<input type="hidden" name="cartDto.id" value="*{optionSetId}">
 					<p th:text="*{optionSet}">상품 옵션들 나열</p>
 					<div class="row margin-top-1x">
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label for="size">다른 옵션 보기</label>
-								<select class="form-control" id="size">
-									<option>Chooze options</option>
-									<option>11.5</option>
-									<option>11</option>
-									<option>10.5</option>
-									<option>10</option>
-									<option>9.5</option>
-									<option>9</option>
-									<option>8.5</option>
+								<label for="otherOptions">다른 옵션 보기</label>
+								<select class="form-control" id="otherOptions" th:each="options:${otherOptions}">
+									<option th:text="${options.optionSet}" th:value="${options.osId}" th:if="${options.osId==productList.osId}" th:selected="selected">11.5</option>
+									<option th:text="${options.optionSet}" th:value="${options.osId}" th:unless="${options.osId==productList.osId}">11.5</option>
 								</select>
 							</div>
 						</div>
 						<div class="col-sm-3">
 							<div class="form-group">
-								<label for="quantity">Quantity</label>
-								<select class="form-control" id="quantity">
+								<label for="qty">Quantity</label>
+								<select class="form-control" name="qty" id="qty">
 									<option>1</option>
 									<option>2</option>
 									<option>3</option>
@@ -65,8 +60,11 @@
 					<hr class="mb-3">
 					<div class="d-flex flex-wrap justify-content-between">
 						<div class="sp-buttons mt-2 mb-2">
-							<button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip"
-								title="Whishlist"><i class="icon-heart"></i></button>
+							
+							<button th:if="${session.loginUser!=null && isInterested}" class="btn btn-outline-secondary btn-sm btn-wishlist active" data-toggle="tooltip"
+							product-heart="${productList.osId}" title="Whishlist"><i class="icon-heart"></i></button>
+							<button th:unless="${session.loginUser!=null && isInterested}" class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip"
+							product-heart="${productList.osId}" title="Whishlist"><i class="icon-heart"></i></button>
 							<button class="btn btn-primary" data-toast data-toast-type="success"
 								data-toast-position="topRight" data-toast-icon="icon-circle-check"
 								data-toast-title="Product" data-toast-message="successfuly added to cart!"><i
@@ -86,7 +84,7 @@
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane fade show active" id="description" role="tabpanel">
-							<img src="img/reviews/01.jpg" alt="Review author"
+							<img src="img/reviews/01.jpg" th:src="@{${productList.descImage}}" alt="Review author"
 								><!--상품설명이미지-->
 						</div>
 						<div class="tab-pane fade" id="reviews" role="tabpanel" >
@@ -163,10 +161,9 @@
 			<h3 class="text-center padding-top-2x mt-2 padding-bottom-1x">You May Also Like</h3>
 			<!-- Carousel-->
 			<div class="owl-carousel"
-				data-owl-carousel="{ &quot;nav&quot;: false, &quot;dots&quot;: true, &quot;margin&quot;: 30, &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;576&quot;:{&quot;items&quot;:2},&quot;768&quot;:{&quot;items&quot;:3},&quot;991&quot;:{&quot;items&quot;:4},&quot;1200&quot;:{&quot;items&quot;:4}} }"
-				th:each="productDto:${hits}">
+				data-owl-carousel="{ &quot;nav&quot;: false, &quot;dots&quot;: true, &quot;margin&quot;: 30, &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;576&quot;:{&quot;items&quot;:2},&quot;768&quot;:{&quot;items&quot;:3},&quot;991&quot;:{&quot;items&quot;:4},&quot;1200&quot;:{&quot;items&quot;:4}} }">
 				<!-- Product-->
-				<div class="grid-item">
+				<div class="grid-item" th:each="productDto:${hits}">
 					<div class="product-card">
 						<a class="product-thumb" href="product-detail.html" th:href="product-detail.html"><img
 								src="img/shop/products/09.jpg" alt="Product"

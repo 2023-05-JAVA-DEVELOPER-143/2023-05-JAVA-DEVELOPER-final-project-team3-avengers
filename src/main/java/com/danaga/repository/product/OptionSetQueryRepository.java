@@ -24,5 +24,10 @@ public class OptionSetQueryRepository {
 		TypedQuery<OptionSet> query = em.createQuery(jpql,OptionSet.class);
 		return query.getResultList();
 	}
+	public List<OptionSet> findForMemberByFilter(QueryStringDataDto dataDto, String username){
+		String jpql = new OptionSetSearchQuery(dataDto,username).build();
+		TypedQuery<OptionSet> query = em.createQuery(jpql,OptionSet.class);
+		return query.getResultList();
+	}
 	
 }

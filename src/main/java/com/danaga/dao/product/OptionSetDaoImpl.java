@@ -36,6 +36,12 @@ public class OptionSetDaoImpl implements OptionSetDao{
 		return query.getResultList();
 	}
 	@Override
+	public List<OptionSet> findForMemberByFilter(QueryStringDataDto dataDto, String username){
+		String jpql = new OptionSetSearchQuery(dataDto,username).build();
+		TypedQuery<OptionSet> query = em.createQuery(jpql,OptionSet.class);
+		return query.getResultList();
+	}
+	@Override
 	public OptionSet findById(Long id) {
 		return repository.findById(id).get();
 	}

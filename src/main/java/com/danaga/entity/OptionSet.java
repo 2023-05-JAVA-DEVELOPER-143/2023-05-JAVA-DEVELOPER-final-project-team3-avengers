@@ -72,7 +72,6 @@ public class OptionSet extends BaseEntity {
 	
 	@Builder.Default
 	@OneToMany(mappedBy = "optionSet",cascade = CascadeType.REMOVE,orphanRemoval = true)
-	@ToString.Exclude
 	private List<Interest> interests = new ArrayList<>();
 	
 

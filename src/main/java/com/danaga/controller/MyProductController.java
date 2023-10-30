@@ -15,7 +15,6 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Controller
-@RequestMapping("/member")
 @RequiredArgsConstructor
 public class MyProductController {
 	private final RecentViewService recentViewService;

@@ -1,7 +1,7 @@
-import {common_header_user_cart} from './main.js';
-import { product_list_grid_view } from './view/view-product-list-grid.js';
-import { product_list_list_view } from './view/view-product-list-list.js';
-import {ajaxRequest} from './request.js';
+//import {common_header_user_cart} from './main.js';
+//import { product_list_grid_view } from './view/view-product-list-grid.js';
+//import { product_list_list_view } from './view/view-product-list-list.js';
+//import {ajaxRequest} from './request.js';
 const PRODUCT_GRID_LIST = { method: 'GET', url: 'api/product-grid-ls' };
 const PRODUCT_LIST_LIST = { method: 'GET', url: 'api/product-list-ls' };
 

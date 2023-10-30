@@ -15,4 +15,5 @@ public interface InterestService {
 	//나의 관심상품 전체 삭제
 	ResponseDto<?> emptyMyInterestingList(Long memberId);
 	ResponseDto<?> deleteHeart(InterestDto dto);
+	ResponseDto<?> isMyInterest(Long optionSetId, String username) throws Exception;
 }

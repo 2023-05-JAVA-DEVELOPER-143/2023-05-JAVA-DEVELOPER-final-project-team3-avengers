@@ -24,6 +24,7 @@ public interface OptionSetDao {
 	OptionSet updateOrderCount(Long id,Integer orderCount);
 	OptionSet updateViewCount(Long id);
 	OptionSet calculateTotalPrice(OptionSetUpdateDto dto);
+	List<OptionSet> findForMemberByFilter(QueryStringDataDto dataDto, String username);
 	
 	
 }

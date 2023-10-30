@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.danaga.dao.MemberDao;
 import com.danaga.dao.product.InterestDao;
 import com.danaga.dao.product.OptionSetDao;
 import com.danaga.dto.ResponseDto;
@@ -21,7 +22,24 @@ public class InterestServiceImpl implements InterestService {
 
 	private final InterestDao interestDao;
 	private final OptionSetDao optionSetDao;
+	private final MemberDao memberDao;
 	
+	//상품이 내 관심상품인지 확인
+	@Override
+	public ResponseDto<?> isMyInterest(Long optionSetId, String username) throws Exception{
+		Long memberId = memberDao.findMember(username).getId();
+		boolean isInterested=interestDao.isInterested(InterestDto.builder()
+				.memberId(memberId).optionSetId(optionSetId).build());
+		if(isInterested) {
+			List<Boolean> answer=new ArrayList<Boolean>();
+			answer.add(true);
+			return ResponseDto.<Boolean>builder().data(answer).build();
+		}else {
+			List<Boolean> answer=new ArrayList<Boolean>();
+			answer.add(false);
+			return ResponseDto.<Boolean>builder().data(answer).build();
+		}
+	}
 	
 	//제품에서 하트 누르면 관심제품 추가
 	//제품에서 하트 누르면 관심제품 삭제
