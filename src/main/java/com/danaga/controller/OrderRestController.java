@@ -61,7 +61,7 @@ public class OrderRestController {
 	 */
 	// OrdersDto updateStatementByCancleOrder(Long orderNo)
 	
-	@PutMapping("/updateCancel/{orderId}")
+	@PutMapping("/updateCancel{orderId}")
 	public ResponseEntity<?> updateStatementByCancleOrder(@PathVariable(value = "orderId")Long orderId) {
 		try {
 			
