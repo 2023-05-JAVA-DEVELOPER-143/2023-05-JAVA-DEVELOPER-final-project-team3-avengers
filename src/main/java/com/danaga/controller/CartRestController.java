@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -101,8 +102,8 @@ public class CartRestController {
 	@PutMapping("/qty")
 	public ResponseEntity<CartDto> updateQty(@RequestBody CartDto dto, HttpSession session) throws Exception {
 		// 로그인 유저 체크
-		sUserId = (String) session.getAttribute("sUserId");
-		System.out.println("sUserId");
+//		sUserId = (String) session.getAttribute("sUserId");
+		sUserId = "User6";
 		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
 		// System.out.println("카트 수량변경 컨트롤러 요청들어올때의 사이즈" + fUserCarts.size());
 		if (sUserId != null) {
@@ -129,13 +130,13 @@ public class CartRestController {
 	// 회원,비회원 테스트 성공
 	// 선택삭제 optionsetId 리스트로 받기 --> 체크박스 2개 이상 선택시 여러개 존재
 	@Operation(summary = "카트 선택삭제")
-	@DeleteMapping("check/{osId}")
-	public void deleteCart(@PathVariable(name = "osId") List<Long> idList, HttpSession session) throws Exception {
+	@DeleteMapping(value = "/deletecart")
+	public void deleteCart(@RequestParam(name = "idlist[]") List<Long> idList, HttpSession session) throws Exception {
 		// Long id == 회원일시 카트 pk , 비회원 일시 optionsetId
 //		sUserId = (String) session.getAttribute("sUserId");
-		sUserId = "User3";
-		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
-		System.out.println("제품 선택 삭제 컨트롤러 들어올때 카트 사이즈 = " + fUserCarts.size());
+		sUserId = "User6";
+//		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
+//		System.out.println("제품 선택 삭제 컨트롤러 들어올때 카트 사이즈 = " + fUserCarts.size());
 		// 회원일 경우
 		if (sUserId != null) {
 			for (int i = 0; i < idList.size(); i++) {

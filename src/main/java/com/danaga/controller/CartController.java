@@ -28,7 +28,7 @@ public class CartController {
 	@GetMapping("/cart_list")
 	public String findCarts(HttpSession session, Model model) throws Exception {
 		//sUserId = (String) session.getAttribute("sUserId");
-		sUserId= "User3";
+		sUserId= "User6";
 		//session.setAttribute("sUserId", sUserId);
 		if (sUserId != null) {
 			List<SUserCartResponseDto> carts = cartService.findsUserCartList(sUserId);

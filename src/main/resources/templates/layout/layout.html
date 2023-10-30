@@ -15,8 +15,8 @@
 	<meta name="viewport"
 		content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	<!-- Favicon and Apple Icons-->
-	<link rel="icon" type="bootstrap/image/x-icon" href="favicon.ico">
-	<link rel="icon" type="bootstrap/image/png" href="favicon.png">
+	<link rel="icon" type="bootstrap/image/x-icon" href="bootstrap/img/favicon.ico">
+	<link rel="icon" type="bootstrap/image/png" href="bootstrap/img/favicon.png">
 	<link rel="apple-touch-icon" href="bootstrap/touch-icon-iphone.png">
 	<link rel="apple-touch-icon" sizes="152x152" href="bootstrap/touch-icon-ipad.png">
 	<link rel="apple-touch-icon" sizes="180x180"
@@ -30,17 +30,16 @@
 	<link id="mainStyles" rel="stylesheet" media="screen"
 		href="bootstrap/css/styles.min.css">
 	<!-- commonJS-->
-	<script defer type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js"></script>
 	<script defer src="bootstrap/js/modernizr.min.js"></script>
 </head>
  
 
 <body>
 		<!-- Off-Canvas Category Menu-->
-	<!-- -------------------- common-top.html start -----------------------  -->
+	<!-- common-top.html start -->
 	<div class="offcanvas-container" id="shop-categories"
 		th:insert="~{/fragment/common-top::common-top}" th:remove="tag"></div>
-	<!-- -------------------- common-top.html end      -----------------------  -->
+	<!-- common-top.html end      -->
 	<!-- Off-Canvas Wrapper-->
 	<div class="offcanvas-wrapper">
 	<!--banner 시작-->
@@ -50,7 +49,7 @@
 				th:remove="tag"></div>
 		</th:block>	
 	<!--banner 끝-->
-    
+      
 
 	<!--Content 내용 영역 시작-->
 	<th:block layout:fragment="content" />
@@ -72,10 +71,11 @@
 	<div class="site-backdrop"></div>
 	<!-- JavaScript (jQuery) libraries, plugins and custom scripts-->
 	<!--Common JS-->
-	<script defer type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js" />
-	<script defer src="js/app.js" type="module"></script>
+	<script defer type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script defer type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js"></script>
 	<script src="bootstrap/js/vendor.min.js" defer="defer"></script>
 	<script src="bootstrap/js/scripts.min.js" defer="defer"></script>
+	<script defer src="js/app.js" type="module"></script>
 	<th:block layout:fragment="script"></th:block>
 	
 </body>
