@@ -29,22 +29,20 @@
 								<thead class="thead-inverse">
 									<tr>
 										<th style="width: 500px; white-space: nowrap;">주문 번호</th>
-										<th style="width: 500px; white-space: nowrap;">주문 상세번호</th>
+										<th style="width: 500px; white-space: nowrap;">주문 내용</th>
 										<th style="width: 500px; white-space: nowrap;">주문 날짜</th>
-										<th style="width: 500px; white-space: nowrap;">상품 갯수</th>
 										<th style="width: 500px; white-space: nowrap;">총 가격</th>
 										<th style="width: 500px; white-space: nowrap;">현재 주문 상태</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
-										<th scope="row" style="width: 500px;">112</th>
-										<td style="width: 500px; white-space: nowrap;">좋은 컴퓨터 외
+										<th th:text="${ordersDto.Id}" scope="row" style="width: 500px;">112</th>
+										<td  th:text="${ordersDto.getDescription()}" style="width: 500px; white-space: nowrap;">좋은 컴퓨터 외
 											5개</td>
-										<td style="width: 500px; white-space: nowrap;">2023.10.15</td>
-										<td style="width: 500px; white-space: nowrap;">15개</td>
-										<td style="width: 500px; white-space: nowrap;">13,000,000원</td>
-										<td style="width: 500px; white-space: nowrap;">배송완료</td>
+										<td th:text="${ordersDto.getCreateDate()}" style="width: 500px; white-space: nowrap;">2023.10.15</td>
+										<td th:text="${ordersDto.getPrice()}" style="width: 500px; white-space: nowrap;">13,000,000원</td>
+										<td th:text="${ordersDto.getStateMsg()}" style="width: 500px; white-space: nowrap;">배송완료</td>
 									</tr>
 
 								</tbody>
@@ -55,16 +53,16 @@
 
 						<div class="row">
 							<div class="col-md-6">
-								<form class="form-group">
+								<form class="form-group" th:object="${refund}">
 									<label for="account-fn">은행이름</label>
 									<input class="form-control" type="text" name="bankName" id="bankName" value="은행이름"
-										required>
+										required th:filed="*{bankName}">
 								</form>
 
 								<form class="form-group">
 									<label for="account-ln">계좌주</label>
 									<input class="form-control" type="text" name="accountName" id="accountName"
-										value="계좌주" required>
+										value="계좌주" required th:filed="*{accountName}">
 								</form>
 							</div>
 
@@ -72,13 +70,13 @@
 								<form class="form-group">
 									<label for="refund-account">환불 계좌번호</label>
 									<input class="form-control" type="text" name="acNo" id="acNo" value="환불 계좌번호"
-										required>
+										required th:filed="*{acNo}">
 								</form>
 
 								<form class="form-group">
 									<label for="refund-reason">환불 사유</label>
 									<input class="form-control" type="text" name="description" id="description"
-										value="환불 사유" required>
+										value="환불 사유" required th:filed="*{description}">
 								</form>
 							</div>
 						</div>
@@ -124,16 +122,37 @@
 
 <th:block layout:fragment="script">
 	<script type="text/javascript">
+    function insertRefund(orderId) {
+    	console.log("@@@@@@@@@@orderId= "+orderId)
+        var refundDto = {
+            bankName: $('#bankName').val(),
+            accountName: $('#accountName').val(),
+            acNo: $('#acNo').val(),
+            description: $('#description').val()
+        };
+        
+        console.log('환불 요청 바디:', refundDto);
 
-		function insertRefund(orderId) {
-			// 세션에서 orderId 가져오기
-			console.log('orderId=  ' + orderId);
-			let form = document.createElement('form');
-			form.method = 'POST';
-			form.action = '/saveRefund' + orderId;
-			document.body.appendChild(form);
-			form.submit();
-		}
+
+        $.post('/saveRefund' + orderId, JSON.stringify(refundDto), 'json')
+        .done(function(response) {
+        	
+        	console.log("refundDto.bankName의 타입: " + typeof refundDto.bankName);
+        	console.log("refundDto의 타입: " + typeof refundDto);
+        	
+        	console.log("refundDto.bankName: "+refundDto.bankName);
+        	console.log("refundDto.accountName: "+refundDto.accountName);
+        	console.log("refundDto.acNo: "+refundDto.acNo);
+        	console.log("refundDto.description: "+refundDto.description);
+        	console.log("response: "+response);
+
+            console.log('환불 정보가 성공적으로 저장되었습니다.');
+        })
+        .fail(function(error) {
+            console.error('환불 정보 저장 중 오류가 발생했습니다.', error);
+        });
+
+    }
 	</script>
 </th:block>
 

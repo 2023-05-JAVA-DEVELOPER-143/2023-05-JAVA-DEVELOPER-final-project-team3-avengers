@@ -6,10 +6,48 @@
 <!-- Header -->
 
 <head>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
+
+
+
+
+
+
+
+	<!-- Open Ticket Modal-->
+	<div class="modal fade" id="orderDetails" tabindex="-1">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Order Details</h4>
+					<button class="close" type="button" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body"></div>
+				<div class="modal-footer">
+
+					<p>팝업 footer</p>
+
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+
+
+
+
+
+
+
+
+
 	<!-- Page Content-->
 	<!-- Main Slider-->
 	<th:block layout:fragment="content">
@@ -17,7 +55,7 @@
 			<div class="row">
 				<div class="col-lg-4" th:insert="mypage_component :: mypage">
 
-				</div>	
+				</div>
 				<div class="col-lg-8">
 					<div class="padding-top-2x mt-2 hidden-lg-up"></div>
 					<div class="table-responsive">
@@ -33,8 +71,10 @@
 							</thead>
 							<tbody>
 								<tr th:each="ordersDto : ${orderDtoList}">
-									<td th:text="${ordersDto.getId()}">
-									<a class="text-medium navi-link" href="#" data-toggle="modal" data-target="#orderDetails">1234</a></td>
+									<td th:text="${ordersDto.getId()}"><a
+										class="text-medium navi-link" href="#"
+										th:onclick="showOrderDetails([[${ordersDto.getId()}]])">
+											1234 </a></td>
 									<td th:text="${ordersDto.getDescription()}">주문 내역</td>
 									<td th:text="${ordersDto.getStateMsg()}">주문 상태</td>
 									<td th:text="${ordersDto.getPrice()}"><span
@@ -63,13 +103,47 @@
 		<script th:inline="javascript">
 			function requestRefund(orderId) {
 				console.log('orderId=  ' + orderId);
-				var form = document.createElement('form');
+				let form = document.createElement('form');
 				form.method = 'GET';
 				form.action = '/refund_main_form/' + orderId;
 				document.body.appendChild(form);
 				form.submit();
 			}
 		</script>
+		<script th:inline="javascript">
+			function showOrderDetails(orderId) {
+				console.log('Showing order details for orderId=' + orderId);
+
+				// AJAX를 사용하여 주문 상세 정보를 불러옵니다.
+				$.ajax({
+					url : '/order/member_order_detail/' + orderId, // 해당 URL을 변경하세요.
+					type : 'GET',
+					success : function(data) {
+						// 성공적으로 데이터를 받았을 때 실행되는 함수
+						console.log('Received data:', data);
+
+						// 모달 내용을 업데이트합니다.
+						var modalBody = $('#orderDetails').find('.modal-body');
+						modalBody.empty(); // 모달 내용 초기화
+
+						// data를 이용하여 모달 내용을 생성
+						var orderDetailsHTML = '<h5>Order Details</h5>';
+						orderDetailsHTML += '<p>Order ID: ' + data.id + '</p>';
+						// 여기에 필요한 정보를 추가하세요.
+
+						modalBody.append(orderDetailsHTML);
+
+						// 모달 열기
+						$('#orderDetails').modal('show');
+					},
+					error : function(error) {
+						// AJAX 요청 중 에러가 발생했을 때 실행되는 함수
+						console.error('Error fetching order details:', error);
+					}
+				});
+			}
+		</script>
+
 	</th:block>
 
 </body>
