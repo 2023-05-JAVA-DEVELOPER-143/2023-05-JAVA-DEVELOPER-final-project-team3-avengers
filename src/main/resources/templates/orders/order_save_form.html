@@ -22,7 +22,7 @@
     <ul>
         <th:block th:if="${sUserId != null}">
             <!-- 회원 주문내역 -->
-            <th:each th:each="item : ${SUserCartResponseDto}">
+            <th:each th:each="item : ${sUserCartResponseDto}">
                 <li th:text="${item.productName} : ${item.qty} ${item.qty}*${item.totalPrice} ">상품 ${item.productName}: ${item.qty} $${item.totalPrice}</li>
             </th:each>
         </th:block>

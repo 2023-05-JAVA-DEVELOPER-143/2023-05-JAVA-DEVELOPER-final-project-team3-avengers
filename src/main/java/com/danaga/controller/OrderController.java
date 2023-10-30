@@ -2,12 +2,6 @@ package com.danaga.controller;
 
 import java.util.*;
 
-import org.apache.catalina.connector.Response;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.data.domain.jaxb.SpringDataJaxb.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.*;
 import org.springframework.web.bind.annotation.*;
@@ -121,11 +115,12 @@ public class OrderController {
 
 		if(sUserId==null) {
 			//비회원
-			model.addAttribute("sUserCartOrderDto",sUserCartOrderDto);
+			List<SUserCartOrderDto> sUserCartOrderDto1 = sUserCartOrderDto;
+			model.addAttribute("sUserCartOrderDto",sUserCartOrderDto1);
 		}else {
 			//회원
 			List<SUserCartResponseDto> sUserCartResponseDtoList = cartService.findsUserCartList(sUserId);
-			model.addAttribute("SUserCartResponseDto", sUserCartResponseDtoList);
+			model.addAttribute("sUserCartResponseDto", sUserCartResponseDtoList);
 		}
 
 		return "orders/order_save_form";
