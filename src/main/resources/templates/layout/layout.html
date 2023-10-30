@@ -35,6 +35,32 @@
  
 
 <body>
+	 <!-- Modal 시작-->
+	<div class="modal fade" id="exampleModal" tabindex="-5" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+	  		<div class="modal-content">
+			 <div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">옵션변경</h5>
+				  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				     <span aria-hidden="true">&times;</span>
+				     </button>
+			 </div>
+				 <div class="modal-body">
+				  <select id="modalSelectbox" class="form-control">
+                    <option th:each="option:${cart.options}" th:text="${option.name + ': ' + option.value}">1</option> 
+                   
+                  </select>
+				 </div>
+					<div class="modal-footer">
+					 	<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+					  	<button type="button" class="btn btn-primary">변경</button>
+					</div>
+			</div>
+		</div>
+	</div>
+	<!-- Modal 끝-->
+	
+	
 		<!-- Off-Canvas Category Menu-->
 	<!-- common-top.html start -->
 	<div class="offcanvas-container" id="shop-categories"
@@ -49,10 +75,10 @@
 				th:remove="tag"></div>
 		</th:block>	
 	<!--banner 끝-->
-    
+      
 
 	<!--Content 내용 영역 시작-->
-	<th:block layout:fragment="content" />
+	<th:block layout:fragment="content"/>
 	<!--Content 내용 영역 끝  -->
 	
 	<!--추천상품 영역   -->
@@ -71,11 +97,11 @@
 	<div class="site-backdrop"></div>
 	<!-- JavaScript (jQuery) libraries, plugins and custom scripts-->
 	<!--Common JS-->
-	<script defer type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script defer type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js"></script>
-	<script defer src="js/app.js" type="module"></script>
 	<script src="bootstrap/js/vendor.min.js" defer="defer"></script>
 	<script src="bootstrap/js/scripts.min.js" defer="defer"></script>
+	
 	<th:block layout:fragment="script"></th:block>
 	
 </body>
