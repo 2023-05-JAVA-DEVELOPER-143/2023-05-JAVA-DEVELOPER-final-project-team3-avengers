@@ -115,18 +115,16 @@ public class OrderController {
 	 * 카트에서 주문(form)(공통) //form에서 sUserId에 유무에 따라서 뿌려지는 data가 달라지게해야함(회원,비회원)
 	 */
 	@GetMapping("/member_cart_order_save_form")
-	public String memberCartOrderAddForm(Model model, HttpSession session) throws Exception {
+	public String memberCartOrderAddForm(@ModelAttribute List<SUserCartOrderDto> sUserCartOrderDto ,Model model,HttpSession session) throws Exception {
 
 		String sUserId = (String) session.getAttribute("sUserId");
 
-		if(sUserId.isEmpty()) {
-			List<CartDto> fUserCartList =(List<CartDto>)session.getAttribute("cartDtoList");
-			
-			model.addAttribute("fUserCartList",fUserCartList);
+		if(sUserId==null) {
+			//비회원
+			model.addAttribute("sUserCartOrderDto",sUserCartOrderDto);
 		}else {
-			
+			//회원
 			List<SUserCartResponseDto> sUserCartResponseDtoList = cartService.findsUserCartList(sUserId);
-			
 			model.addAttribute("SUserCartResponseDto", sUserCartResponseDtoList);
 		}
 

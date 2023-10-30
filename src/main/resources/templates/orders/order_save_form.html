@@ -18,23 +18,18 @@
     <hr class="padding-bottom-1x">
     <!-- Add a list in this section -->
  <div class="custom-section">
- <!-- 비회원 주문내역 -->
-    <h5>비회원 주문 내역</h5>
+    <h5>주문 내역</h5>
     <ul>
-        <th:block th:if="${not #lists.isEmpty(fUserCartList)}">
-            <th:each th:each="cart : ${fUserCartList}">
-                <li>상품 ${name}: $${totalPrice}</li>
+        <th:block th:if="${sUserId != null}">
+            <!-- 회원 주문내역 -->
+            <th:each th:each="item : ${SUserCartResponseDto}">
+                <li th:text="${item.productName} : ${item.qty} ${item.qty}*${item.totalPrice} ">상품 ${item.productName}: ${item.qty} $${item.totalPrice}</li>
             </th:each>
         </th:block>
-    </ul>
-</div>
-<!-- 회원 주문내역 -->
-<div class="custom-section">
-    <h5>회원 주문 내역</h5>
-    <ul>
-        <th:block th:if="${not #lists.isEmpty(SUserCartResponseDto)}">
-            <th:each th:each="item : ${SUserCartResponseDto}">
-                <li>상품 ${item.productName}: ${item.qty} $${item.totalPrice}</li>
+        <th:block th:unless="${sUserId != null}">
+            <!-- 비회원 주문내역 -->
+            <th:each th:each="item : ${sUserCartOrderDto}">
+                <li th:text="${item.productName} : ${item.qty} ${item.qty}*${item.totalPrice}">상품 ${cart.name}: $${cart.totalPrice}</li>
             </th:each>
         </th:block>
     </ul>
