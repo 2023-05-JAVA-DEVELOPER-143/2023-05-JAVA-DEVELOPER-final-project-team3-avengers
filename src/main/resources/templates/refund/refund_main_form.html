@@ -42,7 +42,8 @@
 											5개</td>
 										<td th:text="${ordersDto.getCreateDate()}" style="width: 500px; white-space: nowrap;">2023.10.15</td>
 										<td th:text="${ordersDto.getPrice()}" style="width: 500px; white-space: nowrap;">13,000,000원</td>
-										<td th:text="${ordersDto.getStateMsg()}" style="width: 500px; white-space: nowrap;">배송완료</td>
+										<td th:text="${ordersDto
+										.getStateMsg()}" style="width: 500px; white-space: nowrap;">배송완료</td>
 									</tr>
 
 								</tbody>
@@ -53,30 +54,30 @@
 
 						<div class="row">
 							<div class="col-md-6">
-								<form class="form-group" th:object="${refund}">
+								<form class="form-group" th:object="${refundDto}">
 									<label for="account-fn">은행이름</label>
 									<input class="form-control" type="text" name="bankName" id="bankName" value="은행이름"
-										required th:filed="*{bankName}">
+										required th:field="*{bankName}">
 								</form>
 
-								<form class="form-group">
+								<form class="form-group" th:object="${refundDto}">
 									<label for="account-ln">계좌주</label>
 									<input class="form-control" type="text" name="accountName" id="accountName"
-										value="계좌주" required th:filed="*{accountName}">
+										value="계좌주" required th:field="*{accountName}">
 								</form>
 							</div>
 
 							<div class="col-md-6">
-								<form class="form-group">
+								<form class="form-group" th:object="${refundDto}">
 									<label for="refund-account">환불 계좌번호</label>
 									<input class="form-control" type="text" name="acNo" id="acNo" value="환불 계좌번호"
-										required th:filed="*{acNo}">
+										required th:field="*{acNo}">
 								</form>
 
-								<form class="form-group">
+								<form class="form-group" th:object="${refundDto}">
 									<label for="refund-reason">환불 사유</label>
 									<input class="form-control" type="text" name="description" id="description"
-										value="환불 사유" required th:filed="*{description}">
+										value="환불 사유" required th:field="*{description}">
 								</form>
 							</div>
 						</div>
@@ -122,37 +123,41 @@
 
 <th:block layout:fragment="script">
 	<script type="text/javascript">
-    function insertRefund(orderId) {
-    	console.log("@@@@@@@@@@orderId= "+orderId)
-        var refundDto = {
-            bankName: $('#bankName').val(),
-            accountName: $('#accountName').val(),
-            acNo: $('#acNo').val(),
-            description: $('#description').val()
-        };
-        
-        console.log('환불 요청 바디:', refundDto);
+   function insertRefund(orderId) {
+    console.log("@@@@@@@@@@orderId= " + orderId);
 
+    var form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '/saveRefund' + orderId;
 
-        $.post('/saveRefund' + orderId, JSON.stringify(refundDto), 'json')
-        .done(function(response) {
-        	
-        	console.log("refundDto.bankName의 타입: " + typeof refundDto.bankName);
-        	console.log("refundDto의 타입: " + typeof refundDto);
-        	
-        	console.log("refundDto.bankName: "+refundDto.bankName);
-        	console.log("refundDto.accountName: "+refundDto.accountName);
-        	console.log("refundDto.acNo: "+refundDto.acNo);
-        	console.log("refundDto.description: "+refundDto.description);
-        	console.log("response: "+response);
+    var bankNameInput = document.createElement('input');
+    bankNameInput.type = 'hidden';
+    bankNameInput.name = 'bankName';
+    bankNameInput.value = $('#bankName').val();
+    form.appendChild(bankNameInput);
 
-            console.log('환불 정보가 성공적으로 저장되었습니다.');
-        })
-        .fail(function(error) {
-            console.error('환불 정보 저장 중 오류가 발생했습니다.', error);
-        });
+    var accountNameInput = document.createElement('input');
+    accountNameInput.type = 'hidden';
+    accountNameInput.name = 'accountName';
+    accountNameInput.value = $('#accountName').val();
+    form.appendChild(accountNameInput);
 
-    }
+    var acNoInput = document.createElement('input');
+    acNoInput.type = 'hidden';
+    acNoInput.name = 'acNo';
+    acNoInput.value = $('#acNo').val();
+    form.appendChild(acNoInput);
+
+    var descriptionInput = document.createElement('input');
+    descriptionInput.type = 'hidden';
+    descriptionInput.name = 'description';
+    descriptionInput.value = $('#description').val();
+    form.appendChild(descriptionInput);
+
+    document.body.appendChild(form);
+    form.submit();
+}
+
 	</script>
 </th:block>
 

@@ -42,8 +42,10 @@ public class RefundController {
 		System.out.println("RefundController의 refund_main_form메소드에서 orderId는 " + orderId);
 		OrdersDto ordersDto = orderService.memberOrderDetail(orderId);
 		model.addAttribute("ordersDto", ordersDto);// id있어
-		model.addAttribute("refund",new RefundDto());
+		RefundDto refundDto = new RefundDto();
+		model.addAttribute("refundDto",refundDto);
 		System.out.println("@@@@@@@@@@@@@@ordersDto= "+ordersDto);
+		System.out.println("@@@@@@@@@@@@@@refundDto= "+refundDto);
 
 		// 세션에 orderId 저장
 		HttpSession session = request.getSession();
@@ -56,14 +58,16 @@ public class RefundController {
 	@PostMapping("saveRefund{orderId}")
 	public String saveRefund(Model model, @ModelAttribute("refundDto") RefundDto refundDto, @PathVariable Long orderId, HttpServletRequest request)
 			throws Exception {
-
+		 	log.info("description={}", "bankName={}","accountName={}","acNo={}", refundDto.getDescription(), refundDto.getBankName(),refundDto.getAccountName(),refundDto.getAcNo());
+		    log.info("refundDto={}", refundDto);
 		try {
-			System.out.println("@@@@@@@@@@@@@@refundDto = "+refundDto);
-			System.out.println("@@@@@@@@@@@@@@orderId = "+orderId);
+			System.out.println("@@@@@@@@@@@@@@refundDto = "+refundDto);//들어옴
+			System.out.println("@@@@@@@@@@@@@@orderId = "+orderId);//들어옴
 			
 			
 			
-			log.info("받은 값 : {} ", refundDto );
+			
+			log.info("받은 값 : {} ", refundDto );//들어옴
 			RefundResponseDto refundResponseDto = refundService.saveRefund(refundDto, orderId);
 			System.out.println("@@@@@@@@@@@@@@refundResponseDto = "+refundResponseDto);
 			String loginUser = (String) request.getSession().getAttribute("sUserId");

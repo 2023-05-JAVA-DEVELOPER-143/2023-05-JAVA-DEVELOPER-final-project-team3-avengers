@@ -37,15 +37,19 @@ public class RefundServiceImpl implements RefundService {
 	public RefundResponseDto saveRefund(RefundDto refundDto, Long orderId) throws Exception{
 		
 			Refund refund = Refund.toEntity(refundDto);
+			System.out.println("@@@@@@@refund = "+ refund);
 			//orderId로 orders객체를 만든 다음에 orderDaoImpl에서 
-			Orders orders = orderDao.updateStatementByClientRefundOrder(orderId);
+			Orders orders = orderDao.findById(orderId);
+			System.out.println("@@@@@@@orders = "+ orders);
 			if(orders.getStatement()==OrderStateMsg.배송완료) {
 				Refund insertRefund = refundDao.insertRefund(refund, orderId);
+				System.out.println("@@@@@@@insertRefund = "+ insertRefund);
 				RefundResponseDto refundResponseDto = RefundResponseDto.toDto(insertRefund);
+				System.out.println("@@@@@@@refundResponseDto = "+ refundResponseDto);
 				orderService.updateStatementByClientRefundOrder(orderId);
 				return refundResponseDto;
 			} else {
-				System.out.println("주문상태가 주문완료가 아닙니다.");
+				System.out.println("주문상태가 배송완료가 아닙니다.");
 				return null;
 			}
 
