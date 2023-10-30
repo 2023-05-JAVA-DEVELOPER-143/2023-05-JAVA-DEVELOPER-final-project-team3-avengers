@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="layout/layout(title='myOrders')">
 <!-- Body-->
 <!-- Header -->
@@ -11,61 +12,80 @@
 <body>
 	<!-- Page Content-->
 	<!-- Main Slider-->
-		<th:block layout:fragment="content">
-			<div class="col-lg-8">
-				<div class="padding-top-2x mt-2 hidden-lg-up"></div>
-				<div class="table-responsive">
-					<table class="table table-hover margin-bottom-none">
-						<thead>
-							<tr>
-								<th>주문 번호</th>
-								<th>주문내역</th>
-								<th>주문상태</th>
-								<th>주문 가격</th>
-								<th>환불 및 취소</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr th:each="ordersDto : ${orderDtoList}">
-								<td th:text="${ordersDto.getId()}"><a class="text-medium navi-link" href="#"
-										data-toggle="modal" data-target="#orderDetails">1234</a></td>
-								<td th:text="${ordersDto.getDescription()}">주문 내역</td>
-								<td th:text="${ordersDto.getStateMsg()}">주문 상태</td>
-								<td th:text="${ordersDto.getPrice()}"><span class="text-medium">$760.50</span></td>
-								<td>
-									<button class="refund-button"
-										th:onclick="requestRefund([[${ordersDto.getId()}]])">환불</button>
-									<button class="cancel-button">취소</button>
-								</td>
+	<th:block layout:fragment="content">
+		<div class="container padding-bottom-3x mb-2">
+			<div class="row">
+				<div class="col-lg-4" th:insert="mypage_component :: mypage">
 
-							</tr>
+				</div>	
+				<div class="col-lg-8">
+					<div class="padding-top-2x mt-2 hidden-lg-up"></div>
+					<div class="table-responsive">
+						<table class="table table-hover margin-bottom-none">
+							<thead>
+								<tr>
+									<th>주문 번호</th>
+									<th>주문내역</th>
+									<th>주문상태</th>
+									<th>주문 가격</th>
+									<th>환불 및 취소</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="ordersDto : ${orderDtoList}">
+									<td th:text="${ordersDto.getId()}">
+									<a class="text-medium navi-link" href="#" data-toggle="modal" data-target="#orderDetails">1234</a></td>
+									<td th:text="${ordersDto.getDescription()}">주문 내역</td>
+									<td th:text="${ordersDto.getStateMsg()}">주문 상태</td>
+									<td th:text="${ordersDto.getPrice()}"><span
+										class="text-medium">$760.50</span></td>
+									<td>
+										<button class="refund-button"
+											th:onclick="requestRefund([[${ordersDto.getId()}]])">환불</button>
+										<button class="cancel-button">취소</button>
+									</td>
+
+								</tr>
 
 
-						</tbody>
-					</table>
+							</tbody>
+						</table>
+					</div>
+					<hr>
 				</div>
-				<hr>
-
 			</div>
+		</div>
+	</th:block>
 
-		</th:block>
+	<th:block layout:fragment="recommendation"></th:block>
 
-		<th:block layout:fragment="recommendation"></th:block>
-
-		<th:block layout:fragment="script">
-			<script th:inline="javascript">
-				function requestRefund(orderId) {
-					console.log('orderId=  ' + orderId);
-					var form = document.createElement('form');
-					form.method = 'GET';
-					form.action = '/refund_main_form/' + orderId;
-					document.body.appendChild(form);
-					form.submit();
-				}
-
-			</script>
-		</th:block>
+	<th:block layout:fragment="script">
+		<script th:inline="javascript">
+			function requestRefund(orderId) {
+				console.log('orderId=  ' + orderId);
+				var form = document.createElement('form');
+				form.method = 'GET';
+				form.action = '/refund_main_form/' + orderId;
+				document.body.appendChild(form);
+				form.submit();
+			}
+		</script>
+	</th:block>
 
 </body>
 
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

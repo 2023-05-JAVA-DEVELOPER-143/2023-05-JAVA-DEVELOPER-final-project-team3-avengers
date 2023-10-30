@@ -41,14 +41,35 @@ public class MemberRestController {
 	private MemberService memberService;
 	
 	@GetMapping("/checkDuplicate")
-    public Map<String, Boolean> checkDuplicate(@RequestParam String userName) throws Exception {
+    public Map<String, String> checkDuplicate(@RequestParam String value,@RequestParam String type) throws Exception {
+		Map<String, String> response = new HashMap<>();
+	    boolean isDuplicate = false;
+	    String message = "";
+
+	    // 여기서 type에 따라 중복 확인을 수행하고 메시지를 설정합니다.
+	    if ("userName".equals(type)) {
+	        isDuplicate = memberService.isDuplicate(value);
+	        message = isDuplicate ? "이미 사용 중인 아이디입니다." : "사용할 수 있는 아이디입니다.";
+	    } else if ("email".equals(type)) {
+	        isDuplicate = memberService.isDuplicate(value);
+	        message = isDuplicate ? "이미 사용 중인 이메일입니다." : "사용할 수 있는 이메일입니다.";
+	    } else if ("phoneNo".equals(type)) {
+	        isDuplicate = memberService.isDuplicate(value);
+	        message = isDuplicate ? "이미 사용 중인 휴대폰 번호입니다." : "사용할 수 있는 휴대폰 번호입니다.";
+	    }
+
+	    response.put("isDuplicate", String.valueOf(isDuplicate));
+	    response.put("message", message);
+	    return response;
+    }
+	@GetMapping("/checkDuplicateNickname")
+    public Map<String, Boolean> checkDuplicate(@RequestParam String nickname) throws Exception {
         Map<String, Boolean> response = new HashMap<>();
-        boolean isDuplicate = memberService.isDuplicate(userName);
+        boolean isDuplicate = memberService.isDuplicateByNickname(nickname);
         System.out.println("###############"+isDuplicate);
         response.put("isDuplicate", isDuplicate);
         return response;
     }
-
 
 	@PostMapping("/login")
 	public ResponseEntity<MemberResponse> member_login_action(@RequestBody MemberResponseDto memberResponseDto, HttpSession session) throws Exception {

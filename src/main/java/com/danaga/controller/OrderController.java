@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import com.danaga.dto.*;
 import com.danaga.dto.product.ProductDto;
 import com.danaga.entity.*;
+import com.danaga.repository.*;
 import com.danaga.service.*;
 import com.danaga.service.product.OptionSetService;
 
@@ -28,6 +29,8 @@ public class OrderController {
 	private final OrderService orderService;
 	private final CartService cartService;
 	private final OptionSetService optionSetService;
+	private final MemberService memberService;
+	private final MemberRepository memberRepository;
 	/******************************* 회원 ****************************/
 	/*
 	 * 주문상세보기(회원)
@@ -51,14 +54,18 @@ public class OrderController {
 	 * 주문+주문아이템 목록(회원)
 	 */
 //로그인 한 후에 메뉴에서 주문목록보기 클릭하면 나오게하기
+	@LoginCheck
 	@GetMapping("/member_order_List")
-	public String memberOrderList(Model model, HttpSession session) {//model은 데이터를 담아서 넘겨주는역활
+	public String memberOrderList(Model model, HttpServletRequest request) {//model은 데이터를 담아서 넘겨주는역활
 		try {
 //		   String sUserId = "User1";
-			String sUserId = (String) session.getAttribute("sUserId");
-			List<OrdersDto> orderDtoList = orderService.memberOrderList(sUserId);
+			String loginUser = (String) request.getSession().getAttribute("sUserId");
+			List<OrdersDto> orderDtoList = orderService.memberOrderList(loginUser);
 			model.addAttribute("orderDtoList", orderDtoList);
-			return "orders/orders_list";
+			Long id= memberService.findIdByUsername(loginUser);
+			Member member = memberRepository.findById(id).get();
+			model.addAttribute("loginUser", member);
+			return "orders/orders1";
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("주문목록이 없습니다?", e.getMessage());
@@ -76,9 +83,9 @@ public class OrderController {
 		List<ProductDto> productDtoList = (List<ProductDto>) responseDto.getData();
 		ProductDto productDto = productDtoList.get(0);
 		
-		model.addAttribute(cartDto.getId());
-		model.addAttribute(cartDto.getQty());
-		model.addAttribute(productDto.getTotalPrice());
+		model.addAttribute("id",cartDto.getId());
+		model.addAttribute("qty",cartDto.getQty());
+		model.addAttribute("totalPrice",productDto.getTotalPrice());
 		
 //가격넣기ㄴ
 		return "orders/order_save_form";
@@ -88,6 +95,7 @@ public class OrderController {
 	/*
 	 * 상품에서 주문(action)(회원)
 	 */
+	
 	@PostMapping("/member_product_order_save_action")//modelAttribute html에서 보낸 데이터를 받는곳
 	public String memberProductOrderAddAction(@ModelAttribute("ordersProductDto") OrdersProductDto ordersProductDto, Model model,
 			HttpSession session) {
@@ -112,14 +120,14 @@ public class OrderController {
 		String sUserId = (String) session.getAttribute("sUserId");
 
 		if(sUserId.isEmpty()) {
-			List<CartDto> fUserCarts =(List<CartDto>)session.getAttribute("cartDtoList");
+			List<CartDto> fUserCartList =(List<CartDto>)session.getAttribute("cartDtoList");
 			
-			model.addAttribute("fUserCarts",fUserCarts);
+			model.addAttribute("fUserCartList",fUserCartList);
 		}else {
 			
-			List<SUserCartResponseDto> cartDto = cartService.findsUserCartList(sUserId);
+			List<SUserCartResponseDto> sUserCartResponseDtoList = cartService.findsUserCartList(sUserId);
 			
-			model.addAttribute("cartDto", cartDto);
+			model.addAttribute("SUserCartResponseDto", sUserCartResponseDtoList);
 		}
 
 		return "orders/order_save_form";
@@ -171,7 +179,7 @@ public class OrderController {
 	public String guestDetail(@ModelAttribute("orderGuestDto") OrderGuestDto orderGuestDto ,Model model) {
 		try {
 			orderService.guestOrderDetail(orderGuestDto.getOrderNo(),orderGuestDto.getName(),orderGuestDto.getPhoneNo());
-			return "orders/order_guest_list";
+			return "orders/order_guest_detail";
 		}catch (Exception e) {
 			e.getStackTrace();
 			model.addAttribute("errorMsg",e.getMessage());
@@ -187,7 +195,7 @@ public class OrderController {
 		try {
 			List<OrdersDto> ordersDtoList = orderService.guestOrderList(orderNo, phoneNumber);
 			model.addAttribute("ordersDtoList", ordersDtoList);
-			return "orders/orders_guest";
+			return "orders/orders_guest_detail";
 
 		} catch (Exception e) {
 			e.printStackTrace();

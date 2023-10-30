@@ -18,6 +18,7 @@ public interface MemberService {
 	public MemberResponseDto updateMember(MemberUpdateDto memberUpdateDto) throws Exception;
 	public void deleteMember(String value) throws Exception;
 	public boolean isDuplicate(String value) throws Exception;
+	public boolean isDuplicateByNickname(String nickname) throws Exception;
 	public boolean login(String userName, String password) throws Exception;
 	public void updateGrade(Member member, int gradePoint) throws Exception;
 	Long findIdByUsername(String username) throws Exception;

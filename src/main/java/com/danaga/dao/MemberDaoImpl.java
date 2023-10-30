@@ -86,5 +86,11 @@ public class MemberDaoImpl implements MemberDao {
 		}
 		return false;
 	}
+	public boolean existedMemberByNickname(String nickname) throws Exception {
+			if (memberRepository.findByNickname(nickname).isPresent()) {
+				return true;
+			}
+		return false;
+	}
 
 }
