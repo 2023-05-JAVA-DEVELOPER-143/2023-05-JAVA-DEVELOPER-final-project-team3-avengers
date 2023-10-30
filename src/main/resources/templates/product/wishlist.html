@@ -21,7 +21,7 @@
 						<!-- Wishlist Table-->
 						<!-- 하위 태그들은 size==1이면 빈상자 이미지로 대체-->
 						<table class="table"
-							th:include="myProduct-component :: product-table(myProduct='wish')"></table>
+							th:insert="myProduct-component :: product-table(from='wishlist')"></table>
 						<!-- Wishlist Table-->
 					</div>
 					<hr class="mb-4">
@@ -39,5 +39,6 @@
 		<!--컨텐츠 끝-->
 </th:block>
 <th:block layout:fragment="recommendation"></th:block>
+<th:block layout:fragment="script"></th:block>
 </body>
 </html>

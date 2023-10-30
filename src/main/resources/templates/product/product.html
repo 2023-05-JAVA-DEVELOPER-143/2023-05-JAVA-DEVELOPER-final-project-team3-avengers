@@ -1,91 +1,87 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
- xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
- layout:decorate="layout/layout(title='Product')">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="layout/layout(title='Product')">
+
 <head>
 
 </head>
+
 <body>
 
-		<!-- Page Content-->
-<th:block layout:fragment="content">
+	<!-- Page Content-->
+	<th:block layout:fragment="content">
 		<div class="container padding-bottom-3x mb-1">
+			<blockquote class="blockquote text-center">
+				<h3 class="mb-0">상세 검색</h3>
+			</blockquote>
 			<div class="row justify-content-center">
+				<th:block th:insert="~{filter :: filter}"></th:block>
+				<!--카테고리,옵션 선택자-->
+
+				<!--카테고리,옵션 선택자 끝-->
 				<div class="col-lg-10">
 					<!-- Shop Toolbar-->
 					<div class="shop-toolbar padding-bottom-1x mb-2">
-						
-						<div class="view_opt">
-							
-							<!--카테고리,옵션 선택자-->
-							<div class="container padding-bottom-3x mb-1" th:insert="filter :: filter">
-							
-							<!--카테고리,옵션 선택자 끝-->
-								<div class="price_opt">
-									<!-- prod_price_selector -->
-									<span class="prod_price_selector">
-										<input type="text" class="price_input min_price_input" title="검색될 최소 가격 입력"
-											name="priceRangeMinPrice" id="priceRangeMinPrice" data-origin-min-price="0"
-											value="">
-										<label for="priceRangeMinPrice" class="price_label min_price_label">원</label>
-									</span> ~
-									<span class="prod_price_selector">
-										<input type="text" class="price_input max_price_input" title="검색될 최대 가격 입력"
-											name="priceRangeMaxPrice" id="priceRangeMaxPrice" data-origin-max-price="0"
-											value="">
-										<label for="priceRangeMaxPrice" class="price_label max_price_label">원</label>
-									</span>
-									<span class="prod_name_keyword">
-										<label for="searchByNameKeyword" class="product_name_keyword_label">검색어</label>
-										<input type="text" class="searchByNameKeyword" title="검색어"
-											name="searchNameKeyword" id="nameKeyword" data-origin-name-keyword="0"
-											value="">
-									</span>
-									<button type="button" class="btn_search">검색</button>
-								</div>
+						<div class="price_opt ">
+							<!-- prod_price_selector -->
+							<div class="row justify-content-end">
+								<span class="input-group-text" id="">가격범위 &nbsp;</span>
+								<input type="text" class="form-control" id="minPriceSearch" style="width: 15%;" placeholder="최소 가격">~
+								<input type="text" class="form-control" id="maxPriceSearch" style="width: 15%;" placeholder="최대 가격">
+											&nbsp;
+								<span class="input-group-text" id="basic-addon1">제품명</span>&nbsp;
+								<input type="text" class="form-control" placeholder="검색어" aria-label="nameKeyword"
+									style="width: 15%;" aria-describedby="basic-addon1" id="nameKeywordSearch">&nbsp;
+								<button class="btn btn-secondary" type="button">검색</button>
 							</div>
+						</div>
+
 						<!--정렬기준 선택자-->
-						<div class="column">
-							<div class="shop-sorting">
-								<label for="sorting">Sort by:</label>
-								<select class="form-control" id="sorting">
-									<option th:attr="orderType=#{판매량}">판매량</option>
-									<option th:attr="orderType=#{조회순}">조회순</option>
-									<option th:attr="orderType=#{최저가순}">최저가순</option>
-									<option th:attr="orderType=#{평점순}">평점순</option>
-									<option th:attr="orderType=#{최신순}">최신순</option>
-								</select>
+						<div class="view_opt row justify-content-end">
+							<div class="column">
+								<div class="shop-sorting">
+									<label for="sorting">Sort by:</label>
+									<select class="form-control" id="orderTypeSearch">
+										<option th:value="판매량">판매량</option>
+										<option th:value="조회순">조회순</option>
+										<option th:value="최저가순">최저가순</option>
+										<option th:value="평점순">평점순</option>
+										<option th:value="최신순">최신순</option>
+									</select>
+								</div>
 							</div>
 						</div>
-						</div>
 					</div>
-						<!-- Product 반복-->
-						<div class="product-card-component" th:include="product_component :: product-card-component"></div>
-						<!-- Product 반복 끝 -->
-						
-						<div class="pt-2">
-							<!-- Pagination-->
-							<nav class="pagination">
-								<div class="column">
-									<ul class="pages">
-										<li class="active"><a href="#">1</a></li>
-										<li><a href="#">2</a></li>
-										<li><a href="#">3</a></li>
-										<li><a href="#">4</a></li>
-										<li>...</li>
-										<li><a href="#">12</a></li>
-									</ul>
-								</div>
-								<div class="column text-right hidden-xs-down"><a
-										class="btn btn-outline-secondary btn-sm" href="#">Next&nbsp;<i
-											class="icon-arrow-right"></i></a></div>
-							</nav>
-						</div>
+
+					<!-- Product 반복-->
+					<div class="product-card-component" th:insert="~{product_component :: product-card-component}">
 					</div>
+					<!-- Product 반복 끝 -->
 				</div>
 			</div>
-</th:block>
+			<div class="pt-2">
+				<!-- Pagination-->
+				<nav class="pagination">
+					<div class="column">
+						<ul class="pages">
+							<li class="active"><a href="#">1</a></li>
+							<li><a href="#">2</a></li>
+							<li><a href="#">3</a></li>
+							<li><a href="#">4</a></li>
+							<li>...</li>
+							<li><a href="#">12</a></li>
+						</ul>
+					</div>
+					<div class="column text-right hidden-xs-down"><a class="btn btn-outline-secondary btn-sm"
+							href="#">Next&nbsp;<i class="icon-arrow-right"></i></a></div>
+				</nav>
+			</div>
+		</div>
+
+	</th:block>
 	<!--컨텐츠 끝-->
 	<th:block layout:fragment="recommendation"></th:block>
+	<th:block layout:fragment="script"></th:block>
 </body>
+
 </html>

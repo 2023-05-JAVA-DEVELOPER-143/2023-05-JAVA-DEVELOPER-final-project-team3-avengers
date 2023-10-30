@@ -1,6 +1,7 @@
 package com.danaga.service.product;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -115,12 +116,28 @@ public class OptionSetServiceImpl implements OptionSetService {
 				.build()).stream().limit(20).map(t -> new ProductDto(t)).collect(Collectors.toList());;
 		return ResponseDto.<ProductDto>builder().data(searchResult).build();
 	}
+	@Override
+	@Transactional
+	public ResponseDto<ProductDto> displayHitProductsForMember(Long optionSetId,String username) {
+		List<Category> findCategory = categoryDao.findByOptionSetId(optionSetId);
+		String orderType = OptionSetQueryData.BY_VIEW_COUNT;
+		List<ProductDto> searchResult = optionSetDao.findForMemberByFilter(QueryStringDataDto.builder()
+				.orderType(orderType)
+				.category(findCategory.get(findCategory.size()-1).getName())
+				.build(),username).stream().limit(20).map(t -> new ProductDto(t)).collect(Collectors.toList());;
+				return ResponseDto.<ProductDto>builder().data(searchResult).build();
+	}
 
 	// 카테고리에 해당하는 리스트 전체 조회
 	// 조건에 해당하는 리스트 전체 조회
 	@Override
 	public ResponseDto<ProductDto> searchProducts(QueryStringDataDto dto) {
 		List<ProductDto> data = optionSetDao.findByFilter(dto).stream().map(t -> new ProductDto(t)).collect(Collectors.toList());;
+		return ResponseDto.<ProductDto>builder().data(data).build();
+	}
+	@Override
+	public ResponseDto<ProductDto> searchProductsForMember(QueryStringDataDto dto,String username) {
+		List<ProductDto> data = optionSetDao.findForMemberByFilter(dto,username).stream().map(t -> new ProductDto(t)).collect(Collectors.toList());;
 		return ResponseDto.<ProductDto>builder().data(data).build();
 	}
 
@@ -142,19 +159,31 @@ public class OptionSetServiceImpl implements OptionSetService {
 	}
 
 	// 최하위 카테고리 선택하고 나면 어떤 옵션 필터들 있는지 옵션 명과 옵션값 나열
-		// 일단 최하위 카테고리인지 확인하고
 		@Override
 		@Transactional
 		public ResponseDto<?> showOptionNameValues(Long categoryId) {
-			if (categoryService.isYoungest(categoryId)) {
 				List<OptionNamesValues> optionNameValue = optionDao.findOptionNameValueMapByCategoryId(categoryId);
 				Map<String,Set<String>> dto = optionNameValue.stream().collect(Collectors.groupingBy(OptionNamesValues::getName,Collectors.mapping(OptionNamesValues::getValue, Collectors.toSet())));
 				List<Map<String,Set<String>>> data = new ArrayList<>();
 				data.add(dto);
 				return ResponseDto.<Map<String, Set<String>>>builder().data(data).build();
-			} else {
-				return ResponseDto.builder().error("하위 카테고리를 선택하세요").build();
+		}
+		//노트북 카테고리의 전체 옵션들 찾기
+		//부모 아이디를 받아서 자식들 찾아서 자식들의 카테고리 옵션들 구해서 그걸 하나의 map으로 합치기
+		@Override
+		@Transactional
+		public ResponseDto<?> showAllOptionNameValues(Long categoryId) {
+			List<Long> childrenIds = categoryDao.findChildTypesByParentId(categoryId).stream().map(t -> t.getId()).collect(Collectors.toList());
+			Map<String,Set<String>> dto=new HashMap<String,Set<String>>();
+			for (int i = 0; i < childrenIds.size(); i++) {
+				List<OptionNamesValues> optionNameValue = optionDao.findOptionNameValueMapByCategoryId(childrenIds.get(i));
+				Map<String,Set<String>> result= optionNameValue.stream().collect(Collectors.groupingBy(OptionNamesValues::getName,Collectors.mapping(OptionNamesValues::getValue, Collectors.toSet())));
+				result.forEach((key,value)-> dto.merge(key, value, (v1,v2)->{v1.addAll(v2);return v1;}));
 			}
+			List<Map<String,Set<String>>> data = new ArrayList<>();
+			data.add(dto);
+			System.out.println(dto);
+			return ResponseDto.<Map<String, Set<String>>>builder().data(data).build();
 		}
 		
 		//option update

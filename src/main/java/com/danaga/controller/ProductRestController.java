@@ -89,7 +89,14 @@ public class ProductRestController {
 	@GetMapping("/category/options/{categoryId}")
 	public ResponseEntity<?> showOptionFilter(@PathVariable Long categoryId){
 		try {
-			ResponseDto<?> response =service.showOptionNameValues(categoryId);
+			//만약 부모 id이면 showAllOptionNameValue
+			//아니면 showOptionNameValue
+			ResponseDto<?> response= new ResponseDto();
+			if(categoryService.isYoungest(categoryId)) {
+				response =service.showOptionNameValues(categoryId);
+			}else {
+				response =service.showAllOptionNameValues(categoryId);
+			}
 			return ResponseEntity.status(HttpStatus.OK).body(response);
 		}catch(Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
@@ -98,10 +105,15 @@ public class ProductRestController {
 	
 	//조건에 해당하는 리스트 전체 조회 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<?> searchResult(@RequestBody QueryStringDataDto filterDto){
+	public ResponseEntity<?> searchResult(@RequestBody QueryStringDataDto filterDto,HttpSession session){
 		try {
+			if(session.getAttribute("sUserId")==null) {
 			ResponseDto<?> response =service.searchProducts(filterDto);
 			return ResponseEntity.status(HttpStatus.OK).body(response);
+			}else {
+				ResponseDto<?> response =service.searchProductsForMember(filterDto,(String)session.getAttribute("sUserId"));
+				return ResponseEntity.status(HttpStatus.OK).body(response);
+			}
 		}catch(Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}

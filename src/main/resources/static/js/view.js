@@ -2,7 +2,7 @@
  * view.js
  */
 
-function render(templateId="#guest-main-template",jsonResult={},contentId="#content"){
+function render(templateId,jsonResult={},contentId){
 	addCustomFunctionHandlebars();
 	let templateHtml = document.querySelector(templateId).innerHTML;
 	let bindTemplate = Handlebars.compile(templateHtml);

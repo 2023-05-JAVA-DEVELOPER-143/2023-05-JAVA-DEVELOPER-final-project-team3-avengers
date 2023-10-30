@@ -32,6 +32,7 @@ public class Interest extends BaseEntity{//관심상품
 	
 	@JoinColumn(name = "optionSetId")
 	@ManyToOne
+	@ToString.Exclude
 	private OptionSet optionSet;// 옵션셋FK
 	
 }

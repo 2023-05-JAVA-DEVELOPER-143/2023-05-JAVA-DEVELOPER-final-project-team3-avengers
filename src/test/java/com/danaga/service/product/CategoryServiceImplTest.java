@@ -22,9 +22,9 @@ private CategoryService service;
 	}
 
 	@Test
-	@Disabled
+//	@Disabled
 	void testCategoryFamily() {
-		System.out.println(service.categoryFamily(3L));
+		System.out.println(service.categoryFamily(1L));
 	}
 
 	@Test
@@ -49,6 +49,7 @@ private CategoryService service;
 	@Test
 	@Transactional
 	@Rollback(false)
+	@Disabled
 	void testDelete() {
 		service.delete(10L);
 	}

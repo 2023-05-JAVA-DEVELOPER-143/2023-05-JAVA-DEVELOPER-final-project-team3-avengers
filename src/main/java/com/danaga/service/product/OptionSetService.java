@@ -34,5 +34,8 @@ public interface OptionSetService {
 		ResponseDto<ProductDto> searchProducts(QueryStringDataDto dto);
 		
 		ResponseDto<ProductDto> showOtherOptionSets(Long optionSetId);
+		ResponseDto<?> showAllOptionNameValues(Long categoryId);
+		ResponseDto<ProductDto> searchProductsForMember(QueryStringDataDto dto, String username);
+		ResponseDto<ProductDto> displayHitProductsForMember(Long optionSetId, String username);
 		
 }

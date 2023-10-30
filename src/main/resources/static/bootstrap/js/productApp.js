@@ -1,11 +1,50 @@
-import * as api from "./apiService.js"
+import * as View from "./view.js";
+import * as api from "./p_apiService.js"
+
+
+let hash = window.location.hash
+let path = hash.substring(1);
+let html = '';
+/*
+초기실행메쏘드
+*/
+function init() {
+	registEvent();
+	navigate();
+	//common_header_user_cart();
+}
+
+function registEvent() {
+	
+	$(window).on('hashchange', function(e) {
+		alert('hashchange event:' + e);
+		hash = window.location.hash
+		path = hash.substring(1);
+		navigate();
+	});
+	$(document).on('click', function(e) {
+		console.log(e.target);
+		if ($(e.target).attr('categoryId')) {
+			let categoryId= e.target.categoryId.value;
+			console.log(categoryId);
+			api.subCategory(categoryId);
+		}
+	});
+ 	
+
+}
+
+
+
+
 
 //1.하트 눌렀을때 위시리스트 추가하는 이벤트 
-$('.btn btn-outline-secondary btn-sm btn-wishlist').button(function(e){
+$('.btn btn-outline-secondary btn-sm btn-wishlist').on("click",function(e){
 	let optionSetId = e.target.data-no.value;
 	api.tapHeart(optionSetId);
 });
-$('.btn btn-outline-secondary btn-sm btn-wishlist active').button(api.untapHeart($(this[data-no])));
+//$('.btn btn-outline-secondary btn-sm btn-wishlist active').click(api.untapHeart($(this[data-no])));
+
 //2. sort by  눌렀을 때 정렬 바뀌게 select 다시하는 쿼리
 $('.form-control > #sorting').click(function() {
     var selectedValue = $('.form-control > #sorting option:selected').val();
@@ -15,8 +54,8 @@ $('.form-control > #sorting').click(function() {
 
 
 //3. 필터 카테고리, 옵션 쿼리 
-$('.category-item').click(function(e){
-let categoryId= e.target.data-category-id.value;
+$('.list-group-item category').on("click",function(e){
+let categoryId= e.target.categoryId.value;
 api.subCategory(categoryId);
 });
 $('.sub-category-item').click(function(e){
@@ -24,11 +63,11 @@ $('.sub-category-item').click(function(e){
 	api.showOptions(categoryId);
 	});
 //4. x 눌렀을때 관심상품, 최근 상품 삭제하는 쿼리 
-$('.remove-from-wish').button(function(e){
+$('.remove-from-wish').click(function(e){
 	let optionSetId=e.target.href.substring(1);
 	api.removewish(optionSetId);
 });
-$('.remove-from-recent').button(function(e){
+$('.remove-from-recent').click(function(e){
 	let optionSetId=e.target.href.substring(1);
 	api.removeRecentView(optionSetId);
 });

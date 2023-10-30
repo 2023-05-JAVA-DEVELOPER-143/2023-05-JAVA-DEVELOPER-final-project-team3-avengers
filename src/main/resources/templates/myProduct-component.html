@@ -1,5 +1,5 @@
 
-  <table class="table" th:fragment="product-table(myProduct)" th:remove="tag">
+  <table class="table" th:fragment="product-table(from='')" th:remove="tag">
     <thead>
       <tr>
         <th>Product Name</th>
@@ -20,7 +20,7 @@
             </div>
           </div>
         </td>
-        <td class="text-center"><a class="remove-from-${myProduct}" href="#${productDto.osId}" data-toggle="tooltip" title="Remove item"><i class="icon-cross"></i></a></td>
+        <td class="text-center"><a class="remove-from-cart" href="#" data-${from}-remove="${productDto.osId}" data-toggle="tooltip" title="Remove item"><i class="icon-cross"></i></a></td>
       </tr>
     </tbody>
   </table>

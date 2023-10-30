@@ -28,6 +28,8 @@ public class CategoryDto {
 	public CategoryDto(Category entity){
 		this.id=entity.getId();
 		this.name=entity.getName();
-		this.parentId=entity.getParent().getId();
+		if(entity.getParent()!=null&&entity.getParent().getId()!=null) {
+			this.parentId=entity.getParent().getId();
+		}
 	}
 }

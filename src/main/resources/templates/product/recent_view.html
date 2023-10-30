@@ -19,7 +19,7 @@
 						<!-- recentView Table-->
 						<!-- 하위 태그들은 size==1이면 빈상자 이미지로 대체-->
 						<table class="table"
-							th:include="myProduct-component :: product-table(recent)"></table>
+							th:insert="myProduct-component :: product-table(from='recentview')"></table>
 						<!-- recentView Table-->
 						
 				</div>
@@ -40,6 +40,7 @@
 
 		<!--컨텐츠 끝-->
 <th:block layout:fragment="recommendation"></th:block>
+<th:block layout:fragment="script"></th:block>
 </body>
 
 </html>

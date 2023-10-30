@@ -26,7 +26,7 @@ public class CategoryServiceImpl implements CategoryService{
 		List<CategoryDto> data = categoryDao.findByParentEmpty().stream().map(t->new CategoryDto(t)).collect(Collectors.toList());
 		return ResponseDto.<CategoryDto>builder().data(data).build();
 	}
-	//카테고리의 상위, 자식들 조회
+	//카테고리의  자식들 조회
 	@Override
 	public ResponseDto<?> categoryFamily(Long id) {
 		List<CategoryDto> data = categoryDao.findChildTypesByParentId(id).stream().map(t->new CategoryDto(t)).collect(Collectors.toList());
