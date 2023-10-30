@@ -1,10 +1,13 @@
 import * as View from "./view.js";
 import * as api from "./p_apiService.js"
 
-
 let hash = window.location.hash
 let path = hash.substring(1);
 let html = '';
+
+let filterDto = {};
+filterDto["orderType"] = "판매순";
+
 /*
 초기실행메쏘드
 */
@@ -16,8 +19,22 @@ function init() {
 
 function registEvent() {
 	
+	$('#orderTypeSearch').change(function(){
+		filterDto["orderType"]=$('#orderTypeSearch option:selected').val();
+		api.searchResult(filterDto);
+	});
+	$('#minPriceSearch').keydown(function(){
+		filterDto["minPrice"]=$('#minPridceSearch').val();
+	});
+	$('#maxPriceSearch').keydown(function(){
+		filterDto["maxPrice"]=$('#maxPriceSearch').val();
+	});
+	$('#nameKeywordSearch').keydown(function(){
+		 filterDto["nameKeyword"] = $('#nameKeywordSearch').val();
+	});
+	
+	
 	$(window).on('hashchange', function(e) {
-		alert('hashchange event:' + e);
 		hash = window.location.hash
 		path = hash.substring(1);
 		navigate();
@@ -27,10 +44,21 @@ function registEvent() {
 		if ($(e.target).attr('categoryId')) {
 			let categoryId= $(e.target).attr('categoryId');
 			api.subCategory(categoryId);
+			filterDto["category"] = {};
+		    filterDto.optionset = [];
+			
 		}else if($(e.target).attr('sub-categoryId')){
 			let categoryId=$(e.target).attr('sub-categoryId');
 			api.showOptions(categoryId);
-		}else if($(e.target).atttr('product-heart')){
+			let subCategoryName = $(e.target).attr('sub-categoryName');
+			filterDto["category"] = {};
+			filterDto["category"]["id"] = categoryId;
+			filterDto["category"]["name"] = subCategoryName;
+		    api.searchResult(filterDto);
+		    filterDto.optionset = [];
+		    console.log(filterDto);
+			
+		}else if($(e.target).attr('product-heart')){
 			let optionSetId=$(e.target).attr('product-heart');
 			if(e.target.class=='btn btn-outline-secondary btn-sm btn-wishlist'){
 				api.tapHeart(optionSetId);
@@ -47,11 +75,56 @@ function registEvent() {
 			api.removeRecentView(optionSetId,function callback(){
 			$(e.target).closest("tr").remove();
 			});
+		}else if($(e.target).attr('data-optionValue')){
+			let optionName = $(e.target).closest('tr').find('th').text();
+			let optionValue=$(e.target).attr('data-optionValue');
+			let checked = $(e.target).is(":checked");
+	    	updateQueryDataDto(optionName, optionValue, checked);
+	    	api.searchResult(filterDto);
+		}else if($(e.target).attr('id')=='main-search-btn'){
+			api.searchResult(filterDto);
+		}else if($(e.target).attr('data-toast-message')=="successfuly added to cart!"){
+			let optionSetId = $(e.target).attr('data-optionSetId');
+			let qty = 1;	
+			if($(e.target).attr('data-cart-qty')){
+				qty=$('#qty:selected').text();
+			}
+			api.addToCart(optionSetId,qty);
 		}
 	});
  	
 
 }
+
+function updateQueryDataDto(optionName, optionValue, checked) {
+    if (!filterDto.optionset) {
+        filterDto.optionset = [];
+    }
+    let existingOption = filterDto.optionset.find(opt => opt.optionName === optionName);
+    if (checked) {
+        if (existingOption) {
+            if (!Array.isArray(existingOption.optionValue)) {
+                existingOption.optionValue = [existingOption.optionValue];
+            }
+            existingOption.optionValue.push(optionValue);
+        } else {
+            filterDto.optionset.push({
+                "optionName": optionName,
+                "optionValue": optionValue
+            });
+        }
+    } else if (!checked && existingOption) {
+        if (Array.isArray(existingOption.optionValue)) {
+            existingOption.optionValue = existingOption.optionValue.filter(value => value !== optionValue);
+            if (existingOption.optionValue.length === 0) {
+                filterDto.optionset = filterDto.optionset.filter(opt => opt !== existingOption);
+            }
+        } else if (existingOption.optionValue === optionValue) {
+            filterDto.optionset = filterDto.optionset.filter(opt => opt !== existingOption);
+        }
+    }
+}
+
 
 function navigate() {
 	if (path == '/api/shop-list-ns') {
@@ -63,19 +136,23 @@ function navigate() {
 		/**************** /shop-grid-ns******************/
 		html = product_list_grid_view();
 		$('#page_list_content').html(html);
-	} 
+	} else if (path == 'clear-wishlist') {
+		api.clearWishList();
+	} else if (path == 'clear-recentview') {
+		api.clearRecentView();
+	}
 }
 
 
 
 //1.하트 눌렀을때 위시리스트 추가하는 이벤트 
-$('.btn btn-outline-secondary btn-sm btn-wishlist').on("click",function(e){
+/*$('.btn btn-outline-secondary btn-sm btn-wishlist').on("click",function(e){
 	let optionSetId = e.target.data-no.value;
 	api.tapHeart(optionSetId);
-});
+});*/
 //$('.btn btn-outline-secondary btn-sm btn-wishlist active').click(api.untapHeart($(this[data-no])));
 //2. sort by  눌렀을 때 정렬 바뀌게 select 다시하는 쿼리
-$('#orderTypeSearch').click(function() {
+/*$('#orderTypeSearch').click(function() {
     let selectedValue = $('orderTypeSearch:selected').val();
     let minPriceSearch = $('minPriceSearch').val();
     let maxPriceSearch = $('maxPriceSearch').val();
@@ -88,19 +165,19 @@ $('#orderTypeSearch').click(function() {
 		//카테고리는 어캐? 넘버를 name으로 교환하는거 
 		//옵션리스트 가져오는것도
     api.searchResult(jsonData);
-});
+});*/
 
 
 //3. 필터 카테고리, 옵션 쿼리 ㅇㅇ 
 //4. x 눌렀을때 관심상품, 최근 상품 삭제하는 쿼리 
-$('.remove-from-wish').click(function(e){
+/*$('.remove-from-wish').click(function(e){
 	let optionSetId=e.target.href.substring(1);
 	api.removewish(optionSetId);
 });
 $('.remove-from-recent').click(function(e){
 	let optionSetId=e.target.href.substring(1);
 	api.removeRecentView(optionSetId);
-});
+});*/
 
 //5. 클리어 눌렀을 때 전체 삭제할 수 있게 url 요청 
 

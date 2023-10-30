@@ -15,6 +15,7 @@ import com.danaga.dao.product.OptionSetDao;
 import com.danaga.dao.product.OptionsDao;
 import com.danaga.dao.product.ProductDao;
 import com.danaga.dto.ResponseDto;
+import com.danaga.dto.product.CategoryDto;
 import com.danaga.dto.product.OptionNameValueDto;
 import com.danaga.dto.product.OptionSaveDto;
 import com.danaga.dto.product.OptionSetCreateDto;
@@ -110,9 +111,10 @@ public class OptionSetServiceImpl implements OptionSetService {
 	public ResponseDto<ProductDto> displayHitProducts(Long optionSetId) {
 		List<Category> findCategory = categoryDao.findByOptionSetId(optionSetId);
 		String orderType = OptionSetQueryData.BY_VIEW_COUNT;
+		
 		List<ProductDto> searchResult = optionSetDao.findByFilter(QueryStringDataDto.builder()
 				.orderType(orderType)
-				.category(findCategory.get(findCategory.size()-1).getName())
+				.category(CategoryDto.builder().name(findCategory.get(findCategory.size()-1).getName()).id(findCategory.get(findCategory.size()-1).getId()).build())
 				.build()).stream().limit(20).map(t -> new ProductDto(t)).collect(Collectors.toList());;
 		return ResponseDto.<ProductDto>builder().data(searchResult).build();
 	}
@@ -123,7 +125,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 		String orderType = OptionSetQueryData.BY_VIEW_COUNT;
 		List<ProductDto> searchResult = optionSetDao.findForMemberByFilter(QueryStringDataDto.builder()
 				.orderType(orderType)
-				.category(findCategory.get(findCategory.size()-1).getName())
+				.category(CategoryDto.builder().name(findCategory.get(findCategory.size()-1).getName()).id(findCategory.get(findCategory.size()-1).getId()).build())
 				.build(),username).stream().limit(20).map(t -> new ProductDto(t)).collect(Collectors.toList());;
 				return ResponseDto.<ProductDto>builder().data(searchResult).build();
 	}
