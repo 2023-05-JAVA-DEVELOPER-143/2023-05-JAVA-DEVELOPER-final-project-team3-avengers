@@ -27,27 +27,9 @@ public class OrderController {
 	private final MemberRepository memberRepository;
 	/******************************* 회원 ****************************/
 	/*
-	 * 주문상세보기(회원)
-	 */
-	// OrdersDto memberOrderDetail(Long orderNo)
-//   @GetMapping("/member_order_detail/{orderNo}")
-//   public String memberOrderDetail(Model model,@PathVariable  Long orderNo)throws Exception {
-//	   try {
-//
-//		   OrdersDto ordersDto = orderService.memberOrderDetail(orderNo);
-//		   model.addAttribute("ordersDto", ordersDto);
-//		   return "orders/orders_detail";
-//	   }catch(Exception e) {
-//           e.printStackTrace();
-//           model.addAttribute("errorMsg", e.getMessage());
-//           return null;
-//	   }
-//   }  -------------------->Rest로 가야할듯;;
-
-	/*
 	 * 주문+주문아이템 목록(회원)
 	 */
-//로그인 한 후에 메뉴에서 주문목록보기 클릭하면 나오게하기
+	//로그인 한 후에 메뉴에서 주문목록보기 클릭하면 나오게하기
 	@LoginCheck
 	@GetMapping("/member_order_List")
 	public String memberOrderList(Model model, HttpServletRequest request) {//model은 데이터를 담아서 넘겨주는역활
@@ -66,7 +48,6 @@ public class OrderController {
 			return null;
 		}
 	}
-
 	/*
 	 * 상품에서 주문(form)(공통)
 	 */
@@ -89,7 +70,7 @@ public class OrderController {
 	 * 상품에서 주문(action)(공통)
 	 */
 	
-	@PostMapping("/member_product_order_save_action")//modelAttribute html에서 보낸 데이터를 받는곳
+	@PostMapping("/product_order_save_action")//modelAttribute html에서 보낸 데이터를 받는곳
 	public String memberProductOrderAddAction(@ModelAttribute("ordersProductDto") OrdersProductDto ordersProductDto,@ModelAttribute("orderGuestDto") OrderGuestDto orderGuestDto, Model model,
 			HttpSession session) {
 
@@ -118,7 +99,7 @@ public class OrderController {
 	/*
 	 * 카트에서 보내온 데이터로 주문(form)(공통) //form에서 sUserId에 유무에 따라서 뿌려지는 data가 달라지게해야함(회원,비회원)
 	 */
-	@GetMapping("/member_cart_order_save_form")
+	@GetMapping("/cart_order_save_form")
 	public String memberCartOrderAddForm(@ModelAttribute List<SUserCartOrderDto> sUserCartOrderDto ,Model model,HttpSession session) throws Exception {
 
 		String sUserId = (String) session.getAttribute("sUserId");
@@ -155,7 +136,7 @@ public class OrderController {
 	/*
 	 * 카트에서 보내온 데이터로 주문(action)(공통)
 	 */
-	@PostMapping("/member_cart_select_order_save_action")
+	@PostMapping("/cart_select_order_save_action")
 	public String memberCartSelectOrderAddAction(@ModelAttribute("deliveryDto") DeliveryDto deliveryDto,@ModelAttribute("orderGuestDto") OrderGuestDto orderGuestDto, Model model, HttpSession session) {
 		
 		String sUserId = (String) session.getAttribute("sUserId");
@@ -204,19 +185,19 @@ public class OrderController {
 	}
 
 	/******************************* 비회원 ****************************/
-	/*
-	 * 주문상세보기(비회원)
-	 */
-	public String guestDetail(@ModelAttribute("orderGuestDto") OrderGuestDto orderGuestDto ,Model model) {
-		try {
-			orderService.guestOrderDetail(orderGuestDto.getOrderNo(),orderGuestDto.getName(),orderGuestDto.getPhoneNo());
-			return "orders/order_guest_detail";
-		}catch (Exception e) {
-			e.getStackTrace();
-			model.addAttribute("errorMsg",e.getMessage());
-			return null;
-		}
-	}
+//	/*
+//	 * 주문상세보기(비회원)
+//	 */
+//	public String guestDetail(@ModelAttribute("orderGuestDto") OrderGuestDto orderGuestDto ,Model model) {
+//		try {
+//			orderService.guestOrderDetail(orderGuestDto.getOrderNo(),orderGuestDto.getName(),orderGuestDto.getPhoneNo());
+//			return "orders/order_guest_detail";
+//		}catch (Exception e) {
+//			e.getStackTrace();
+//			model.addAttribute("errorMsg",e.getMessage());
+//			return null;
+//		}
+//	}				---->rest로 가야할듯;;
 	
 	/*
 	 * 주문+주문아이템 목록(비회원) 
