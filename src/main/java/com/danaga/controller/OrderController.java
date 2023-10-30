@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import com.danaga.dto.*;
 import com.danaga.dto.product.ProductDto;
 import com.danaga.entity.*;
+import com.danaga.repository.*;
 import com.danaga.service.*;
 import com.danaga.service.product.OptionSetService;
 
@@ -28,6 +29,8 @@ public class OrderController {
 	private final OrderService orderService;
 	private final CartService cartService;
 	private final OptionSetService optionSetService;
+	private final MemberService memberService;
+	private final MemberRepository memberRepository;
 	/******************************* 회원 ****************************/
 	/*
 	 * 주문상세보기(회원)
@@ -53,13 +56,16 @@ public class OrderController {
 //로그인 한 후에 메뉴에서 주문목록보기 클릭하면 나오게하기
 	@LoginCheck
 	@GetMapping("/member_order_List")
-	public String memberOrderList(Model model, HttpSession session) {//model은 데이터를 담아서 넘겨주는역활
+	public String memberOrderList(Model model, HttpServletRequest request) {//model은 데이터를 담아서 넘겨주는역활
 		try {
 //		   String sUserId = "User1";
-			String sUserId = (String) session.getAttribute("sUserId");
-			List<OrdersDto> orderDtoList = orderService.memberOrderList(sUserId);
+			String loginUser = (String) request.getSession().getAttribute("sUserId");
+			List<OrdersDto> orderDtoList = orderService.memberOrderList(loginUser);
 			model.addAttribute("orderDtoList", orderDtoList);
-			return "orders/orders_list";
+			Long id= memberService.findIdByUsername(loginUser);
+			Member member = memberRepository.findById(id).get();
+			model.addAttribute("loginUser", member);
+			return "orders/orders1";
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("주문목록이 없습니다?", e.getMessage());
