@@ -104,9 +104,10 @@ public class ProductRestController {
 	}
 	
 	//조건에 해당하는 리스트 전체 조회 
-	@PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	//datadto에서 category가 부모 카테고리(전체)이면 어떡할지 여기서 처리 
+	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> searchResult(@RequestBody QueryStringDataDto filterDto,HttpSession session){
-		try {
+		try {//emptySTring 걸러주고 search>>query에서 걸르
 			if(session.getAttribute("sUserId")==null) {
 			ResponseDto<?> response =service.searchProducts(filterDto);
 			return ResponseEntity.status(HttpStatus.OK).body(response);

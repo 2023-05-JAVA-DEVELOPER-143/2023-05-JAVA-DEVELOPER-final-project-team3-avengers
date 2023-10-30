@@ -8,6 +8,9 @@ const UNTAP_HEART={url:"/product/heart/@optionSetId",method:"DELETE"};
 const CHILD_CATEGORY={url:"/product/category/@categoryId",method:"GET"};
 const SHOW_OPTIONS={url:"/product/category/options/@categoryId",method:"GET"};
 const SEARCH={url:"/product",method:"POST"};
+const ADD_TO_CART={url:"/cart",method:"POST"};
+const CLEAR_WISHLIST={url:"/wishlist", method:"DELETE"};
+const CLEAR_RECENTVIEW={url:"/recentViews", method:"DELETE"};
 
-export {API_BASE_URL,REMOVE_RECENT_VIEW,ADD_WISHLIST,REMOVE_WISHLIST,
-    TAP_HEART,UNTAP_HEART,CHILD_CATEGORY,SHOW_OPTIONS,SEARCH}
+export {API_BASE_URL,REMOVE_RECENT_VIEW,ADD_WISHLIST,REMOVE_WISHLIST,CLEAR_RECENTVIEW,
+    TAP_HEART,UNTAP_HEART,CHILD_CATEGORY,SHOW_OPTIONS,SEARCH,ADD_TO_CART,CLEAR_WISHLIST}

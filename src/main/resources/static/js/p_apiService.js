@@ -1,5 +1,5 @@
-import {API_BASE_URL,REMOVE_RECENT_VIEW,ADD_WISHLIST,REMOVE_WISHLIST,
-    TAP_HEART,UNTAP_HEART,CHILD_CATEGORY,SHOW_OPTIONS,SEARCH} from "./api-config.js";
+import {API_BASE_URL,REMOVE_RECENT_VIEW,ADD_WISHLIST,REMOVE_WISHLIST,CLEAR_WISHLIST,
+    TAP_HEART,UNTAP_HEART,CHILD_CATEGORY,SHOW_OPTIONS,SEARCH, ADD_TO_CART,CLEAR_RECENTVIEW} from "./api-config.js";
 import * as View from "./view.js";
 function call(api, method,request){
     let headers = new Headers({
@@ -16,6 +16,7 @@ function call(api, method,request){
     }; 
     if(request){
         //GET method
+        //options.body = JSON.stringify(request);원본
         options.body = JSON.stringify(request);
     }
     return fetch(options.url, options).then((response) => {
@@ -81,16 +82,40 @@ export function subCategory(categoryId){//대분류 선택하면 발생할 api
 export function showOptions(categoryId){
     return call(SHOW_OPTIONS.url.replace("@categoryId",categoryId),SHOW_OPTIONS.method,null)
     .then((response)=>{
-		console.log(response);
 		let template = Handlebars.compile($('#option-choice-template-unique').html());
          let mixedTemplate = template(response);
          $('#option-choice-template-position').html(mixedTemplate);
+       
         //옆 섹션에 선택 가능한 옵션들 뿌리기
     });
 }
 export function searchResult(filterDto){//검색결과 보여주기
     return call(SEARCH.url,SEARCH.method,filterDto)
     .then((response)=>{
-        //검색 결과 뿌리기
+        let template=Handlebars.compile($('#main-product-item-template').html());
+        let mixedTemplate=template(response);
+        $('#main-product-item-template-position').html(mixedTemplate);
     });
+}
+export function addToCart(optionSetId, qty){
+	cartDto={
+		"optionSetId": optionSetId,
+		"qty": qty
+	}
+	return call(ADD_TO_CART.url,ADD_TO_CART.method,cartDto)
+	.then((response)=>{
+		
+	});
+}
+export function clearWishList(){
+	return call(CLEAR_WISHLIST.url,CLEAR_WISHLIST.method,null)
+	.then((response)=>{
+		
+	});
+}
+export function clearRecentView(){
+	return call(CLEAR_RECENTVIEW.url,CLEAR_RECENTVIEW.method,null)
+	.then((response)=>{
+		
+	});
 }

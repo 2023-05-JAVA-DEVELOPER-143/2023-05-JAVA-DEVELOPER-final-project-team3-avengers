@@ -14,8 +14,7 @@ import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-@Data
-@AllArgsConstructor
+@Data@AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class QueryStringDataDto {
@@ -23,10 +22,12 @@ public class QueryStringDataDto {
 	private String orderType;
 	private String brand;
 	@Builder.Default
-	private Map<String,List<String>> optionset=new HashMap();
+	private List<OptionNameValueMapDto> optionset=new ArrayList();
+	//json을 객체로 변환하는 과정에서 문제
 	private Integer minPrice;
 	private Integer maxPrice;
 	private String nameKeyword;
-	private String category;
+	private CategoryDto category;
+	//json을 객체로 변환하는 과정에서 문제
 	
 }

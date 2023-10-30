@@ -32,7 +32,7 @@
 						customer reviews</span>
 					<h2 class="padding-top-1x text-normal" th:text="*{name}">Product Name</h2>
 					<span class="h2 d-block" th:text="*{totalPrice}">멤버등급할인된가격</span>
-					<input type="hidden" name="cartDto.id" value="*{optionSetId}">
+					<input type="hidden" value="*{osId}">
 					<p th:text="*{optionSet}">상품 옵션들 나열</p>
 					<div class="row margin-top-1x">
 						<div class="col-sm-4">
@@ -67,7 +67,7 @@
 							product-heart="${productList.osId}" title="Whishlist"><i class="icon-heart"></i></button>
 							<button class="btn btn-primary" data-toast data-toast-type="success"
 								data-toast-position="topRight" data-toast-icon="icon-circle-check"
-								data-toast-title="Product" data-toast-message="successfuly added to cart!"><i
+								data-toast-title="Product" data-toast-message="successfuly added to cart!" data-optionSetId="*{osId}" data-cart-qty=""><i
 									class="icon-bag"></i> Add to Cart</button>
 						</div>
 					</div>
@@ -172,10 +172,10 @@
 						<h4 class="product-price" th:text="${productDto.totalPrice}">$34.99</h4>
 						<div class="product-buttons">
 							<button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip"
-								title="Whishlist"><i class="icon-heart"></i></button>
+								title="Whishlist" product-heart="${productDto.osId}"><i class="icon-heart"></i></button>
 							<button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success"
 								data-toast-position="topRight" data-toast-icon="icon-circle-check"
-								data-toast-title="Product" data-toast-message="successfuly added to cart!">Add to
+								data-toast-title="Product" data-toast-message="successfuly added to cart!" data-optionSetId="${productDto.osId}">Add to
 								Cart</button>
 						</div>
 					</div>
