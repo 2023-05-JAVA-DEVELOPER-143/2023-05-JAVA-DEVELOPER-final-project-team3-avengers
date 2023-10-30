@@ -24,7 +24,7 @@ public interface OrderService {
 	/*
 	 * cart에서 선택주문(비회원)
 	 */
-//	OrdersDto guestCartSelectOrderSave(DeliveryDto deliveryDto,List<CartDto> fUserCarts,OrderGuestDto orderGuestDto)throws Exception;
+	OrdersDto guestCartSelectOrderSave(DeliveryDto deliveryDto,List<CartDto> fUserCarts,OrderGuestDto orderGuestDto)throws Exception;
 	/*
 	 * 주문+주문아이템 목록(비회원)
 	 */

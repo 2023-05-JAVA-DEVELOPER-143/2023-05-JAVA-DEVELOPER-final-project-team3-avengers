@@ -81,87 +81,125 @@ public class OrderController {
 		model.addAttribute("qty",cartDto.getQty());
 		model.addAttribute("totalPrice",productDto.getTotalPrice());
 		
-//가격넣기ㄴ
 		return "orders/order_save_form";
 
 	}
 
 	/*
-	 * 상품에서 주문(action)(회원)
+	 * 상품에서 주문(action)(공통)
 	 */
 	
 	@PostMapping("/member_product_order_save_action")//modelAttribute html에서 보낸 데이터를 받는곳
-	public String memberProductOrderAddAction(@ModelAttribute("ordersProductDto") OrdersProductDto ordersProductDto, Model model,
+	public String memberProductOrderAddAction(@ModelAttribute("ordersProductDto") OrdersProductDto ordersProductDto,@ModelAttribute("orderGuestDto") OrderGuestDto orderGuestDto, Model model,
 			HttpSession session) {
 
 		String sUserId = (String) session.getAttribute("sUserId");
-		try {
-			orderService.memberProductOrderSave(sUserId, ordersProductDto);
-			return "redirect:orders/order_list";
-		} catch (Exception e) {
-			model.addAttribute("msg", e.getMessage());
-			e.printStackTrace();
-			return "product/product_detail/" + ordersProductDto.getOptionSetId();
+		if(sUserId==null) {//비회원
+			try {
+				orderService.guestProductOrderSave(ordersProductDto,orderGuestDto);
+				return "redirect:orders/guest/order_list";
+			} catch (Exception e) {
+				model.addAttribute("msg", e.getMessage());
+				e.printStackTrace();
+				return "product/product_detail/" + ordersProductDto.getOptionSetId();
+			}
+		}else { 
+			try {
+				orderService.memberProductOrderSave(sUserId, ordersProductDto);
+				return "redirect:orders/order_list";
+			} catch (Exception e) {
+				model.addAttribute("msg", e.getMessage());
+				e.printStackTrace();
+				return "product/product_detail/" + ordersProductDto.getOptionSetId();
+			}
 		}
 	}
 
 	/*
-	 * 카트에서 주문(form)(공통) //form에서 sUserId에 유무에 따라서 뿌려지는 data가 달라지게해야함(회원,비회원)
+	 * 카트에서 보내온 데이터로 주문(form)(공통) //form에서 sUserId에 유무에 따라서 뿌려지는 data가 달라지게해야함(회원,비회원)
 	 */
 	@GetMapping("/member_cart_order_save_form")
 	public String memberCartOrderAddForm(@ModelAttribute List<SUserCartOrderDto> sUserCartOrderDto ,Model model,HttpSession session) throws Exception {
 
 		String sUserId = (String) session.getAttribute("sUserId");
-
 		if(sUserId==null) {
-			//비회원
-			List<SUserCartOrderDto> sUserCartOrderDto1 = sUserCartOrderDto;
-			model.addAttribute("sUserCartOrderDto",sUserCartOrderDto1);
+			//비회원(전체,선택)
+			model.addAttribute("sUserCartOrderDto",sUserCartOrderDto);
+			session.setAttribute("sUserCartOrderDto", sUserCartOrderDto);
 		}else {
-			//회원
-			List<SUserCartResponseDto> sUserCartResponseDtoList = cartService.findsUserCartList(sUserId);
-			model.addAttribute("sUserCartResponseDto", sUserCartResponseDtoList);
+			//회원(선택) 선택안에 전체가 포함됨
+			model.addAttribute("sUserCartOrderDto", sUserCartOrderDto);
+			session.setAttribute("sUserCartOrderDto", sUserCartOrderDto);
 		}
-
 		return "orders/order_save_form";
 	}
 
-	/*
-	 * 카트에서 주문(action)(회원)
-	 */
-	@PostMapping("/member_cart_order_save_action")
-	public String memberCartOrderAddAction(@ModelAttribute("deliveryDto") DeliveryDto deliveryDto, Model model, HttpSession session)
-			throws Exception {
-
-		String sUserId = (String) session.getAttribute("sUserId");
-		try {
-			orderService.memberCartOrderSave(sUserId, deliveryDto);
-			return "redirect:orders/order_list";
-		} catch (Exception e) {
-			model.addAttribute("msg", e.getMessage());
-			e.printStackTrace();
-			return "cart/list";
-		}
-	}
+//	/*
+//	 * 카트에서 보내온 데이터로 주문(action)(회원)
+//	 */
+//	@PostMapping("/member_cart_order_save_action")
+//	public String memberCartOrderAddAction(@ModelAttribute("deliveryDto") DeliveryDto deliveryDto, Model model, HttpSession session)
+//			throws Exception {
+//
+//		String sUserId = (String) session.getAttribute("sUserId");
+//		try {
+//			orderService.memberCartOrderSave(sUserId, deliveryDto);
+//			return "redirect:orders/order_list";
+//		} catch (Exception e) {
+//			model.addAttribute("msg", e.getMessage());
+//			e.printStackTrace();
+//			return "cart/list";
+//		}
+//	}
 	
 	/*
-	 * 카트에서 선택주문(action)(회원)
+	 * 카트에서 보내온 데이터로 주문(action)(공통)
 	 */
 	@PostMapping("/member_cart_select_order_save_action")
-	public String memberCartSelectOrderAddAction(@ModelAttribute("deliveryDto") DeliveryDto deliveryDto, Model model, HttpSession session) {
-
+	public String memberCartSelectOrderAddAction(@ModelAttribute("deliveryDto") DeliveryDto deliveryDto,@ModelAttribute("orderGuestDto") OrderGuestDto orderGuestDto, Model model, HttpSession session) {
+		
 		String sUserId = (String) session.getAttribute("sUserId");
-		try {
-			List<CartDto> fUserCarts =(List<CartDto>)session.getAttribute("cartDtoList");
-			orderService.memberCartSelectOrderSave(sUserId, deliveryDto, fUserCarts);
-			for (CartDto cartDto : fUserCarts) {
-				cartService.deleteCart(cartDto.getId(), sUserId);
+		
+		if(sUserId==null) { //비회원주문
+			try {
+				List<SUserCartOrderDto> sUserCartOrderDto = (List<SUserCartOrderDto>)session.getAttribute("sUserCartOrderDto");
+				List<CartDto> fUserCarts =new ArrayList<>();
+				for (int i = 0; i < sUserCartOrderDto.size(); i++) {
+					CartDto cartDto =CartDto.builder()
+										   .id(sUserCartOrderDto.get(i).getId())
+										   .qty(sUserCartOrderDto.get(i).getQty())
+										   .build();
+					fUserCarts.add(cartDto);
+				}
+				orderService.guestCartSelectOrderSave(deliveryDto, fUserCarts, orderGuestDto);
+//				session.invalidate();
+				return "redirect:orders/guest/order_list";
+			} catch (Exception e) {
+				model.addAttribute("msg", e.getMessage());
+				e.printStackTrace();
+				return "cart/cart_form";
 			}
-			return "redirect:orders/order_list";
-		} catch (Exception e) {
-			model.addAttribute("msg", e.getMessage());
-			e.printStackTrace();
-			return "cart/cart_form";
+		}else{ //회원주문
+			try {
+				List<SUserCartOrderDto> sUserCartOrderDto = (List<SUserCartOrderDto>)session.getAttribute("sUserCartOrderDto");
+				List<CartDto> fUserCarts =new ArrayList<>();
+				for (int i = 0; i < sUserCartOrderDto.size(); i++) {
+					CartDto cartDto =CartDto.builder()
+										   .id(sUserCartOrderDto.get(i).getId())
+										   .qty(sUserCartOrderDto.get(i).getQty())
+										   .build();
+					fUserCarts.add(cartDto);
+				}
+				orderService.memberCartSelectOrderSave(sUserId, deliveryDto, fUserCarts);
+				for (CartDto cartDto : fUserCarts) {
+					cartService.deleteCart(cartDto.getId(), sUserId);
+				}
+				return "redirect:orders/order_list";
+			} catch (Exception e) {
+				model.addAttribute("msg", e.getMessage());
+				e.printStackTrace();
+				return "cart/cart_form";
+			}
 		}
 	}
 
@@ -197,41 +235,41 @@ public class OrderController {
 		}
 	}
 
-	/*
-	 * 상품에서 주문(action)(비회원)
-	 */
-	@PostMapping("/guest_product_order_save_action")//modelAttribute html에서 보낸 데이터를 받는곳
-	public String guestProductOrderAddAction(@ModelAttribute("ordersProductDto") OrdersProductDto ordersProductDto, @ModelAttribute("orderGuestDto") OrderGuestDto orderGuestDto
-			, Model model) {
+//	/*
+//	 * 상품에서 주문(action)(비회원)
+//	 */
+//	@PostMapping("/guest_product_order_save_action")//modelAttribute html에서 보낸 데이터를 받는곳
+//	public String guestProductOrderAddAction(@ModelAttribute("ordersProductDto") OrdersProductDto ordersProductDto, @ModelAttribute("orderGuestDto") OrderGuestDto orderGuestDto
+//			, Model model) {
+//
+//		try {
+//			orderService.guestProductOrderSave(ordersProductDto,orderGuestDto);
+//			return "redirect:orders/guest/order_list";
+//		} catch (Exception e) {
+//			model.addAttribute("msg", e.getMessage());
+//			e.printStackTrace();
+//			return "product/product_detail/" + ordersProductDto.getOptionSetId();
+//		}
+//	}
 
-		try {
-			orderService.guestProductOrderSave(ordersProductDto,orderGuestDto);
-			return "redirect:orders/guest/order_list";
-		} catch (Exception e) {
-			model.addAttribute("msg", e.getMessage());
-			e.printStackTrace();
-			return "product/product_detail/" + ordersProductDto.getOptionSetId();
-		}
-	}
-
-	/*
-	 * 카트에서 주문(action)(비회원) (선택주문까지됨)
-	 */
-	@PostMapping("/guest_cart_order_save_action")
-	public String guestCartOrderAddAction(@ModelAttribute("deliveryDto") DeliveryDto deliveryDto,@ModelAttribute("orderGuestDto") OrderGuestDto orderGuestDto, Model model, HttpSession session)
-			throws Exception {
-
-		List<CartDto> fUserCarts =(List<CartDto>)session.getAttribute("cartDtoList");
-		try {
-			orderService.guestCartOrderSave(fUserCarts, deliveryDto, orderGuestDto);
-//			session.invalidate();
-			return "redirect:orders/guest/order_list";
-		} catch (Exception e) {
-			model.addAttribute("msg", e.getMessage());
-			e.printStackTrace();
-			return "cart/cart_form";
-		}
-	}
+//	/*
+//	 * 카트에서 주문(action)(비회원) (선택주문까지됨)
+//	 */
+//	@PostMapping("/guest_cart_order_save_action")
+//	public String guestCartOrderAddAction(@ModelAttribute("deliveryDto") DeliveryDto deliveryDto,@ModelAttribute("orderGuestDto") OrderGuestDto orderGuestDto, Model model, HttpSession session)
+//			throws Exception {
+//
+//		List<CartDto> fUserCarts =(List<CartDto>)session.getAttribute("cartDtoList");
+//		try {
+//			orderService.guestCartOrderSave(fUserCarts, deliveryDto, orderGuestDto);
+////			session.invalidate();
+//			return "redirect:orders/guest/order_list";
+//		} catch (Exception e) {
+//			model.addAttribute("msg", e.getMessage());
+//			e.printStackTrace();
+//			return "cart/cart_form";
+//		}
+//	}
 //	
 //	/*
 //	 * 카트에서 선택주문(action)(비회원)
@@ -251,37 +289,41 @@ public class OrderController {
 //		}
 //	}
 //	
+
+
 	
-	
+//결국엔 전체,선택 주문이 합쳐짐 그리고 form도 같이 씀
+//그래서 form 하나, 주문 하나로 합쳐짐!!
+
 	/******************************* 회원 ****************************/
 
 	// 주문상세보기(회원)(이미 완성됨)
-//   memberOrderDetail  //에헤이 조졌네 이거 -----> Rest로 가야함
+//   memberOrderDetail  
 
-	// 주문+주문아이템 목록(완료) 테스트x
+	// 주문+주문아이템 목록 테스트x
 //   memberOrderList
 
-	// 상품에서 직접주문(완료) 테스트x
+	// 상품에서 직접주문 테스트x
 //   memberProductOrderAdd
 
-	// cart에서 주문(완료) 테스트x
+	// cart에서 주문 테스트x
 //   memberCartOrderSave
 
-	// cart에서 선택주문(완료) 테스트x
+	// cart에서 선택주문 테스트x
 //   memberCartSelectOrderSave
 
 	/******************************* 비회원 ****************************/
 
-	// 주문상세보기(비회원)(완료) 테스트x
+	// 주문상세보기(비회원) 테스트x
 // guestOrderList
 
-	// 주문+주문아이템 목록(비회원)(완료) 테스트x
+	// 주문+주문아이템 목록(비회원) 테스트x
 //   memberOrderList
 
-	// 상품에서 주문(비회원)(완료) 테스트x
+	// 상품에서 주문(비회원) 테스트x
 //   guestProductOrderSave
 
-	// 카트에서 주문(비회원)(완료) 테스트x
+	// 카트에서 주문(비회원) 테스트x
 //   guestCartOrderSave
 
 }
