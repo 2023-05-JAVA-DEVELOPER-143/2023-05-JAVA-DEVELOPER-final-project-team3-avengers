@@ -105,81 +105,89 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	@Transactional
 	public BoardDto upIsLike(Long boardId, Long memberId) {
-		// board와 member config 객체 조회 및 예외처리
-		Board board = bRepository.findById(boardId)
-				.orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다.(대상게시글이 없음)"));
-		Member member = mRepository.findById(memberId)
-				.orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다.(회원정보없음)"));
-		Optional<LikeConfig> config = lcRepository.findByBoardAndMember(board, member);
-		LikeConfig obj = null;
-		// 좋아요 상태가 없는(좋아요를 누른적없는) 회원의 config like값이 0인 객체를 생성
-		if (config.isEmpty()) {
-			obj = LikeConfig.createConfig(board, member);
-			if (obj.getIsLike() == 0) {
-				obj.setIsLike(1);// 좋아요 상태를 1로 만들어줌
-				lcRepository.save(obj);
-			} else if (obj.getIsLike() == 1) {
-				obj.setIsLike(0);// 이미 누른회원이 또 누르면 0으로 만들어줌
-				lcRepository.save(obj);
-			}
+	    // board와 member config 객체 조회 및 예외처리
+	    Board board = bRepository.findById(boardId)
+	            .orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다.(대상게시글이 없음)"));
+	    Member member = mRepository.findById(memberId)
+	            .orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다.(회원정보없음)"));
 
-		} else { // config의 상태가 있던경우
-			if (obj.getIsLike() == 0) {
-				obj.setIsLike(1);// 좋아요 상태를 1로 만들어줌
-				lcRepository.save(obj);
-			} else if (obj.getIsLike() == 1) {
-				obj.setIsLike(0);// 이미 누른회원이 또 누르면 0으로 만들어줌
-				lcRepository.save(obj);
-			}
-		}
-		// board entity상태 변경후 db에 갱신
-		board.updateConfig(obj);
-		Board response = bRepository.save(board);
+	    // LikeConfig 객체 조회
+	    Optional<LikeConfig> config = lcRepository.findByBoardAndMember(board, member);
 
-		// 저장후 dto객체로 변환 및 반환
-		BoardDto responseDto = BoardDto.responseDto(response);
-		return responseDto;
+	    LikeConfig obj;
 
+	    if (config.isEmpty()) {
+	        // 좋아요 상태가 없는 회원의 경우, 새로운 LikeConfig 객체 생성
+	        obj = LikeConfig.createConfig(board, member);
+	        obj.setIsLike(1); // 좋아요 상태를 1로 만들어줌
+	        board.setIsLike(board.getIsLike()+1);
+	    } else {
+	        // 이미 좋아요 상태가 있는 경우, config 객체를 가져옴
+	        obj = config.get();
+
+	        // 현재 상태에 따라 좋아요 상태를 반전
+	        obj.setIsLike(obj.getIsLike() == 0 ? 1 : 0);
+	        if (obj.getIsLike() == 1) {
+	            board.setIsLike(board.getIsLike() - 1); // isLike 값 -1
+	        }else if (obj.getIsLike()==0) {
+	        	board.setIsLike(board.getIsLike() +1);
+	        }
+	    }
+
+	    // config 상태를 저장
+	    lcRepository.save(obj);
+
+	    // board entity상태 변경후 db에 갱신
+	    board.updateConfig(obj);
+	    Board response = bRepository.save(board);
+
+	    // 저장후 dto객체로 변환 및 반환
+	    return BoardDto.responseDto(response);
 	}
+
 
 	// 싫어요
 	@Override
 	@Transactional
 	public BoardDto upDisLike(Long boardId, Long memberId) {
-		// board와 member config 객체 조회 및 예외처리
-		Board board = bRepository.findById(boardId)
-				.orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다.(대상게시글이 없음)"));
-		Member member = mRepository.findById(memberId)
-				.orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다.(회원정보없음)"));
-		Optional<LikeConfig> config = lcRepository.findByBoardAndMember(board, member);
-		LikeConfig obj = null;
-		// 좋아요 상태가 없는(좋아요를 누른적없는) 회원의 config like값이 0인 객체를 생성
-		if (config.isEmpty()) {
-			obj = LikeConfig.createConfig(board, member);
-			if (obj.getDisLike() == 0) {
-				obj.setDisLike(1);// 좋아요 상태를 1로 만들어줌
-				lcRepository.save(obj);
-			} else if (obj.getDisLike() == 1) {
-				obj.setDisLike(0);// 이미 누른회원이 또 누르면 0으로 만들어줌
-				lcRepository.save(obj);
-			}
+		 // board와 member config 객체 조회 및 예외처리
+	    Board board = bRepository.findById(boardId)
+	            .orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다.(대상게시글이 없음)"));
+	    Member member = mRepository.findById(memberId)
+	            .orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다.(회원정보없음)"));
 
-		} else { // config의 상태가 있던경우
-			if (obj.getDisLike() == 0) {
-				obj.setDisLike(1);// 좋아요 상태를 1로 만들어줌
-				lcRepository.save(obj);
-			} else if (obj.getDisLike() == 1) {
-				obj.setDisLike(0);// 이미 누른회원이 또 누르면 0으로 만들어줌
-				lcRepository.save(obj);
-			}
-		}
-		// board entity상태 변경후 db에 갱신
-		board.updateConfig(obj);
-		Board response = bRepository.save(board);
+	    // LikeConfig 객체 조회
+	    Optional<LikeConfig> config = lcRepository.findByBoardAndMember(board, member);
 
-		// 저장후 dto객체로 변환 및 반환
-		BoardDto responseDto = BoardDto.responseDto(response);
-		return responseDto;
+	    LikeConfig obj;
+
+	    if (config.isEmpty()) {
+	        // 좋아요 상태가 없는 회원의 경우, 새로운 LikeConfig 객체 생성
+	        obj = LikeConfig.createConfig(board, member);
+	        obj.setDisLike(1); // 좋아요 상태를 1로 만들어줌
+	        board.setDisLike(board.getDisLike()+1);
+	    } else {
+	        // 이미 좋아요 상태가 있는 경우, config 객체를 가져옴
+	        obj = config.get();
+
+	        // 현재 상태에 따라 좋아요 상태를 반전
+	        obj.setDisLike(obj.getDisLike() == 0 ? 1 : 0);
+	        if (obj.getDisLike() == 1) {
+	            board.setDisLike(board.getDisLike() - 1); // isLike 값 -1
+	        }else if (obj.getDisLike()==0) {
+	        	board.setDisLike(board.getDisLike() +1);
+	        }
+	    }
+
+	    // config 상태를 저장
+	    lcRepository.save(obj);
+
+	    // board entity상태 변경후 db에 갱신
+	    board.updateConfig(obj);
+	    Board response = bRepository.save(board);
+
+	    // 저장후 dto객체로 변환 및 반환
+	    return BoardDto.responseDto(response);
 	}
 
 	// 게시물수정

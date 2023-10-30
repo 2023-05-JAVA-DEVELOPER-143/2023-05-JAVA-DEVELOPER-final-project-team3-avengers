@@ -15,7 +15,8 @@ import com.danaga.repository.BoardRepository;
 import com.danaga.repository.CommentsRepository;
 
 import jakarta.transaction.Transactional;
-
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @Service
 public class CommentsServiceImpl implements CommentsService{
 
@@ -27,48 +28,43 @@ public class CommentsServiceImpl implements CommentsService{
 
 	@Override
 	public List<CommentDto> comments(Long boardId) {
-		return cRepository.findByBoard_Id(boardId).stream().map(comments -> CommentDto.createDto(comments))
+		return cRepository.findByBoard_Id(boardId).stream().map(comments -> CommentDto.responseDto(comments))
 				.collect(Collectors.toList());
 	}
 	@Override
 	@Transactional
-	public CommentDto createComment(CommentDto commentDto) {
+	public CommentDto createComment(CommentDto commentDto, Long boardId) {
+	    // 게시글 조회 및 예외 발생
+	    Board board = bRepository.findById(boardId)
+	            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시물입니다."));
 
-		Board board = bRepository.findById(commentDto.getBoardId())
-				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시물입니다."));
+	    Comments parent = null;
 
-		Comments parent = null;
-		// 자식댓글인 경우
-		if (commentDto.getParentId() != null) {
-			parent = cRepository.findById(commentDto.getParentId())
-					.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상위 댓글입니다."));
+	    // 자식 댓글인 경우
+	    if (commentDto.getParentId() != null && commentDto.getParentId() != 0L) {
+	        parent = cRepository.findById(commentDto.getParentId())
+	                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상위 댓글입니다."));
 
-			// 부모댓글의 게시글 번호와 자식댓글의 게시글 번호 같은지 체크하기
-			if (parent.getBoard().getId() != commentDto.getBoardId()) {
-				throw new IllegalArgumentException("존재하지 않는 게시물입니다.");
-			}
-		}
-		
-		Comments comment = Comments.builder().writer(commentDto.getWriter()).board(board)
-				.content(commentDto.getContent()).build();
-		if (null != parent) {
-			comment.updateParent(parent);
-		}
-		cRepository.save(comment);
+	        // 부모댓글의 게시글 번호와 자식댓글의 게시글 번호가 같은지 체크하기
+	        if (!parent.getBoard().getId().equals(commentDto.getBoardId())) {
+	            throw new IllegalArgumentException("존재하지 않는 게시물입니다.");
+	        }
+	    } 
 
-		CommentDto commentResponseDto = null;
-		if (parent != null) {
-			commentResponseDto = CommentDto.builder().id(comment.getId()).writer(comment.getWriter())
-					.content(comment.getContent()).createTime(comment.getCreateTime())
-					.updateTime(comment.getUpdateTime()).parentId(comment.getParent().getId()).build();
-		} else {
-			commentResponseDto = CommentDto.builder().id(comment.getId()).writer(comment.getWriter())
-					.content(comment.getContent()).createTime(comment.getCreateTime())
-					.updateTime(comment.getUpdateTime()).build();
-		}
+	    // 댓글 엔티티 생성
+	    Comments target = Comments.toEntity(commentDto, board, parent);
 
-		return commentResponseDto;
+	    // 댓글 엔티티 DB에 저장
+	    Comments savedComment = cRepository.save(target);
+
+	    // 엔티티를 DTO로 변환 및 반환
+	    CommentDto commentResponseDto = CommentDto.responseDto(savedComment);
+	    return commentResponseDto;
 	}
+
+
+
+
 	@Override
 	@Transactional
 	public CommentDto update(Long id, CommentDto dto) {
@@ -84,7 +80,8 @@ public class CommentsServiceImpl implements CommentsService{
 		// DB로 갱신
 		Comments updated = cRepository.save(target);
 		// 댓글 엔티티를 DTO로 변환 및 반환
-		return CommentDto.createDto(updated);
+		CommentDto response=CommentDto.responseDto(updated);
+		return response;
 	}
 	@Override
 	@Transactional
@@ -95,6 +92,7 @@ public class CommentsServiceImpl implements CommentsService{
 		// 댓글을 DB에서 삭제
 		cRepository.delete(target);
 		// 삭제 댓글을 DTO로 반환
-		return CommentDto.createDto(target);
+		CommentDto response=CommentDto.responseDto(target);
+		return response;
 	}
 }

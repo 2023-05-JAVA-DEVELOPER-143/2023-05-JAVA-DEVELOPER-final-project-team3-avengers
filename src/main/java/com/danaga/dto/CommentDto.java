@@ -25,15 +25,38 @@ public class CommentDto {
 	private LocalDateTime updateTime;
 	private Long boardId;
 	
-	public static CommentDto createDto(Comments comment) {
-		
-		return CommentDto.builder()
-				.id(comment.getId()).writer(comment.getWriter()).content(comment.getContent())
-				.pw(comment.getPw()).createTime(comment.getCreateTime()).parentId(comment.getParent().getId())
-				.boardId(comment.getBoard().getId()).updateTime(comment.getUpdateTime())
-				.build();
+	public static CommentDto createDto(CommentDto comment) {
+	  
+
+	    return CommentDto.builder()
+	            .id(0L)
+	            .writer(comment.getWriter())
+	            .content(comment.getContent())
+	            .pw(comment.getPw())
+	            .createTime(comment.getCreateTime())
+	            .parentId(comment.getParentId())
+	            .boardId(comment.getBoardId())
+	            .updateTime(comment.getUpdateTime())
+	            .build();
 	}
+
 	
-	
+	public static CommentDto responseDto(Comments comment) {
+	    CommentDto.CommentDtoBuilder builder = CommentDto.builder()
+	            .id(comment.getId())
+	            .writer(comment.getWriter())
+	            .content(comment.getContent())
+	            .pw(comment.getPw())
+	            .createTime(comment.getCreateTime())
+	            .updateTime(comment.getUpdateTime())
+	            .boardId(comment.getBoard().getId());
+
+	    if (comment.getParent() != null) {
+	        builder.parentId(comment.getParent().getId());
+	    }
+
+	    return builder.build();
+	}
+
 	
 }
