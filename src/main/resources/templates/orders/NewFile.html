@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>상영시간 워크샵</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<style type="text/css">
+		.head-content{
+			margin-left: 30px;
+		}
+		video{
+			width: 300px;
+			height: 300px;
+		}
+		.movie-img{		
+			margin-bottom: 10px;
+		}
+		.movie-img > img{
+			width : 300px;
+			height: 300px;
+		}
+	</style>
+</head>
+<script type="text/javascript">///////////////////////////////////////////////////////////////////////////////////////////////
+	$(document).ready(function(){
+		var movieUrl='';
+		$('.show').click(function(){   //class="btn btn-danger show 이게 의미가 앞에는 버튼 스타일이고 show가 맞아
+			movieUrl = $(this).val(); // this는 버튼이므로 클릭된 버튼의 value를 가져옴. jQuery 함수로 this를 jQuery 객체로 변환
+			console.log(movieUrl);
+			$.ajax({			
+				url: movieUrl+".json",  
+	 			type:"GET",
+	 			contentType:'application/json;charset=utf-8',
+				dataType:'json',
+	 			success:function(response) {
+	 				showList(response);
+	 			},
+	 			error:function(xhr,status,msg){
+	 				console.log("상태값 : " + status + " Http에러메시지 : "+msg);
+	 			}
+	 		});
+		});
+		function showList(data){
+			var timeList = ''; //나중에 시간 목록을 저장할 용도로 사용됩니다.
+			$(".modal-body").empty(); //모달 창의 내용을 모두 비웁니다. 이는 이전에 불러온 내용을 초기화하는 역할
+			var head = '<span>'+movieUrl+'</span>'; //모달 창 상단에 영화 제목을 표시하기 위한 것
+			$(".modal-body").append(head);		//앞서 만든 head 변수의 내용을 모달 창의 내용에 추가
+			$.each(data, function(index, item){
+				timeList = '<tr>';
+				timeList += '<td>' + item.idx + '</td>';
+				timeList += '<td>' + item.time + '</td>';
+				timeList += '</tr>';
+				$(".modal-body").append(timeList);
+			})
+		}
+	});
+</script>
+<body>
+	<!-- 네브바 -->
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<!-- Brand/logo -->
+		<a class="navbar-brand" href="#">Cinema</a>
+		<!-- Links -->
+		<ul class="navbar-nav ">
+			<li class="nav-item"><a class="nav-link" href="#">최신영화소개</a></li>
+			<li class="nav-item"><a class="nav-link" href="#">영화관찾기</a></li>
+			<li class="nav-item"><a class="nav-link" href="#">로그인</a></li>
+			<li class="nav-item"><a class="nav-link" href="#">회원가입</a></li>
+		</ul>
+	</nav>
+	<!-- 점보트론 -->
+	<div class="jumbotron jumbotron-fluid">
+		<div class="head-content">
+			<h1>힐링 시네마</h1>
+			<p>힐링 시네마는 새로운 개념의 영화장르의 한가지를 말하는 것입니다. 지친 영혼을 위한 휴식을~~~~~</p>
+		</div>
+	</div>
+	<!-- 영화리스트 -->
+	<div class="row">
+	  <div class="col-sm-3">
+	  	<video src="media/KungFuPanda_Sample.mp4" controls="controls"></video>
+	  </div>
+	  <div class="col-sm-3">
+	  	<div class="movie-img">
+	  		<img alt="쿵팬 이미지" src="img/movie_image2.jpg">
+	  	</div>
+	  	<button type="button" class="btn btn-primary">예고편 보기</button>
+	  	<button type="button" class="btn btn-danger show" data-toggle="modal" data-target="#myModal" value="panda">상영시간 보기</button>//////////////////////////////////////////////////////////////
+	  </div>
+	  <div class="col-sm-3">
+		<div class="movie-img">
+	  		<img alt="어벤져스" src="img/TheAvengers2012Poster.jpg">
+	  	</div>
+	  	<button type="button" class="btn btn-primary">예고편 보기</button>
+	  	<button type="button" class="btn btn-danger show" data-toggle="modal" data-target="#myModal" value="aven">상영시간 보기</button>
+	  </div>
+	  <div class="col-sm-3">
+	  	<div class="movie-img">
+	  		<img alt="iron" src="img/ironMan.png">
+	  	</div>
+	  	<button type="button" class="btn btn-primary">예고편 보기</button>
+	  	<button type="button" class="btn btn-danger show" data-toggle="modal" data-target="#myModal" value="iron">상영시간 보기</button>
+	  </div>
+	</div>
+
+	<!-- 모달창 -->////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	<div class="modal fade" id="myModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">상영시간보기</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<!-- Modal body -->
+				<div class="modal-body">
+					
+				</div>
+
+				<!-- Modal footer -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</body>
+</html>
