@@ -46,7 +46,7 @@ public class Comments extends BaseEntity {
   private String content;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "parent_id")
+  @JoinColumn(name = "parent_id", nullable = true) // nullable 속성을 true로 변경
   private Comments parent;
 
   @Builder.Default
@@ -61,6 +61,29 @@ public class Comments extends BaseEntity {
   public void updateParent(Comments parent){
     this.parent = parent;
   }
+
+  public static Comments toEntity(CommentDto comment, Board board, Comments parent) {
+	    if (comment.getParentId() == null || comment.getParentId()==0L) {
+	        return Comments.builder()
+	                .id(comment.getId())
+	                .writer(comment.getWriter())
+	                .pw(comment.getPw())
+	                .board(board)
+	                .content(comment.getContent())
+	                .build();
+	    }else {
+
+		    return Comments.builder()
+		            .id(comment.getId())
+		            .writer(comment.getWriter())
+		            .pw(comment.getPw())
+		            .board(board)
+		            .content(comment.getContent())
+		            .parent(parent)
+		            .build();
+		}
+	}
+
 
 
  

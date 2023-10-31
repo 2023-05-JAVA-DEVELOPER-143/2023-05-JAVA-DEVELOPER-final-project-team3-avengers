@@ -17,5 +17,7 @@ public interface CommentsRepository extends JpaRepository<Comments, Long>{
             "WHERE c.board_id = :boardId " +
             "ORDER BY parent.comment_id ASC NULLS FIRST, c.created_at ASC")
 	List<Comments> findAllByBoard(Board board);
+
+	List<Comments> findAllByParentId(Long id);
 	
 }

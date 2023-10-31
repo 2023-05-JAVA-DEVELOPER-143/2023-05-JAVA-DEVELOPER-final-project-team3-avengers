@@ -21,19 +21,19 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/board")
 public class BoardRestController {
 
-	public final BoardService bService;
+	private final BoardService bService;
 	
-	@PatchMapping("/{id}/upIsLike")
-	public ResponseEntity<BoardDto> upIsLike(@PathVariable("boardId") Long boardId, @RequestBody Long memberId) {
-		log.info("memberId",memberId);
-		log.info("boardId",boardId);
+	@PatchMapping("/{boardId}/upIsLike/{memberId}")
+	public ResponseEntity<BoardDto> upIsLike(@PathVariable("boardId") Long boardId, @PathVariable("memberId") Long memberId) {
+		log.info("memberId = {}",memberId);
+		log.info("boardId = {}",boardId);
 		BoardDto dtos = bService.upIsLike(boardId,memberId);
 		log.info("dto = {}",dtos);
 		return ResponseEntity.status(HttpStatus.OK).body(dtos);
 	}
 	
-	@PatchMapping("/{id}/upDisLike")
-	public ResponseEntity<BoardDto> upDisLike(@PathVariable("boardId") Long boardId, @RequestBody Long memberId) {
+	@PatchMapping("/{boardId}/upDisLike/{memberId}")
+	public ResponseEntity<BoardDto> upDisLike(@PathVariable("boardId") Long boardId, @PathVariable("memberId") Long memberId) {
 		log.info("boardId",boardId);
 		BoardDto dtos = bService.upDisLike(boardId,memberId);
 		log.info("dto = {}",dtos);
