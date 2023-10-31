@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -16,7 +17,7 @@ import com.danaga.dto.MemberLoginDto;
 import com.danaga.dto.MemberResponseDto;
 import com.danaga.dto.MemberUpdateDto;
 import com.danaga.entity.Member;
-import com.danaga.exception.ExistedMemberException;
+import com.danaga.exception.ExistedMemberByUserNameException;
 import com.danaga.exception.MemberNotFoundException;
 import com.danaga.exception.PasswordMismatchException;
 import com.danaga.service.MemberService;
@@ -30,7 +31,7 @@ public class MemberController {
 	@Autowired
 	private MemberService memberService;
 
-	@GetMapping("/member_login_form")
+	@RequestMapping("/member_login_form")
 	public String member_login_form() {
 		return "member/member_login_form";
 	}
@@ -68,7 +69,7 @@ public class MemberController {
 			member.setBirthday(birthday);
 			memberService.joinMember(member);
 			path = "redirect:member_login_form";
-		} catch (ExistedMemberException e) {
+		} catch (ExistedMemberByUserNameException e) {
 			model.addAttribute("msg", e.getMessage());
 			model.addAttribute("fuser", member);
 			path = "member/member_join_form";
