@@ -110,7 +110,7 @@ public class OrderController {
 
 	@PostMapping("/cart_order_form")
 	public String memberCartOrderAddForm(@ModelAttribute List<SUserCartOrderDto> sUserCartOrderDto ,Model model,HttpSession session) throws Exception {
-
+		
 		String sUserId = (String) session.getAttribute("sUserId");
 		if(sUserId==null) {
 			//비회원(전체,선택)
@@ -132,6 +132,7 @@ public class OrderController {
 		model.addAttribute("sUserCartOrderDto", sUserCartOrderDto);
 		return "orders/order_save_form";
 	}
+
 
 //	/*
 //	 * 카트에서 보내온 데이터로 주문(action)(회원)
@@ -218,11 +219,8 @@ public class OrderController {
 //	}				---->rest로 가야할듯;;
 	
 	/*
-<<<<<<< HEAD
 	 * 주문+주문아이템 목록(비회원)
-=======
 	 * 주문List보기(비회원) 비회원 찾는 폼에서 데이터를 보내줘서 이 url로 받으면 list뿌려주고 디테일까지 나오게만들기
->>>>>>> refs/heads/feather/KKR48
 	 */
 	@GetMapping("/guest_order_detail")
 	public String guestOrderList(@ModelAttribute OrdersGuestDetailDto ordersGuestDetailDto ,Model model) {

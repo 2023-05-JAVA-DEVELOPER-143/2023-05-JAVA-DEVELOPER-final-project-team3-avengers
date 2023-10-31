@@ -16,7 +16,6 @@ import com.danaga.service.CartService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,8 +27,7 @@ public class CartController {
 
 	@GetMapping("/cart_list")
 	public String findCarts(HttpSession session, Model model) throws Exception {
-		// sUserId = (String) session.getAttribute("sUserId");
-		sUserId= "User3";
+		sUserId = (String) session.getAttribute("sUserId");
 		fUserCarts=(List<CartDto>)session.getAttribute("fUserCarts");
 		if (sUserId != null) { // 회원
 			List<SUserCartResponseDto> carts = cartService.findsUserCartList(sUserId);

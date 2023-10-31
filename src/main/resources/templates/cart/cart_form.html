@@ -39,11 +39,13 @@
 			 
 			  <!-- 반복문 가즈아 -->
             <tr class="cart_info" th:each="cart:${cart}">
-				 <input type="hidden" class="totalqty" th:value="${cart.qty}">
-                 <input type="hidden" class="totalprice" th:value="${cart.totalPrice}">
+              
               <td class="prd-check-td">
                 <div class="prd-check">
-                  <input type="checkbox" checked="checked" class="checkbox" th:data-selectid="${cart.osId}">
+                  <input type="checkbox" checked="checked" class="checkbox" name="checkboxvalue" th:value="${cart.osId}" th:data-selectid="${cart.osId}">
+                  <input type="hidden" checked="checked" class="checkbox" name="checkboxqty" th:value="${cart.qty}" >
+                  <input type="hidden" checked="checked" class="checkbox" name="checkboxproductName" th:value="${cart.productName}" >
+                  <input type="hidden" checked="checked" class="checkbox" name="checkboxtotalPrice" th:value="${cart.totalPrice}" >
                 </div>
               </td>
               <td>
@@ -64,26 +66,20 @@
               </td>
               <td class="text-center">
                 <div class="count-input">
-                  <select id="selectbox" class="form-control" th:data-id="${cart.osId}" onchange="getSelectValue(this);">
+                  <select id="selectbox" class="form-control" name="checkboxvalue" th:data-id="${cart.osId}" onchange="getSelectValue(this);">
 					<option disabled hidden th:selected="${cart.qty}"></option>
 					<option th:selected="${cart.qty} == '1'">1</option>	   
 					<option th:selected="${cart.qty} == '2'">2</option>	   
 					<option th:selected="${cart.qty} == '3'">3</option>	   
 					<option th:selected="${cart.qty} == '4'">4</option>	   
 					<option th:selected="${cart.qty} == '5'">5</option>	   
-					<option th:selected="${cart.qty} == '6'">6</option>	   
-					<option th:selected="${cart.qty} == '7'">7</option>	   
-					<option th:selected="${cart.qty} == '8'">8</option>	   
-					<option th:selected="${cart.qty} == '9'">9</option>	   
-					<option th:selected="${cart.qty} == '10'">10</option>	 
-						 
                   </select>
                  
 				  
                 </div>
               </td>
               <td class="text-center text-lg text-medium" th:text="${cart.totalPrice} * ${cart.qty}">2,332,000</td>
-              <td class="text-center text-lg text-medium" th:text="${cart.totalPrice}">332,000</td>
+              <td class="text-center text-lg text-medium" th:text="${cart.totalPrice}">0원</td>
               <td class="text-center">
                 <a class="plain-btn" data-toggle="modal" data-target="#exampleModal">옵션변경</a>
                 <a href="javascript:void(0)" class="plain-btn" id="deletebtn" th:data-osId="${cart.osId}" onclick="deleteCart(this)">삭제하기</a>
@@ -98,7 +94,7 @@
       <div class="shopping-cart-footer">
 
         <div class="column text-lg"> 총 결제금액: 
-			<span class="text-medium" id="finalTotalPrice">$289.68</span>
+			<span class="text-medium" id="finalTotalPrice">0원</span>
 		</div>
       </div>
       <div class="shopping-cart-footer">
@@ -106,7 +102,7 @@
         <div class="column"></div>
         <div class="column">
           <a href="javascript:void(0)" class="btn btn-selectdelete" id="selectAllcheck" onclick="selectAlldelete()">선택삭제</a>
-          <a class="btn btn-success" href="checkout-address.html">주문하기</a>
+          <a class="btn btn-success" href="#" onclick="checkValue();">주문하기</a>
         </div>
       </div>
       
@@ -219,7 +215,7 @@
                 data-toast-message="successfuly added to cart!">장바구니 담기</button>
             </div>
           </div>
-        </div>
+        </div>	
       </div>
     </div>
     <!-- content end -->
@@ -231,27 +227,77 @@
 <th:block layout:fragment="script">
 
 <script th:inline="javascript">
+	
+/*
 $(document).ready(function() {
-	let totalPrice = 0;
-	let totalqty = 0;
-	let qtyprice=0;
-	
-	$(".cart_info").each(function(index, element) {
-		if($("input[class='checkbox']:checked" == true)) {
-			// 총 가격
-			totalPrice = parseInt($(element).find(".totalprice").val());
-			totalqty = parseInt($(element).find(".totalqty").val());
-			qtyprice += totalPrice * totalqty;
-			
-		}
-		console.log(totalPrice);
-		console.log(totalqty);
-		// 총 가격
-		$("#finalTotalPrice").html(qtyprice);
-	});
-	
-	
+    let qtyprice = 0;
+    let checkboxes = document.querySelectorAll('input[name="checkboxvalue"]');
+    let checkboxtotalPrice = document.querySelectorAll('input[name="checkboxtotalPrice"]');
+    let checkboxesqty = document.querySelectorAll('input[name="checkboxqty"]');
+    
+    // 초기 총 결제 금액 계산
+    for (let i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+            let qty = parseInt(checkboxesqty[i].value);
+            let totalPrice = parseInt(checkboxtotalPrice[i].value);
+            qtyprice += qty * totalPrice;
+        }
+    }
+    $("#finalTotalPrice").text(qtyprice);
+    
+    // 체크박스 상태 변경 시 이벤트 처리
+    $('input[name="checkboxvalue"]').on('change', function() {
+        let index = checkboxes.indexOf(this);
+        let qty = parseInt(checkboxesqty[index].value);
+        let totalPrice = parseInt(checkboxtotalPrice[index].value);
+        
+        if (this.checked) {
+            qtyprice += qty * totalPrice;
+        } else {
+            qtyprice -= qty * totalPrice;
+        }
+        $("#finalTotalPrice").text(qtyprice);
+    });
 });
+*/
+
+/* 체크된 체크박스 값들만 주문폼으로 넘기기 (테스트완료 소리질러~~)  */ 
+function checkValue() {
+   let checkedData = [];
+
+   // 체크박스 요소들을 가져온다
+   let checkboxes = document.querySelectorAll('input[name="checkboxvalue"]');
+   let checkboxesqty = document.querySelectorAll('input[name="checkboxqty"]');
+   let checkboxproductName = document.querySelectorAll('input[name="checkboxproductName"]');
+   let checkboxtotalPrice = document.querySelectorAll('input[name="checkboxtotalPrice"]')?document.querySelectorAll('input[name="checkboxtotalPrice"]'):'';
+   
+   // 체크된 체크박스의 수량과 값을 객체로 묶어 배열에 추가한다
+   for(let i = 0; i < checkboxes.length; i++) {
+       if (checkboxes[i].checked) {
+           const id = checkboxes[i].value;
+           const qty = checkboxesqty[i].value;
+           const productName = checkboxproductName[i].value;
+           const totalPrice = checkboxtotalPrice[i].value;
+           const item = { id, qty, productName, totalPrice };
+           checkedData.push(item);
+       }
+   }
+   // 배열에 추가된 객체들을 출력
+   console.log("선택된 데이터: ", checkedData);
+   
+   $.ajax({
+		url : "/member_cart_order_save_form",
+		type : "post",
+		contentType : 'application/json',
+		data : JSON.stringify(checkedData),
+		success : function() {
+			console.log(checkedData);
+			location.href = "http://localhost:80/member_cart_order_save_form";
+		}
+	});
+   
+   
+}
 
 
 /* 전체 선택 체크 유무 */
@@ -277,7 +323,6 @@ function getSelectValue(obj) {
 		let selectedValue = $(obj).val();
 		console.log(selectedValue);
 		
-						
 		let data = {
 			qty : selectedValue,
 			id : selectosId
@@ -312,7 +357,8 @@ function deleteCart(obj) {
 			success : function() {
 				alert('삭제완료');
 				location.href = "http://localhost:80/cart_list";
-			} 
+			}
+		
 		});
 	} 
 }
@@ -339,6 +385,7 @@ function selectAlldelete() {
 		 });
 	 } 
 }
+
 
 
 
