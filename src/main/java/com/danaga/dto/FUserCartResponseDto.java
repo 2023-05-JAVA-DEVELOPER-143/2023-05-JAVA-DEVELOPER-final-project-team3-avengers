@@ -23,6 +23,9 @@ public class FUserCartResponseDto {
 	private String pImage; // 프로덕트 사진
 	private Long osId; // 옵션셋 아이디
 	@Builder.Default
+	private List<CartElseOptionsetDto> elseOptionSets = new ArrayList<>();
+	
+	@Builder.Default
 	private List<CartOptionDto> options = new ArrayList<>(); // 옵션 네임 밸류
 
 	public static FUserCartResponseDto toDto(OptionSet entity, Integer qty) {

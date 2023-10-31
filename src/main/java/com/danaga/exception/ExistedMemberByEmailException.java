@@ -1,8 +1,8 @@
 package com.danaga.exception;
 
-public class ExistedMemberException extends Exception{
+public class ExistedMemberByEmailException extends Exception{
 	private Object data;
-	public ExistedMemberException(String msg) {
+	public ExistedMemberByEmailException(String msg) {
 		super(msg);
 	}
 	public Object getData() {

@@ -51,39 +51,59 @@
 												ipsum</span></p>
 									</div>
 								</div>
-								<div th:text="${board.isLike}">23913</div>
-								<a id="up-is-like-btn" class="btn btn-primary" onclick="upIsLike('IsLike')">좋아요</a>
-								<div th:text="${board.DisLike}">23913</div>
-								<a id="up-dis-like-btn" class="btn btn-primary" onclick="upIsLike('DisLike')">싫어요</a>
+								
+								<a id="up-IsLike-btn" class="btn btn-primary" onclick="upIsLike('IsLike')"> <span id="like-count" th:text="${board.isLike}">23913</span> &ensp;좋아요</a>
+								
+								<a id="up-DisLike-btn" class="btn btn-primary" onclick="upIsLike('DisLike')"> <span id="dislike-count" th:text="${board.disLike}">23913</span> &ensp;싫어요</a>
 
-								<script th:inline="javascript">
-									const upIsLikeBtn = document.querySelector("#up-is-like-btn");
-									const upDisLikeBtn = document.querySelector("#up-dis-like-btn");
+<script th:inline="javascript">
+    const upIsLikeBtn = $('#up-IsLike-btn');
+    const upDisLikeBtn = $("#up-DisLike-btn");
 
-									function upIsLike(action) {
-										const boardId = '1'; // 여기에 게시물 ID를 동적으로 설정
-										const memberId = '1'; // 여기에 회원 ID를 동적으로 설정
+    // 컨트롤러에서 받아온 초기 값
+    const initialLikeCount = '[[${board.isLike}]]';
+    const initialDislikeCount = '[[${board.disLike}]]';
 
-										// AJAX 요청
-										$.ajax({
-											type: 'PATCH',
-											url: `/board/${boardId}/up${action}`,
-											data: {memberId: memberId},
-											success: function (response) {
-												if (response.status === 'ok') {
-													// 서버 응답이 OK일 경우 숫자 업데이트
-													const numberElement = document.querySelector('[th\\:text="${board.' + action + '}"]');
-													numberElement.textContent = response.newCount;
-												} else {
-													console.error('서버 응답 오류:', response.message);
-												}
-											},
-											error: function (xhr, status, error) {
-												console.error('AJAX 오류:', error);
-											}
-										});
-									}
-								</script>
+    // 초기 값으로 엘리먼트 설정
+    $("#like-count").text(initialLikeCount);
+    $("#dislike-count").text(initialDislikeCount);
+
+    upIsLikeBtn.click(function() {
+        upIsLike('IsLike');
+    });
+
+    upDisLikeBtn.click(function() {
+        upIsLike('DisLike');
+    });
+
+    function upIsLike(action) {
+        const boardId = '1'; // 여기에 게시물 ID를 동적으로 설정
+        const memberId = '1'; // 여기에 회원 ID를 동적으로 설정
+
+        // AJAX 요청
+        $.ajax({
+            type: 'PATCH',
+            url: `/board/${boardId}/up${action}/${memberId}`,
+            data: { 'memberId': memberId, 'boardId': boardId },
+            success: function (response) {
+                if (response) {
+                    // 서버 응답이 OK일 경우 숫자 업데이트
+                    if (action === 'IsLike') {
+                        $("#like-count").text(response.isLike);
+                    } else if (action === 'DisLike') {
+                        $("#dislike-count").text(response.disLike);
+                    }
+                } else {
+                    console.error('서버 응답 오류:', response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('AJAX 오류:', error);
+            }
+        });
+    }
+</script>
+
 
 
 							</div>

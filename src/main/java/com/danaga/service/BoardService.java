@@ -5,7 +5,6 @@ import java.util.List;
 import com.danaga.dto.BoardDto;
 
 public interface BoardService {
-
 	List<BoardDto> popularPost();
 	
 	List<BoardDto> boards(Long boardGroupId);

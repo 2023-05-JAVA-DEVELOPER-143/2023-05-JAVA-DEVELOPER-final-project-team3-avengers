@@ -13,188 +13,279 @@
 		<!-- Main Slider-->
 		<section class="hero-slider" style="background-image: url(img/hero-slider/main-bg.jpg);">
 
-
-
-			<!-- Order Form-->
-			<div class="col-xl-9 col-lg-8">
-				<h4>Billing Address</h4>
-				<hr class="padding-bottom-1x">
-
-				<div class="table-responsive" style="margin-left: -150px; width: 120%;">
-					<table class="table">
-						<thead class="thead-inverse">
-							<tr>
-								<th style="width: 500px; white-space: nowrap;">주문 번호</th>
-								<th style="width: 500px; white-space: nowrap;">상품 이름</th>
-								<th style="width: 500px; white-space: nowrap;">수량</th>
-								<th style="width: 500px; white-space: nowrap;">가격</th>
-							</tr>
-						</thead>
-						<tbody>
-							<th:block th:if="${sUserId != null}">
-								<th:each th:each="itme : ${sUserCartResponseDto}">
+			<div class="container padding-bottom-3x mb-2">
+				<div class="row">
+					<!-- Checkout Adress-->
+					<!-- Order Form-->
+					<div class="col-xl-9 col-lg-8 order-lg-first">
+						<h4>Billing Address</h4>
+						<hr class="padding-bottom-1x">
+						<div class="table-responsive" style="margin-left: -150px; width: 120%;">
+							<table class="table">
+								<thead class="thead-inverse">
 									<tr>
-										<th scope="row" style="width: 500px;">112</th>
-										<td style="width: 500px; white-space: nowrap;">좋은 컴퓨터 외
-											5개</td>
-										<td style="width: 500px; white-space: nowrap;">2023.10.15</td>
-										<td style="width: 500px; white-space: nowrap;">15개</td>
+										<th style="width: 500px; white-space: nowrap;">상품 번호</th>
+										<th style="width: 500px; white-space: nowrap;">상품 이름</th>
+										<th style="width: 500px; white-space: nowrap;">수량</th>
+										<th style="width: 500px; white-space: nowrap;">총가격</th>
 									</tr>
-								</th:each>
+								</thead>
+								<tbody>
+									<tr th:each="item : ${sUserCartOrderDto}">
+										<td style="width: 500px;" th:text="${item.id}">112</td>
+										<td style="width: 500px; white-space: nowrap;" th:text="${item.productName}">좋은
+											컴퓨터 외 5개</td>
+										<td style="width: 500px; white-space: nowrap;" th:text="${item.qty}">2023.10.15
+										</td>
+										<td style="width: 500px; white-space: nowrap;" th:text="${item.totalPrice}">15개
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
 
-							</th:block>
-							<th:block th:unless="${sUserId != null}">
-								<th:each th:each="itme : ${sUserCartOrderDto}">
+						<div class="custom-section">
+							<div class="col-sm-8">
+								<div class="form-group" style="display: flex; align-items: center;">
+									<label for="checkout-fn"
+										style="flex: 1;text-align: right; margin-right: 1rem;">주문자</label>
+									<input class="form-control" type="text" id="checkout-fn"
+										style="flex: 2; width: 80%;">
+								</div>
+							</div>
+						</div>
+
+						<div class="custom-section">
+							<div class="col-sm-8">
+								<div class="form-group" style="display: flex; align-items: center;">
+									<label for="checkout-email"
+										style="flex: 1;text-align: right; margin-right: 1rem;">주문자전화번호</label>
+									<input class="form-control" type="email" id="checkout-email"
+										style="flex: 2; width: 80%;">
+								</div>
+							</div>
+						</div>
+
+						<div class="custom-section">
+							<div class="col-sm-8">
+								<div class="form-group" style="display: flex; align-items: center;">
+									<label for="checkout-company"
+										style="flex: 1; text-align: right; margin-right: 1rem;">수령인</label>
+									<input class="form-control" type="text" id="checkout-company"
+										style="flex: 2; width: 80%;">
+								</div>
+							</div>
+						</div>
+
+						<div class="custom-section">
+							<div class="col-sm-8">
+								<div class="form-group" style="display: flex; align-items: center;">
+									<label for="checkout-company-phone"
+										style="flex: 1; text-align: right; margin-right: 1rem;">수령인전화번호</label>
+									<input class="form-control" type="text" id="checkout-company-phone"
+										style="flex: 2; width: 80%;">
+								</div>
+							</div>
+						</div>
+
+						<div class="custom-section">
+							<div class="col-sm-8">
+								<div class="form-group" style="display: flex; align-items: center;">
+									<label for="checkout-address1"
+										style="flex: 1; text-align: right; margin-right: 1rem;">수령인주소</label> <input
+										class="form-control" type="text" id="checkout-address1"
+										style="flex: 2; width: 80%;">
+								</div>
+							</div>
+						</div>
+
+						<h4>Shipping Address</h4>
+						<hr class="padding-bottom-1x">
+						<div class="form-group">
+							<div class="custom-control custom-checkbox">
+								<input class="custom-control-input" type="checkbox" id="same_address" checked> <label
+									class="custom-control-label" for="same_address">주문</label>
+							</div>
+						</div>
+						<div class="checkout-footer">
+							<div class="column">
+								<a class="btn btn-outline-secondary" href="cart.html"> <i
+										class="icon-arrow-left"></i><span class="hidden-xs-down">&nbsp;Back
+										To Cart</span>
+								</a>
+							</div>
+							<div class="column">
+								<a class="btn btn-primary" href="http://localhost/cart_order_save_action"> <span
+										class="hidden-xs-down">주문하기&nbsp;</span><i class="icon-arrow-right"></i>
+								</a>
+							</div>
+						</div>
+					</div>
+
+					<!-- Sidebar          -->
+					<div class="col-xl-3 col-lg-4">
+						<aside class="sidebar">
+							<div class="padding-top-2x hidden-lg-up"></div>
+							<!-- Order Summary Widget-->
+							<section class="widget widget-order-summary">
+								<h3 class="widget-title">Order Summary</h3>
+								<table class="table">
 									<tr>
-										<th scope="row" style="width: 500px;">112</th>
-										<td style="width: 500px; white-space: nowrap;">좋은 컴퓨터 외
-											5개</td>
-										<td style="width: 500px; white-space: nowrap;">2023.10.15</td>
-										<td style="width: 500px; white-space: nowrap;">15개</td>
+										<td>Cart Subtotal:</td>
+										<td class="text-medium">$289.68</td>
 									</tr>
-								</th:each>
-							</th:block>
-						</tbody>
-					</table>
-				</div>
-
-				<div class="custom-section">
-					<div class="col-sm-6">
-						<div class="form-group">
-							<label for="checkout-fn">주문자</label>
-							<input class="form-control" type="text" id="checkout-fn">
-						</div>
-					</div>
-				</div>
-				<div class="custom-section">
-					<div class="col-sm-6">
-						<div class="form-group">
-							<label for="checkout-email">주문자전화번호</label>
-							<input class="form-control" type="email" id="checkout-email">
-						</div>
-					</div>
-				</div>
-				<div class="custom-section">
-					<div class="col-sm-6">
-						<div class="form-group">
-							<label for="checkout-company">수령인</label>
-							<input class="form-control" type="text" id="checkout-company">
-						</div>
-					</div>
-				</div>
-				<div class="custom-section">
-					<div class="col-sm-6">
-						<div class="form-group">
-							<label for="checkout-company">수령인전화번호</label>
-							<input class="form-control" type="text" id="checkout-company">
-						</div>
-					</div>
-				</div>
-				<div class="custom-section">
-					<div class="col-sm-6">
-						<div class="form-group">
-							<label for="checkout-address1">수령인주소</label>
-							<input class="form-control" type="text" id="checkout-address1">
-						</div>
-					</div>
-				</div>
-				<h4>Shipping Address</h4>
-				<hr class="padding-bottom-1x">
-				<div class="form-group">
-					<div class="custom-control custom-checkbox">
-						<input class="custom-control-input" type="checkbox" id="same_address" checked>
-						<label class="custom-control-label" for="same_address">주문</label>
-					</div>
-				</div>
-				<div class="checkout-footer">
-					<div class="column">
-						<a class="btn btn-outline-secondary" href="cart.html">
-							<i class="icon-arrow-left"></i><span class="hidden-xs-down">&nbsp;Back To Cart</span>
-						</a>
-					</div>
-					<div class="column">
-						<a class="btn btn-primary" href="http://localhost/cart_order_save_action">
-							<span class="hidden-xs-down">주문하기&nbsp;</span><i class="icon-arrow-right"></i>
-						</a>
+									<tr>
+										<td>Shipping:</td>
+										<td class="text-medium">$22.50</td>
+									</tr>
+									<tr>
+										<td>Estimated tax:</td>
+										<td class="text-medium">$3.42</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td class="text-lg text-medium">$315.60</td>
+									</tr>
+								</table>
+							</section>
+							<!-- Featured Products Widget-->
+							<section class="widget widget-featured-products">
+								<h3 class="widget-title">Recently Viewed</h3>
+								<!-- Entry-->
+								<div class="entry">
+									<div class="entry-thumb">
+										<a href="shop-single.html"><img src="img/shop/widget/01.jpg" alt="Product"></a>
+									</div>
+									<div class="entry-content">
+										<h4 class="entry-title">
+											<a href="shop-single.html">Oakley Kickback</a>
+										</h4>
+										<span class="entry-meta">$155.00</span>
+									</div>
+								</div>
+								<!-- Entry-->
+								<div class="entry">
+									<div class="entry-thumb">
+										<a href="shop-single.html"><img src="img/shop/widget/02.jpg" alt="Product"></a>
+									</div>
+									<div class="entry-content">
+										<h4 class="entry-title">
+											<a href="shop-single.html">Top-Sider Fathom</a>
+										</h4>
+										<span class="entry-meta">$90.00</span>
+									</div>
+								</div>
+								<!-- Entry-->
+								<div class="entry">
+									<div class="entry-thumb">
+										<a href="shop-single.html"><img src="img/shop/widget/03.jpg" alt="Product"></a>
+									</div>
+									<div class="entry-content">
+										<h4 class="entry-title">
+											<a href="shop-single.html">Vented Straw Fedora</a>
+										</h4>
+										<span class="entry-meta">$49.50</span>
+									</div>
+								</div>
+								<!-- Entry-->
+								<div class="entry">
+									<div class="entry-thumb">
+										<a href="shop-single.html"><img src="img/shop/widget/04.jpg" alt="Product"></a>
+									</div>
+									<div class="entry-content">
+										<h4 class="entry-title">
+											<a href="shop-single.html">Big Wordmark Tote</a>
+										</h4>
+										<span class="entry-meta">$29.99</span>
+									</div>
+								</div>
+							</section>
+							<!-- Promo Banner-->
+							<section class="promo-box" style="background-image: url(img/banners/02.jpg);">
+								<span class="overlay-dark" style="opacity: .4;"></span>
+								<div class="promo-box-content text-center padding-top-2x padding-bottom-2x">
+									<h4 class="text-light text-thin text-shadow">New
+										Collection of</h4>
+									<h3 class="text-bold text-light text-shadow">Sunglasses</h3>
+									<a class="btn btn-outline-white btn-sm" href="shop-grid-ls.html">Shop Now</a>
+								</div>
+							</section>
+						</aside>
 					</div>
 				</div>
 			</div>
-	
-			<!-- Sidebar          -->
-          <div class="col-xl-3 col-lg-4">
-            <aside class="sidebar">
-              <div class="padding-top-2x hidden-lg-up"></div>
-              <!-- Order Summary Widget-->
-              <section class="widget widget-order-summary">
-                <h3 class="widget-title">Order Summary</h3>
-                <table class="table">
-                  <tr>
-                    <td>Cart Subtotal:</td>
-                    <td class="text-medium">$289.68</td>
-                  </tr>
-                  <tr>
-                    <td>Shipping:</td>
-                    <td class="text-medium">$22.50</td>
-                  </tr>
-                  <tr>
-                    <td>Estimated tax:</td>
-                    <td class="text-medium">$3.42</td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td class="text-lg text-medium">$315.60</td>
-                  </tr>
-                </table>
-              </section>
-              <!-- Featured Products Widget-->
-              <section class="widget widget-featured-products">
-                <h3 class="widget-title">Recently Viewed</h3>
-                <!-- Entry-->
-                <div class="entry">
-                  <div class="entry-thumb"><a href="shop-single.html"><img src="img/shop/widget/01.jpg" alt="Product"></a></div>
-                  <div class="entry-content">
-                    <h4 class="entry-title"><a href="shop-single.html">Oakley Kickback</a></h4><span class="entry-meta">$155.00</span>
-                  </div>
-                </div>
-                <!-- Entry-->
-                <div class="entry">
-                  <div class="entry-thumb"><a href="shop-single.html"><img src="img/shop/widget/02.jpg" alt="Product"></a></div>
-                  <div class="entry-content">
-                    <h4 class="entry-title"><a href="shop-single.html">Top-Sider Fathom</a></h4><span class="entry-meta">$90.00</span>
-                  </div>
-                </div>
-                <!-- Entry-->
-                <div class="entry">
-                  <div class="entry-thumb"><a href="shop-single.html"><img src="img/shop/widget/03.jpg" alt="Product"></a></div>
-                  <div class="entry-content">
-                    <h4 class="entry-title"><a href="shop-single.html">Vented Straw Fedora</a></h4><span class="entry-meta">$49.50</span>
-                  </div>
-                </div>
-                <!-- Entry-->
-                <div class="entry">
-                  <div class="entry-thumb"><a href="shop-single.html"><img src="img/shop/widget/04.jpg" alt="Product"></a></div>
-                  <div class="entry-content">
-                    <h4 class="entry-title"><a href="shop-single.html">Big Wordmark Tote</a></h4><span class="entry-meta">$29.99</span>
-                  </div>
-                </div>
-              </section>
-              <!-- Promo Banner-->
-              <section class="promo-box" style="background-image: url(img/banners/02.jpg);"><span class="overlay-dark" style="opacity: .4;"></span>
-                <div class="promo-box-content text-center padding-top-2x padding-bottom-2x">
-                  <h4 class="text-light text-thin text-shadow">New Collection of</h4>
-                  <h3 class="text-bold text-light text-shadow">Sunglasses</h3><a class="btn btn-outline-white btn-sm" href="shop-grid-ls.html">Shop Now</a>
-                </div>
-              </section>
-            </aside>
-          </div>
+			<!-- Site Footer-->
+			<footer class="site-footer">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-3 col-md-6">
+							<!-- Contact Info-->
+							<section class="widget widget-light-skin">
+								<h3 class="widget-title">Get In Touch With Us</h3>
+								<p class="text-white">Phone: 00 33 169 7720</p>
+								<ul class="list-unstyled text-sm text-white">
+									<li><span class="opacity-50">Monday-Friday:</span>9.00 am
+										- 8.00 pm</li>
+									<li><span class="opacity-50">Saturday:</span>10.00 am -
+										6.00 pm</li>
+								</ul>
+								<p>
+									<a class="navi-link-light" href="#">support@unishop.com</a>
+								</p>
+								<a class="social-button shape-circle sb-facebook sb-light-skin" href="#"><i
+										class="socicon-facebook"></i></a><a
+									class="social-button shape-circle sb-twitter sb-light-skin" href="#"><i
+										class="socicon-twitter"></i></a><a
+									class="social-button shape-circle sb-instagram sb-light-skin" href="#"><i
+										class="socicon-instagram"></i></a><a
+									class="social-button shape-circle sb-google-plus sb-light-skin" href="#"><i
+										class="socicon-googleplus"></i></a>
+							</section>
+						</div>
+						<div class="col-lg-3 col-md-6">
+							<!-- Mobile App Buttons-->
+							<section class="widget widget-light-skin">
+								<h3 class="widget-title">Our Mobile App</h3>
+								<a class="market-button apple-button mb-light-skin" href="#"><span
+										class="mb-subtitle">Download on the</span><span class="mb-title">App
+										Store</span></a><a class="market-button google-button mb-light-skin"
+									href="#"><span class="mb-subtitle">Download on the</span><span
+										class="mb-title">Google Play</span></a><a
+									class="market-button windows-button mb-light-skin" href="#"><span
+										class="mb-subtitle">Download on the</span><span class="mb-title">Windows
+										Store</span></a>
+							</section>
+						</div>
+						<div class="col-lg-3 col-md-6">
+							<!-- About Us-->
+							<section class="widget widget-links widget-light-skin">
+								<h3 class="widget-title">About Us</h3>
+								<ul>
+									<li><a href="#">Careers</a></li>
+									<li><a href="#">About Unishop</a></li>
+									<li><a href="#">Our Story</a></li>
+									<li><a href="#">Services</a></li>
+									<li><a href="#">Our Blog</a></li>
+								</ul>
+							</section>
+						</div>
+						<div class="col-lg-3 col-md-6">
+							<!-- Account / Shipping Info-->
+							<section class="widget widget-links widget-light-skin">
+								<h3 class="widget-title">Account &amp; Shipping Info</h3>
+								<ul>
+									<li><a href="#">Your Account</a></li>
+									<li><a href="#">Shipping Rates & Policies</a></li>
+									<li><a href="#">Refunds & Replacements</a></li>
+									<li><a href="#">Taxes</a></li>
+									<li><a href="#">Delivery Info</a></li>
+									<li><a href="#">Affiliate Program</a></li>
+								</ul>
 
-
-
-		</section>
-
+							</section>
 	</th:block>
-	<th:block layout:fragment="recommendation">
-	</th:block>
+	<th:block layout:fragment="recommendation"></th:block>
+
 </body>
 
 </html>

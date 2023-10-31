@@ -38,6 +38,8 @@
 							<li><a href="http://localhost/product">Product</a></li>
 							<li><a href="http://localhost/cart/list">Cart</a></li>
 							<li class="has-children"><a href="http://localhost/cart_order_save_form"><span>Checkout</span></a>
+							<li><a href="http://localhost/cart_list">Cart</a></li>
+							<li class="has-children"><a href="checkout-address.html"><span>Checkout</span></a>
 								<ul class="sub-menu">
 									<li><a href="checkout-address.html">Address</a></li>
 									<li><a href="checkout-shipping.html">Shipping</a></li>
@@ -162,8 +164,8 @@
 							</ul>
 						</div>
 						<div class="cart">
-							<a href="http://localhost/cart/list"></a><i class="icon-bag"></i><span
-								class="count">3</span><span class="subtotal">$289.68</span>
+							<a href="http://localhost/cart_list"></a><i class="icon-bag"></i><span
+								class="count" th:text="${session.countCarts}">3</span><span class="subtotal">$289.68</span>
 							<div class="toolbar-dropdown">
 								<div class="dropdown-product-item">
 									<span class="dropdown-product-remove"><i
@@ -208,7 +210,7 @@
 									</div>
 									<div class="column">
 										<a class="btn btn-sm btn-block btn-success"
-											href="http://localhost/cart_order_save_form">주문하기</a>
+											href="http://localhost/cart_order_form">주문하기</a>
 									</div>
 								</div>
 							</div>
