@@ -234,8 +234,8 @@ public class OrderServiceImpl implements OrderService {
 	 */
 	
 	@Transactional
-	public List<OrdersDto> guestOrderList(Long orderNo, String phoneNumber)throws Exception {
-		if(phoneNumber.equals(memberService.getMemberBy(phoneNumber).getPhoneNo())) {
+	public List<OrdersDto> guestOrderList(Long orderNo, String phoneNumber, String name)throws Exception {
+		if(name.equals(memberService.getMemberBy(phoneNumber).getName())) {
 			if(orderNo==orderDao.findById(orderNo).getId()) {
 				List<Orders> orderList= new ArrayList<>();	
 				orderList.add(orderDao.findById(orderNo));
@@ -248,7 +248,7 @@ public class OrderServiceImpl implements OrderService {
 			}
 			throw new Exception("일치하는 주문번호가 없습니다.");
 		}
-		throw new Exception("일치하는 전화번호가 없습니다.");
+		throw new Exception("일치하는 정보가 없습니다.");
 	}
 
 	/*
