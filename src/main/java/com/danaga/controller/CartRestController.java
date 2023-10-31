@@ -45,7 +45,7 @@ public class CartRestController {
 	public void addCart(@RequestBody CartDto dto, HttpSession session) throws Exception {
 		sUserId = (String) session.getAttribute("sUserId");
 		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
-		sUserId = "User3";
+		//sUserId = "User3";
 		// 1번 경우 = 회원 + 세션 장바구니 비어있음
 		if (sUserId != null && fUserCarts == null) {
 			cartService.addCart(dto, sUserId);
@@ -128,21 +128,21 @@ public class CartRestController {
 	public void deleteCart(@RequestParam(name = "idlist[]") List<Long> idList, HttpSession session) throws Exception {
 		// Long id == 회원일시 카트 pk , 비회원 일시 optionsetId
 		// sUserId = (String) session.getAttribute("sUserId");
-		sUserId = "User3";
+		//sUserId = "User3";
 		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
-		System.out.println("제품 선택 삭제 컨트롤러 들어올때 카트 사이즈 = " + fUserCarts.size());
 		// 회원일 경우
 		if (sUserId != null) {
 			for (int i = 0; i < idList.size(); i++) {
 				cartService.deleteCart(idList.get(i), sUserId);
 			}
-		} // 비회원일 경우
+		} else if (fUserCarts != null) {// 비회원일 경우
 			// 선택 optionsetId 와 카트리스트의 optionsetId 동일한 것 찾고 삭제 후 세션에 저장
-		for (int i = 0; i < idList.size(); i++) {
-			for (int j = 0; j < fUserCarts.size(); j++) {
-				if (idList.get(i) == fUserCarts.get(j).getId()) {
-					fUserCarts.remove(j);
-					break;
+			for (int i = 0; i < idList.size(); i++) {
+				for (int j = 0; j < fUserCarts.size(); j++) {
+					if (idList.get(i) == fUserCarts.get(j).getId()) {
+						fUserCarts.remove(j);
+						break;
+					}
 				}
 			}
 		}
@@ -155,7 +155,7 @@ public class CartRestController {
 	// 장바구니에 몇개 담겼는지 숫자 체크
 	void countCarts(HttpSession session) throws Exception {
 		sUserId = (String) session.getAttribute("sUserId");
-		sUserId = "User3";
+		//sUserId = "User3";
 		if (sUserId != null) {
 			session.setAttribute("countCarts", cartService.countCarts(sUserId));
 		} else if (fUserCarts != null) {// 비회원 일시 장바구니 리스트의 사이즈
