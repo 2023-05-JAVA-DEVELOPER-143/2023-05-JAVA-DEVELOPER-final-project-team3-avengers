@@ -135,7 +135,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 						.category(CategoryDto.builder().name(findCategory.get(findCategory.size() - 1).getName())
 								.id(findCategory.get(findCategory.size() - 1).getId()).build())
 						.build(), username)
-				.stream().limit(20).map(t -> new ProductDto(t)).collect(Collectors.toList());
+				.stream().limit(20).collect(Collectors.toList());
 		;
 		return ResponseDto.<ProductDto>builder().data(searchResult).build();
 	}
@@ -152,8 +152,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 
 	@Override
 	public ResponseDto<ProductDto> searchProductsForMember(QueryStringDataDto dto, String username) {
-		List<ProductDto> data = optionSetDao.findForMemberByFilter(dto, username).stream().map(t -> new ProductDto(t))
-				.collect(Collectors.toList());
+		List<ProductDto> data = optionSetDao.findForMemberByFilter(dto, username);
 		;
 		return ResponseDto.<ProductDto>builder().data(data).build();
 	}
