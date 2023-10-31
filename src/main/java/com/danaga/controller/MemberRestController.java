@@ -58,7 +58,7 @@ public class MemberRestController {
 	        message = isDuplicate ? "이미 사용 중인 휴대폰 번호입니다." : "사용할 수 있는 휴대폰 번호입니다.";
 	    }
 
-	    response.put("isDuplicate", String.valueOf(isDuplicate));
+	    response.put("isDuplicate", String.valueOf(!isDuplicate));
 	    response.put("message", message);
 	    return response;
     }
