@@ -44,7 +44,8 @@ public class CartRestController {
 	@PostMapping
 	public void addCart(@RequestBody CartDto dto, HttpSession session) throws Exception {
 		sUserId = (String) session.getAttribute("sUserId");
-		fUserCarts = (ArrayList<CartDto>) session.getAttribute("fUserCarts");
+		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
+		sUserId = "User3";
 		// 1번 경우 = 회원 + 세션 장바구니 비어있음
 		if (sUserId != null && fUserCarts == null) {
 			cartService.addCart(dto, sUserId);
@@ -59,25 +60,25 @@ public class CartRestController {
 			fUserCarts.clear();
 			session.setAttribute("fUserCarts", fUserCarts);
 			countCarts(session);
-		} // 3번 경우 = 비회원 + 세션 장바구니 X
-		if (sUserId == null && fUserCarts == null) {
-			// 들어온 dto -> list에 추가 후 세션에 저장
-			fUserCarts = new ArrayList<>();
-			fUserCarts.add(dto);
-			session.setAttribute("fUserCarts", fUserCarts);
-			countCarts(session);
-		} else if (sUserId == null && fUserCarts != null) {
-			// 4번 경우 = 비회원 + 세션 장바구니 O
-			int findIndex = findFUserCart(fUserCarts, dto);
-			if (findIndex == -1) {
+		} else {// 3번 경우 = 비회원 + 세션 장바구니 X
+			if (sUserId == null && fUserCarts == null) {
+				// 들어온 dto -> list에 추가 후 세션에 저장
+				fUserCarts = new ArrayList<>();
 				fUserCarts.add(dto);
-			} else {
-				fUserCarts.get(findIndex).setQty(fUserCarts.get(findIndex).getQty() + dto.getQty());
+				session.setAttribute("fUserCarts", fUserCarts);
+				countCarts(session);
+			} else if (sUserId == null && fUserCarts != null) {
+				// 4번 경우 = 비회원 + 세션 장바구니 O
+				int findIndex = findFUserCart(fUserCarts, dto);
+				if (findIndex == -1) {
+					fUserCarts.add(dto);
+				} else {
+					fUserCarts.get(findIndex).setQty(fUserCarts.get(findIndex).getQty() + dto.getQty());
+				}
+				session.setAttribute("fUserCarts", fUserCarts);
+				countCarts(session);
 			}
-			session.setAttribute("fUserCarts", fUserCarts);
-			countCarts(session);
 		}
-
 	}
 
 	@Operation(summary = "카트 옵션 변경")
@@ -126,7 +127,7 @@ public class CartRestController {
 	@DeleteMapping("check/{osId}")
 	public void deleteCart(@PathVariable(name = "osId") List<Long> idList, HttpSession session) throws Exception {
 		// Long id == 회원일시 카트 pk , 비회원 일시 optionsetId
-//		sUserId = (String) session.getAttribute("sUserId");
+		// sUserId = (String) session.getAttribute("sUserId");
 		sUserId = "User3";
 		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
 		System.out.println("제품 선택 삭제 컨트롤러 들어올때 카트 사이즈 = " + fUserCarts.size());
@@ -154,11 +155,13 @@ public class CartRestController {
 	// 장바구니에 몇개 담겼는지 숫자 체크
 	void countCarts(HttpSession session) throws Exception {
 		sUserId = (String) session.getAttribute("sUserId");
+		sUserId = "User3";
 		if (sUserId != null) {
 			session.setAttribute("countCarts", cartService.countCarts(sUserId));
-		} // 비회원 일시 장바구니 리스트의 사이즈
-		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
-		session.setAttribute("countCarts", fUserCarts.size());
+		} else if (fUserCarts != null) {// 비회원 일시 장바구니 리스트의 사이즈
+			fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
+			session.setAttribute("countCarts", fUserCarts.size());
+		}
 	};
 
 	// 비회원 장바구니 아이템 넣기 [fUserCarts : 세션 장바구니 ,dto : 장바구니 담을 제품]

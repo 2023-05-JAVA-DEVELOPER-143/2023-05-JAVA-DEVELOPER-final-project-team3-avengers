@@ -29,8 +29,9 @@ public class CartController {
 
 	@GetMapping("/cart_list")
 	public String findCarts(HttpSession session, Model model) throws Exception {
-		//sUserId = (String) session.getAttribute("sUserId");
+		// sUserId = (String) session.getAttribute("sUserId");
 		sUserId= "User3";
+		fUserCarts=(List<CartDto>)session.getAttribute("fUserCarts");
 		if (sUserId != null) { // 회원
 			List<SUserCartResponseDto> carts = cartService.findsUserCartList(sUserId);
 			model.addAttribute("cart", carts);
@@ -44,4 +45,3 @@ public class CartController {
 		return "cart/cart_form";
 	}
 }
-
