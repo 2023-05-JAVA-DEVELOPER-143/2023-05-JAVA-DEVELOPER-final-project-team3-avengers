@@ -17,7 +17,9 @@ public interface MemberService {
 	public MemberResponseDto joinGuest(MemberInsertGuestDto memberInsertGuestDto) throws Exception;
 	public MemberResponseDto updateMember(MemberUpdateDto memberUpdateDto) throws Exception;
 	public void deleteMember(String value) throws Exception;
-	public boolean isDuplicate(String value) throws Exception;
+	public boolean isDuplicateByUserName(String userName) throws Exception;
+	public boolean isDuplicateByEmail(String email) throws Exception;
+	public boolean isDuplicateByPhoneNo(String phoneNo) throws Exception;
 	public boolean isDuplicateByNickname(String nickname) throws Exception;
 	public boolean login(String userName, String password) throws Exception;
 	public void updateGrade(Member member, int gradePoint) throws Exception;

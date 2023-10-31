@@ -13,7 +13,10 @@ import com.danaga.dto.MemberResponseDto;
 import com.danaga.dto.MemberUpdateDto;
 import com.danaga.entity.Member;
 import com.danaga.exception.PasswordMismatchException;
-import com.danaga.exception.ExistedMemberException;
+import com.danaga.exception.ExistedMemberByEmailException;
+import com.danaga.exception.ExistedMemberByNicknameException;
+import com.danaga.exception.ExistedMemberByUserNameException;
+import com.danaga.exception.ExistedMemberByPhoneNoException;
 import com.danaga.exception.MemberNotFoundException;
 import com.danaga.repository.MemberRepository;
 
@@ -41,21 +44,21 @@ public class MemberServiceImpl implements MemberService {
 		return MemberResponseDto.toDto(memberDao.findMember(value));
 	}
 	@Transactional
-	public MemberResponseDto joinMember(Member member) throws Exception, ExistedMemberException {
+	public MemberResponseDto joinMember(Member member) throws Exception, ExistedMemberByUserNameException {
 		// 1.중복체크
-		if (memberDao.existedMemberBy(member.getUserName())) {
+		if (memberDao.existedMemberByUserName(member.getUserName())) {
 			// 중복
-			throw new ExistedMemberException(member.getUserName() + " 는 이미 존재하는 아이디 입니다.");
-		} else if (memberDao.existedMemberBy(member.getEmail())) {
-			throw new ExistedMemberException(member.getEmail() + " 는 이미 등록된 이메일 입니다.");
-		} else if (memberDao.existedMemberBy(member.getPhoneNo())
+			throw new ExistedMemberByUserNameException(member.getUserName() + " 는 이미 존재하는 아이디 입니다.");
+		} else if (memberDao.existedMemberByEmail(member.getEmail())) {
+			throw new ExistedMemberByEmailException(member.getEmail() + " 는 이미 등록된 이메일 입니다.");
+		} else if (memberDao.existedMemberByPhoneNo(member.getPhoneNo())
 				&& (memberDao.findMember(member.getPhoneNo()).getRole().equals("Guest"))) {
 			member.setRole("Member");
 			return MemberResponseDto.toDto((memberDao.update(member)));
-		} else if (memberDao.existedMemberBy(member.getPhoneNo())) {
-			throw new ExistedMemberException(member.getPhoneNo() + " 는 이미 등록된 번호 입니다.");
+		} else if (memberDao.existedMemberByPhoneNo(member.getPhoneNo())) {
+			throw new ExistedMemberByPhoneNoException(member.getPhoneNo() + " 는 이미 등록된 번호 입니다.");
 		} else if (memberRepository.findByNickname(member.getNickname()).isPresent()) {
-			throw new ExistedMemberException(member.getNickname() + "는 사용중인 닉네임 입니다.");
+			throw new ExistedMemberByNicknameException(member.getNickname() + "는 사용중인 닉네임 입니다.");
 		}
 		// 안중복
 		// 2.회원가입
@@ -64,20 +67,20 @@ public class MemberServiceImpl implements MemberService {
 
 	@Transactional
 	public MemberResponseDto joinGuest(MemberInsertGuestDto memberInsertGuestDto) throws Exception {
-		if (memberDao.existedMemberBy(memberInsertGuestDto.getPhoneNo())) {
+		if (memberDao.existedMemberByPhoneNo(memberInsertGuestDto.getPhoneNo())) {
 			return MemberResponseDto.toDto(memberDao.findMember((memberInsertGuestDto).getPhoneNo()));
 		} else {
 			return MemberResponseDto.toDto(memberDao.insert(Member.toGuestEntity(memberInsertGuestDto)));
 		}
 	}
 	@Transactional
-	public MemberResponseDto updateMember(MemberUpdateDto memberUpdateDto) throws Exception, ExistedMemberException {
+	public MemberResponseDto updateMember(MemberUpdateDto memberUpdateDto) throws Exception, ExistedMemberByUserNameException {
 		Member originalMember = memberRepository.findById(memberUpdateDto.getId()).get();
 		Member member = Member.builder().id(memberUpdateDto.getId()).password(memberUpdateDto.getPassword()).nickname(memberUpdateDto.getNickname()).address(memberUpdateDto.getAddress()).build();
 		if (originalMember.getNickname().equals(member.getNickname())) {
 			
 		} else if(memberRepository.findByNickname(member.getNickname()).isPresent()) {
-			throw new ExistedMemberException(member.getNickname()+"는 사용중인 닉네임 입니다.");
+			throw new ExistedMemberByUserNameException(member.getNickname()+"는 사용중인 닉네임 입니다.");
 		}
 		//Member updatedMember = Member.toUpdateEntity(memberUpdateDto);
 		return MemberResponseDto.toDto(memberDao.update(member));
@@ -88,11 +91,17 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	// 중복체크
-	public boolean isDuplicate(String value) throws Exception {
-		return memberDao.existedMemberBy(value);
+	public boolean isDuplicateByUserName(String userName) throws Exception {
+		return memberDao.existedMemberByUserName(userName);
+	}
+	public boolean isDuplicateByEmail(String email) throws Exception {
+		return memberDao.existedMemberByEmail(email);
+	}
+	public boolean isDuplicateByPhoneNo(String phoneNo) throws Exception {
+		return memberDao.existedMemberByPhoneNo(phoneNo);
 	}
 	public boolean isDuplicateByNickname(String nickname) throws Exception {
-		return memberDao.existedMemberBy(nickname);
+		return memberDao.existedMemberByNickname(nickname);
 	}
 
 	public boolean login(String userName, String password) throws Exception {

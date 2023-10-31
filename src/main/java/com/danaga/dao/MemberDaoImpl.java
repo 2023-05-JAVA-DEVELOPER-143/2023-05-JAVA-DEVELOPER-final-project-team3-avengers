@@ -70,19 +70,21 @@ public class MemberDaoImpl implements MemberDao {
 		}
 	}
 
-	public boolean existedMemberBy(String value) throws Exception {
-		if (value.contains("@")) {
-			if (memberRepository.findByEmail(value).isPresent()) {
-				return true;
-			}
-		} else if (value.contains("-")) {
-			if (memberRepository.findByPhoneNo(value).isPresent()) {
-				return true;
-			}
-		} else {
-			if (memberRepository.findByUserName(value).isPresent()) {
-				return true;
-			}
+	public boolean existedMemberByUserName(String userName) throws Exception {
+		if (memberRepository.findByUserName(userName).isPresent()) {
+			return true;
+		}
+		return false;
+	}
+	public boolean existedMemberByEmail(String email) throws Exception {
+		if (memberRepository.findByEmail(email).isPresent()) {
+			return true;
+		}
+		return false;
+	}
+	public boolean existedMemberByPhoneNo(String phoneNo) throws Exception {
+		if (memberRepository.findByPhoneNo(phoneNo).isPresent()) {
+			return true;
 		}
 		return false;
 	}
