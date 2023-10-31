@@ -20,4 +20,5 @@ public interface BoardService {
 	BoardDto update(BoardDto dto);
 	
 	BoardDto delete(BoardDto dto);
+	String getBoardGroupName(Long boardGroupId);
 }

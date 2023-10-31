@@ -85,14 +85,21 @@ public class CommentsServiceImpl implements CommentsService{
 	}
 	@Override
 	@Transactional
-	public CommentDto delete(Long id) {
+	public CommentDto delete(Long id,String pw) {
 		// 댓글 조회 및 예외
 		Comments target = cRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("댓글 삭제 실패! 대상 댓글을 찾을수 없습니다."));
+		
+		//댓글 비밀번호 확인후 틀리면 null 리턴, 맞으면 삭제
+		if(target.getPw()!=pw) {
+			return null;
+		}
 		// 댓글을 DB에서 삭제
 		cRepository.delete(target);
 		// 삭제 댓글을 DTO로 반환
 		CommentDto response=CommentDto.responseDto(target);
 		return response;
 	}
+	
+	
 }
