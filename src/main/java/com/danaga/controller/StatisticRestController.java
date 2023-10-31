@@ -1,8 +1,12 @@
 package com.danaga.controller;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.danaga.entity.Member;
 import com.danaga.entity.Statistic;
+import com.danaga.service.BoardService;
 import com.danaga.service.BoardServiceImpl;
 import com.danaga.service.MemberService;
 import com.danaga.service.OrderService;
@@ -33,45 +38,27 @@ public class StatisticRestController {
 	@Autowired
 	private OrderService orderService;
 	@Autowired
-	private BoardServiceImpl boardService;
+	private BoardService boardService;
 	
-	@Operation(summary = "admin : 전체 통계 호출")
-	@GetMapping("/list")
-	public ResponseEntity<List<Statistic>> getStatisticListAll() {
-		List<Statistic> statistics = statisticService.thisMonthStatistic();
-		return ResponseEntity.status(HttpStatus.OK).body(statistics);
+	@GetMapping("/daily_update")
+	public Map<String, Object> dailyUpdate() {
+		statisticService.updateAt(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
+		Map<String, Object> updatedData = new HashMap<>();
+		updatedData.put("updatedMonthlyStat", statisticService.thisMonthStatistic());
+		updatedData.put("updated7dStat", statisticService.latest7DaysStatistic());
+		return updatedData;
 	}
-	@Operation(summary = "admin : ")
-	@GetMapping("/daily")
-	public ResponseEntity<List<Statistic>> getTodayList() {
-		String today = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
-		statisticService.updateAt(today);
-		List<Statistic> statistics = statisticService.updateAll();
-		return ResponseEntity.status(HttpStatus.OK).body(statistics);
+	
+	@GetMapping("/option_year")
+	public List<Statistic> optionYear() {
+		List<Statistic> list = statisticService.yearlyStatistic("2023");
+		return list;
 	}
-	@Operation(summary = "admin : yyyymmdd 통계 업데이트")
-	@PostMapping("/{date}")
-	public ResponseEntity<List<Statistic>> manualUpdate(@PathVariable(value = "date") String findDate) {
-		statisticService.updateAt(findDate);
-		List<Statistic> statistics = statisticService.Statistics();
-		return ResponseEntity.status(HttpStatus.OK).body(statistics);
+	
+	@GetMapping("/option_days")
+	public List<Statistic> optionDays() {
+		List<Statistic> list = statisticService.latest7DaysStatistic();
+		return list;
 	}
-	@Operation(summary = "admin : 과거 통계 업데이트")
-	@GetMapping("/update")
-	public ResponseEntity<List<Statistic>> entireUpdate() {
-		List<Statistic> statistics = statisticService.updateAll();
-		return ResponseEntity.status(HttpStatus.OK).body(statistics);
-	}
-	@Operation(summary = "admin : YYYYMM월 데이터")
-	@GetMapping("/month/{month}")
-	public ResponseEntity<List<Statistic>> searchMonth(@PathVariable(value = "month") String month) {
-		List<Statistic> statistics = statisticService.monthlyStatistic(month);
-		return ResponseEntity.status(HttpStatus.OK).body(statistics);
-	}
-	@Operation(summary = "admin : 이번달 데이터")
-	@GetMapping("/this")
-	public ResponseEntity<List<Statistic>> thisMonth() {
-		List<Statistic> statistics = statisticService.thisMonthStatistic();
-		return ResponseEntity.status(HttpStatus.OK).body(statistics);
-	}
+	
 }

@@ -8,22 +8,30 @@ import com.danaga.entity.Statistic;
 
 @Transactional
 public interface StatisticService {
-	//전체 통계 데이터 출력
-	List<Statistic> Statistics(); 
-
-	//N일자 통계 입력
+	//N일자 통계 입력 및 반환
 	Statistic updateAt(String string);
-		
-	//전체 통계 입력
-	List<Statistic> updateAll();
 	
-	//최근 7일치 기록
+	//최근 7일치 기록 단순반환
 	List<Statistic> latest7DaysStatistic();
-
-	//YYYYMM월 기록
+	
+	//이번달 기록 단순반환
+	List<Statistic> thisMonthStatistic();
+	
+	//YYYYMM월 기록 단순반환
 	List<Statistic> monthlyStatistic(String month);
 
-	//이번달 기록
-	List<Statistic> thisMonthStatistic();
+	//YYYY년 기록 단순반환
+	List<Statistic> yearlyStatistic(String year);
+	
+	/******************** Batch *****************/
+	
+	//이번 달 업데이트
+	void updateThisMonth();
+	
+	//월별 업데이트
+	void createMoData(String month);
+	
+
+
 	
 }

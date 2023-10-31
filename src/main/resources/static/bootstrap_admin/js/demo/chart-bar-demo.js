@@ -26,13 +26,24 @@ function number_format(number, decimals, dec_point, thousands_sep) {
   }
   return s.join(dec);
 }
-var dailySalesTotQtyValues = chartData.map(function(item) {
-    return item.dailySalesTotQty;
-});
+
 var dateList = chartData.map(function(item) {
     return item.id;
 });
-// Bar Chart Example
+var dailySalesTotQtyValues = chartData.map(function(item) {
+    return item.dailySalesTotQty;
+});
+var dailySalesRevenueValues = chartData.map(function(item) {
+    return item.dailySalesRevenue;
+});
+var dailyBoardInquiryValues = chartData.map(function(item) {
+    return item.dailyBoardInquiry;
+});
+var dailyNewMemberValues = chartData.map(function(item) {
+    return item.dailyNewMember;
+});
+
+// qtyChart
 var ctx = document.getElementById("myBarChart");
 var myBarChart = new Chart(ctx, {
   type: 'bar',
@@ -78,7 +89,7 @@ var myBarChart = new Chart(ctx, {
           padding: 10,
           // Include a dollar sign in the ticks
           callback: function(value, index, values) {
-            return number_format(value);
+            return number_format(value) + '건';
           }
         },
         gridLines: {
@@ -108,26 +119,25 @@ var myBarChart = new Chart(ctx, {
       callbacks: {
         label: function(tooltipItem, chart) {
           var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-          return datasetLabel + ': ' + number_format(tooltipItem.yLabel);
+          return datasetLabel + ': ' + number_format(tooltipItem.yLabel) +'건';
         }
       }
     },
   }
 });
+
+// qtyChart
 myBarChart.data.datasets[0].data = dailySalesTotQtyValues.reverse();
 myBarChart.data.labels = dateList.reverse();
 var parsedValues = dailySalesTotQtyValues.map(function(value) {
-  return parseFloat(value); // parseFloat를 사용하여 실수로 파싱
+  return parseFloat(value);
 });
-
-// 파싱된 값 중에서 최댓값 찾기
 var maxParsedValue = Math.max.apply(null, parsedValues);
-
-// yAxes의 max 값을 설정
-myBarChart.options.scales.yAxes[0].ticks.max = maxParsedValue * 1.2;
+myBarChart.options.scales.yAxes[0].ticks.max = maxParsedValue * 1.1;
 myBarChart.update();
 
-// Bar Chart Example
+
+// revenueChart
 var ctx = document.getElementById("myBarChart2");
 var myBarChart = new Chart(ctx, {
   type: 'bar',
@@ -173,7 +183,7 @@ var myBarChart = new Chart(ctx, {
           padding: 10,
           // Include a dollar sign in the ticks
           callback: function(value, index, values) {
-            return number_format(value);
+            return number_format(value) + '원';
           }
         },
         gridLines: {
@@ -203,14 +213,23 @@ var myBarChart = new Chart(ctx, {
       callbacks: {
         label: function(tooltipItem, chart) {
           var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-          return datasetLabel + ': ' + number_format(tooltipItem.yLabel);
+          return datasetLabel + ': ' + number_format(tooltipItem.yLabel) + '원';
         }
       }
     },
   }
 });
+// revenueChart
+myBarChart.data.datasets[0].data = dailySalesRevenueValues.reverse();
+myBarChart.data.labels = dateList;
+var parsedValues = dailySalesRevenueValues.map(function(value) {
+  return parseFloat(value);
+});
+var maxParsedValue = Math.max.apply(null, parsedValues);
+myBarChart.options.scales.yAxes[0].ticks.max = maxParsedValue * 1.1;
+myBarChart.update();
 
-// Bar Chart Example
+// memberChart
 var ctx = document.getElementById("myBarChart3");
 var myBarChart = new Chart(ctx, {
   type: 'bar',
@@ -256,7 +275,7 @@ var myBarChart = new Chart(ctx, {
           padding: 10,
           // Include a dollar sign in the ticks
           callback: function(value, index, values) {
-            return number_format(value);
+            return number_format(value) + '명';
           }
         },
         gridLines: {
@@ -286,14 +305,24 @@ var myBarChart = new Chart(ctx, {
       callbacks: {
         label: function(tooltipItem, chart) {
           var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-          return datasetLabel + ': ' + number_format(tooltipItem.yLabel);
+          return datasetLabel + ': ' + number_format(tooltipItem.yLabel) + '명';
         }
       }
     },
   }
 });
 
-// Bar Chart Example
+// memberChart
+myBarChart.data.datasets[0].data = dailyNewMemberValues.reverse();
+myBarChart.data.labels = dateList;
+var parsedValues = dailyNewMemberValues.map(function(value) {
+  return parseFloat(value);
+});
+var maxParsedValue = Math.max.apply(null, parsedValues);
+myBarChart.options.scales.yAxes[0].ticks.max = maxParsedValue * 1.1;
+myBarChart.update();
+
+// boardChart
 var ctx = document.getElementById("myBarChart4");
 var myBarChart = new Chart(ctx, {
   type: 'bar',
@@ -339,7 +368,7 @@ var myBarChart = new Chart(ctx, {
           padding: 10,
           // Include a dollar sign in the ticks
           callback: function(value, index, values) {
-            return number_format(value);
+            return number_format(value) + '개';
           }
         },
         gridLines: {
@@ -369,9 +398,19 @@ var myBarChart = new Chart(ctx, {
       callbacks: {
         label: function(tooltipItem, chart) {
           var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-          return datasetLabel + ': ' + number_format(tooltipItem.yLabel);
+          return datasetLabel + ': ' + number_format(tooltipItem.yLabel) + '개';
         }
       }
     },
   }
 });
+
+// boardChart
+myBarChart.data.datasets[0].data = dailyBoardInquiryValues.reverse();
+myBarChart.data.labels = dateList;
+var parsedValues = dailyBoardInquiryValues.map(function(value) {
+  return parseFloat(value);
+});
+var maxParsedValue = Math.max.apply(null, parsedValues);
+myBarChart.options.scales.yAxes[0].ticks.max = maxParsedValue * 1.1;
+myBarChart.update();

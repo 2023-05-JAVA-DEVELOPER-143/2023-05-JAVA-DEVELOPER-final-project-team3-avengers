@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -31,7 +30,7 @@
     <div id="wrapper">
 
         <!-- Sidebar Start -->
-		<div th:insert="admin/admin_include::nav"></div>
+		<div th:insert="~{admin/admin_include::nav}"></div>
 		<!-- Sidebar End -->
 
         <!-- Content Wrapper -->
@@ -45,12 +44,9 @@
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800" style="margin-top: 20px;">회원리스트</h1>
-                    <p class="mb-4" th:text="${memberList}">DataTables is a third party plugin that is used to generate the demo table below.
-                        For more information about DataTables, please visit the <a target="_blank"
-                            href="https://datatables.net">official DataTables documentation</a>.</p>
 
                     <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
+                    <div class="card shadow mb-4" style="margin-top: 20px;">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary" th:text="${#calendars.format(#calendars.createNow(),'yyyy년 MM월 dd일') + ' 기준'}">회원명단</h6>
                         </div>
@@ -69,14 +65,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Tiger Nixon</td>
-                                            <td>System Architect</td>
-                                            <td>Edinburgh</td>
-                                            <td>61</td>
-                                            <td>2011/04/25</td>
-                                            <td>$320,800</td>
-                                            <td><a class="dropdown-item" href="#" data-toggle="modal" data-target="#deleteModal">
+                                        <tr th:each="member : ${memberList}">
+                                            <td th:text="${member.email}"></td>
+                                            <td th:text="${member.name}"></td>
+                                            <td th:text="${#dates.format(member.birthday, 'yyyy-MM-dd')}"></td>
+                                            <td th:text="${member.nickname}"></td>
+                                            <td th:text="${member.grade}"></td>
+                                            <td th:text="${#temporals.format(member.joinDate, 'yyyy-MM-dd')}"></td>
+                                            <td><a class="dropdown-item" href="#" data-toggle="modal" data-target="#deleteModal"
+                                            th:attr="data-memberid=${member.id}, data-membername=${member.name}">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     삭제하기
                                 </a></td>
@@ -120,7 +117,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">OOO 회원을 정말 삭제하시겠습니까?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel" >OOO 회원을 정말 삭제하시겠습니까?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -128,7 +125,7 @@
                 <div class="modal-body">"삭제" 버튼을 누르면 회원정보가 영구히 삭제됩니다.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
-                    <a class="btn btn-primary" href="login.html">삭제</a>
+                    <a class="btn btn-primary" th:href="@{'/admin/delete_member' + member.id}">삭제</a>
                 </div>
             </div>
         </div>

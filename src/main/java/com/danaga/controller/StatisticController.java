@@ -1,5 +1,7 @@
 package com.danaga.controller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +12,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.danaga.entity.Statistic;
+import com.danaga.repository.BoardRepository;
+import com.danaga.repository.OrderRepository;
+import com.danaga.repository.product.ProductRepository;
+import com.danaga.service.BoardService;
 import com.danaga.service.BoardServiceImpl;
 import com.danaga.service.MemberService;
 import com.danaga.service.OrderService;
 import com.danaga.service.StatisticService;
+import com.danaga.service.product.OptionSetService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +32,17 @@ public class StatisticController {
 	private final StatisticService statisticService;
 	private final MemberService memberService;
 	private final OrderService orderService;
-	private final BoardServiceImpl boardService;
+	private final OrderRepository orderRepository;
+	private final BoardService boardService;
+	private final BoardRepository boardRepository;
+	private final ProductRepository productRepository;
 	
 	@GetMapping
 	public String main(Model model) {
-		model.addAttribute("statisticList", changeDateFormat(statisticService.latest7DaysStatistic()));
+		model.addAttribute("thisMonthList", statisticService.thisMonthStatistic());
+		model.addAttribute("todayStat", statisticService.updateAt(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"))));
+		model.addAttribute("latest7List", changeDateFormat(statisticService.latest7DaysStatistic()));
+		//model.addAttribute("yearList", statisticService.latest7DaysStatistic());
 		return "admin/admin";
 	}
 	@GetMapping("/admin_product_insert")
@@ -37,11 +50,13 @@ public class StatisticController {
 		return "admin/admin_product_insert";
 	}
 	@GetMapping("/admin_product_list")
-	public String adminProductList() {
+	public String adminProductList(Model model) {
+		model.addAttribute("productList", productRepository.findAll());
 		return "admin/admin_product_list";
 	}
 	@GetMapping("/admin_order_list")
-	public String adminOrderList() {
+	public String adminOrderList(Model model) {
+		model.addAttribute("orderList", orderRepository.findAll());
 		return "admin/admin_order_list";
 	}
 	@Operation(summary = "admin : 회원리스트 출력")
@@ -51,7 +66,8 @@ public class StatisticController {
 		return "admin/admin_member_list";
 	}
 	@GetMapping("/admin_board_list")
-	public String adminBoardList() {
+	public String adminBoardList(Model model) {
+		model.addAttribute("boardList", boardRepository.findAll());
 		return "admin/admin_board_list";
 	}
 	

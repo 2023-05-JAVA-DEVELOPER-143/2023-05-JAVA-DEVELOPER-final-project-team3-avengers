@@ -44,7 +44,7 @@
 					<div class="d-sm-flex align-items-center justify-content-between mb-4" style="margin-top: 20px;">
 						<h1 class="h3 mb-0 text-gray-800 font-weight-bold"
 							th:text="${#calendars.format(#calendars.createNow(),'yyyy년 MM월') + ' 통계'}">2023년 10월 통계</h1>
-						<a href="/admin/daily" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+						<a href="" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" id="dailyUpdate"><i
 								class="fas fa-download fa-sm text-white-50"></i> 실시간 업데이트</a>
 					</div>
 
@@ -59,15 +59,10 @@
 											<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
 												이번 달 판매량</div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800"
-												th:text="${#numbers.formatDecimal(#aggregates.sum(statisticList.![dailySalesTotQty]),1,'COMMA',0,'POINT')+'건'}">
+												th:text="${#numbers.formatDecimal(#aggregates.sum(thisMonthList.![dailySalesTotQty]),1,'COMMA',0,'POINT')+'건'}">
 												1,541</div>
 											<span class="mr-2 d-none d-lg-inline text-gray-600 small font-weight-bold"
-												th:each="data : ${statisticList}"
-												th:if="${data.id eq #dates.format(#dates.createNow(), 'yyyyMMdd')}">
-												<span th:if="${data.dailySalesTotQty == null or data.dailySalesTotQty == 0}" th:text="'(금일 현재 0명)'"></span>
-												<span th:if="${data.dailySalesTotQty > 0}"
-													th:text="'(금일 현재 ' + ${data.dailySalesTotQty + '명 &uarr;)'}"></span>
-											</span>
+												th:text="'(금일 현재 ' + ${todayStat.dailySalesTotQty} + '건)'"></span>
 										</div>
 										<div class="col-auto">
 											<i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -86,16 +81,10 @@
 											<div class="text-xs font-weight-bold text-success text-uppercase mb-1">
 												이번 달 판매수익</div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800"
-												th:text="${#numbers.formatDecimal(#aggregates.sum(statisticList.![dailySalesRevenue]),1,'COMMA',0,'POINT')+'원'}">
+												th:text="${#numbers.formatDecimal(#aggregates.sum(thisMonthList.![dailySalesRevenue]),1,'COMMA',0,'POINT')+'원'}">
 												52,155,540원</div>
 											<span class="mr-2 d-none d-lg-inline text-gray-600 small font-weight-bold"
-												th:each="data : ${statisticList}"
-												th:if="${data.id eq #dates.format(#dates.createNow(), 'yyyyMMdd')}">
-												<span th:if="${data.dailySalesRevenue > 0}"
-													th:text="'(금일 현재 ' + ${#numbers.formatDecimal(data.dailySalesRevenue,1,'COMMA',0,'POINT') + '원 &uarr;)'}"></span>
-												<span th:unless="${data.dailySalesRevenue > 0}"
-													th:text="'(금일 현재 0원)'"></span>
-											</span>
+												th:text="'(금일 현재 ' + ${todayStat.dailySalesRevenue} + '원)'"></span>
 										</div>
 										<div class="col-auto">
 											<i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -116,7 +105,7 @@
 											<div class="row no-gutters align-items-center">
 												<div class="col-auto">
 													<div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"
-														th:text="${#numbers.formatDecimal(#aggregates.sum(statisticList.![dailyNewMember]),1,'COMMA',0,'POINT')+'명'}">
+														th:text="${#numbers.formatDecimal(#aggregates.sum(thisMonthList.![dailyNewMember]),1,'COMMA',0,'POINT')+'명'}">
 														50명</div>
 												</div>
 												<div class="col">
@@ -128,13 +117,7 @@
 												</div>
 											</div>
 											<span class="mr-2 d-none d-lg-inline text-gray-600 small font-weight-bold"
-												th:each="data : ${statisticList}"
-												th:if="${data.id eq #dates.format(#dates.createNow(), 'yyyyMMdd')}">
-												<span th:if="${data.dailyNewMember > 0}"
-													th:text="'(금일 현재 ' + ${data.dailyNewMember + '명 &uarr;)'}"></span>
-												<span th:unless="${data.dailyNewMember > 0}"
-													th:text="'(금일 현재 0명)'"></span>
-											</span>
+												th:text="'(금일 현재 ' + ${todayStat.dailyNewMember} + '명)'"></span>
 										</div>
 										<div class="col-auto">
 											<i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
@@ -153,16 +136,10 @@
 											<div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
 												이번 달 게시글 수</div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800"
-												th:text="${#numbers.formatDecimal(#aggregates.sum(statisticList.![dailyBoardInquiry]),1,'COMMA',0,'POINT')+'개'}">
+												th:text="${#numbers.formatDecimal(#aggregates.sum(thisMonthList.![dailyBoardInquiry]),1,'COMMA',0,'POINT')+'개'}">
 												180</div>
 											<span class="mr-2 d-none d-lg-inline text-gray-600 small font-weight-bold"
-												th:each="data : ${statisticList}"
-												th:if="${data.id eq #dates.format(#dates.createNow(), 'yyyyMMdd')}">
-												<span th:if="${data.dailyBoardInquiry > 0}"
-													th:text="'(금일 현재 ' + ${data.dailyBoardInquiry + '개 &uarr;)'}"></span>
-												<span th:unless="${data.dailyBoardInquiry > 0}"
-													th:text="'(금일 현재 0개)'"></span>
-											</span>
+												th:text="'(금일 현재 ' + ${todayStat.dailyBoardInquiry} + '개)'"></span>
 										</div>
 										<div class="col-auto">
 											<i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -175,15 +152,15 @@
 
 					<!-- Content Row -->
 					<div class="d-sm-flex align-items-center justify-content-between mb-4" style="margin-top: 20px;">
-						<h1 class="h4 mb-0 text-gray-600 ">최근 7일 데이터 추이</h1>
+						<h1 class="h4 mb-0 text-gray-600 " id="displayText">최근 7일 데이터 추이</h1>
 						<div class="dropdown mb-4">
 							<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
 								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								기간선택
 							</button>
 							<div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton">
-								<a class="dropdown-item" href="#">2023년 월별</a>
-								<a class="dropdown-item" href="#">최근 7일 일별</a>
+								<a class="dropdown-item" href="#" id="optionYear">2023년 월별</a>
+								<a class="dropdown-item" href="#" id="optionDays">최근 7일 일별</a>
 							</div>
 						</div>
 					</div>
@@ -231,7 +208,7 @@
 								<!-- Card Header - Dropdown -->
 								<div
 									class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-									<h6 class="m-0 font-weight-bold text-info">회원수 추이</h6>
+									<h6 class="m-0 font-weight-bold text-info">신규회원수 추이</h6>
 								</div>
 								<!-- Card Body -->
 								<div class="card-body">
@@ -297,11 +274,12 @@
 			<script src="/bootstrap_admin/vendor/chart.js/Chart.min.js"></script>
 
 			<script th:inline="javascript">
-				var chartData = /*[[${statisticList}]]*/
+				var chartData = /*[[${latest7List}]]*/
 			</script>
 
 			<!-- Page level custom scripts -->
 			<script src="/bootstrap_admin/js/demo/chart-bar-demo.js"></script>
+			<script src="/bootstrap_admin/js/app.js"></script>
 
 </body>
 
