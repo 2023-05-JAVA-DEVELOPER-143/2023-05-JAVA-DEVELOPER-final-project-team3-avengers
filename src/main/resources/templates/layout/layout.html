@@ -35,31 +35,9 @@
  
 
 <body>
-	 <!-- Modal 시작-->
-	<div class="modal fade" id="exampleModal" tabindex="-5" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-	  		<div class="modal-content">
-			 <div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">옵션변경</h5>
-				  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				     <span aria-hidden="true">&times;</span>
-				     </button>
-			 </div>
-				 <div class="modal-body">
-				  <select id="modalSelectbox" class="form-control">
-                    <!-- <option th:each="option:${cart.options}" th:text="${option.name + ': ' + option.value}">1</option>  -->
-                   
-                  </select>
-				 </div>
-					<div class="modal-footer">
-					 	<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-					  	<button type="button" class="btn btn-primary">변경</button>
-					</div>
-			</div>
-		</div>
-	</div>
-	<!-- Modal 끝-->
 	
+	
+<th:block layout:fragment="modal"></th:block>
 	
 		<!-- Off-Canvas Category Menu-->
 	<!-- common-top.html start -->

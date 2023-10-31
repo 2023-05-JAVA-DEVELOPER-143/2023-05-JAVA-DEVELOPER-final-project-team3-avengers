@@ -109,8 +109,9 @@
 
 					<!-- 클라이언트 요청 -->
 					<script id="main-product-item-template"	type="text/x-handlebars-template">
-					<div class="product-card product-list">
-						{{#each data}} <a class="product-thumb"
+{{#each data}} 					
+<div class="product-card product-list">
+						<a class="product-thumb"
 							href="http://localhost/product{{osId}}"> <img
 							src="{{pImage}}" alt="Product">
 						</a>
@@ -145,9 +146,9 @@
 								data-optionSetId="{{osId}}">Add to
 								Cart</button>
 						</div>
-					{{/each}}
+					
 					</div>
-			
+			{{/each}}
 
 
 				</script>

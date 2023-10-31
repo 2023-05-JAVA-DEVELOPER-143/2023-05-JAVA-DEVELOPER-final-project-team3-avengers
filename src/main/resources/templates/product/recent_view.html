@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
- layout:decorate="layout/layout(title='최근 본 상품')">
+ layout:decorate="layout/layout(title='Recently Viewed')">
 <head>
 
 </head>
@@ -11,7 +11,7 @@
 		<div class="container padding-bottom-3x mb-2">
 			<div class="row">
 				<!--profile component-->
-				<div class="col-lg-4" th:insert="mypage_component :: profile-component"></div>
+				<div class="col-lg-4" th:insert="~{mypage_component :: mypage}"></div>
 				<!--profile component 끝-->
 				<div class="col-lg-8">
 					<div class="padding-top-2x mt-2 hidden-lg-up"></div>
@@ -19,17 +19,11 @@
 						<!-- recentView Table-->
 						<!-- 하위 태그들은 size==1이면 빈상자 이미지로 대체-->
 						<table class="table"
-							th:insert="myProduct-component :: product-table(from='recentview')"></table>
+							th:insert="~{myProduct-component :: product-table(from='recentview')}"></table>
 						<!-- recentView Table-->
 						
 				</div>
 				<hr class="mb-4">
-				<div class="custom-control custom-checkbox">
-					<input class="custom-control-input" type="checkbox" id="inform_me" checked> <label
-						class="custom-control-label" for="inform_me">Inform me when item from my wishlist is
-						available</label>
-
-					</div>
 				</div>
 			</div>
 		</div>

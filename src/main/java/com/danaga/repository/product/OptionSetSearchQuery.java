@@ -161,11 +161,11 @@ public class OptionSetSearchQuery {
 	public void optionFilter(String optionName,List<String> optionValue) {
 		String valueString = "o.value= :optionValue1";
 		if(optionValue!=null&&optionValue.size()==1) {
-			valueString.replace(":optionValue1", optionValue.get(0));
+			valueString.replace(":optionValue1", "'"+optionValue.get(0)+"'");
 		}else if(optionValue!=null&&optionValue.size()>1) {
-			valueString.replace(":optionValue1", optionValue.get(0));
+			valueString.replace(":optionValue1", "'"+optionValue.get(0)+"'");
 			for (int i = 1; i < optionValue.size(); i++) {
-				valueString+="OR o.value="+optionValue.get(i);
+				valueString+="OR o.value="+"'"+optionValue.get(i)+"'";
 			}
 		}
 		String option_filter = "AND EXISTS ( SELECT 1 FROM Options o WHERE o.optionSet = os AND o.name = :optionName AND ("+valueString+") )";
@@ -180,7 +180,7 @@ public class OptionSetSearchQuery {
 	}
 	public void nameKeyword(String nameKeyword) {
 		String name_keyword = "AND os.product.name like :nameKeyword ";
-		name_keyword = name_keyword.replace(":nameKeyword", "'"+nameKeyword+"'");
+		name_keyword = name_keyword.replace(":nameKeyword", "'%"+nameKeyword+"%'");
 		this.searchQuery+=name_keyword;
 	}
 	public String build() {
