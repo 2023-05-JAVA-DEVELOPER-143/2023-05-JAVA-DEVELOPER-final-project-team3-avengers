@@ -8,8 +8,36 @@
 	<link rel="stylesheet" media="screen" href="bootstrap/css/cart.css">
 </head>
 <body>
+	<!-- Modal 시작-->
+	<div class="modal fade" id="exampleModal" tabindex="-5" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+	  		<div class="modal-content">
+			 <div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">옵션변경</h5>
+				  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				     <span aria-hidden="true">&times;</span>
+				     </button>
+			 </div>
+				 <div class="modal-body" >
+				  <select id="modalSelectbox" class="form-control">
+                      <option>옵션1</option> 
+                      <option>옵션2</option> 
+                      <option>옵션3</option> 
+                      <option>옵션4</option> 
+                      <option>옵션5</option> 
+                  </select>
+				 </div>
+					<div class="modal-footer">
+					 	<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+					  	<button type="button" class="btn btn-primary">변경</button>
+					</div>
+			</div>
+		</div>
+	</div>
+	<!-- Modal 끝-->
+	
       <!-- Page Content-->
-        <th:block layout:fragment="content">
+      <th:block layout:fragment="content">
       <!-- Main Slider-->
         
 	
@@ -228,14 +256,14 @@
 
 <script th:inline="javascript">
 	
-/*
+
 $(document).ready(function() {
     let qtyprice = 0;
     let checkboxes = document.querySelectorAll('input[name="checkboxvalue"]');
     let checkboxtotalPrice = document.querySelectorAll('input[name="checkboxtotalPrice"]');
     let checkboxesqty = document.querySelectorAll('input[name="checkboxqty"]');
     
-    // 초기 총 결제 금액 계산
+    // 체크된 체크박스만 계산
     for (let i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i].checked) {
             let qty = parseInt(checkboxesqty[i].value);
@@ -243,6 +271,8 @@ $(document).ready(function() {
             qtyprice += qty * totalPrice;
         }
     }
+    
+    console.log(qtyprice);
     $("#finalTotalPrice").text(qtyprice);
     
     // 체크박스 상태 변경 시 이벤트 처리
@@ -259,7 +289,7 @@ $(document).ready(function() {
         $("#finalTotalPrice").text(qtyprice);
     });
 });
-*/
+
 
 /* 체크된 체크박스 값들만 주문폼으로 넘기기 (테스트완료 소리질러~~)  */ 
 function checkValue() {
@@ -286,13 +316,13 @@ function checkValue() {
    console.log("선택된 데이터: ", checkedData);
    
    $.ajax({
-		url : "/member_cart_order_save_form",
+		url : "/cart_order_form",
 		type : "post",
 		contentType : 'application/json',
 		data : JSON.stringify(checkedData),
 		success : function() {
 			console.log(checkedData);
-			location.href = "http://localhost:80/member_cart_order_save_form";
+			location.href = "http://localhost:80/cart_order_form";
 		}
 	});
    

@@ -109,7 +109,7 @@ public class OrderController {
 	 */
 
 	@PostMapping("/cart_order_form")
-	public String memberCartOrderAddForm(@ModelAttribute List<SUserCartOrderDto> sUserCartOrderDto ,Model model,HttpSession session) throws Exception {
+	public String memberCartOrderAddForm(@RequestBody List<SUserCartOrderDto> sUserCartOrderDto ,Model model,HttpSession session) throws Exception {
 		
 		String sUserId = (String) session.getAttribute("sUserId");
 		if(sUserId==null) {
