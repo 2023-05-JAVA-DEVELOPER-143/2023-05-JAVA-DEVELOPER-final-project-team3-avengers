@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="layout/layout(title='')">
+<!-- Body-->
+<!-- Header -->
+
+<head>
+</head>
+
+<body>
+	<!-- Page Content-->
+	<th:block layout:fragment="content">
+		<!-- Main Slider-->
+		<section class="hero-slider" style="background-image: url(img/hero-slider/main-bg.jpg);">
+			<!-- Find Guest Form-->
+			<div class="col-xl-9 col-lg-8">
+				<h4>Billing Address</h4>
+				<hr class="padding-bottom-1x">
+				<div class="custom-section">
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label for="checkout-fn">주문번호</label>
+							<input class="form-control" type="text" id="checkout-fn">
+						</div>
+					</div>
+				</div>
+				<div class="custom-section">
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label for="checkout-email">주문자전화번호</label>
+							<input class="form-control" type="email" id="checkout-email">
+						</div>
+					</div>
+				</div>
+				<div class="custom-section">
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label for="checkout-company">주문자이름</label>
+							<input class="form-control" type="text" id="checkout-company">
+						</div>
+					</div>
+				</div>
+				<hr class="padding-bottom-1x">
+				
+				<div class="checkout-footer">
+					<div class="column">
+						<a class="btn btn-primary" href="http://localhost/guest_order_detail">
+							<span class="hidden-xs-down">주문찾기 &nbsp;</span><i class="icon-arrow-right"></i>
+						</a>
+					</div>
+				</div>
+			</div>
+
+		</section>
+
+	</th:block>
+	<th:block layout:fragment="recommendation">
+	</th:block>
+</body>
+
+</html>

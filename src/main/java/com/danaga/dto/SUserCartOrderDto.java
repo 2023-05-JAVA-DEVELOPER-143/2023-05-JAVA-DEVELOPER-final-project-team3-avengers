@@ -20,4 +20,5 @@ public class SUserCartOrderDto {
 	private Integer qty;
 	private String productName;
 	private Integer totalPrice;
+	
 }

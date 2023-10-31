@@ -152,90 +152,90 @@ public class OrderServiceImpl implements OrderService {
 		
 	}
 	
-//	
-//	/*
-//	 * cart에서 선택주문(비회원)
-//	 */
-//	@Transactional
-//	public OrdersDto guestCartSelectOrderSave(DeliveryDto deliveryDto,List<CartDto> fUserCarts,OrderGuestDto orderGuestDto)throws Exception {
-//
-//		ArrayList<OrderItem> orderItemList = new ArrayList<>();
-//		
-//		int o_tot_price = 0;
-//		int oi_tot_count = 0;
-//		
-//	   	MemberResponseDto memberResponseDto =memberService.joinGuest(MemberInsertGuestDto.builder()
-//				   .name(orderGuestDto.getName())
-//				   .phoneNo(orderGuestDto.getPhoneNo())
-//				   .role("Guest")
-//				   .build());
-//	   	Member member= Member.toResponseEntity(memberResponseDto);
-//
-//		for (int i = 0; i < fUserCarts.size(); i++) {
-//			
-//			CartDto cartDto= fUserCarts.get(i);
-//			OptionSet optionSet = optionSetDao.findById(cartDto.getId());
-//			
-//
-//		    o_tot_price+=(optionSet.getTotalPrice())*(cartDto.getQty());
-//		    oi_tot_count+=cartDto.getQty();
-//		
-//            OrderItem inputOIEntity = OrderItem.builder()
-//							                   .qty(cartDto.getQty())
-//							                   .optionSet(optionSet)
-//							                   .build();
-//
-//            orderItemList.add(inputOIEntity);
-//		}
-//	       
-//			OptionSet optionSet= optionSetDao.findById(orderItemList.get(0).getOptionSet().getId());
-//			
-//			String o_desc = optionSet.getProduct().getName() + "외" + (oi_tot_count - 1) + "개";
-//	      
-//			if (oi_tot_count == 1) {
-//	    	   o_desc = optionSet.getProduct().getName();
-//	       }
-//	       
-//	       
-//	     	Delivery delivery = Delivery.builder()
-//					.name(deliveryDto.getName())
-//					.phoneNumber(deliveryDto.getPhoneNumber())
-//					.address(deliveryDto.getAddress())
-//					.build();
-//			System.out.println("@@@@@@@@@@@@@@@@@@delivery: "+delivery);
-//
-//	       Orders orders = Orders.builder()
-//                   .description(o_desc)
-//                   .price(o_tot_price)
-//                   .statement(OrderStateMsg.입금대기중)
-//                   .member(member)
-//                   .delivery(delivery)
-//                   .orderItems(orderItemList)
-//                   .build();
-//			System.out.println("@@@@@@@@@@@@@@@@@@orders: "+orders);
-//
-//		      for (OrderItem orderItem : orderItemList) {
-//				orderItem.setOrders(orders);
-//			}
-//		      delivery.setOrders(orders);
-//		      orders.setMember(member);
-//		      Orders realOrders = orderDao.save(orders);// 마지막에 세이브해야되는듯
-//		      System.out.println("@@@@@@@@@@@@@@@@@@delivery: "+delivery);
-//		      System.out.println("@@@@@@@@@@@@@@@@@@orderItemList: "+orderItemList);
-//		      System.out.println("@@@@@@@@@@@@@@@@@@real orders: "+realOrders);
-//
-//		return OrdersDto.orderDto(orders);
-//	}
-//
-//	
+	
+	/*
+	 * cart에서 선택주문(비회원)
+	 */
+	@Transactional
+	public OrdersDto guestCartSelectOrderSave(DeliveryDto deliveryDto,List<CartDto> fUserCarts,OrderGuestDto orderGuestDto)throws Exception {
+
+		ArrayList<OrderItem> orderItemList = new ArrayList<>();
+		
+		int o_tot_price = 0;
+		int oi_tot_count = 0;
+		
+	   	MemberResponseDto memberResponseDto =memberService.joinGuest(MemberInsertGuestDto.builder()
+				   .name(orderGuestDto.getName())
+				   .phoneNo(orderGuestDto.getPhoneNo())
+				   .role("Guest")
+				   .build());
+	   	Member member= Member.toResponseEntity(memberResponseDto);
+
+		for (int i = 0; i < fUserCarts.size(); i++) {
+			
+			CartDto cartDto= fUserCarts.get(i);
+			OptionSet optionSet = optionSetDao.findById(cartDto.getId());
+			
+
+		    o_tot_price+=(optionSet.getTotalPrice())*(cartDto.getQty());
+		    oi_tot_count+=cartDto.getQty();
+		
+            OrderItem inputOIEntity = OrderItem.builder()
+							                   .qty(cartDto.getQty())
+							                   .optionSet(optionSet)
+							                   .build();
+
+            orderItemList.add(inputOIEntity);
+		}
+	       
+			OptionSet optionSet= optionSetDao.findById(orderItemList.get(0).getOptionSet().getId());
+			
+			String o_desc = optionSet.getProduct().getName() + "외" + (oi_tot_count - 1) + "개";
+	      
+			if (oi_tot_count == 1) {
+	    	   o_desc = optionSet.getProduct().getName();
+	       }
+	       
+	       
+	     	Delivery delivery = Delivery.builder()
+					.name(deliveryDto.getName())
+					.phoneNumber(deliveryDto.getPhoneNumber())
+					.address(deliveryDto.getAddress())
+					.build();
+			System.out.println("@@@@@@@@@@@@@@@@@@delivery: "+delivery);
+
+	       Orders orders = Orders.builder()
+                   .description(o_desc)
+                   .price(o_tot_price)
+                   .statement(OrderStateMsg.입금대기중)
+                   .member(member)
+                   .delivery(delivery)
+                   .orderItems(orderItemList)
+                   .build();
+			System.out.println("@@@@@@@@@@@@@@@@@@orders: "+orders);
+
+		      for (OrderItem orderItem : orderItemList) {
+				orderItem.setOrders(orders);
+			}
+		      delivery.setOrders(orders);
+		      orders.setMember(member);
+		      Orders realOrders = orderDao.save(orders);// 마지막에 세이브해야되는듯
+		      System.out.println("@@@@@@@@@@@@@@@@@@delivery: "+delivery);
+		      System.out.println("@@@@@@@@@@@@@@@@@@orderItemList: "+orderItemList);
+		      System.out.println("@@@@@@@@@@@@@@@@@@real orders: "+realOrders);
+
+		return OrdersDto.orderDto(orders);
+	}
+
+	
 	
 	/*
 	 * 주문+주문아이템 목록(비회원)
 	 */
 	
 	@Transactional
-	public List<OrdersDto> guestOrderList(Long orderNo, String phoneNumber)throws Exception {
-		if(phoneNumber.equals(memberService.getMemberBy(phoneNumber).getPhoneNo())) {
+	public List<OrdersDto> guestOrderList(Long orderNo, String phoneNumber, String name)throws Exception {
+		if(name.equals(memberService.getMemberBy(phoneNumber).getName())) {
 			if(orderNo==orderDao.findById(orderNo).getId()) {
 				List<Orders> orderList= new ArrayList<>();	
 				orderList.add(orderDao.findById(orderNo));
@@ -248,7 +248,7 @@ public class OrderServiceImpl implements OrderService {
 			}
 			throw new Exception("일치하는 주문번호가 없습니다.");
 		}
-		throw new Exception("일치하는 전화번호가 없습니다.");
+		throw new Exception("일치하는 정보가 없습니다.");
 	}
 
 	/*

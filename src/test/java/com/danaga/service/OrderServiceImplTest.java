@@ -131,7 +131,7 @@ class OrderServiceImplTest {
 	void testGuestOrderList() throws Exception {
 		// List<CartCreateDto> fUserCarts, DeliveryDto deliveryDto
 		
-		System.out.println("$$$$$$$$$$$$$$$"+orderService.guestOrderList(1L,"123-123123232322"));
+		System.out.println("$$$$$$$$$$$$$$$"+orderService.guestOrderList(1L,"123-123123232322","ㅇㅇ"));
 		
 	}
 	
