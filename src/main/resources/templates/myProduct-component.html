@@ -1,26 +1,34 @@
-
-  <table class="table" th:fragment="product-table(from='')" th:remove="tag">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <th:block th:fragment="product-table(from)" th:remove="tag">
+  <table class="table">
     <thead>
       <tr>
         <th>Product Name</th>
-        <th class="text-center"><a class="btn btn-sm btn-outline-danger" href="#clear-${from}">Clear Wishlist</a></th>
+        <th class="text-center"><a class="btn btn-sm btn-outline-danger" th:href="@{|http://localhost/${from}_delete|}">전체 삭제</a></th>
       </tr>
     </thead>
     <tbody>
+    <th:block th:if="${productList.size()==0}">
+    	<!-- <img src="img/shop/product/01.jpg"> -->
+    </th:block>
+    <th:block th:unless="${productList.size()==0}">
       <tr th:each="productDto:${productList}">
         <td>
           <div class="product-item">
-            <a class="product-thumb" href="shop-single.html">
-              <img src="img/shop/product/01.jpg" alt="Product">
+            <a class="product-thumb" href="shop-single.html" th:href="@{http://localhost/product__${productDto.osId}__}">
+              <img src="img/shop/product/01.jpg" th:src="${productDto.pImage}" alt="Product">
             </a>
             <div class="product-info">
               <h4 class="product-title" th:text="${productDto.name}">
-                <a href="shop-single.html">Unionbay Park</a></h4>
+                <a href="shop-single.html" th:href="@{http://localhost/product${productDto.osId}}">Unionbay Park</a></h4>
               <div class="text-lg text-medium text-muted" th:text="${productDto.totalPrice}">$43.90</div>
             </div>
           </div>
         </td>
-        <td class="text-center"><a class="remove-from-cart" href="#" data-${from}-remove="${productDto.osId}" data-toggle="tooltip" title="Remove item"><i class="icon-cross"></i></a></td>
+        <td class="text-center"><a class="remove-from-cart" href="#" title="Remove item"><i class="icon-cross" th:attr="|data-${from}-remove|='__${productDto.osId}__'" data-toggle="tooltip"></i></a></td>
       </tr>
+      </th:block>
     </tbody>
   </table>
+</html>

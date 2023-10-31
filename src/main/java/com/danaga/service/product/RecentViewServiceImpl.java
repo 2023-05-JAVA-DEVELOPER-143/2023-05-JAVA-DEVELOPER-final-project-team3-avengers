@@ -39,6 +39,7 @@ public class RecentViewServiceImpl implements RecentViewService{
 	}
 	
 	//나의 최근본 상품 전체 삭제 
+	@Transactional
 	public ResponseDto<?> removeMyRecentViews(Long memberId){
 		recentViewDao.deleteAll(memberId);
 		List<ProductDto> data = optionSetDao.findAllByRecentView_MemberId(memberId).stream().map(t -> new ProductDto(t)).collect(Collectors.toList());

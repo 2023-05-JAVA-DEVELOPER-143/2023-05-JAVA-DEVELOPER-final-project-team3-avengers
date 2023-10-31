@@ -107,15 +107,3 @@ export function addToCart(optionSetId, qty){
 		
 	});
 }
-export function clearWishList(){
-	return call(CLEAR_WISHLIST.url,CLEAR_WISHLIST.method,null)
-	.then((response)=>{
-		
-	});
-}
-export function clearRecentView(){
-	return call(CLEAR_RECENTVIEW.url,CLEAR_RECENTVIEW.method,null)
-	.then((response)=>{
-		
-	});
-}

@@ -37,6 +37,7 @@ function registEvent() {
 	$(window).on('hashchange', function(e) {
 		hash = window.location.hash
 		path = hash.substring(1);
+		console.log(path);
 		navigate();
 	});
 	$(document).on('click', function(e) {
@@ -67,11 +68,13 @@ function registEvent() {
 			}
 		}else if($(e.target).attr('data-wishlist-remove')){
 			let optionSetId=$(e.target).attr('data-wishlist-remove');
+			console.log(optionSetId);
 			api.removewish(optionSetId,function callback(){
 			$(e.target).closest("tr").remove();
 			});
 		}else if($(e.target).attr('data-recentview-remove')){
 			let optionSetId=$(e.target).attr('data-recentview-remove');
+			console.log(optionSetId);
 			api.removeRecentView(optionSetId,function callback(){
 			$(e.target).closest("tr").remove();
 			});
@@ -136,11 +139,7 @@ function navigate() {
 		/**************** /shop-grid-ns******************/
 		html = product_list_grid_view();
 		$('#page_list_content').html(html);
-	} else if (path == 'clear-wishlist') {
-		api.clearWishList();
-	} else if (path == 'clear-recentview') {
-		api.clearRecentView();
-	}
+	} 
 }
 
 

@@ -83,6 +83,7 @@ public class InterestServiceImpl implements InterestService {
 	}
 	//나의 관심상품 리스트 전체 삭제
 	@Override
+	@Transactional
 	public ResponseDto<?> emptyMyInterestingList(Long memberId) {
 		interestDao.deleteAll(memberId);
 		List<ProductDto> data = optionSetDao.findAllByInterest_MemberId(memberId).stream().map(t -> new ProductDto(t)).collect(Collectors.toList());

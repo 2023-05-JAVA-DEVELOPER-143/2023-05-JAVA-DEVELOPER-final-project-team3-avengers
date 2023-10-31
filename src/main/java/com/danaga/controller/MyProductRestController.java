@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.danaga.dto.MemberResponseDto;
 import com.danaga.dto.ResponseDto;
 import com.danaga.dto.product.InterestDto;
 import com.danaga.dto.product.RecentViewDto;
@@ -58,10 +59,10 @@ public class MyProductRestController {
 	public ResponseEntity<?> untappedHeart(@PathVariable Long optionSetId, HttpSession session){
 		try {
 			String username = (String)session.getAttribute("sUserId");
-			Long memberId = memberService.findIdByUsername(username);
+			MemberResponseDto member = memberService.getMemberBy(username);
 			//memberId 찾기 
 			ResponseDto<?> response = interestService.deleteHeart(InterestDto.builder()
-					.memberId(1L)//임시//원래는 memberId
+					.memberId(member.getId())//임시//원래는 memberId
 					.optionSetId(optionSetId)
 					.build());
 			return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -75,11 +76,11 @@ public class MyProductRestController {
 	public ResponseEntity<?> removeViewRecord(@PathVariable Long optionSetId, HttpSession session){
 		try {
 			String username = (String)session.getAttribute("sUserId");
-			Long memberId = memberService.findIdByUsername(username);
+			MemberResponseDto member = memberService.getMemberBy(username);
 			//memberId 찾기 
 			ResponseDto<?> response = recentViewService.removeRecentView(
 						RecentViewDto.builder()
-						.memberId(1L)//임시//원래는 memberId
+						.memberId(member.getId())//임시//원래는 memberId
 						.optionSetId(optionSetId)
 						.build());
 			return ResponseEntity.status(HttpStatus.OK).body(response);
