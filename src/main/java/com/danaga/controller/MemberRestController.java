@@ -63,10 +63,9 @@ public class MemberRestController {
 	    return response;
     }
 	@GetMapping("/checkDuplicateNickname")
-    public Map<String, Boolean> checkDuplicate(@RequestParam String nickname) throws Exception {
+    public Map<String, Boolean> checkDuplicateNickname(@RequestParam String nickname) throws Exception {
         Map<String, Boolean> response = new HashMap<>();
         boolean isDuplicate = memberService.isDuplicateByNickname(nickname);
-        System.out.println("###############"+isDuplicate);
         response.put("isDuplicate", isDuplicate);
         return response;
     }
@@ -99,13 +98,13 @@ public class MemberRestController {
 	}
 
 	@PostMapping("/join")
-	public ResponseEntity<MemberResponse> member_join_action(@RequestBody Member memberResponseDto) throws Exception {
-		memberService.joinMember(memberResponseDto);
+	public ResponseEntity<MemberResponse> member_join_action(@RequestBody Member member) throws Exception {
+		memberService.joinMember(member);
 
 		MemberResponse response = new MemberResponse();
 		response.setStatus(MemberResponseStatusCode.CREATED_USER);
 		response.setMessage(MemberResponseMessage.CREATED_USER);
-		response.setData(memberResponseDto);
+		response.setData(member);
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.CREATED);

@@ -38,5 +38,8 @@ public class IndexController {
 			return null;
 		}
 	}
-	
+	@RequestMapping("/404")
+	public String error_page() {
+		return "404";
+	}
 }
