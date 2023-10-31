@@ -32,7 +32,20 @@ public class BoardServiceImpl implements BoardService{
 	private BoardGroupRepository bgRepository;
 	@Autowired
 	private LikeConfigRepository lcRepository;
-
+	
+	
+	public String getBoardGroupName(Long boardGroupId) {
+		List<BoardDto> dto = bRepository.findByBoardGroupIdOrderByCreateTimeDesc(boardGroupId).stream().map(t -> BoardDto.responseDto(t)).collect(Collectors.toList());
+		String name ="";
+		for (BoardDto boardDto : dto) {
+			name =boardDto.getBoardGroupName();
+			if(name!=null) {
+				break;
+			}
+		}
+		log.info("boardGroupName : {} ",name);
+		return name;
+	}
 	//인기 게시물 출력
 	@Override
 	public List<BoardDto> popularPost(){
@@ -40,7 +53,7 @@ public class BoardServiceImpl implements BoardService{
 		for (BoardDto boardDto : top10List) {
 			if(boardDto.getTitle().length()>10) {
 				String contentTemp=boardDto.getTitle().substring(0,10)+"...";
-				boardDto.setContent(contentTemp);
+				boardDto.setTitle(contentTemp);
 			}
 		}
 		return top10List;
@@ -213,6 +226,7 @@ public class BoardServiceImpl implements BoardService{
 	public BoardDto delete(BoardDto dto) {
 		// config상태 삭제
 		lcRepository.deleteByBoard_Id(dto.getId());
+		
 		// 게시물 조회 및 예외처리
 		Board target = bRepository.findById(dto.getId())
 				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시물입니다."));

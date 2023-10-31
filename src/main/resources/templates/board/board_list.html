@@ -1,10 +1,134 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="EUC-KR">
-<title>Insert title here</title>
-</head>
-<body>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="layout/layout(title=${boardGroupName})">
+<!-- Body-->
+<!-- Header -->
 
+<head>
+</head>
+
+<body>
+	<!-- Page Content-->
+	<th:block layout:fragment="content">
+		<!-- Main Slider-->
+		<section class="hero-slider" style="background-image: url(img/hero-slider/main-bg.jpg);">
+
+			<!-- Off-Canvas Wrapper-->
+			<div class="offcanvas-wrapper">
+				<!-- 생성,삭제,수정 메세지 보여주기-->
+				<div class="row" th:if="${msg !=null}">
+					<div class="col-sm-6">
+						<div class="iziToast iziToast-success">
+							<div class="iziToast-body" style="padding-left: 33px;"><i
+									class="iziToast-icon icon-circle-check"></i><strong>성공</strong>
+								<p th:text="${msg}">toast notification with icon</p>
+							</div>
+							<button class="iziToast-close"></button>
+						</div>
+					</div>
+				</div>
+				<!-- Page Title-->
+				<th:block layout:fragment="page-title(page_title=${boardGroupId})">
+					<!-- Page Content-->
+
+					<div class="container padding-bottom-3x mb-2">
+						<div class="row">
+							<div class="col-lg-4 col-md-8 order-md-2">
+								<h6 class="text-muted text-normal text-uppercase">인기 게시물</h6>
+								<div class="padding-top-2x mt-2 hidden-lg-up"></div>
+								<div class="table-responsive">
+									<table class="table table-hover margin-bottom-none">
+										<thead>
+											<tr>
+												<th>글 제목</th>
+												<th>조회수</th>
+												<th>좋아요</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="top : ${top10}">
+												<td><a class="text-medium navi-link" th:text="${top.title}"
+														th:href="@{/show{id}(id=${top.id})}">st 08, 2017</a></td>
+												<td><span class="text-large" th:text="${top.readCount}">Canceled</span>
+												</td>
+												<td><span class="text-medium" th:text="${top.isLike}">$760.50</span>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<script>
+									let memberId = '[[${session.sUserId}]]';
+									$("#change-write-page").on('click',()=>{
+										if(memberId==null){
+										window.alert("글쓰기는 로그인이 필요한 기능입니다.")
+										window.location.href = "member/member_login_form.html";
+										return;
+									}
+									});
+								
+								</script>
+							<div class="col-lg-8 col-md-8 order-md-2">
+								<div class="text-right"  id="change-write-page"><a class="btn btn-success" href="create.html"
+										th:href="@{/board_create{boardGroupId} (boardGroupId=${boardGroupId})}">글쓰기</a>
+								</div>
+								<h6 class="text-muted text-normal text-uppercase" th:if="${boardGroupId} eq 1">자유게시판
+								</h6>
+								<h6 class="text-muted text-normal text-uppercase" th:if="${boardGroupId} eq 2">1:1문의
+								</h6>
+								<h6 class="text-muted text-normal text-uppercase" th:if="${boardGroupId} eq 3">공지사항</h6>
+								<h6 class="text-muted text-normal text-uppercase" th:if="${boardGroupId} eq 4">자주묻는질문
+								</h6>
+								<hr class="margin-bottom-1x">
+								<div class="padding-top-2x mt-2 hidden-lg-up"></div>
+								<div class="table-responsive">
+									<table class="table table-inverse">
+										<thead>
+											<tr>
+												<th>게시물 번호</th>
+												<th>글 제목</th>
+												<th>내용</th>
+												<th>작성자</th>
+												<th>조회수</th>
+												<th>좋아요</th>
+												<th>작성일</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="list : ${boardList}">
+
+												<td><a class="text-medium navi-link" th:text="${list.id}"
+														th:href="@{/show{id}(id=${list.id})}">78A643CD409</a></td>
+												<td><a class="text-medium navi-link" th:text="${list.title}"
+														th:href="@{/show{id}(id=${list.id})}">st 08, 2017</a></td>
+												<td><a class="text-medium navi-link" th:text="${list.content}"
+														th:href="@{/show{id}(id=${list.id})}">August 08, 2017</a>
+												</td>
+												<td class="text-large" th:text="${list.nickname}">August 08, 2017</td>
+												<td><span class="text-danger"
+														th:text="${list.readCount}">Canceled</span>
+												</td>
+												<td><span class="text-large" th:text="${list.isLike}">$760.50</span>
+												</td>
+												<td><span class="text-large"
+														th:text="${#temporals.format(list.createTime,'yyyy-MM-dd HH:mm:ss')}">August
+														08, 2017</span></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+
+							</div>
+						</div>
+					</div>
+			</div>
+		</section>
+
+	</th:block>
+	<th:block layout:fragment="recommendation"></th:block>
+	<th:block layout:fragment="script">
+	</th:block>
 </body>
+
 </html>
