@@ -109,8 +109,8 @@ public class OrderController {
 	 * 카트에서 보내온 데이터로 주문(form)(공통)
 	 * 달라지게해야함(회원,비회원)
 	 */
-	@GetMapping("/cart_order_form")
-	public ModelAndView memberCartOrderAddForm(@RequestBody List<SUserCartOrderDto> sUserCartOrderDto, Model model,
+	@PostMapping("/cart_order_form")
+	public String memberCartOrderAddForm(@RequestBody List<SUserCartOrderDto> sUserCartOrderDto, Model model,
 			HttpSession session) throws Exception {
 		System.out.println(sUserCartOrderDto.size());
 		System.out.println(sUserCartOrderDto);
@@ -125,11 +125,15 @@ public class OrderController {
 //						.totalPrice(300000)
 //						.build();
 //		sUserCartOrderDto.add(userCartOrderDto);
-		ModelAndView m = new ModelAndView();
-		m.setViewName("orders/order_save_form");
-		return m;
+		return "orders/order_save_form";
 	}
-
+	
+	@GetMapping("/order_save_form")
+	public String orderSaveForm(Model model, HttpSession session) {
+		model.addAttribute("sUserCartOrderDto",session.getAttribute("sUserCartOrderDto"));
+		return "orders/order_save_form";
+	}
+	
 	/*
 	 * 카트에서 보내온 데이터로 주문(action)(공통)
 	 */

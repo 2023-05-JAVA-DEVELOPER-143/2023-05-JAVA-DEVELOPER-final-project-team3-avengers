@@ -381,6 +381,9 @@ function checkValue() {
 		type : "post",
 		contentType : 'application/json',
 		data : JSON.stringify(checkedData),
+		success : function(result){
+			window.location.href="http://localhost/order_save_form";
+		}
 	});
 }
 /* 전체 선택 체크 유무 */

@@ -44,7 +44,7 @@ class OrderServiceImplTest {
 	@Transactional
 	@Rollback(false)
 	@Test
-	//@Disabled
+	@Disabled
 	void testGuestCartOrderSave() throws Exception {
 		// List<CartCreateDto> fUserCarts, DeliveryDto deliveryDto
 		
@@ -142,7 +142,7 @@ class OrderServiceImplTest {
 	@Transactional
 	@Rollback(false)
 	@Test
-	@Disabled
+	//@Disabled
 	void testMemberProductOrderSave()throws Exception {
 		
 		System.out.println("0000000000000000000000000000000000000");

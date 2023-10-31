@@ -42,7 +42,7 @@ public class CartController {
 				carts.get(i).setElseOptionSets(findLists.getData().stream().map(t -> new CartElseOptionsetDto(t))
 						.collect(Collectors.toList()));
 			}
-			System.out.println(">>>>>>" + carts.get(0).getElseOptionSets().get(0).getOsId());
+			//System.out.println(">>>>>>" + carts.get(0).getElseOptionSets().get(0).getOsId());
 			session.setAttribute("countCarts", carts.size());
 			model.addAttribute("cart", carts);
 		} else {// 비회원
