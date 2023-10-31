@@ -56,7 +56,7 @@ public class OrderController {
 	/*
 	 * 상품에서 주문(form)(공통)
 	 */
-	@GetMapping("/product_order_save_form")
+	@GetMapping("/product_order_form")
 	public String memberProductOrderAddForm(@ModelAttribute("cartDto") CartDto cartDto, Model model) {
 
 		ResponseDto<?> responseDto = optionSetService.findById(cartDto.getId());
@@ -78,7 +78,7 @@ public class OrderController {
 	 */
 
 	
-	@PostMapping("/product_order_save_action")//modelAttribute html에서 보낸 데이터를 받는곳
+	@PostMapping("/product_order_action")//modelAttribute html에서 보낸 데이터를 받는곳
 	public String memberProductOrderAddAction(@ModelAttribute("ordersProductDto") OrdersProductDto ordersProductDto,@ModelAttribute("orderGuestDto") OrderGuestDto orderGuestDto, Model model,
 			HttpSession session) {
 
@@ -108,29 +108,27 @@ public class OrderController {
 	 * 카트에서 보내온 데이터로 주문(form)(공통) //form에서 sUserId에 유무에 따라서 뿌려지는 data가 달라지게해야함(회원,비회원)
 	 */
 
-	@GetMapping("/cart_order_save_form")
-	public String memberCartOrderAddForm(/*@ModelAttribute List<SUserCartOrderDto> sUserCartOrderDto ,*/Model model,HttpSession session) throws Exception {
+	@PostMapping("/cart_order_form")
+	public String memberCartOrderAddForm(@ModelAttribute List<SUserCartOrderDto> sUserCartOrderDto ,Model model,HttpSession session) throws Exception {
 
-
-
-//		String sUserId = (String) session.getAttribute("sUserId");
-//		if(sUserId==null) {
-//			//비회원(전체,선택)
-//			model.addAttribute("sUserCartOrderDto",sUserCartOrderDto);
-//			session.setAttribute("sUserCartOrderDto", sUserCartOrderDto);
-//		}else {
-//			//회원(전체,선택) 
-//			model.addAttribute("sUserCartOrderDto", sUserCartOrderDto);
-//			session.setAttribute("sUserCartOrderDto", sUserCartOrderDto);
-//		}
-		List<SUserCartOrderDto> sUserCartOrderDto = new ArrayList<>();
-		SUserCartOrderDto userCartOrderDto= SUserCartOrderDto.builder()
-						.id(2L)
-						.qty(3)
-						.productName("dd")
-						.totalPrice(300000)
-						.build();
-		sUserCartOrderDto.add(userCartOrderDto);
+		String sUserId = (String) session.getAttribute("sUserId");
+		if(sUserId==null) {
+			//비회원(전체,선택)
+			model.addAttribute("sUserCartOrderDto",sUserCartOrderDto);
+			session.setAttribute("sUserCartOrderDto", sUserCartOrderDto);
+		}else {
+			//회원(전체,선택) 
+			model.addAttribute("sUserCartOrderDto", sUserCartOrderDto);
+			session.setAttribute("sUserCartOrderDto", sUserCartOrderDto);
+		}
+//		List<SUserCartOrderDto> sUserCartOrderDto = new ArrayList<>();
+//		SUserCartOrderDto userCartOrderDto= SUserCartOrderDto.builder()
+//						.id(2L)
+//						.qty(3)
+//						.productName("dd")
+//						.totalPrice(300000)
+//						.build();
+//		sUserCartOrderDto.add(userCartOrderDto);
 		model.addAttribute("sUserCartOrderDto", sUserCartOrderDto);
 		return "orders/order_save_form";
 	}
@@ -156,7 +154,7 @@ public class OrderController {
 	/*
 	 * 카트에서 보내온 데이터로 주문(action)(공통)
 	 */
-	@PostMapping("/cart_order_save_action")
+	@PostMapping("/cart_order_action")
 	public String memberCartSelectOrderAddAction(@ModelAttribute("deliveryDto") DeliveryDto deliveryDto,@ModelAttribute("orderGuestDto") OrderGuestDto orderGuestDto, Model model, HttpSession session) {
 		
 		String sUserId = (String) session.getAttribute("sUserId");
