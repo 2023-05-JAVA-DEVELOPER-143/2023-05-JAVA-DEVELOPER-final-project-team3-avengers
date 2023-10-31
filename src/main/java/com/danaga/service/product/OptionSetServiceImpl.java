@@ -51,10 +51,11 @@ public class OptionSetServiceImpl implements OptionSetService {
 	@Transactional
 	public ResponseDto<?> deleteProduct(Long productId, QueryStringDataDto dataDto) {
 		productDao.deleteById(productId);
-		List<ProductDto> optionSetList = optionSetDao.findByFilter(dataDto).stream().map(t -> new ProductDto(t)).collect(Collectors.toList());
-		//기존 전체 프로덕트 리스트 화면에서 삭제 눌렀을때
-		//삭제 누른당시 리스트의 검색 조건을 그대로 가져와서 
-		//삭제 후에도 같은 검색 조건으로 리스트 다시 갱신하게 
+		List<ProductDto> optionSetList = optionSetDao.findByFilter(dataDto).stream().map(t -> new ProductDto(t))
+				.collect(Collectors.toList());
+		// 기존 전체 프로덕트 리스트 화면에서 삭제 눌렀을때
+		// 삭제 누른당시 리스트의 검색 조건을 그대로 가져와서
+		// 삭제 후에도 같은 검색 조건으로 리스트 다시 갱신하게
 		return ResponseDto.<ProductDto>builder().data(optionSetList).build();
 	}
 
@@ -63,7 +64,9 @@ public class OptionSetServiceImpl implements OptionSetService {
 	@Transactional
 	public ResponseDto<?> deleteOptionSet(Long optionSetId, QueryStringDataDto dataDto) {
 		optionSetDao.deleteById(optionSetId);
-		List<ProductDto> optionSetList = optionSetDao.findByFilter(dataDto).stream().map(t -> new ProductDto(t)).collect(Collectors.toList());;
+		List<ProductDto> optionSetList = optionSetDao.findByFilter(dataDto).stream().map(t -> new ProductDto(t))
+				.collect(Collectors.toList());
+		;
 		return ResponseDto.<ProductDto>builder().data(optionSetList).build();
 	}
 
@@ -74,7 +77,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 		optionDao.deleteById(optionId);
 		List<String> msg = new ArrayList<>();
 		msg.add("삭제되었습니다.");
-		return ResponseDto.<String>builder().data(msg).build();//그냥 "msg"를 반환하는게
+		return ResponseDto.<String>builder().data(msg).build();// 그냥 "msg"를 반환하는게
 	}
 
 	// 오더하면 옵션셋 재고 -1, 환불하거나 취소하면 +1
@@ -111,35 +114,47 @@ public class OptionSetServiceImpl implements OptionSetService {
 	public ResponseDto<ProductDto> displayHitProducts(Long optionSetId) {
 		List<Category> findCategory = categoryDao.findByOptionSetId(optionSetId);
 		String orderType = OptionSetQueryData.BY_VIEW_COUNT;
-		
-		List<ProductDto> searchResult = optionSetDao.findByFilter(QueryStringDataDto.builder()
-				.orderType(orderType)
-				.category(CategoryDto.builder().name(findCategory.get(findCategory.size()-1).getName()).id(findCategory.get(findCategory.size()-1).getId()).build())
-				.build()).stream().limit(20).map(t -> new ProductDto(t)).collect(Collectors.toList());;
+
+		List<ProductDto> searchResult = optionSetDao
+				.findByFilter(QueryStringDataDto.builder().orderType(orderType)
+						.category(CategoryDto.builder().name(findCategory.get(findCategory.size() - 1).getName())
+								.id(findCategory.get(findCategory.size() - 1).getId()).build())
+						.build())
+				.stream().limit(20).map(t -> new ProductDto(t)).collect(Collectors.toList());
+		;
 		return ResponseDto.<ProductDto>builder().data(searchResult).build();
 	}
+
 	@Override
 	@Transactional
-	public ResponseDto<ProductDto> displayHitProductsForMember(Long optionSetId,String username) {
+	public ResponseDto<ProductDto> displayHitProductsForMember(Long optionSetId, String username) {
 		List<Category> findCategory = categoryDao.findByOptionSetId(optionSetId);
 		String orderType = OptionSetQueryData.BY_VIEW_COUNT;
-		List<ProductDto> searchResult = optionSetDao.findForMemberByFilter(QueryStringDataDto.builder()
-				.orderType(orderType)
-				.category(CategoryDto.builder().name(findCategory.get(findCategory.size()-1).getName()).id(findCategory.get(findCategory.size()-1).getId()).build())
-				.build(),username).stream().limit(20).map(t -> new ProductDto(t)).collect(Collectors.toList());;
-				return ResponseDto.<ProductDto>builder().data(searchResult).build();
+		List<ProductDto> searchResult = optionSetDao
+				.findForMemberByFilter(QueryStringDataDto.builder().orderType(orderType)
+						.category(CategoryDto.builder().name(findCategory.get(findCategory.size() - 1).getName())
+								.id(findCategory.get(findCategory.size() - 1).getId()).build())
+						.build(), username)
+				.stream().limit(20).map(t -> new ProductDto(t)).collect(Collectors.toList());
+		;
+		return ResponseDto.<ProductDto>builder().data(searchResult).build();
 	}
 
 	// 카테고리에 해당하는 리스트 전체 조회
 	// 조건에 해당하는 리스트 전체 조회
 	@Override
 	public ResponseDto<ProductDto> searchProducts(QueryStringDataDto dto) {
-		List<ProductDto> data = optionSetDao.findByFilter(dto).stream().map(t -> new ProductDto(t)).collect(Collectors.toList());;
+		List<ProductDto> data = optionSetDao.findByFilter(dto).stream().map(t -> new ProductDto(t))
+				.collect(Collectors.toList());
+		;
 		return ResponseDto.<ProductDto>builder().data(data).build();
 	}
+
 	@Override
-	public ResponseDto<ProductDto> searchProductsForMember(QueryStringDataDto dto,String username) {
-		List<ProductDto> data = optionSetDao.findForMemberByFilter(dto,username).stream().map(t -> new ProductDto(t)).collect(Collectors.toList());;
+	public ResponseDto<ProductDto> searchProductsForMember(QueryStringDataDto dto, String username) {
+		List<ProductDto> data = optionSetDao.findForMemberByFilter(dto, username).stream().map(t -> new ProductDto(t))
+				.collect(Collectors.toList());
+		;
 		return ResponseDto.<ProductDto>builder().data(data).build();
 	}
 
@@ -152,7 +167,9 @@ public class OptionSetServiceImpl implements OptionSetService {
 	@Transactional
 	public ResponseDto<ProductDto> showOtherOptionSets(Long optionSetId) {
 		Product product = productDao.findByOptionSetId(optionSetId);
-		List<ProductDto> findOptionSets = optionSetDao.findAllByProductId(product.getId()).stream().map(t -> new ProductDto(t)).collect(Collectors.toList());;
+		List<ProductDto> findOptionSets = optionSetDao.findAllByProductId(product.getId()).stream()
+				.map(t -> new ProductDto(t)).collect(Collectors.toList());
+		;
 		for (ProductDto optionSet : findOptionSets) {
 			if (optionSet.getStock() == 0)
 				findOptionSets.remove(optionSet);
@@ -161,74 +178,81 @@ public class OptionSetServiceImpl implements OptionSetService {
 	}
 
 	// 최하위 카테고리 선택하고 나면 어떤 옵션 필터들 있는지 옵션 명과 옵션값 나열
-		@Override
-		@Transactional
-		public ResponseDto<?> showOptionNameValues(Long categoryId) {
-				List<OptionNamesValues> optionNameValue = optionDao.findOptionNameValueMapByCategoryId(categoryId);
-				Map<String,Set<String>> dto = optionNameValue.stream().collect(Collectors.groupingBy(OptionNamesValues::getName,Collectors.mapping(OptionNamesValues::getValue, Collectors.toSet())));
-				List<Map<String,Set<String>>> data = new ArrayList<>();
-				data.add(dto);
-				return ResponseDto.<Map<String, Set<String>>>builder().data(data).build();
-		}
-		//노트북 카테고리의 전체 옵션들 찾기
-		//부모 아이디를 받아서 자식들 찾아서 자식들의 카테고리 옵션들 구해서 그걸 하나의 map으로 합치기
-		@Override
-		@Transactional
-		public ResponseDto<?> showAllOptionNameValues(Long categoryId) {
-			List<Long> childrenIds = categoryDao.findChildTypesByParentId(categoryId).stream().map(t -> t.getId()).collect(Collectors.toList());
-			Map<String,Set<String>> dto=new HashMap<String,Set<String>>();
-			for (int i = 0; i < childrenIds.size(); i++) {
-				List<OptionNamesValues> optionNameValue = optionDao.findOptionNameValueMapByCategoryId(childrenIds.get(i));
-				Map<String,Set<String>> result= optionNameValue.stream().collect(Collectors.groupingBy(OptionNamesValues::getName,Collectors.mapping(OptionNamesValues::getValue, Collectors.toSet())));
-				result.forEach((key,value)-> dto.merge(key, value, (v1,v2)->{v1.addAll(v2);return v1;}));
-			}
-			List<Map<String,Set<String>>> data = new ArrayList<>();
-			data.add(dto);
-			System.out.println(dto);
-			return ResponseDto.<Map<String, Set<String>>>builder().data(data).build();
-		}
-		
-		//option update
-		@Override
-		@Transactional
-		public ResponseDto<?> update(OptionSaveDto dto) {
-			Options created = optionDao.update(dto);
-			List<Options> data = new ArrayList<>();
-			data.add(created);
-			return ResponseDto.<Options>builder().data(data).build();
-		}
-		
+	@Override
+	@Transactional
+	public ResponseDto<?> showOptionNameValues(Long categoryId) {
+		List<OptionNamesValues> optionNameValue = optionDao.findOptionNameValueMapByCategoryId(categoryId);
+		Map<String, Set<String>> dto = optionNameValue.stream().collect(Collectors.groupingBy(
+				OptionNamesValues::getName, Collectors.mapping(OptionNamesValues::getValue, Collectors.toSet())));
+		List<Map<String, Set<String>>> data = new ArrayList<>();
+		data.add(dto);
+		return ResponseDto.<Map<String, Set<String>>>builder().data(data).build();
+	}
 
-		// 토탈프라이스도 계산
-		// 프로덕트, 옵션, 옵션셋, 추가
-		@Override
-		@Transactional
-		public ResponseDto<?> uploadProduct(UploadProductDto dto) {
-			Product createdProduct = productDao.create(dto.getProduct());
-			OptionSet createdOptionSet = optionSetDao.create(dto.getOptionSet());
-			createdOptionSet.setProduct(createdProduct);
-			int productPrice = createdProduct.getPrice();
-			for(OptionSaveDto option : dto.getOptions()) {
-				Options createdOption = optionDao.save(option);
-				productPrice+=option.getExtraPrice();
-				createdOption.setOptionSet(createdOptionSet);
-			}
-			createdOptionSet.setTotalPrice(productPrice);
-			List<ProductDto> data = new ArrayList<>();
-			data.add(new ProductDto(createdOptionSet));
-			return ResponseDto.<ProductDto>builder().data(data).build();
+	// 노트북 카테고리의 전체 옵션들 찾기
+	// 부모 아이디를 받아서 자식들 찾아서 자식들의 카테고리 옵션들 구해서 그걸 하나의 map으로 합치기
+	@Override
+	@Transactional
+	public ResponseDto<?> showAllOptionNameValues(Long categoryId) {
+		List<Long> childrenIds = categoryDao.findChildTypesByParentId(categoryId).stream().map(t -> t.getId())
+				.collect(Collectors.toList());
+		Map<String, Set<String>> dto = new HashMap<String, Set<String>>();
+		for (int i = 0; i < childrenIds.size(); i++) {
+			List<OptionNamesValues> optionNameValue = optionDao.findOptionNameValueMapByCategoryId(childrenIds.get(i));
+			Map<String, Set<String>> result = optionNameValue.stream().collect(Collectors.groupingBy(
+					OptionNamesValues::getName, Collectors.mapping(OptionNamesValues::getValue, Collectors.toSet())));
+			result.forEach((key, value) -> dto.merge(key, value, (v1, v2) -> {
+				v1.addAll(v2);
+				return v1;
+			}));
 		}
-		
-		//옵션셋 아이디로 옵션셋 찾기 디테일 들어갈때사용
-		@Override
-		public ResponseDto<?> findById(Long optionSetId) {
-			OptionSet optionSet=optionSetDao.findById(optionSetId);
-			List<ProductDto> data = new ArrayList<>();
-			data.add(new ProductDto(optionSet));
-			return ResponseDto.<ProductDto>builder().data(data).build();
+		List<Map<String, Set<String>>> data = new ArrayList<>();
+		data.add(dto);
+		System.out.println(dto);
+		return ResponseDto.<Map<String, Set<String>>>builder().data(data).build();
+	}
+
+	// option update
+	@Override
+	@Transactional
+	public ResponseDto<?> update(OptionSaveDto dto) {
+		Options created = optionDao.update(dto);
+		List<Options> data = new ArrayList<>();
+		data.add(created);
+		return ResponseDto.<Options>builder().data(data).build();
+	}
+
+	// 토탈프라이스도 계산
+	// 프로덕트, 옵션, 옵션셋, 추가
+	@Override
+	@Transactional
+	public ResponseDto<?> uploadProduct(UploadProductDto dto) {
+		Product createdProduct = productDao.create(dto.getProduct());
+		OptionSet createdOptionSet = optionSetDao.create(dto.getOptionSet());
+		createdOptionSet.setProduct(createdProduct);
+		int productPrice = createdProduct.getPrice();
+		for (OptionSaveDto option : dto.getOptions()) {
+			Options createdOption = optionDao.save(option);
+			productPrice += option.getExtraPrice();
+			createdOption.setOptionSet(createdOptionSet);
 		}
+		createdOptionSet.setTotalPrice(productPrice);
+		List<ProductDto> data = new ArrayList<>();
+		data.add(new ProductDto(createdOptionSet));
+		return ResponseDto.<ProductDto>builder().data(data).build();
+	}
+
+	// 옵션셋 아이디로 옵션셋 찾기 디테일 들어갈때사용
+	@Override
+	public ResponseDto<?> findById(Long optionSetId) {
+		OptionSet optionSet = optionSetDao.findById(optionSetId);
+		List<ProductDto> data = new ArrayList<>();
+		data.add(new ProductDto(optionSet));
+		return ResponseDto.<ProductDto>builder().data(data).build();
+	}
+
 	/////////////////////////////////////////////////////////
-		//카테고리도 바꿀수 있게 
+	// 카테고리도 바꿀수 있게
 	@Override
 	public ResponseDto<?> update(ProductUpdateDto dto) {
 //		Product origin = productDao.findById(dto.getId());
@@ -247,16 +271,11 @@ public class OptionSetServiceImpl implements OptionSetService {
 		return null;
 	}
 
-	
-
-
-	
-
 	// 프로덕트 별점 업뎃
 	// 리뷰가 등록될때마다 갱신
 	@Override
 	public ResponseDto<?> updateRating(ProductSaveDto dto) {
-		//기존 프로덕트의 리뷰들을 
+		// 기존 프로덕트의 리뷰들을
 		return null;
 	}
 

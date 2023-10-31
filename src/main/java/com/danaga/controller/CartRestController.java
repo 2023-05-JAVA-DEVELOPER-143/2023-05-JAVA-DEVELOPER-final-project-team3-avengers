@@ -145,6 +145,7 @@ public class CartRestController {
 	// 장바구니에 몇개 담겼는지 숫자 체크
 	void countCarts(HttpSession session) throws Exception {
 		sUserId = (String) session.getAttribute("sUserId");
+		//sUserId = "User3";
 		if (sUserId != null) {
 			session.setAttribute("countCarts", cartService.countCarts(sUserId));
 		} else if(fUserCarts != null) { // 비회원 일시 장바구니 리스트의 사이즈

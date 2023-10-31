@@ -8,7 +8,9 @@ import com.danaga.dao.MemberDao;
 import com.danaga.dao.product.OptionSetDao;
 import com.danaga.dto.CartDto;
 import com.danaga.dto.FUserCartResponseDto;
+import com.danaga.dto.ResponseDto;
 import com.danaga.dto.SUserCartResponseDto;
+import com.danaga.dto.product.ProductDto;
 
 import lombok.RequiredArgsConstructor;
 import com.danaga.entity.Cart;
@@ -89,7 +91,7 @@ public class CartServiceImpl implements CartService {
 				.build(); // 변경된 옵션셋
 
 		// 변경하고자하는 옵션셋과 멤버아이디로 이미 존재하는지 체크
-		Cart findDuplicateCart = cartRepository.findByOptionSetIdAndMemberId(changeOptionsetId,memberId );
+		Cart findDuplicateCart = cartRepository.findByOptionSetIdAndMemberId(changeOptionsetId, memberId);
 
 		if (findDuplicateCart == null) {
 			// 변경할 카트 수량 1일시 findCart == 옵션셋이 변경된 카트
