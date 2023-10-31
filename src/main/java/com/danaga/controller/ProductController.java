@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.danaga.dto.MemberResponseDto;
 import com.danaga.dto.ResponseDto;
 import com.danaga.dto.product.CategoryDto;
 import com.danaga.dto.product.ProductDto;
@@ -141,10 +142,10 @@ public class ProductController {
 			service.updateViewCount(optionSetId);
 			//디테일 들어갈때 조회수도 증가
 			if(session.getAttribute("sUserId")!=null) {//로그인유저일시
-//				String username =(String)session.getAttribute("sUserId");
-//				Long memberId = memberService.findIdByUsername(username);
+				String username =(String)session.getAttribute("sUserId");
+				MemberResponseDto member = memberService.getMemberBy(username);
 			recentViewService.addRecentView(RecentViewDto.builder()
-					.memberId(1L)//memberId
+					.memberId(member.getId())//memberId
 					.optionSetId(optionSetId)
 					.build());
 			//최근본상품에 추가

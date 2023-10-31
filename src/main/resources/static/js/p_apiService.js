@@ -34,15 +34,18 @@ function call(api, method,request){
     });
 }
 
-export function tapHeart(optionSetId){//디테일에서//클릭이벤트핸들러에서 이미지로 어떤 함수 쓸건지 결정
+export function tapHeart(optionSetId,callback){//디테일에서//클릭이벤트핸들러에서 이미지로 어떤 함수 쓸건지 결정
     return call(TAP_HEART.url.replace('@optionSetId',optionSetId),TAP_HEART.method,null)
     .then((response) =>{
-       //하트 이미지 바꾸는 코드
+       console.log('추가성공');
+       callback();
     });
 }
-export function untapHeart(optionSetId){//디테일에서//그리고 애초에 서버에서 이미지 뿌릴때 좋아요 여부 확인해서 이미지 알맞게 뿌려야함
+export function untapHeart(optionSetId,callback){//디테일에서//그리고 애초에 서버에서 이미지 뿌릴때 좋아요 여부 확인해서 이미지 알맞게 뿌려야함
     return call(UNTAP_HEART.url.replace("@optionSetId",optionSetId),UNTAP_HEART.method,null)
     .then((response) =>{
+       console.log('제거성공');
+       callback();
        //하트 이미지 바꾸는 코드
     });//그리고 하트 누르는 서비스에서 반환값은 없어도 됨 있으려면 차라리 하트이미지 경로를 주던가
 }

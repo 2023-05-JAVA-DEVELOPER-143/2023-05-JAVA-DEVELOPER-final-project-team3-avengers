@@ -84,17 +84,17 @@
 								th:text="'등록일 : '+${productDto.updateTime}">{{updateTime}}</div>
 							<div class="d-inline text-success">리뷰수</div>
 							<div class="product-buttons">
-								<button th:if="${session.sUserId!=null && isInterested}"
+								<button th:if="${param.sUserId!=null && productDto.isInterested}"
 									class="btn btn-outline-secondary btn-sm btn-wishlist active"
-									product-heart="${productDto.osId}" data-toggle="tooltip"
+									data-toggle="tooltip" th:product-heart="|${productDto.osId}|"
 									title="Whishlist">
-									<i class="icon-heart"></i>
+									<i class="icon-heart" th:heart="|${productDto.osId}|"></i>
 								</button>
-								<button th:unless="${session.sUserId!=null && isInterested}"
+								<button th:unless="${param.sUserId!=null && productDto.isInterested}"
 									class="btn btn-outline-secondary btn-sm btn-wishlist"
-									product-heart="${productDto.osId}" data-toggle="tooltip"
-									title="Whishlist">
-									<i class="icon-heart"></i>
+									 data-toggle="tooltip"
+									title="Whishlist" th:product-heart-yet="|${productDto.osId}|">
+									<i class="icon-heart" th:heart="|${productDto.osId}|"></i>
 								</button>
 								<button class="btn btn-outline-primary btn-sm" data-toast
 									data-toast-type="success" data-toast-position="topRight"
@@ -109,8 +109,8 @@
 
 					<!-- 클라이언트 요청 -->
 					<script id="main-product-item-template"	type="text/x-handlebars-template">
-{{#each data}} 					
-<div class="product-card product-list">
+					{{#each data}} 					
+						<div class="product-card product-list">
 						<a class="product-thumb"
 							href="http://localhost/product{{osId}}"> <img
 							src="{{pImage}}" alt="Product">

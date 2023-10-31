@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.danaga.dto.MemberResponseDto;
 import com.danaga.dto.ResponseDto;
 import com.danaga.dto.product.InterestDto;
 import com.danaga.dto.product.ProductDto;
@@ -45,10 +46,10 @@ public class ProductRestController {
 	public ResponseEntity<?> tapHeartInDetail(HttpSession session,@PathVariable Long optionSetId){
 		try {
 			//만약 로그인유저가 아니라면 그냥 아무것도 안하고 리턴하는 처리 추가 필요
-//			String username=(String)session.getAttribute("sUserId");
-//			Long memberId = memberService.findIdByUsername(username);
+			String username=(String)session.getAttribute("sUserId");
+			MemberResponseDto member = memberService.getMemberBy(username);
 			ResponseDto<?> response =interestService.clickHeart(InterestDto.builder()
-					.memberId(1L)//임시//원래는 memberId
+					.memberId(member.getId())//임시//원래는 memberId
 					.optionSetId(optionSetId)
 					.build());
 			return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -62,10 +63,10 @@ public class ProductRestController {
 //	@LoginCheck
 	public ResponseEntity<?> untapHeartInDetail(HttpSession session,@PathVariable Long optionSetId){
 		try {
-//			String username=(String)session.getAttribute("sUserId");
-//			Long memberId = memberService.findIdByUsername(username);
+			String username=(String)session.getAttribute("sUserId");
+			MemberResponseDto member = memberService.getMemberBy(username);
 			ResponseDto<?> response =interestService.deleteHeart(InterestDto.builder()
-					.memberId(1L)//임시//원래는 memberId
+					.memberId(member.getId())//임시//원래는 memberId
 					.optionSetId(optionSetId)
 					.build());
 			return ResponseEntity.status(HttpStatus.OK).body(response);
