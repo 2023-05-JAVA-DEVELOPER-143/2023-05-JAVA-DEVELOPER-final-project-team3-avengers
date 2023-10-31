@@ -6,6 +6,23 @@
 
 <head>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	
+	
+	
+	<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	
+	
+	
+	
+	
+	
 	<style>
     button.order-Link {
         background-color: rgba(255, 255, 255, 0.5); /* 배경색을 투명한 흰색으로 설정 */
@@ -72,7 +89,7 @@
 							<tbody>
 								<tr th:each="ordersDto : ${orderDtoList}">
 									<td >
-										<button class="order-Link" type="button"data-toggle="modal" data-target="#orderDetails"   data-order-id="${ordersDto.getId()}"><span th:text="${ordersDto.getId()}">주문번호</span></button>
+										<button class="order-Link" type="button"data-toggle="modal" data-target="#orderDetails"   data-order-id="27"><span th:text="${ordersDto.getId()}">주문번호</span></button>
 									</td>
 									<td th:text="${ordersDto.getDescription()}">주문 내역</td>
 									<td th:text="${ordersDto.getStateMsg()}">주문 상태</td>
@@ -129,9 +146,10 @@
 
 				function requestOrderDetails(orderId) {
 					$.ajax({
-						url: 'order/member_order_detail/' + orderId,
+						url: 'order/member_order_detail' + orderId,
 						type: 'GET',
 						success: function (data) {
+							
 							// 주문 상세 정보로 모달을 채웁니다.
 							$('.modal-body').html(data.description); // 데이터 구조에 따라 수정하세요.
 							$('#orderDetails').modal('show'); // 모달을 표시합니다.
