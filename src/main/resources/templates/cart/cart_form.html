@@ -286,20 +286,12 @@ function checkValue() {
    console.log("선택된 데이터: ", checkedData);
    
    $.ajax({
-		url : "/member_cart_order_save_form",
+		url : "/cart_order_form",
 		type : "post",
 		contentType : 'application/json',
 		data : JSON.stringify(checkedData),
-		success : function() {
-			console.log(checkedData);
-			location.href = "http://localhost:80/member_cart_order_save_form";
-		}
 	});
-   
-   
 }
-
-
 /* 전체 선택 체크 유무 */
 $(".basket_CheckBox").click(function() {
 	let check = $(".basket_CheckBox").prop("checked");

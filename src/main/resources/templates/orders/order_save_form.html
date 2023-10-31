@@ -27,48 +27,32 @@
                      <table class="table">
                         <thead class="thead-inverse">
                            <tr>
-                              <th style="width: 500px; white-space: nowrap;">주문 번호</th>
+                              <th style="width: 500px; white-space: nowrap;">상품 번호</th>
                               <th style="width: 500px; white-space: nowrap;">상품 이름</th>
                               <th style="width: 500px; white-space: nowrap;">수량</th>
-                              <th style="width: 500px; white-space: nowrap;">가격</th>
+                              <th style="width: 500px; white-space: nowrap;">총가격</th>
                            </tr>
                         </thead>
                         <tbody>
-                           <th:block th:if="${sUserId != null}">
-                              <th:each th:each="itme : ${sUserCartResponseDto}">
+                              <th:each th:each="item : ${sUserCartResponseDto}">
                                  <tr>
-                                    <th scope="row" style="width: 500px;">112</th>
-                                    <td style="width: 500px; white-space: nowrap;">좋은 컴퓨터 외
+                                    <th scope="row" style="width: 500px;" th:text="${item.id}">112</th>
+                                    <td style="width: 500px; white-space: nowrap;"th:text="${item.productName}">좋은 컴퓨터 외
                                        5개</td>
-                                    <td style="width: 500px; white-space: nowrap;">2023.10.15</td>
-                                    <td style="width: 500px; white-space: nowrap;">15개</td>
+                                    <td style="width: 500px; white-space: nowrap;"th:text="${item.qty}">2023.10.15</td>
+                                    <td style="width: 500px; white-space: nowrap;"th:text="${item.totalPrice}">15개</td>
                                  </tr>
                               </th:each>
-
-                           </th:block>
-                           <th:block th:unless="${sUserId != null}">
-                              <th:each th:each="itme : ${sUserCartOrderDto}">
-                                 <tr>
-                                    <th scope="row" style="width: 500px;">112</th>
-                                    <td style="width: 500px; white-space: nowrap;">좋은 컴퓨터 외
-                                       5개</td>
-                                    <td style="width: 500px; white-space: nowrap;">2023.10.15</td>
-                                    <td style="width: 500px; white-space: nowrap;">15개</td>
-                                 </tr>
-                              </th:each>
-                           </th:block>
                         </tbody>
                      </table>
                   </div>
 
-
                   <div class="custom-section">
                      <div class="col-sm-8">
                         <div class="form-group"
                            style="display: flex; align-items: center;">
-                           <label for="checkout-fn" style="flex: 1;text-align: right; margin-right: 1rem;">주문자</label> <input
-                              class="form-control" type="text" id="checkout-fn"
-                              style="flex: 2; width: 80%;">
+                           <label for="checkout-fn" style="flex: 1;text-align: right; margin-right: 1rem;">주문자</label> 
+                           <input class="form-control" type="text" id="checkout-fn" style="flex: 2; width: 80%;">
                         </div>
                      </div>
                   </div>
@@ -77,9 +61,8 @@
                      <div class="col-sm-8">
                         <div class="form-group"
                            style="display: flex; align-items: center;">
-                           <label for="checkout-email" style="flex: 1;text-align: right; margin-right: 1rem;">주문자전화번호</label> <input
-                              class="form-control" type="email" id="checkout-email"
-                              style="flex: 2; width: 80%;">
+                           <label for="checkout-email" style="flex: 1;text-align: right; margin-right: 1rem;">주문자전화번호</label> 
+                           <input class="form-control" type="email" id="checkout-email" style="flex: 2; width: 80%;">
                         </div>
                      </div>
                   </div>
@@ -88,9 +71,8 @@
                      <div class="col-sm-8">
                         <div class="form-group"
                            style="display: flex; align-items: center;">
-                           <label for="checkout-company" style="flex: 1; text-align: right; margin-right: 1rem;">수령인</label> <input
-                              class="form-control" type="text" id="checkout-company"
-                              style="flex: 2; width: 80%;">
+                           <label for="checkout-company" style="flex: 1; text-align: right; margin-right: 1rem;">수령인</label> 
+                           <input class="form-control" type="text" id="checkout-company" style="flex: 2; width: 80%;">
                         </div>
                      </div>
                   </div>
@@ -116,14 +98,6 @@
                         </div>
                      </div>
                   </div>
-
-
-
-
-
-
-
-
 
                   <h4>Shipping Address</h4>
                   <hr class="padding-bottom-1x">
@@ -323,21 +297,6 @@
    </th:block>
    <th:block layout:fragment="recommendation"></th:block>
    
-   <th:block layout::fragment="script">
-	   <script th:include="javascript">
-		   $(document).click(function (e){
-			   
-			   e.preventDefault();
-			   let orderId = $(this).data('');
-			   
-		   })
-		   
-		   
-	   </script>
-	   
-	   
-	   
-   </th:block>
 </body>
 
 </html>
