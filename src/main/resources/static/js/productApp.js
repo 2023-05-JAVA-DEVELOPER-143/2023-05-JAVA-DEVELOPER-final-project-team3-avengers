@@ -99,6 +99,7 @@ function registEvent() {
 			if ($(e.target).attr('data-cart-qty')) {
 				qty = $('#qty:selected').text();
 			}
+			e.stopPropagation();
 			api.addToCart(optionSetId, qty);
 		} else if ($(e.target).attr('heart')) {
 			let parentButton = undefined;
@@ -168,4 +169,4 @@ function navigate() {
 	}
 }
 
-init();
+//init();
