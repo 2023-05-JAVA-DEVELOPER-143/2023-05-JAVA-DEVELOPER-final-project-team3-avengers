@@ -1,42 +1,40 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="layout/layout(title='장바구니')">
 <!-- Body-->
 <!-- Header -->
+
 <head>
-<link rel="stylesheet" media="screen" href="bootstrap/css/cart.css">
+	<link rel="stylesheet" media="screen" href="bootstrap/css/cart.css">
 </head>
+
 <body>
-	<!-- Modal 시작-->
 	<th:block layout:fragment="modal">
-		<div class="modal fade" id="exampleModal" tabindex="-5"
-			aria-labelledby="exampleModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel">옵션변경</h5>
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body" th:each="cart:${cart}">
-						<select id="modalSelectbox" class="form-control"
-							th:each="optionset:${cart.elseOptionSets}">
-							<option th:text="${optionset.osString}"></option>
-						</select>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary"
-							data-dismiss="modal">취소</button>
-						<button type="button" class="btn btn-primary">변경</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- Modal 끝-->
-	</th:block>
+      <div class="modal fade" id="exampleModal" tabindex="-5"
+         aria-labelledby="exampleModalLabel" aria-hidden="true">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">옵션변경</h5>
+                  <button type="button" class="close" data-dismiss="modal"
+                     aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                  </button>
+               </div>
+               <div class="modal-body" >
+                  <select id="modalSelectbox" class="form-control">
+                  </select>
+               </div>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary"
+                     data-dismiss="modal">취소</button>
+                  <button type="button" class="btn btn-primary" id="modalsave">변경</button>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Modal 끝-->
+   </th:block>
 
 
 	<!-- Page Content-->
@@ -54,9 +52,8 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th class="cartAllCheck"><label><input
-									type="checkbox" checked="checked" id="chkBasketAll"
-									name="chkBasketAll" class="basket_CheckBox"></label></th>
+							<th class="cartAllCheck"><label><input type="checkbox" checked="checked" id="chkBasketAll"
+										name="chkBasketAll" class="basket_CheckBox"></label></th>
 							<th class="product-title-name">상품명</th>
 							<th class="text-center">수량</th>
 							<th class="text-center">결제액</th>
@@ -66,28 +63,20 @@
 						</tr>
 					</thead>
 					<tbody>
-
 						<!-- 반복문 가즈아 -->
 						<tr class="cart_info" th:each="cart:${cart}">
-
 							<td class="prd-check-td">
 								<div class="prd-check">
-									<input type="checkbox" checked="checked" class="checkbox"
-										name="checkboxvalue" th:value="${cart.osId}"
-										th:data-selectid="${cart.osId}"> <input type="hidden"
-										checked="checked" class="checkbox" name="checkboxqty"
-										th:value="${cart.qty}"> <input type="hidden"
-										checked="checked" class="checkbox" name="checkboxproductName"
-										th:value="${cart.productName}"> <input type="hidden"
-										checked="checked" class="checkbox" name="checkboxtotalPrice"
-										th:value="${cart.totalPrice}">
+									<input type="checkbox" checked="checked" class="checkbox" name="checkboxid" th:value="${cart.osId}" th:data-selectid="${cart.osId}"> 
+									<input type="hidden" checked="checked" class="checkbox" name="checkboxqty" th:value="${cart.qty}">
+									<input type="hidden" checked="checked" class="checkbox" name="checkboxproductName" th:value="${cart.productName}"> 
+									<input type="hidden" checked="checked" class="checkbox" name="checkboxtotalPrice" th:value="${cart.totalPrice}">
 								</div>
 							</td>
 							<td>
 								<div class="product-item">
-									<a class="product-thumb" href="shop-single.html"><img
-										src="img/shop/cart/01.jpg" alt="Product"
-										th:src="${cart.pImage}"></a>
+									<a class="product-thumb" href="shop-single.html"><img src="img/shop/cart/01.jpg"
+											alt="Product" th:src="${cart.pImage}"></a>
 									<div class="product-info">
 										<h4 class="product-title">
 											<a href="shop-single.html" th:text="${cart.productName}">Unionbay
@@ -105,9 +94,7 @@
 							</td>
 							<td class="text-center">
 								<div class="count-input">
-									<select id="selectbox" class="form-control"
-										name="checkboxvalue" th:data-id="${cart.osId}"
-										onchange="getSelectValue(this);">
+									<select id="selectbox" class="form-control" name="checkboxvalue" th:data-id="${cart.osId}" onchange="getSelectValue(this);">
 										<option disabled hidden th:selected="${cart.qty}"></option>
 										<option th:selected="${cart.qty} == '1'">1</option>
 										<option th:selected="${cart.qty} == '2'">2</option>
@@ -119,14 +106,14 @@
 
 								</div>
 							</td>
-							<td class="text-center text-lg text-medium"
-								th:text="${cart.totalPrice} * ${cart.qty}">2,332,000</td>
-							<td class="text-center text-lg text-medium"
-								th:text="${#numbers.formatInteger(cart.totalPrice * (cart.grade / 10), '0')}">0원</td>
-							<td class="text-center"><a class="plain-btn"
-								data-toggle="modal" data-target="#exampleModal">옵션변경</a> <a
-								href="javascript:void(0)" class="plain-btn" id="deletebtn"
-								th:data-osId="${cart.osId}" onclick="deleteCart(this)">삭제하기</a>
+							<td class="text-center text-lg text-medium" th:text="${cart.totalPrice} * ${cart.qty}">
+								2,332,000</td>
+							<td class="text-center text-lg text-medium" th:text="${cart.totalPrice}">0원</td>
+							<td class="text-center">
+								<a class="plain-btn" id="modalvalue" data-toggle="modal"
+									data-target="#exampleModal" th:onclick="selectOption([[${cart.elseOptionSets}]] ,[[${cart.osId}]] );">옵션변경</a> 
+								<a href="javascript:void(0)" class="plain-btn"
+									id="deletebtn" th:data-osId="${cart.osId}" onclick="deleteCart(this)">삭제하기</a>
 
 							</td>
 						</tr>
@@ -148,9 +135,9 @@
 				</div>
 				<div class="column"></div>
 				<div class="column">
-					<a href="javascript:void(0)" class="btn btn-selectdelete"
-						id="selectAllcheck" onclick="selectAlldelete()">선택삭제</a> <a
-						class="btn btn-success" href="#" onclick="checkValue();">주문하기</a>
+					<a href="javascript:void(0)" class="btn btn-selectdelete" id="selectAllcheck"
+						onclick="selectAlldelete()">선택삭제</a> <a class="btn btn-success" href="#"
+						onclick="checkValue();">주문하기</a>
 				</div>
 			</div>
 
@@ -167,8 +154,8 @@
 				<div class="grid-item">
 					<div class="product-card">
 						<div class="product-badge text-danger">22% Off</div>
-						<a class="product-thumb" href="shop-single.html"><img
-							src="img/shop/products/09.jpg" alt="Product"></a>
+						<a class="product-thumb" href="shop-single.html"><img src="img/shop/products/09.jpg"
+								alt="Product"></a>
 						<h3 class="product-title">
 							<a href="shop-single.html">Rocket Dog</a>
 						</h3>
@@ -177,14 +164,14 @@
 							$34.99
 						</h4>
 						<div class="product-buttons">
-							<button class="btn btn-outline-secondary btn-sm btn-wishlist"
-								data-toggle="tooltip" title="Whishlist">
+							<button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip"
+								title="Whishlist">
 								<i class="icon-heart"></i>
 							</button>
-							<button class="btn btn-outline-primary btn-sm" data-toast
-								data-toast-type="success" data-toast-position="topRight"
-								data-toast-icon="icon-circle-check" data-toast-title="Product"
-								data-toast-message="successfuly added to cart!">장바구니 담기</button>
+							<button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success"
+								data-toast-position="topRight" data-toast-icon="icon-circle-check"
+								data-toast-title="Product" data-toast-message="successfuly added to cart!">장바구니
+								담기</button>
 						</div>
 					</div>
 				</div>
@@ -193,45 +180,44 @@
 					<div class="product-card">
 						<div class="rating-stars">
 							<i class="icon-star filled"></i><i class="icon-star filled"></i><i
-								class="icon-star filled"></i><i class="icon-star filled"></i><i
-								class="icon-star"></i>
+								class="icon-star filled"></i><i class="icon-star filled"></i><i class="icon-star"></i>
 						</div>
-						<a class="product-thumb" href="shop-single.html"><img
-							src="img/shop/products/03.jpg" alt="Product"></a>
+						<a class="product-thumb" href="shop-single.html"><img src="img/shop/products/03.jpg"
+								alt="Product"></a>
 						<h3 class="product-title">
 							<a href="shop-single.html">Oakley Kickback</a>
 						</h3>
 						<h4 class="product-price">$155.00</h4>
 						<div class="product-buttons">
-							<button class="btn btn-outline-secondary btn-sm btn-wishlist"
-								data-toggle="tooltip" title="Whishlist">
+							<button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip"
+								title="Whishlist">
 								<i class="icon-heart"></i>
 							</button>
-							<button class="btn btn-outline-primary btn-sm" data-toast
-								data-toast-type="success" data-toast-position="topRight"
-								data-toast-icon="icon-circle-check" data-toast-title="Product"
-								data-toast-message="successfuly added to cart!">장바구니 담기</button>
+							<button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success"
+								data-toast-position="topRight" data-toast-icon="icon-circle-check"
+								data-toast-title="Product" data-toast-message="successfuly added to cart!">장바구니
+								담기</button>
 						</div>
 					</div>
 				</div>
 				<!-- Product-->
 				<div class="grid-item">
 					<div class="product-card">
-						<a class="product-thumb" href="shop-single.html"><img
-							src="img/shop/products/12.jpg" alt="Product"></a>
+						<a class="product-thumb" href="shop-single.html"><img src="img/shop/products/12.jpg"
+								alt="Product"></a>
 						<h3 class="product-title">
 							<a href="shop-single.html">Vented Straw Fedora</a>
 						</h3>
 						<h4 class="product-price">$49.50</h4>
 						<div class="product-buttons">
-							<button class="btn btn-outline-secondary btn-sm btn-wishlist"
-								data-toggle="tooltip" title="Whishlist">
+							<button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip"
+								title="Whishlist">
 								<i class="icon-heart"></i>
 							</button>
-							<button class="btn btn-outline-primary btn-sm" data-toast
-								data-toast-type="success" data-toast-position="topRight"
-								data-toast-icon="icon-circle-check" data-toast-title="Product"
-								data-toast-message="successfuly added to cart!">장바구니 담기</button>
+							<button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success"
+								data-toast-position="topRight" data-toast-icon="icon-circle-check"
+								data-toast-title="Product" data-toast-message="successfuly added to cart!">장바구니
+								담기</button>
 						</div>
 					</div>
 				</div>
@@ -243,42 +229,42 @@
 								class="icon-star filled"></i><i class="icon-star filled"></i><i
 								class="icon-star filled"></i>
 						</div>
-						<a class="product-thumb" href="shop-single.html"><img
-							src="img/shop/products/11.jpg" alt="Product"></a>
+						<a class="product-thumb" href="shop-single.html"><img src="img/shop/products/11.jpg"
+								alt="Product"></a>
 						<h3 class="product-title">
 							<a href="shop-single.html">Top-Sider Fathom</a>
 						</h3>
 						<h4 class="product-price">$90.00</h4>
 						<div class="product-buttons">
-							<button class="btn btn-outline-secondary btn-sm btn-wishlist"
-								data-toggle="tooltip" title="Whishlist">
+							<button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip"
+								title="Whishlist">
 								<i class="icon-heart"></i>
 							</button>
-							<button class="btn btn-outline-primary btn-sm" data-toast
-								data-toast-type="success" data-toast-position="topRight"
-								data-toast-icon="icon-circle-check" data-toast-title="Product"
-								data-toast-message="successfuly added to cart!">장바구니 담기</button>
+							<button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success"
+								data-toast-position="topRight" data-toast-icon="icon-circle-check"
+								data-toast-title="Product" data-toast-message="successfuly added to cart!">장바구니
+								담기</button>
 						</div>
 					</div>
 				</div>
 				<!-- Product-->
 				<div class="grid-item">
 					<div class="product-card">
-						<a class="product-thumb" href="shop-single.html"><img
-							src="img/shop/products/04.jpg" alt="Product"></a>
+						<a class="product-thumb" href="shop-single.html"><img src="img/shop/products/04.jpg"
+								alt="Product"></a>
 						<h3 class="product-title">
 							<a href="shop-single.html">Waist Leather Belt</a>
 						</h3>
 						<h4 class="product-price">$47.00</h4>
 						<div class="product-buttons">
-							<button class="btn btn-outline-secondary btn-sm btn-wishlist"
-								data-toggle="tooltip" title="Whishlist">
+							<button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip"
+								title="Whishlist">
 								<i class="icon-heart"></i>
 							</button>
-							<button class="btn btn-outline-primary btn-sm" data-toast
-								data-toast-type="success" data-toast-position="topRight"
-								data-toast-icon="icon-circle-check" data-toast-title="Product"
-								data-toast-message="successfuly added to cart!">장바구니 담기</button>
+							<button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success"
+								data-toast-position="topRight" data-toast-icon="icon-circle-check"
+								data-toast-title="Product" data-toast-message="successfuly added to cart!">장바구니
+								담기</button>
 						</div>
 					</div>
 				</div>
@@ -286,8 +272,8 @@
 				<div class="grid-item">
 					<div class="product-card">
 						<div class="product-badge text-danger">50% Off</div>
-						<a class="product-thumb" href="shop-single.html"><img
-							src="img/shop/products/01.jpg" alt="Product"></a>
+						<a class="product-thumb" href="shop-single.html"><img src="img/shop/products/01.jpg"
+								alt="Product"></a>
 						<h3 class="product-title">
 							<a href="shop-single.html">Unionbay Park</a>
 						</h3>
@@ -296,14 +282,14 @@
 							$49.99
 						</h4>
 						<div class="product-buttons">
-							<button class="btn btn-outline-secondary btn-sm btn-wishlist"
-								data-toggle="tooltip" title="Whishlist">
+							<button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip"
+								title="Whishlist">
 								<i class="icon-heart"></i>
 							</button>
-							<button class="btn btn-outline-primary btn-sm" data-toast
-								data-toast-type="success" data-toast-position="topRight"
-								data-toast-icon="icon-circle-check" data-toast-title="Product"
-								data-toast-message="successfuly added to cart!">장바구니 담기</button>
+							<button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success"
+								data-toast-position="topRight" data-toast-icon="icon-circle-check"
+								data-toast-title="Product" data-toast-message="successfuly added to cart!">장바구니
+								담기</button>
 						</div>
 					</div>
 				</div>
@@ -312,52 +298,64 @@
 		<!-- content end -->
 
 
-	</th:block>
-	<th:block layout:fragment="recommendation">
-	</th:block>
-	<th:block layout:fragment="script">
-
-		<script th:inline="javascript">
+</th:block>
+<th:block layout:fragment="recommendation">
+</th:block>
+<th:block layout:fragment="script">
+		
+<script th:inline="javascript">
 	
-/*
+/* 총결제금액 계산 */
 $(document).ready(function() {
-    let qtyprice = 0;
-    let checkboxes = document.querySelectorAll('input[name="checkboxvalue"]');
+    let checkboxes = document.querySelectorAll('input[name="checkboxid"]');
     let checkboxtotalPrice = document.querySelectorAll('input[name="checkboxtotalPrice"]');
     let checkboxesqty = document.querySelectorAll('input[name="checkboxqty"]');
     
-    // 초기 총 결제 금액 계산
-    for (let i = 0; i < checkboxes.length; i++) {
-        if (checkboxes[i].checked) {
-            let qty = parseInt(checkboxesqty[i].value);
-            let totalPrice = parseInt(checkboxtotalPrice[i].value);
-            qtyprice += qty * totalPrice;
+    // 초기 총 결제 금액 계산 함수
+    function calculateTotalPrice() {
+        let qtyprice = 0;
+        for (let i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                let qty = parseInt(checkboxesqty[i].value);
+                let totalPrice = parseInt(checkboxtotalPrice[i].value);
+                qtyprice += qty * totalPrice;
+            }
         }
+        return qtyprice;
     }
-    $("#finalTotalPrice").text(qtyprice);
-    
-    // 체크박스 상태 변경 시 이벤트 처리
-    $('input[name="checkboxvalue"]').on('change', function() {
-        let index = checkboxes.indexOf(this);
-        let qty = parseInt(checkboxesqty[index].value);
-        let totalPrice = parseInt(checkboxtotalPrice[index].value);
-        
-        if (this.checked) {
-            qtyprice += qty * totalPrice;
-        } else {
-            qtyprice -= qty * totalPrice;
-        }
-        $("#finalTotalPrice").text(qtyprice);
-    });
-});
-*/
 
-/* 체크된 체크박스 값들만 주문폼으로 넘기기 (테스트완료 소리질러~~)  */ 
+    // 초기 총 결제 금액 설정
+    let finaltotalPrice = calculateTotalPrice();
+    $("#finalTotalPrice").text(finaltotalPrice + '원');
+
+    // 체크박스 상태 변경 시 이벤트 처리
+    $('input[name="checkboxid"]').on('change', function () {
+        let qtyprice = calculateTotalPrice();
+        $("#finalTotalPrice").text(qtyprice + '원');
+    });
+
+    // 전체 체크 해제 버튼 클릭 시 값 초기화
+    $('#chkBasketAll').on('change', function () {
+		if ($("input[name=chkBasketAll]:checkbox" ).is(":checked")){
+	        $('input[name="checkboxid"]').prop('checked', true);
+			let qtyprice = calculateTotalPrice();
+        	$("#finalTotalPrice").text(qtyprice + '원');
+		} else {
+	        $('input[name="checkboxid"]').prop('checked', false);
+	        $("#finalTotalPrice").text('0원');
+		}
+    });
+	
+});
+
+
+
+/* 체크된 체크박스 값들만 주문폼으로 넘기기 */ 
 function checkValue() {
    let checkedData = [];
 
    // 체크박스 요소들을 가져온다
-   let checkboxes = document.querySelectorAll('input[name="checkboxvalue"]');
+   let checkboxes = document.querySelectorAll('input[name="checkboxid"]');
    let checkboxesqty = document.querySelectorAll('input[name="checkboxqty"]');
    let checkboxproductName = document.querySelectorAll('input[name="checkboxproductName"]');
    let checkboxtotalPrice = document.querySelectorAll('input[name="checkboxtotalPrice"]')?document.querySelectorAll('input[name="checkboxtotalPrice"]'):'';
@@ -381,11 +379,6 @@ function checkValue() {
 		type : "post",
 		contentType : 'application/json',
 		data : JSON.stringify(checkedData),
-		success : function(result){
-			window.location.href="http://localhost/order_save_form";
-		
-			console.log(checkedData);
-		}	
 	});
 }
 /* 전체 선택 체크 유무 */
@@ -475,22 +468,62 @@ function selectAlldelete() {
 }
 
 
+/* 옵션 변경 */
+function selectOption(elseOptionSets, osId) {
+   let elseOptions = elseOptionSets;
+   let selectCartid = osId;
+   let data = [osId];
+   
+   let modalSelectbox = document.getElementById("modalSelectbox");
+    while (modalSelectbox.firstChild) {
+           modalSelectbox.removeChild(modalSelectbox.firstChild);
+       }
+   for(let i = 0; i < elseOptions.length ; i++){
+	      let option = document.createElement("option");
+	      option.textContent = elseOptions[i].osString;
+	      option.value = elseOptions[i].osId;
+		  modalSelectbox.appendChild(option);
+		  
+		  
+      if(option.value == selectCartid) {
+		  option.selected = true;
+	  }
+   }
+   
+   
+   $("#modalSelectbox").on('change', function() {
+	   let updateId = modalSelectbox.value;
+	   $("#modalsave").click(function() {
+		  data.push(updateId);
+		  $.ajax({
+			 url: "/cart/optionset",
+			 type: "post",
+			 contentType: 'application/json',
+			 data: JSON.stringify(data),
+			 success : function() {
+				 console.log(data);
+				 alert('변경완료');
+				 location.href="http://localhost:80/cart_list"
+			 },
+			 error : function() {
+				 alert('이미 담겨있는 상품입니다');
+			 }
+		  });
+	   });
+   });
+   
+   
+   
+   
+}
 
 
-/* 옵션 변경때 사용해야할듯싶다..
-$('#modalLarge').on('show.bs.modal',function(e) {
-	alert('#modalLarge가 보여지기직전에 띄어짐');
-	// ajax 요청
-	$(e.target).find('.modal-title').html("모달에 띄어지는 타이틀[ajax receive data]");
-	$(e.target).find('.modal-body p').html("모달에 띄어지는 타이틀[ajax receive data]");
-	$(e.target).find('.modal-footer .btn-primary').click(function(e1) {
-		alert('close button click!!')   // 옵션 변경후 save 시킬 버튼 여기다 ajax처리
-	});
-});
-*/
+
+
+
 
 
 </script>
-	</th:block>
+</th:block>
 </body>
 </html>

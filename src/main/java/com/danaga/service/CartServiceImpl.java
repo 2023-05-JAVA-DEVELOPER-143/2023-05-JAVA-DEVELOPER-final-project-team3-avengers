@@ -49,10 +49,11 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public void addCart(CartDto dto, String value) throws Exception {
 		// 로그인 유저 아이디와 OptionSetId 로 동일제품 찾기
-		Cart findCart = cartRepository.findByOptionSetIdAndMemberId(dto.getOptionSetId(), memberDao.findMember(value).getId());
+		Cart findCart = cartRepository.findByOptionSetIdAndMemberId(dto.getOptionSetId(),
+				memberDao.findMember(value).getId());
 		// 인서트할 카트
-		Cart addCart = Cart.builder().member(memberDao.findMember(value)).optionSet(optionSetDao.findById(dto.getOptionSetId()))
-				.qty(dto.getQty()).build();
+		Cart addCart = Cart.builder().member(memberDao.findMember(value))
+				.optionSet(optionSetDao.findById(dto.getOptionSetId())).qty(dto.getQty()).build();
 		if (findCart == null) {
 			cartRepository.save(addCart);
 		} else {

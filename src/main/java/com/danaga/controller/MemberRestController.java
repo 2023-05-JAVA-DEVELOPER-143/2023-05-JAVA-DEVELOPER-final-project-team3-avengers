@@ -11,16 +11,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.danaga.dto.MemberLoginDto;
 import com.danaga.dto.MemberResponseDto;
 import com.danaga.dto.MemberUpdateDto;
 import com.danaga.entity.Member;
@@ -43,34 +43,6 @@ public class MemberRestController {
 	@Autowired
 	private MemberService memberService;
 	
-	@GetMapping("/checkDuplicatePhoneNo")
-	public Map<String, Boolean> checkDuplicatePhoneNo(@RequestParam String phoneNo) throws Exception {
-		Map<String, Boolean> response = new HashMap<>();
-		boolean isDuplicate = memberService.isDuplicateByPhoneNo(phoneNo);
-		response.put("isDuplicate", isDuplicate);
-		return response;
-	}
-	@GetMapping("/checkDuplicateEmail")
-	public Map<String, Boolean> checkDuplicateEmail(@RequestParam String email) throws Exception {
-		Map<String, Boolean> response = new HashMap<>();
-		boolean isDuplicate = memberService.isDuplicateByEmail(email);
-		response.put("isDuplicate", isDuplicate);
-		return response;
-	}
-	@GetMapping("/checkDuplicateUserName")
-	public Map<String, Boolean> checkDuplicateUserName(@RequestParam String userName) throws Exception {
-		Map<String, Boolean> response = new HashMap<>();
-		boolean isDuplicate = memberService.isDuplicateByUserName(userName);
-		response.put("isDuplicate", isDuplicate);
-		return response;
-	}
-	@GetMapping("/checkDuplicateNickname")
-	public Map<String, Boolean> checkDuplicateNickname(@RequestParam String nickname) throws Exception {
-		Map<String, Boolean> response = new HashMap<>();
-		boolean isDuplicate = memberService.isDuplicateByNickname(nickname);
-		response.put("isDuplicate", isDuplicate);
-		return response;
-	}
 
 //	@PostMapping("/login")
 //	public ResponseEntity<MemberResponse> member_login_action(@RequestBody MemberResponseDto memberResponseDto, HttpSession session) throws Exception {
@@ -86,28 +58,28 @@ public class MemberRestController {
 //		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
 //	}
 	@PostMapping(value = "/login_rest",produces = "application/json;charset=UTF-8")
-	public Map member_login_action_rest(@RequestBody MemberResponseDto memberResponseDto, HttpSession session) throws Exception {
+	public Map member_login_action_rest(@RequestBody MemberLoginDto memberLoginDto, HttpSession session) throws Exception {
 		HashMap map = new HashMap<>();
 	//	MemberResponseDto memberResponseDto = MemberResponseDto.builder().userName(userName).password(password).build();
 		int result = 2;
 		
 		try {
-			memberService.login(memberResponseDto.getUserName(), memberResponseDto.getPassword());
+			memberService.login(memberLoginDto.getUserName(), memberLoginDto.getPassword());
 			
 		} catch (MemberNotFoundException e) {
 			result = 0;
 			map.put("result", result);
-			map.put("member", memberResponseDto);
+			map.put("member", memberLoginDto);
 			return map;
 		} catch (PasswordMismatchException e) {
 			result = 1;
 			map.put("result", result);
-			map.put("member", memberResponseDto);
+			map.put("member", memberLoginDto);
 			return map;
 		}
-		session.setAttribute("sUserId", memberResponseDto.getUserName());
+		session.setAttribute("sUserId", memberLoginDto.getUserName());
 		map.put("result", result);
-		map.put("member", memberResponseDto);
+		map.put("member", memberLoginDto);
 		return map;
 	}
 	
@@ -175,19 +147,43 @@ public class MemberRestController {
 			return map;
 	}
 
+//	@LoginCheck
+//	@PutMapping("/{id}")
+//	public ResponseEntity<MemberResponse> member_modify_action(@PathVariable(name = "id") String id,
+//			@RequestBody MemberUpdateDto memberUpdateDto) throws Exception {
+//		MemberResponseDto updatedMember = memberService.updateMember(memberUpdateDto);
+//
+//		MemberResponse response = new MemberResponse();
+//		response.setStatus(MemberResponseStatusCode.UPDATE_USER);
+//		response.setMessage(MemberResponseMessage.UPDATE_USER);
+//		response.setData(updatedMember);
+//		HttpHeaders httpHeaders = new HttpHeaders();
+//		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+//		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
+//	}
 	@LoginCheck
-	@PutMapping("/{id}")
-	public ResponseEntity<MemberResponse> member_modify_action(@PathVariable(name = "id") String id,
-			@RequestBody MemberUpdateDto memberUpdateDto) throws Exception {
-		MemberResponseDto updatedMember = memberService.updateMember(memberUpdateDto);
-
-		MemberResponse response = new MemberResponse();
-		response.setStatus(MemberResponseStatusCode.UPDATE_USER);
-		response.setMessage(MemberResponseMessage.UPDATE_USER);
-		response.setData(updatedMember);
-		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
+	@PostMapping(value = "/modify_action_rest",produces = "application/json;charset=UTF-8")
+	public Map member_modify_action(@RequestBody MemberUpdateDto memberUpdateDto,HttpSession session) throws Exception {
+		HashMap map = new HashMap<>();
+		int result = 2;
+		MemberResponseDto updatedMember = new MemberResponseDto();
+		System.out.println("######"+memberUpdateDto.getPassword()+"#########"+memberUpdateDto.getNickname());
+		try {
+			String sUserId = (String) session.getAttribute("sUserId");
+			Long sUserLongId = memberService.getMemberBy(sUserId).getId();
+			memberUpdateDto.setId(sUserLongId);
+			updatedMember = memberService.updateMember(memberUpdateDto);
+		} catch (ExistedMemberByNicknameException e) {
+			result = 1;
+			System.out.println("######################"+result);
+			map.put("member", memberUpdateDto);
+			map.put("result", result);
+			map.put("msg", memberUpdateDto.getNickname() + "는 사용중인 닉네임입니다.");
+			return map;
+		}
+		map.put("member", updatedMember);
+		map.put("result", result);
+		return map;
 	}
 
 	@GetMapping("/list")

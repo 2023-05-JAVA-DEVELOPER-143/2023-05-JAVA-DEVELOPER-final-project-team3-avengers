@@ -54,13 +54,13 @@
 						<div class="row">
 							<div class="col-md-6">
 								<form class="form-group" th:object="${refundDto}">
-									<label for="account-fn">은행이름</label>
+									<label for="account-fn" style = "pointer-events: none;">은행이름</label>
 									<input class="form-control" type="text" name="bankName" id="bankName" value="은행이름"
 										required th:field="*{bankName}">
 								</form>
 
 								<form class="form-group" th:object="${refundDto}">
-									<label for="account-ln">계좌주</label>
+									<label for="account-ln" style = "pointer-events: none;">계좌주</label>
 									<input class="form-control" type="text" name="accountName" id="accountName"
 										value="계좌주" required th:field="*{accountName}">
 								</form>
@@ -68,13 +68,13 @@
 
 							<div class="col-md-6">
 								<form class="form-group" th:object="${refundDto}">
-									<label for="refund-account">환불 계좌번호</label>
+									<label for="refund-account" style = "pointer-events: none;">환불 계좌번호</label>
 									<input class="form-control" type="text" name="acNo" id="acNo" value="환불 계좌번호"
 										required th:field="*{acNo}">
 								</form>
 
 								<form class="form-group" th:object="${refundDto}">
-									<label for="refund-reason">환불 사유</label>
+									<label for="refund-reason" style = "pointer-events: none;">환불 사유</label>
 									<input class="form-control" type="text" name="description" id="description"
 										value="환불 사유" required th:field="*{description}">
 								</form>
@@ -159,8 +159,6 @@
 
 	</script>
 </th:block>
-
-
 
 
 </body>

@@ -32,9 +32,7 @@ class OptionSetServiceImplTest {
 	@Rollback(false)
 	@Disabled//아직
 	void testDeleteProduct() {
-		System.out.println(service.deleteProduct(8L, QueryStringDataDto.builder()
-				.orderType(OptionSetQueryData.BY_ORDER_COUNT)
-				.build()));
+		System.out.println(service.deleteProduct(8L));
 	}
 
 	@Test
@@ -42,8 +40,7 @@ class OptionSetServiceImplTest {
 	@Rollback(false)
 	@Disabled
 	void testDeleteOptionSet() {
-		System.out.println(service.deleteOptionSet(2L, QueryStringDataDto.builder()
-				.build()));
+		System.out.println(service.deleteOptionSet(2L));
 	}
 
 	@Test
@@ -111,17 +108,17 @@ class OptionSetServiceImplTest {
 		System.out.println(service.showOptionNameValues(13L));
 	}
 
-	@Test
-	@Transactional
-	@Rollback(false)
-	@Disabled
-	void testUpdateOptionSaveDto() {
-		System.out.println(service.update(OptionSaveDto.builder()
-				.extraPrice(10000)
-				.id(30L)
-				.name("update")
-				.build()));
-	}
+//	@Test
+//	@Transactional
+//	@Rollback(false)
+//	@Disabled
+//	void testUpdateOptionSaveDto() {
+//		System.out.println(service.update(OptionSaveDto.builder()
+//				.extraPrice(10000)
+//				.id(30L)
+//				.name("update")
+//				.build()));
+//	}
 
 	@Test
 	@Transactional

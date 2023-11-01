@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import com.danaga.entity.Statistic;
 
 
-public interface StatisticRepository extends JpaRepository<Statistic, Date>{
+public interface StatisticRepository extends JpaRepository<Statistic, String>{
 	// N일 총 판매수량
 	@Query(value = "select nvl(count(create_date),0) from orders where to_char(create_date,'YYYYMMDD') = :findDate", nativeQuery = true)
 	Long countTotSalesOn(@Param("findDate") String findDate);
@@ -32,5 +32,17 @@ public interface StatisticRepository extends JpaRepository<Statistic, Date>{
 	
 	// YYYYMM월의 기록
 	List<Statistic> findByIdStartsWith(String id);
+	
+	// M월 총 주문 건수
+	@Query(value = "select nvl(count(create_date),0) from orders where to_char(create_date,'YYYYMM') = :findMonth", nativeQuery = true)
+	Long countTotSalesThisMonth(@Param("findMonth") String findMonth);
+	
+	// M월 배송중+입금대기 건수
+	@Query(value = "select nvl(count(create_date),0) from orders where to_char(create_date,'YYYYMM') = :findMonth  and (statement = '배송중' or statement = '입금대기중')", nativeQuery = true)
+	Long countToSalesThisMonth(@Param("findMonth") String findMonth);
+	
+	// 환불대기+환불완료+취소 건수
+	@Query(value = "select nvl(count(create_date),0) from orders where to_char(create_date,'YYYYMM') = :findMonth  and (statement = '환불대기중' or statement = '환불완료' or statement = '취소')", nativeQuery = true)
+	Long countFailSalesThisMonth(@Param("findMonth") String findMonth);
 
 }

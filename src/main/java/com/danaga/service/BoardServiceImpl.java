@@ -52,7 +52,7 @@ public class BoardServiceImpl implements BoardService{
 		List<BoardDto> top10List = bRepository.findTop10ByOrderByReadCountDesc().stream().map(t -> BoardDto.responseDto(t)).collect(Collectors.toList());
 		for (BoardDto boardDto : top10List) {
 			if(boardDto.getTitle().length()>10) {
-				String contentTemp=boardDto.getTitle().substring(0,10)+"...";
+				String contentTemp=boardDto.getTitle().substring(0,8)+"...";
 				boardDto.setTitle(contentTemp);
 			}
 		}
@@ -65,9 +65,13 @@ public class BoardServiceImpl implements BoardService{
 		List<BoardDto> boardList=bRepository.findByBoardGroupIdOrderByCreateTimeDesc(boardGroupId).stream()
 				.map(board -> BoardDto.responseDto(board)).collect(Collectors.toList());
 		for (BoardDto boardDto : boardList) {
-			if(boardDto.getContent().length()>15) {
-				String contentTemp=boardDto.getContent().substring(0,15)+"...";
+			if(boardDto.getContent().length()>5) {
+				String contentTemp=boardDto.getContent().substring(0,5)+"...";
 				boardDto.setContent(contentTemp);
+			}
+			if(boardDto.getTitle().length()>5) {
+				String contentTemp=boardDto.getTitle().substring(0,5)+"...";
+				boardDto.setTitle(contentTemp);
 			}
 		}
 		return boardList;
@@ -141,9 +145,9 @@ public class BoardServiceImpl implements BoardService{
 	        // 현재 상태에 따라 좋아요 상태를 반전
 	        obj.setIsLike(obj.getIsLike() == 0 ? 1 : 0);
 	        if (obj.getIsLike() == 1) {
-	            board.setIsLike(board.getIsLike() - 1); // isLike 값 -1
+	            board.setIsLike(board.getIsLike() + 1); 
 	        }else if (obj.getIsLike()==0) {
-	        	board.setIsLike(board.getIsLike() +1);
+	        	board.setIsLike(board.getIsLike() -1);
 	        }
 	    }
 
@@ -186,9 +190,9 @@ public class BoardServiceImpl implements BoardService{
 	        // 현재 상태에 따라 좋아요 상태를 반전
 	        obj.setDisLike(obj.getDisLike() == 0 ? 1 : 0);
 	        if (obj.getDisLike() == 1) {
-	            board.setDisLike(board.getDisLike() - 1); // isLike 값 -1
+	            board.setDisLike(board.getDisLike() + 1); 
 	        }else if (obj.getDisLike()==0) {
-	        	board.setDisLike(board.getDisLike() +1);
+	        	board.setDisLike(board.getDisLike() -1);
 	        }
 	    }
 

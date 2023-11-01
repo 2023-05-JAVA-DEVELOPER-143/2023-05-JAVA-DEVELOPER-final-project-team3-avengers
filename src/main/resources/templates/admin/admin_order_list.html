@@ -82,7 +82,7 @@
 													<button class="btn btn-primary dropdown-toggle" type="button"
 														id="dropdownMenuButton" data-toggle="dropdown"
 														aria-haspopup="true" aria-expanded="false">
-														<span th:text="${order.statement}"></span>
+														<span th:class="'dropdown-selected'+${order.id}" th:text="${order.statement}"></span>
 													</button>
 													<div class="dropdown-menu animated--fade-in"
 														aria-labelledby="dropdownMenuButton">
@@ -96,7 +96,7 @@
 													<button class="btn btn-danger dropdown-toggle" type="button"
 														id="dropdownMenuButton" data-toggle="dropdown"
 														aria-haspopup="true" aria-expanded="false">
-														<span th:text="${order.statement}"></span>
+														<span th:class="'dropdown-selected'+${order.id}" th:text="${order.statement}"></span>
 													</button>
 													<div class="dropdown-menu animated--fade-in"
 														aria-labelledby="dropdownMenuButton">
@@ -190,7 +190,7 @@
 				contentType: "application/json",
 				data: JSON.stringify(data),
 				success: function () {
-					window.location.href = "/admin/admin_order_list";
+					$('.dropdown-selected'+orderId).text(statement);
 				},
 				error: function () {
 					modalBody.textContent = "변경이 안되는데요ㅠㅠ?";

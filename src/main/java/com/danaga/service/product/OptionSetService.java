@@ -13,8 +13,8 @@ import com.danaga.entity.OptionSet;
 
 public interface OptionSetService {
 
-		ResponseDto<?> deleteProduct(Long productId, QueryStringDataDto dataDto);
-		ResponseDto<?> deleteOptionSet(Long optionSetId, QueryStringDataDto dataDto);
+		ResponseDto<?> deleteProduct(Long productId);
+		ResponseDto<?> deleteOptionSet(Long optionSetId);
 		ResponseDto<?> deleteOption(Long optionId);
  		
 		ResponseDto<?> updateStock(OptionSetUpdateDto dto);

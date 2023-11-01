@@ -15,6 +15,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode()
 public class Delivery {
 	@Id
 	@SequenceGenerator(name = "DELIVERY_DELIVERY_NO_SEQ", sequenceName = "DELIVERY_DELIVERY_NO_SEQ", initialValue = 1, allocationSize = 1)

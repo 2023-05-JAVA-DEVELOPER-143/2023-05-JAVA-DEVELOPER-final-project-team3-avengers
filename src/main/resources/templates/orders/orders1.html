@@ -23,7 +23,7 @@
 	</style>
 
 	<style>
-		button.order-Link {
+		button.btn {
 			background-color: rgba(255, 255, 255, 0.5);
 			/* 배경색을 투명한 흰색으로 설정 */
 			border: none;
@@ -42,7 +42,7 @@
 			/* 포커스 효과 제거 */
 		}
 
-		button.order-Link:hover {
+		button.btn:hover {
 			background-color: rgba(255, 255, 255, 0.7);
 			/* 마우스 오버시 미세하게 밝아지도록 설정 */
 		}
@@ -102,7 +102,7 @@
 								<tr th:each="ordersDto : ${orderDtoList}"
 									th:each-sort="${ordersDto.id}"	>
 									<td>
-										<button class="btn " data-bs-toggle="modal" data-bs-target="#orderDetails"
+										<button class="btn" data-bs-toggle="modal" data-bs-target="#orderDetails"
 											th:data-order-id="${ordersDto.id}">
 											<span th:text="${ordersDto.id}">주문번호</span></button>
 									</td>

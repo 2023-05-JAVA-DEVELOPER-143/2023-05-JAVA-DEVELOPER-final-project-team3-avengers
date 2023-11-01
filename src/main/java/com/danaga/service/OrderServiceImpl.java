@@ -46,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
 	   
 	    
 	    for (CartDto cartDto : fUserCarts) {//카트Dto로 부터 orderItem을 만들어서 orderItemList를만들려고
-	    	OptionSet optionSet =optionSetDao.findById(cartDto.getId());
+	    	OptionSet optionSet =optionSetDao.findById(cartDto.getOptionSetId());
 	    	
 	    	o_tot_price+=optionSet.getTotalPrice()*cartDto.getQty();//주문의 요소 중 하나임
 	    	oi_tot_count+=cartDto.getQty();//주문Desc만드려고
@@ -175,7 +175,7 @@ public class OrderServiceImpl implements OrderService {
 		for (int i = 0; i < fUserCarts.size(); i++) {
 			
 			CartDto cartDto= fUserCarts.get(i);
-			OptionSet optionSet = optionSetDao.findById(cartDto.getId());
+			OptionSet optionSet = optionSetDao.findById(cartDto.getOptionSetId());
 			
 
 		    o_tot_price+=(optionSet.getTotalPrice())*(cartDto.getQty());
@@ -396,7 +396,7 @@ public class OrderServiceImpl implements OrderService {
 		for (int i = 0; i < fUserCarts.size(); i++) {
 			
 			CartDto cartDto= fUserCarts.get(i);
-			OptionSet optionSet = optionSetDao.findById(cartDto.getId());
+			OptionSet optionSet = optionSetDao.findById(cartDto.getOptionSetId());
 			
 
 		    o_tot_price+=(optionSet.getTotalPrice())*(cartDto.getQty());
