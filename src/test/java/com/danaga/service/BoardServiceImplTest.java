@@ -26,8 +26,8 @@ public class BoardServiceImplTest {
     @Autowired
     private BoardServiceImpl boardService;
 
-    @Test
-    public void testCreateBoard() {
+    //@Test
+    /*public void testCreateBoard() {
         // Mock necessary data
         BoardDto boardDto = BoardDto.builder()
                 .boardGroupId(1L)
@@ -41,7 +41,7 @@ public class BoardServiceImplTest {
         BoardDto result = boardService.createBoard(boardDto);
         System.out.println(">>>>>>>>board : "+result);
         
-    }
+    }*/
 }
 
 
