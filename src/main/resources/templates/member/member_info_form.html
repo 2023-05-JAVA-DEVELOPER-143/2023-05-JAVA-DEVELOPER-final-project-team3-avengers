@@ -16,57 +16,56 @@
 				</div>	
 				<div class="col-lg-8">
 					<div class="padding-top-2x mt-2 hidden-lg-up"></div>
-					<form class="row" name="f" th:object="${loginUser}" method="post">
+					<form class="row" name="f" id="form-account-update" th:object="${loginUser}" method="post">
 						<input type="hidden" name="userName" value="guard" th:value="*{userName}" />
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label for="reg-email">E-mail 주소</label> <input name="email" value="guard"
-									th:value="*{email}" class="form-control" type="email" id="reg-email" disabled>
+									th:value="*{email}" class="form-control" type="email" id="email" disabled>
 							</div>
 						</div>
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label for="reg-phone">휴대폰 번호</label> <input name="phoneNo" value="guard"
-									th:value="*{phoneNo}" class="form-control" type="text" id="reg-phone" disabled>
+									th:value="*{phoneNo}" class="form-control" type="text" id="phone" disabled>
 							</div>
 						</div>
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label for="reg-nickname">닉네임</label> <input name="nickname" value="guard"
-									th:value="*{nickname}" class="form-control" type="text" id="reg-nickname" required>
+									th:value="*{nickname}" class="form-control" type="text" id="nickname" required>
 							</div>
 						</div>
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label for="reg-birthday">생년월일</label> <input name="birthday" value="guard"
-									th:value="${#dates.format(loginUser.birthday, 'yyyy-MM-dd')}" class="form-control" type="text" id="reg-birthday" disabled>
+									th:value="${#dates.format(loginUser.birthday, 'yyyy-MM-dd')}" class="form-control" type="text" id="birthday" disabled>
 							</div>
 						</div>
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label for="reg-pass">비밀번호</label> <input name="password" value="guard"
-									th:value="*{password}" class="form-control" type="password" id="reg-pass" required>
+									th:value="*{password}" class="form-control" type="password" id="pass" required>
 							</div>
 						</div>
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label for="reg-pass-confirm">비밀번호 확인</label> <input name="password2"
-									class="form-control" type="password" id="reg-pass-confirm" required>
+									class="form-control" type="password" id="pass-confirm" required>
 							</div>
 						</div>
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label for="reg-address">주소</label>
 								<input class="form-control" name="address" value="guard" th:value="*{address}"
-									type="text" id="reg-address" required>
+									type="text" id="address" required>
 							</div>	
 						</div>
 						<div class="col-12">
 							<hr class="mt-2 mb-3">
 							<div class="d-flex flex-wrap justify-content-between align-items-center">
 								<div class="custom-control custom-checkbox d-block"></div>
-								<button class="btn btn-primary margin-right-none" type="button"
-								 onclick="modify()">수정하기</button>
+								<button class="btn-account-profile-update btn btn-primary margin-right-none" id="modify_action_btn" type="button">수정하기</button>
 							</div>
 						</div>
 					</form>
@@ -75,38 +74,87 @@
 		</div>
 	</th:block>
 	<th:block layout:fragment="script">
+	<script defer type="text/javascript" src="js/jquery.validate.js"></script>
 		<script type="text/javascript">
-
-			function modify() {
-				if (document.f.password.value == "") {
-					alert("비밀번호를 입력하십시요.");
-					f.password.focus();
-					return false;
+			function isNoValidPassword(password) {
+			    // 비밀번호 길이가 8에서 20 사이여야 함
+			    // 최소한 하나의 문자, 하나의 숫자, 그리고 하나의 특수 문자가 포함되어야 함
+			    const hasLetter = /[a-zA-Z]/.test(password);
+			    const hasNumber = /\d/.test(password);
+			    const hasSpecialChar = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]/.test(password);
+			    if(!(hasLetter && hasNumber && hasSpecialChar)){
+				    return true;
 				}
-				if (document.f.password2.value == "") {
-					alert("비밀번호확인을 입력하십시요.");
-					f.password2.focus();
-					return false;
-				}
-				if (document.f.password.value != document.f.password2.value) {
-					alert("비밀번호와 비밀번호확인은 일치하여야합니다.");
-					f.password.focus();
-					f.password.select();
-					return false;
-				}
-				if (document.f.nickname.value == "") {
-					alert("닉네임을 입력하십시요.");
-					f.nickname.focus();
-					f.nickname.select();
-					return false;
-				}
-				document.f.action = "/member_modify_action";
-				document.method = 'POST';
-				document.f.submit();
-				
-				alert('수정되었습니다!');
+				return false;
 			}
-
+		/***************프로필변경 [/member/modify_action_rest]******* */
+		var member_modify_action_rest=function(data){
+			$.ajax({
+					url:'/member/modify_action_rest',
+    				method:'POST',
+    				data:JSON.stringify(data),
+    				dataType: "json",
+    				contentType: 'application/json;chrset=UTF-8',
+    				success:function(resultJson){
+					if(resultJson.result==1) {
+						$('#nickname').css('border','0.5px solid orange');
+						$('#nickname').tooltip({'trigger':'hover', 'title': resultJson.msg});
+			    		$('#nickname').tooltip('show');
+					} else {
+						alert("수정되었습니다");
+		   			}
+			    	
+				}
+			});
+		};
+    	/*********사용자정보수정이벤트 처리**********/
+    	$('#modify_action_btn').on('click',function(e){
+    		
+    		if($('#pass').val()!=$('#pass-confirm').val()){
+    			$('#pass').css('border','0.5px dotted orange');
+    			$('#pass-confirm').css('border','0.5px dotted orange');
+    			$('#pass-confirm').tooltip({'trigger':'hover', 'title':'비밀번호와 비밀번호확인이 일치하여야합니다.'});
+    			$('#pass-confirm').tooltip('show');
+    		}else{
+    			$('#pass').css('border','');
+    			$('#pass-confirm').css('border','');
+    			//var params = $('#form-account-update').serialize();
+				let nickname = $('#nickname').val();
+				let password = $('#pass').val();
+				let address = $('#address').val();
+    			let data = {
+				"nickname" : nickname,
+				"password" : password,
+				"address" : address
+				}
+        		member_modify_action_rest(data);
+    		}
+    	});
+    	/*********사용자정보수정폼 패쓰워드와 패쓰워드확인 유효성처리**********/
+		$('#pass').on('keyup',function(e){
+        		if(($('#pass').val().length < 8 || $('#pass').val().length > 20) || isNoValidPassword($('#pass').val())){
+        			$('#pass').css('border','0.5px dotted orange');
+        			$('#pass').tooltip({'trigger':'hover', 'title':'비밀번호는 8 ~ 20자 이내이고 최소한 하나의 문자, 숫자, 특수 문자가 포함되어야 합니다.'});
+        			$('#pass').tooltip('show');
+        		} else {
+					$('#pass,#pass-confirm').css('border','');
+        			$('#pass-confirm').tooltip('hide');
+        			$('#pass-confirm').tooltip('dispose');
+				}
+			});
+			$('#pass-confirm').on('keyup',function(e){
+        		if($('#pass').val()!=$('#pass-confirm').val()){
+        			$('#pass,#pass-confirm').css('border','0.5px dotted orange');
+        			$('#pass-confirm').tooltip({'trigger':'hover', 'title':'비밀번호와 비밀번호확인이 일치하여야합니다.'});
+        			$('#pass-confirm').tooltip('show');
+        			$('#modify_action_btn').attr('disabled', 'disabled');
+        		} else {
+        			$('#pass,#pass-confirm').css('border','');
+        			$('#pass-confirm').tooltip('hide');
+        			$('#pass-confirm').tooltip('dispose');
+        			$('#modify_action_btn').removeAttr('disabled');
+        		}
+        	});
 
 		</script>
 	</th:block>
