@@ -43,8 +43,8 @@
 	var account_login_action_rest=function(data){
 			$.ajax({
     				url:'/member/login_rest',
-    				data:JSON.stringify(data),
     				method:'POST',
+    				data:JSON.stringify(data),
     				dataType: "json",
     				contentType: 'application/json;chrset=UTF-8',
     				success:function(resultJson){
@@ -63,13 +63,13 @@
     		    			 $('#loginUserId').tooltip('show');
     		    		 }else if(resultJson.result==1){
     		    			 $('#loginPassword').css('border','0.5px solid orange');
-    		    			 $('#loginPassword').tooltip({'trigger':'hover', 'title': '패쓰워드가 일치하지않습니다.'});
+    		    			 $('#loginPassword').tooltip({'trigger':'hover', 'title': '비밀번호가 일치하지않습니다.'});
     		    			 $('#loginPassword').tooltip('show');
     		    		 }else if(resultJson.result==2){
     		    			 $('#form-account-login input').css('border','');
     	    				 $('#loginUserId').tooltip('dispose');
     	    				 $('#loginPassword').tooltip('dispose');
-    		    			 location.href='index';
+    		    			 location.href='/index';
     		    		 }
     				}
     			});
