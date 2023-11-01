@@ -2,6 +2,7 @@ package com.danaga.service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,7 @@ public class StatisticServiceImpl implements StatisticService {
 	@Override
 	public List<Statistic> yearlyStatistic(String year) {
 		List<Statistic> statisticList = statisticRepository.findByIdStartsWith("1M" + year);
+		Collections.reverse(statisticList);
 		return statisticList;
 	}
 

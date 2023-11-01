@@ -89,7 +89,8 @@
 											<td th:text="${product.product.rating}"></td>
 											<td th:text="${#temporals.format(product.createTime, 'yyyy-MM-dd')}"></td>
 											<td><a class="dropdown-item" href="#" data-toggle="modal"
-													data-target="#deleteModal">
+													data-target="#deleteModal"
+													th:onclick="updateModalContent([[${product.product.name}]], [[${product.id}]])">
 													<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
 													삭제하기
 												</a></td>
@@ -133,15 +134,15 @@
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">OOO 회원을 정말 삭제하시겠습니까?</h5>
+					<h5 class="modal-title" id="exampleModalLabel">OOO 제품을 정말 삭제하시겠습니까?</h5>
 					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">×</span>
 					</button>
 				</div>
-				<div class="modal-body">"삭제" 버튼을 누르면 회원정보가 영구히 삭제됩니다.</div>
+				<div class="modal-body">"삭제" 버튼을 누르면 제품이 영구히 삭제됩니다.</div>
 				<div class="modal-footer">
 					<button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
-					<a class="btn btn-primary" href="login.html">삭제</a>
+					<a class="btn btn-primary" >삭제</a>
 				</div>
 			</div>
 		</div>
@@ -163,6 +164,31 @@
 
 	<!-- Page level custom scripts -->
 	<script src="/bootstrap_admin/js/demo/datatables-demo.js"></script>
+	
+	<script>
+		function updateModalContent(productName, productId) {
+			var modalTitle = document.getElementById("exampleModalLabel");
+			var modalBody = document.querySelector(".modal-body");
+			var deleteButton = document.querySelector(".btn-primary");
+
+			modalTitle.textContent = productId + "번 " + productName + " 제품을 정말 삭제하시겠습니까?";
+			modalBody.textContent = "\"삭제\" 버튼을 누르면 제품이 영구히 삭제됩니다.";
+			
+			deleteButton.addEventListener("click", function () {
+				$.ajax({
+					type: "DELETE",
+					url: "/admin_data/product/" + productId,
+					success: function () {
+						location.reload();
+					},
+					error: function () {
+						modalBody.textContent = "삭제가 안되는데요ㅠㅠ?";
+					}
+				});
+			});
+			
+			};
+	</script>
 
 </body>
 
