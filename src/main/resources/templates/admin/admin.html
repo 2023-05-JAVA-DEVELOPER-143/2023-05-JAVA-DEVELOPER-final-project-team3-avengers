@@ -58,9 +58,22 @@
 										<div class="col mr-2">
 											<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
 												이번 달 판매량</div>
-											<div class="h5 mb-0 font-weight-bold text-gray-800"
-												th:text="${#numbers.formatDecimal(#aggregates.sum(thisMonthList.![dailySalesTotQty]),1,'COMMA',0,'POINT')+'건'}">
-												1,541</div>
+											<div class="row no-gutters align-items-center">
+												<div class="col-auto">
+													<div class="h5 mb-0 font-weight-bold text-gray-800"
+														th:text="${#numbers.formatDecimal(#aggregates.sum(thisMonthList.![dailySalesTotQty]),1,'COMMA',0,'POINT')+'건'}">
+														1,541</div>
+												</div>
+												<div class="col" style="margin-left: 20px; margin-top: 15px;">
+													<div class="progress progress-sm mr-2">
+														<div class="progress-bar bg-primary" role="progressbar"
+															style="width: 50%" aria-valuenow="50" aria-valuemin="0"
+															aria-valuemax="100"></div>
+													</div>
+													<div class="text-xs text-right text-primary text-uppercase mb-1">
+														배송완료율 50%</div>
+												</div>
+											</div>
 											<span class="mr-2 d-none d-lg-inline text-gray-600 small font-weight-bold"
 												th:text="'(금일 현재 ' + ${todayStat.dailySalesTotQty} + '건)'"></span>
 										</div>
@@ -108,13 +121,6 @@
 														th:text="${#numbers.formatDecimal(#aggregates.sum(thisMonthList.![dailyNewMember]),1,'COMMA',0,'POINT')+'명'}">
 														50명</div>
 												</div>
-												<div class="col">
-													<div class="progress progress-sm mr-2">
-														<div class="progress-bar bg-info" role="progressbar"
-															style="width: 50%" aria-valuenow="50" aria-valuemin="0"
-															aria-valuemax="100"></div>
-													</div>
-												</div>
 											</div>
 											<span class="mr-2 d-none d-lg-inline text-gray-600 small font-weight-bold"
 												th:text="'(금일 현재 ' + ${todayStat.dailyNewMember} + '명)'"></span>
@@ -147,6 +153,8 @@
 									</div>
 								</div>
 							</div>
+						</div>
+						<div class="mr-2 d-none d-lg-inline text-gray-600 small">배송완료율 : (전체주문건수-환불신청건수-배송대기건수) / 전체주문건수
 						</div>
 					</div>
 

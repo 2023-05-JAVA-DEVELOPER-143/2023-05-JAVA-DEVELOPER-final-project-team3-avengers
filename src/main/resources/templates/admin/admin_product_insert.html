@@ -52,52 +52,87 @@
 								<div class="row">
 									<div class="col-lg-12">
 										<div class="p-5">
-											<div class="text-center">
-												<h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
-											</div>
 											<form class="user">
-												<div class="form-group row">
-													<div class="col-sm-6 mb-3 mb-sm-0">
-														<input type="text" class="form-control form-control-user"
-															id="exampleFirstName" placeholder="First Name">
-													</div>
-													<div class="col-sm-6">
-														<input type="text" class="form-control form-control-user"
-															id="exampleLastName" placeholder="Last Name">
-													</div>
+												<div class="text-center">
+													<h3 class="h5 text-gray-900 mb-4" style="font-weight: bold;">기본정보
+													</h3>
 												</div>
-												<div class="form-group">
-													<input type="email" class="form-control form-control-user"
-														id="exampleInputEmail" placeholder="Email Address">
-												</div>
-												<div class="form-group row">
-													<div class="col-sm-6 mb-3 mb-sm-0">
-														<input type="password" class="form-control form-control-user"
-															id="exampleInputPassword" placeholder="Password">
-													</div>
-													<div class="col-sm-6">
-														<input type="password" class="form-control form-control-user"
-															id="exampleRepeatPassword" placeholder="Repeat Password">
-													</div>
-												</div>
-												<a href="login.html" class="btn btn-primary btn-user btn-block">
-													Register Account
-												</a>
 												<hr>
-												<a href="index.html" class="btn btn-google btn-user btn-block">
-													<i class="fab fa-google fa-fw"></i> Register with Google
+												<div class="form-group row">
+													<div class="col-sm-6 mb-3 mb-sm-0">
+														<a>&nbsp&nbsp&nbsp&nbsp제품명</a>
+														<input type="text" class="form-control form-control-user"
+															id="exampleFirstName" placeholder="First Name" />
+													</div>
+													<div class="col-sm-6">
+														<a>&nbsp&nbsp&nbsp&nbsp브랜드</a>
+														<input type="text" class="form-control form-control-user"
+															id="exampleLastName" placeholder="Last Name" />
+													</div>
+													<div class="col-sm-6" style="margin-top: 10px;">
+														<a>&nbsp&nbsp&nbsp&nbsp가격</a>
+														<input type="text" class="form-control form-control-user"
+															id="exampleLastName" placeholder="Last Name" />
+													</div>
+												</div>
+												<div class="text-center">
+													<h3 class="h5 text-gray-900 mb-4"
+														style="margin-top: 20px; font-weight: bold;">이미지</h3>
+												</div>
+												<hr>
+												<div class="form-group">
+													<a>&nbsp&nbsp&nbsp&nbsp제품 이미지</a>
+													<div style="margin-top: 20px; margin-bottom: 20px;" class="text-center">
+														<input type="file" id="img" name="img"
+															accept="image/png, image/jpeg"
+															onchange="imagePreview(this);" />
+														<br />
+														<img id="preview" />
+													</div>
+													<a style="margin-top: 20px;">&nbsp&nbsp&nbsp&nbsp상세페이지 이미지</a>
+													<div style="margin-top: 20px; margin-bottom: 20px;" class="text-center">
+														<input type="file" id="descImg" name="descImg"
+															accept="image/png, image/jpeg" />
+													</div>
+												</div>
+												<div class="text-center">
+													<h3 class="h5 text-gray-900 mb-4"
+														style="margin-top: 20px; font-weight: bold;">옵션정보</h3>
+												</div>
+												<hr>
+												<div class="form-group row">
+													<div class="col-sm-6 mb-3 mb-sm-0">
+														<a>&nbsp&nbsp&nbsp&nbsp옵션성격</a>
+														<input type="text" class="form-control form-control-user"
+															id="exampleFirstName" placeholder="First Name" />
+													</div>
+													<div class="col-sm-6">
+														<a>&nbsp&nbsp&nbsp&nbsp옵션값</a>
+														<input type="text" class="form-control form-control-user"
+															id="exampleLastName" placeholder="Last Name" />
+													</div>
+													<div class="col-sm-6" style="margin-top: 10px;">
+														<a>&nbsp&nbsp&nbsp&nbsp옵션가격</a>
+														<input type="text" class="form-control form-control-user"
+															id="exampleLastName" placeholder="Last Name" />
+													</div>
+													<div class="col-sm-6" style="margin-top: 10px;">
+														<a>&nbsp&nbsp&nbsp&nbsp재고</a>
+														<input type="text" class="form-control form-control-user"
+															id="exampleLastName" placeholder="Last Name" />
+													</div>
+												</div>
+												<hr>
+												</br>
+												<a href="#" class="btn btn-primary btn-icon-split"
+													style="float: right;">
+													<span class="icon text-white-50">
+														<i class="fas fa-arrow-right"></i>
+													</span>
+													<span class="text">상품등록</span>
 												</a>
-												<a href="index.html" class="btn btn-facebook btn-user btn-block">
-													<i class="fab fa-facebook-f fa-fw"></i> Register with Facebook
-												</a>
+												</br>
 											</form>
-											<hr>
-											<div class="text-center">
-												<a class="small" href="forgot-password.html">Forgot Password?</a>
-											</div>
-											<div class="text-center">
-												<a class="small" href="login.html">Already have an account? Login!</a>
-											</div>
 										</div>
 									</div>
 								</div>
@@ -165,6 +200,21 @@
 
 		<!-- Page level custom scripts -->
 		<script src="/bootstrap_admin/js/demo/datatables-demo.js"></script>
+
+		<script>
+			function imagePreview(input) {
+				if (input.files && input.files[0]) {
+					var reader = new FileReader();
+					reader.onload = function (e) {
+						document.getElementById('preview').src = e.target.result;
+					};
+					reader.readAsDataURL(input.files[0]);
+				} else {
+					document.getElementById('preview').src = "";
+				}
+			}
+
+		</script>
 
 </body>
 

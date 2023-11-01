@@ -71,9 +71,10 @@
                                             <td th:text="${board.readCount}"></td>
                                             <td th:text="${board.member.name}"></td>
                                             <td th:text="${board.isAdmin}"></td>
-                                            <td><a class="dropdown-item" href="#" data-toggle="modal" data-target="#deleteModal">
+                                            <td><a class="dropdown-item" href="#" data-toggle="modal" data-target="#deleteModal"
+                                            	th:onclick="updateModalContent([[${board.id}]], [[${board.content}]])">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    삭제하기
+                                    삭제하기(내용보기)
                                 </a></td>
                                         </tr>
                                     </tbody>
@@ -123,7 +124,7 @@
                 <div class="modal-body">"삭제" 버튼을 누르면 회원정보가 영구히 삭제됩니다.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
-                    <a class="btn btn-primary" href="login.html">삭제</a>
+                    <a class="btn btn-primary" id="boardDelete">삭제</a>
                 </div>
             </div>
         </div>
@@ -145,6 +146,31 @@
 
     <!-- Page level custom scripts -->
     <script src="/bootstrap_admin/js/demo/datatables-demo.js"></script>
+    
+    <script>
+		function updateModalContent(boardId, boardContent) {
+			var modalTitle = document.getElementById("exampleModalLabel");
+			var modalBody = document.querySelector(".modal-body");
+			var deleteButton = document.querySelector(".btn-primary");
+
+			modalTitle.textContent = boardId + "번 게시글을 정말 삭제하시겠습니까?";
+			modalBody.textContent = "내용보기 :\r\n" + boardContent;
+			
+			deleteButton.addEventListener("click", function () {
+				$.ajax({
+					type: "DELETE",
+					url: "/admin_data/board/" + boardId,
+					success: function () {
+						window.location.href = "/admin/admin_board_list";
+					},
+					error: function () {
+						modalBody.textContent = "삭제가 안되는데요ㅠㅠ?";
+					}
+				});
+			});
+			
+			};
+	</script>
 
 </body>
 
