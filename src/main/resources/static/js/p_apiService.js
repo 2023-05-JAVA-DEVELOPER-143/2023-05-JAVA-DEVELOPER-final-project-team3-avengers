@@ -103,7 +103,7 @@ export function searchResult(filterDto) {//검색결과 보여주기
 		});
 }
 export function addToCart(optionSetId, qty) {
-	cartDto = {
+	let cartDto = {
 		"optionSetId": optionSetId,
 		"qty": qty
 	}

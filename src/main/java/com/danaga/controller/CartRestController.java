@@ -35,7 +35,7 @@ public class CartRestController {
 
 	@Operation(summary = " 카트 추가 ")
 	@PostMapping
-	public void addCart(@RequestBody CartDto dto, HttpSession session) throws Exception {
+	public ResponseEntity<String> addCart(@RequestBody CartDto dto, HttpSession session) throws Exception {
 		sUserId = (String) session.getAttribute("sUserId");
 		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
 		System.out.println(">>>>>>>>>>>>>>>>>>> add dto " + dto.getQty());
@@ -73,6 +73,7 @@ public class CartRestController {
 				countCarts(session);
 			}
 		}
+		return ResponseEntity.status(HttpStatus.OK).body("ㄴ");
 	}
 
 	@Operation(summary = "카트 옵션 변경")
