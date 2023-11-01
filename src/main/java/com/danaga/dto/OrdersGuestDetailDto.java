@@ -20,7 +20,7 @@ import lombok.*;
 @Builder
 
 public class OrdersGuestDetailDto {
-	private Long orderNO;
+	private Long orderNo;
 	private String phoneNumber;
 	private String name;
 	

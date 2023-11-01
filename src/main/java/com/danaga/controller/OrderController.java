@@ -17,7 +17,8 @@ import com.mysql.cj.x.protobuf.MysqlxCrud.Order;
 
 import jakarta.servlet.http.*;
 import lombok.RequiredArgsConstructor;
-
+import lombok.extern.slf4j.*;
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class OrderController {
@@ -187,16 +188,34 @@ public class OrderController {
 	}
 
 	/******************************* 비회원 ****************************/
+	
+	/*
+	 * 로그아웃 상태에서 메인페이지에서 상단에서 페이지버튼 클릭 후 FIND ORDER GUEST를 클릭하면 비회원 찾기 폼으로 넘어가는 거 
+	 */
+	
+	@GetMapping("/find_order_guest")
+	public String guestOrderList(Model model) {
+		OrdersGuestDetailDto ordersGuestDetailDto = new OrdersGuestDetailDto();
+		model.addAttribute("ordersGuestDetailDto",ordersGuestDetailDto);
+		return "orders/find_order_guest";
+	}
 
 	/*
 	 * 주문+주문아이템 목록(비회원) 주문List보기(비회원) 비회원 찾는 폼에서 데이터를 보내줘서 이 url로 받으면 list뿌려주고 디테일까지
 	 * 나오게만들기
 	 */
-	@GetMapping("/guest_order_detail")
-	public String guestOrderList(@ModelAttribute OrdersGuestDetailDto ordersGuestDetailDto, Model model) {
+	@GetMapping("/order_guest_detail")
+	public String guestOrderList(@ModelAttribute("ordersGuestDetailDto") OrdersGuestDetailDto ordersGuestDetailDto, Model model) {
 		try {
-			List<OrdersDto> ordersDtoList = orderService.guestOrderList(ordersGuestDetailDto.getOrderNO(),
+		 	log.info("orderNo={}", "name={}","phoneNumber={}",
+		 			ordersGuestDetailDto.getOrderNo(), ordersGuestDetailDto.getName(),ordersGuestDetailDto.getPhoneNumber());
+		    log.info("ordersGuestDetailDto={}", ordersGuestDetailDto);
+		    System.out.println("@@@@@@getOrderNo: "+ordersGuestDetailDto.getOrderNo());
+			
+			
+			List<OrdersDto> ordersDtoList = orderService.guestOrderList(ordersGuestDetailDto.getOrderNo(),
 					ordersGuestDetailDto.getPhoneNumber(), ordersGuestDetailDto.getName());
+			System.out.println("@@@@@@@@@@@@@@@@ordersDtoList: "+ordersDtoList);
 			model.addAttribute("ordersDtoList", ordersDtoList);
 			return "orders/order_guest_detail";
 
