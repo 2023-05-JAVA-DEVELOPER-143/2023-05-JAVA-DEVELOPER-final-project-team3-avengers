@@ -1,6 +1,5 @@
 import {API_BASE_URL,REMOVE_RECENT_VIEW,ADD_WISHLIST,REMOVE_WISHLIST,CLEAR_WISHLIST,
     TAP_HEART,UNTAP_HEART,CHILD_CATEGORY,SHOW_OPTIONS,SEARCH, ADD_TO_CART,CLEAR_RECENTVIEW} from "./api-config.js";
-import * as View from "./view.js";
 function call(api, method,request){
     let headers = new Headers({
         "Content-Type": "application/json",
@@ -101,12 +100,14 @@ export function searchResult(filterDto){//검색결과 보여주기
     });
 }
 export function addToCart(optionSetId, qty){
-	cartDto={
+	let cartDto={
 		"optionSetId": optionSetId,
 		"qty": qty
 	}
 	return call(ADD_TO_CART.url,ADD_TO_CART.method,cartDto)
 	.then((response)=>{
+		console.log(cartDto);
+		console.log(response);
 		
 	});
 }
