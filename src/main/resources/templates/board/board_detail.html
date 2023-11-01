@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="layout/layout(title=${board.title})">
+	layout:decorate="layout/layout(title=${board.title})" auto-config='true' use-expressions="true">
 <!-- Body-->
 <!-- Header -->
 
 <head>
+<headers>
+        <frame-options policy="SAMEORIGIN"/>
+    </headers>
+</head>
 
 
 <body>
@@ -127,7 +131,7 @@
 					</div>
 
 					<div class="toolbar">
-						<div th:if="${board.memberId} eq ${session.sUserId} or ${board.isAdmin} eq 2" th:remove="tag">
+						<div th:if="${board.userName} eq ${session.sUserId} or ${board.isAdmin} eq 2" th:remove="tag">
 							<a th:href="@{/board_edit{id} (id=${board.id})}" class="btn btn-primary">수정</a>
 							<a th:href="@{/board_edit{id} (id=${board.id})}" class="btn btn-danger">삭제</a>
 						</div>
@@ -139,7 +143,48 @@
 							<!-- Results-->
 							<div class="col-xl-12 col-lg-12">
 								<div class="card mb-4">
+<script>
+      // 2. This code loads the IFrame Player API code asynchronously.
+      var tag = document.createElement('script');
 
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      // 3. This function creates an <iframe> (and YouTube player)
+      //    after the API code downloads.
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+          height: '360',
+          width: '640',
+          videoId: 'M7lc1UVf-VE',
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      }
+
+      // 4. The API will call this function when the video player is ready.
+      function onPlayerReady(event) {
+        event.target.playVideo();
+      }
+
+      // 5. The API calls this function when the player's state changes.
+      //    The function indicates that when playing a video (state=1),
+      //    the player should play for six seconds and then stop.
+      var done = false;
+      function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.PLAYING && !done) {
+          setTimeout(stopVideo, 6000);
+          done = true;
+        }
+      }
+      function stopVideo() {
+        player.stopVideo();
+      }
+    </script>
 									<div class="card-header">
 										<h3>제목 : [[${board.title}]] </h3><span class="badge badge-pill badge-primary"
 											th:if="${board.readCount} &gt; 500" th:text="hot">Product</span>
@@ -154,15 +199,48 @@
 												<h6>작성일 : [[${#temporals.format(board.createTime,'yyyy-MM-dd
 													HH:mm:ss')}]]</h6>
 												<p> 내용 </p><br>
-												<div class="video-container" th:utext="${board.content}">
-													<div th:if="${#strings.contains(board.content, '&lt;oembed url=')}">
-														
+												<div class="video-container" th:utext="${board.content}" id="content">
+													<div
+														style="position: relative; padding-bottom: 100%; height: 0; padding-bottom: 56.2493%;">
+														<iframe src="https://www.youtube.com/embed/${ videoId }"
+															style="position: absolute; width: 80%; height: 80%; top: 0; left: 0;"
+															frameborder="0" allow="autoplay; encrypted-media"
+															allowfullscreen>
+														</iframe>
 													</div>
 												</div>
-<script>
-	const getContent='[[${board.content}]]';
+												<script>
+													// board.content에서 oembed 태그를 찾는 정규 표현식
+													const oembedRegex = /<oembed url="([^"]+)"><\/oembed>/;
 
-</script>
+													// board.content에서 oembed 태그를 찾고 URL을 추출하여 iframe으로 대체
+													const contentElement = document.getElementById('content'); // board.content를 포함하는 요소
+													const content = contentElement.innerHTML;
+													const matches = content.match(oembedRegex);
+
+													if (matches) {
+														const oembedUrl = matches[1]; // oembed 태그 내의 URL 추출
+														const iframe = document.createElement('iframe');
+														iframe.width = '300';
+														iframe.height = '300';
+														iframe.src = oembedUrl; // URL을 iframe의 src로 설정
+														iframe.frameborder = '0';
+														iframe.allowfullscreen = true;
+
+														// board.content 내의 oembed 태그를 iframe으로 대체
+														contentElement.innerHTML = content.replace(matches[0], iframe.outerHTML);
+													}
+													const iframe = new IframeView();
+
+													iframe.render();
+													document.body.appendChild(iframe.element);
+
+													iframe.on('loaded', () => {
+														console.log('The iframe has loaded', iframe.element.contentWindow);
+													});
+
+													iframe.element.src = oembedUrl;
+												</script>
 											</div>
 										</div>
 										<a id="up-IsLike-btn" class="btn btn-outline-info"

@@ -58,18 +58,19 @@
 									</table>
 								</div>
 							</div>
-							<script>
-									let memberId = '[[${session.sUserId}]]';
-									$("#change-write-page").on('click',()=>{
-										if(memberId===null){
-										window.alert("글쓰기는 로그인이 필요한 기능입니다.")
-										event.preventDefault();
-										window.location.href = "member/member_login_form.html";
-										return false;
-									}
-									});
-								
-								</script>
+<script th:inline="javascript">
+   let memberId='[[${session.sUserId}]]';
+
+    document.getElementById('change-write-page').addEventListener('click', function(event) {
+        if ('[[${session.sUserId}]]' === null || '[[${session.sUserId}]]' === "") {
+            window.alert("글쓰기는 로그인이 필요한 기능입니다.");
+            
+            window.location.href = "member/member_login_form.html"; // 로그인 페이지로 리디렉션
+        }
+    });
+</script>
+
+
 							<div class="col-lg-8 col-md-8 order-md-2">
 								<div class="text-right"  id="change-write-page"><a class="btn btn-success" href="create.html"
 										th:href="@{/board_create{boardGroupId} (boardGroupId=${boardGroupId})}">글쓰기</a>
