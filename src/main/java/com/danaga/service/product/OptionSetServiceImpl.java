@@ -49,25 +49,20 @@ public class OptionSetServiceImpl implements OptionSetService {
 	// 프로덕트 삭제해서 옵션셋도 같이 삭제되게
 	@Override
 	@Transactional
-	public ResponseDto<?> deleteProduct(Long productId, QueryStringDataDto dataDto) {
+	public ResponseDto<?> deleteProduct(Long productId) {
 		productDao.deleteById(productId);
-		List<ProductDto> optionSetList = optionSetDao.findByFilter(dataDto).stream().map(t -> new ProductDto(t))
-				.collect(Collectors.toList());
 		// 기존 전체 프로덕트 리스트 화면에서 삭제 눌렀을때
 		// 삭제 누른당시 리스트의 검색 조건을 그대로 가져와서
 		// 삭제 후에도 같은 검색 조건으로 리스트 다시 갱신하게
-		return ResponseDto.<ProductDto>builder().data(optionSetList).build();
+		return null;
 	}
 
 	// 옵션셋 삭제시 옵션들도 삭제
 	@Override
 	@Transactional
-	public ResponseDto<?> deleteOptionSet(Long optionSetId, QueryStringDataDto dataDto) {
+	public ResponseDto<?> deleteOptionSet(Long optionSetId) {
 		optionSetDao.deleteById(optionSetId);
-		List<ProductDto> optionSetList = optionSetDao.findByFilter(dataDto).stream().map(t -> new ProductDto(t))
-				.collect(Collectors.toList());
-		;
-		return ResponseDto.<ProductDto>builder().data(optionSetList).build();
+		return null;
 	}
 
 	// 옵션 삭제하고 옵션이 붙어있던 오리진 옵션셋 반환

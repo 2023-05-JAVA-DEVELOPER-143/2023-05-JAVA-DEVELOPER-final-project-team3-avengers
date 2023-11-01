@@ -1,15 +1,8 @@
 package com.danaga.repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-
 import com.danaga.entity.Orders;
-
-import jakarta.persistence.criteria.Order;
 
 public interface OrderRepository extends JpaRepository<Orders, Long> {
 
@@ -25,5 +18,6 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
 
 	// 비회원 : 주문 번호, 회원 이름, 회원 전화번호를 기반으로 주문 조회
 	Orders findOrdersByIdAndMember_NameAndMember_PhoneNo(Long orderNo, String userName, String phoneNo);
+	
 
 }

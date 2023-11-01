@@ -39,19 +39,27 @@ import lombok.RequiredArgsConstructor;
 public class StatisticController {
 	private final StatisticService statisticService;
 	private final MemberService memberService;
-	private final OrderService orderService;
 	private final OrderRepository orderRepository;
-	private final BoardService boardService;
 	private final BoardRepository boardRepository;
 	private final OptionSetRepository optionSetRepository;
 	
 	@GetMapping
 	public String main(Model model) {
 		model.addAttribute("thisMonthList", statisticService.thisMonthStatistic());
-		model.addAttribute("todayStat", statisticService.updateAt(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"))));
+		model.addAttribute("todayStat", statisticService.todayStatistic());
+		model.addAttribute("delivery", statisticService.deliveryRate());
 		model.addAttribute("latest7List", changeDateFormat(statisticService.latest7DaysStatistic()));
 		//model.addAttribute("yearList", statisticService.latest7DaysStatistic());
 		return "admin/admin";
+	}
+	@GetMapping("/m")
+	public String main_sub(Model model) {
+		model.addAttribute("thisMonthList", statisticService.thisMonthStatistic());
+		model.addAttribute("todayStat", statisticService.todayStatistic());
+		model.addAttribute("delivery", statisticService.deliveryRate());
+		model.addAttribute("latest7List", statisticService.yearlyStatistic(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy"))));
+		//model.addAttribute("yearList", statisticService.latest7DaysStatistic());
+		return "admin/admin_month";
 	}
 	@GetMapping("/admin_product_insert")
 	public String adminProductInsert() {
