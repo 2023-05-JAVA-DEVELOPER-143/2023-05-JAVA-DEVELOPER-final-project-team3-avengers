@@ -122,9 +122,9 @@
 							<td class="text-center text-lg text-medium"
 								th:text="${cart.totalPrice} * ${cart.qty}">2,332,000</td>
 							<td class="text-center text-lg text-medium"
-								th:text="${#numbers.formatInteger(cart.totalPrice * (cart.grade / 10), '0')}">0원</td>
+								th:text="${cart.totalPrice}">0원</td>
 							<td class="text-center"><a class="plain-btn"
-								data-toggle="modal" data-target="#exampleModal">옵션변경</a> <a
+								data-toggle="modal" data-target="#exampleModal" th:onclick="selectOption([[${cart}]])">옵션변경</a> <a
 								href="javascript:void(0)" class="plain-btn" id="deletebtn"
 								th:data-osId="${cart.osId}" onclick="deleteCart(this)">삭제하기</a>
 
@@ -474,6 +474,10 @@ function selectAlldelete() {
 	 } 
 }
 
+function selectOption(cart) {
+	var insertedCart = cart
+	console.log(insertedCart)
+}
 
 
 
