@@ -111,44 +111,44 @@ class OptionSetServiceImplTest {
 		System.out.println(service.showOptionNameValues(13L));
 	}
 
-	@Test
-	@Transactional
-	@Rollback(false)
-	@Disabled
-	void testUpdateOptionSaveDto() {
-		System.out.println(service.update(OptionSaveDto.builder()
-				.extraPrice(10000)
-				.id(30L)
-				.name("update")
-				.build()));
-	}
+//	@Test
+//	@Transactional
+//	@Rollback(false)
+//	@Disabled
+//	void testUpdateOptionSaveDto() {
+//		System.out.println(service.update(OptionSaveDto.builder()
+//				.extraPrice(10000)
+//				.id(30L)
+//				.name("update")
+//				.build()));
+//	}
 
-	@Test
-	@Transactional
-	@Rollback(false)
-	@Disabled
-	void testUploadProduct() {
-		List<OptionSaveDto> list =new ArrayList<OptionSaveDto>();
-		list.add(OptionSaveDto.builder()
-				.extraPrice(10000000)
-				.name("내가만든")
-				.value("내가만든")
-				.build());
-		System.out.println(service.uploadProduct(UploadProductDto.builder()
-				.product(ProductSaveDto.builder()
-						.brand("custom")
-						.descImage("custom")
-						.prevDesc("custom")
-						.img("custome")
-						.price(300000000)
-						.name("custom")
-						.build())
-				.optionSet(OptionSetCreateDto.builder()
-						.stock(10000000)
-						.build())
-				.options(list)
-				.build()));
-	}
+//	@Test
+//	@Transactional
+//	@Rollback(false)
+//	@Disabled
+//	void testUploadProduct() {
+//		List<OptionSaveDto> list =new ArrayList<OptionSaveDto>();
+//		list.add(OptionSaveDto.builder()
+//				.extraPrice(10000000)
+//				.name("내가만든")
+//				.value("내가만든")
+//				.build());
+//		System.out.println(service.uploadProduct(UploadProductDto.builder()
+//				.product(ProductSaveDto.builder()
+//						.brand("custom")
+//						.descImage("custom")
+//						.prevDesc("custom")
+//						.img("custome")
+//						.price(300000000)
+//						.name("custom")
+//						.build())
+//				.optionSet(OptionSetCreateDto.builder()
+//						.stock(10000000)
+//						.build())
+//				.options(list)
+//				.build()));
+//	}
 
 	@Test
 	@Disabled

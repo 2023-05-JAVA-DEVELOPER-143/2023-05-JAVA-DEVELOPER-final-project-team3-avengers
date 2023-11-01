@@ -17,13 +17,6 @@
 
 <body>
 	<th:block th:fragment="filter" th:remove="tag">
-		<!--<div class="col-lg-2">
-			<ul class="category-item list-group border border-secondary" th:each="category : ${categoryList}">
-				<li class="list-group-item category" th:attr="categoryId=${category.id}" th:text="${category.name}">노트북
-				</li>
-				선택된 경우 class="list-group-item-active"
-			</ul>
-		</div>-->
 		<div class="list-group col-lg-2">
 			<div th:each="category : ${categoryList}">
 				<button type="button" class="list-group-item list-group-item-action border border-secondary"

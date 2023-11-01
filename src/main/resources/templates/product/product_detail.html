@@ -31,16 +31,15 @@
 					</div><span class="text-muted align-middle" >&nbsp;&nbsp;4.2 | 3
 						customer reviews</span>
 					<h2 class="padding-top-1x text-normal" th:text="*{name}">Product Name</h2>
-					<span class="h2 d-block" th:text="*{totalPrice}">멤버등급할인된가격</span>
-					<input type="hidden" value="*{osId}">
+					<span class="h2 d-block" th:text="*{totalPrice}">가격</span>
+					<input type="hidden" th:value="*{osId}">
 					<p th:text="*{optionSet}">상품 옵션들 나열</p>
 					<div class="row margin-top-1x">
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label for="otherOptions">다른 옵션 보기</label>
-								<select class="form-control" id="otherOptions" th:each="options:${otherOptions}">
-									<option th:text="${options.optionSet}" th:value="${options.osId}" th:if="${options.osId==productList.osId}" th:selected="selected">11.5</option>
-									<option th:text="${options.optionSet}" th:value="${options.osId}" th:unless="${options.osId==productList.osId}">11.5</option>
+								<label for="otherOptions" >다른 옵션 보기</label>
+								<select class="form-control" id="otherOptions">
+									<option th:each="options:${otherOptions}" th:text="${options.optionSet}" th:value="${options.osId}" th:selected="${options.osId==productList.osId}">11.5</option>
 								</select>
 							</div>
 						</div>
@@ -60,14 +59,22 @@
 					<hr class="mb-3">
 					<div class="d-flex flex-wrap justify-content-between">
 						<div class="sp-buttons mt-2 mb-2">
-							
-							<button th:if="${session.loginUser!=null && isInterested}" class="btn btn-outline-secondary btn-sm btn-wishlist active" data-toggle="tooltip"
-							product-heart="${productList.osId}" title="Whishlist"><i class="icon-heart"></i></button>
-							<button th:unless="${session.loginUser!=null && isInterested}" class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip"
-							product-heart="${productList.osId}" title="Whishlist"><i class="icon-heart"></i></button>
+						
+							<button th:if="${isInterested==true}"
+									class="btn btn-outline-secondary btn-sm btn-wishlist active"
+									data-toggle="tooltip" th:product-heart="|${productList.osId}|"
+									title="Whishlist">
+									<i class="icon-heart" th:heart="|${productList.osId}|"></i>
+								</button>
+								<button th:unless="${isInterested==true}"
+									class="btn btn-outline-secondary btn-sm btn-wishlist"
+									 data-toggle="tooltip"
+									title="Whishlist" th:product-heart-yet="|${productList.osId}|">
+									<i class="icon-heart" th:heart="|${productList.osId}|"></i>
+								</button>
 							<button class="btn btn-primary" data-toast data-toast-type="success"
 								data-toast-position="topRight" data-toast-icon="icon-circle-check"
-								data-toast-title="Product" data-toast-message="successfuly added to cart!" data-optionSetId="*{osId}" data-cart-qty=""><i
+								data-toast-title="Product" data-toast-message="successfuly added to cart!" th:data-optionSetId="${productList.osId}" data-cart-qty="1"><i
 									class="icon-bag"></i> Add to Cart</button>
 						</div>
 					</div>
@@ -171,11 +178,21 @@
 						<h3 class="product-title" th:text="${productDto.name}"><a href="product-detail.html">상품명</a></h3>
 						<h4 class="product-price" th:text="${productDto.totalPrice}">$34.99</h4>
 						<div class="product-buttons">
-							<button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip"
-								title="Whishlist" product-heart="${productDto.osId}"><i class="icon-heart"></i></button>
+							<button th:if="${productList.isInterested}"
+									class="btn btn-outline-secondary btn-sm btn-wishlist active"
+									data-toggle="tooltip" th:product-heart="|${productList.osId}|"
+									title="Whishlist">
+									<i class="icon-heart" th:heart="|${productList.osId}|"></i>
+								</button>
+								<button th:unless="${productList.isInterested}"
+									class="btn btn-outline-secondary btn-sm btn-wishlist"
+									 data-toggle="tooltip"
+									title="Whishlist" th:product-heart-yet="|${productList.osId}|">
+									<i class="icon-heart" th:heart="|${productList.osId}|"></i>
+								</button>
 							<button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success"
 								data-toast-position="topRight" data-toast-icon="icon-circle-check"
-								data-toast-title="Product" data-toast-message="successfuly added to cart!" data-optionSetId="${productDto.osId}">Add to
+								data-toast-title="Product" data-toast-message="successfuly added to cart!" th:data-optionSetId="${productDto.osId}">Add to
 								Cart</button>
 						</div>
 					</div>

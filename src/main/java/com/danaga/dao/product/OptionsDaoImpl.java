@@ -17,21 +17,6 @@ import lombok.RequiredArgsConstructor;
 public class OptionsDaoImpl implements OptionsDao{
 
 	private final OptionsRepository optionsRepository;
-//	@Override
-//	public List<Options> findOptionsByOptionSet(OptionSet optionSet) {
-//		List<Options> options = optionsRepository.findByOptionSet(optionSet);
-//		return options;
-//	}
-
-//	@Override
-//	public List<OptionNamesOnly> findOptionNamesByCategoryId(Long id) {
-//		return optionsRepository.findDistinctNameByOptionSet_Product_CategorySets_Category_Id(id);
-//	}
-
-//	@Override
-//	public List<OptionValuesOnly> findOptionValuesByCategoryId(Long id) {
-//		return optionsRepository.findDistinctValueByOptionSet_Product_CategorySets_Category_Id(id);
-//	}
 	@Override
 	public List<OptionNamesValues> findOptionNameValueMapByCategoryId(Long id) {
 		return optionsRepository.findDistinctByOptionSet_Product_CategorySets_Category_Id(id);

@@ -9,5 +9,5 @@ public interface CommentsService {
 	List<CommentDto> comments(Long boardId);
 	CommentDto createComment(CommentDto commentDto,Long boardId);
 	CommentDto update(Long id, CommentDto dto);
-	CommentDto delete(Long id);
+	CommentDto delete(Long id,String pw);
 }

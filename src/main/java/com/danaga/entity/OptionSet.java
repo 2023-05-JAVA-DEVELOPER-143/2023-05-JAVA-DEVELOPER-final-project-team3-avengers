@@ -71,7 +71,7 @@ public class OptionSet extends BaseEntity {
 	private List<RecentView> recentViews = new ArrayList<>();
 	
 	@Builder.Default
-	@OneToMany(mappedBy = "optionSet",cascade = CascadeType.REMOVE,orphanRemoval = true)
+	@OneToMany(mappedBy = "optionSet",cascade = CascadeType.REMOVE,orphanRemoval = true, fetch = FetchType.EAGER)
 	private List<Interest> interests = new ArrayList<>();
 	
 

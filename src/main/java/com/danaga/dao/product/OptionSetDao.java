@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.danaga.dto.product.OptionSetCreateDto;
 import com.danaga.dto.product.OptionSetUpdateDto;
+import com.danaga.dto.product.ProductDto;
 import com.danaga.dto.product.QueryStringDataDto;
 import com.danaga.entity.OptionSet;
 
@@ -24,7 +25,7 @@ public interface OptionSetDao {
 	OptionSet updateOrderCount(Long id,Integer orderCount);
 	OptionSet updateViewCount(Long id);
 	OptionSet calculateTotalPrice(OptionSetUpdateDto dto);
-	List<OptionSet> findForMemberByFilter(QueryStringDataDto dataDto, String username);
+	List<ProductDto> findForMemberByFilter(QueryStringDataDto dataDto, String username);
 	
 	
 }

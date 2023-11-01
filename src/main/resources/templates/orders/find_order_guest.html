@@ -11,51 +11,103 @@
 	<!-- Page Content-->
 	<th:block layout:fragment="content">
 		<!-- Main Slider-->
-		<section class="hero-slider" style="background-image: url(img/hero-slider/main-bg.jpg);">
+		<section class="hero-slider"
+			style="background-image: url(img/hero-slider/main-bg.jpg);">
 			<!-- Find Guest Form-->
 			<div class="col-xl-9 col-lg-8">
-				<h4>Billing Address</h4>
+				<h2>비회원 주문 찾기</h2>
+			</div>			<hr class="padding-bottom-1x">
+
+
+			<form class="custom-section" th:object="${ordersGuestDetailDto}">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label for="orderNo">주문번호</label> 
+						<input class="form-control" type="text" id="orderNo" name="orderNo" value="orderNo"
+							required th:field="*{orderNo}">
+					</div>
+				</div>
+
+
+
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label for="phoneNumber">주문자전화번호</label> <input
+							class="form-control" type="text" id="phoneNumber"
+							name="phoneNumber" value="phoneNumber" required
+							th:field="*{phoneNumber}">
+					</div>
+				</div>
+
+
+
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label for="name">주문자이름</label> <input class="form-control"
+							type="text" id="name" name="name" value="name" required
+							th:field="*{name}">
+					</div>
+				</div>
+
+
 				<hr class="padding-bottom-1x">
-				<div class="custom-section">
-					<div class="col-sm-6">
-						<div class="form-group">
-							<label for="checkout-fn">주문번호</label>
-							<input class="form-control" type="text" id="checkout-fn">
-						</div>
-					</div>
-				</div>
-				<div class="custom-section">
-					<div class="col-sm-6">
-						<div class="form-group">
-							<label for="checkout-email">주문자전화번호</label>
-							<input class="form-control" type="email" id="checkout-email">
-						</div>
-					</div>
-				</div>
-				<div class="custom-section">
-					<div class="col-sm-6">
-						<div class="form-group">
-							<label for="checkout-company">주문자이름</label>
-							<input class="form-control" type="text" id="checkout-company">
-						</div>
-					</div>
-				</div>
-				<hr class="padding-bottom-1x">
-				
+
 				<div class="checkout-footer">
 					<div class="column">
-						<a class="btn btn-primary" href="http://localhost/guest_order_detail">
-							<span class="hidden-xs-down">주문찾기 &nbsp;</span><i class="icon-arrow-right"></i>
+						<a class="btn btn-primary" href="#" th:onclick="guestOrderDetail()">
+							<span class="hidden-xs-down">주문찾기 &nbsp;</span><i
+							class="icon-arrow-right"></i>
 						</a>
 					</div>
 				</div>
+			</form>
 			</div>
 
 		</section>
 
 	</th:block>
-	<th:block layout:fragment="recommendation">
+	<th:block layout:fragment="script">
+		<script type="text/javascript">
+			function guestOrderDetail() {
+			    var form = document.createElement('form');
+			    form.method = 'GET';
+			    form.action = '/order_guest_detail';
+		
+					
+			    var orderNoInput = document.createElement('input');
+			    orderNoInput.type = 'hidden';
+			    orderNoInput.name = 'orderNo';
+			    orderNoInput.value = $('#orderNo').val();
+			    console.log('@@@@@@@@orderNoInput'+orderNoInput.value);
+
+			    form.appendChild(orderNoInput);
+
+			    var phoneNumberInput = document.createElement('input');
+			    phoneNumberInput.type = 'hidden';
+			    phoneNumberInput.name = 'phoneNumber';
+			    phoneNumberInput.value = $('#phoneNumber').val();
+			    console.log('@@@@@@@@phoneNumberInput'+phoneNumberInput.value);
+			    form.appendChild(phoneNumberInput);
+
+			    var nameInput = document.createElement('input');
+			    nameInput.type = 'hidden';
+			    nameInput.name = 'name';
+			    nameInput.value = $('#name').val();
+			    console.log('@@@@@@@@nameInput'+nameInput.value);
+			    form.appendChild(nameInput);
+			    document.body.appendChild(form);
+			    
+			    form.submit();
+			}
+
+
+		</script>
 	</th:block>
+
+
+
+
+
 </body>
 
 </html>

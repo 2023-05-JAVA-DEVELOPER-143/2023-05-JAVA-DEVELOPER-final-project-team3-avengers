@@ -30,6 +30,7 @@ public class RecentView extends BaseEntity{//멤버아이디와 프로덕트아�
 	private Long id;
 	@ManyToOne
 	@JoinColumn(name = "memberId")
+	@ToString.Exclude
 	private Member member;//member FK
 	@ManyToOne
 	@JoinColumn(name = "optionSetId")

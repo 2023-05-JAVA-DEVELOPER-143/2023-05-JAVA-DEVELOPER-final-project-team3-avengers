@@ -32,7 +32,7 @@ public class CartServiceImplTest {
 	@Test
 	@Disabled
 	void 카트수량변경() throws Exception {
-		cs.updateCartQty(CartDto.builder().id(1L).qty(5).build(), "User1");
+		cs.updateCartQty(CartDto.builder().optionSetId(1L).qty(5).build(), "User1");
 		// cs.updateCartQty(CartUpdateQtyDto.builder().id(4L).qty(30).build());
 		// cs.updateCartQty(CartUpdateQtyDto.builder().id(5L).qty(30).build());
 		// cs.updateCartQty(CartUpdateQtyDto.builder().id(6L).qty(30).build());
@@ -47,10 +47,10 @@ public class CartServiceImplTest {
 		// 중복 옵션 X + 장바구니 수량 >=2 ok
 		// 중복 옵션 O + 장바구니 수량 1 ok
 		// 중복 옵션 O + 장바구니 수량 >=2 ok
-		String a = "User5";
+		String a = "User4";
 		List<Long> b = new ArrayList<>();
-		Long c = 3L;
-		Long d = 1L;
+		Long c = 10L;
+		Long d = 3L;
 		b.add(c);
 		b.add(d);
 		cs.updateCartOptionSet(b, a);
@@ -110,7 +110,7 @@ public class CartServiceImplTest {
 	@Test
 	@Disabled
 	void 수량파악() throws Exception {
-		CartDto dto = CartDto.builder().id(9L).qty(100).build();
+		CartDto dto = CartDto.builder().optionSetId(9L).qty(100).build();
 		String value = "User1";
 		System.out.println(cs.countCarts(value));
 	}

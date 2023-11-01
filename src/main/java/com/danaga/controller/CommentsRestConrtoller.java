@@ -22,37 +22,36 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/comment")
 public class CommentsRestConrtoller {
 
 	private final CommentsService cService;
 	
-	@PostMapping("/{boardId}/create")
+	@PostMapping("/{boardId}/create_comment")
 	public ResponseEntity<CommentDto> create (@PathVariable("boardId")Long boardId, @RequestBody CommentDto dto) {
 		
 		log.info("boardId : {}",boardId);
 		log.info("dto : {}",dto);
-		CommentDto target = cService.createComment(dto,boardId);
-		log.info("target : {}",target);
-		return ResponseEntity.status(HttpStatus.OK).body(target);
+		CommentDto comments = cService.createComment(dto,boardId);
+		log.info("target : {}",comments);
+		return ResponseEntity.status(HttpStatus.OK).body(comments);
 	}
 	
-	@GetMapping("/{boardId}/list")
+	@GetMapping("/{boardId}/comment_list")
 	public ResponseEntity<List<CommentDto>> getConmments(@PathVariable("boardId")Long boardId){
 		List<CommentDto> comments= cService.comments(boardId);
 		return ResponseEntity.status(HttpStatus.OK).body(comments);
 	}
 	
-	@PatchMapping("/{commentId}/edit")
-	public ResponseEntity<CommentDto> update(@PathVariable("commentId")Long commentId,@RequestBody CommentDto dto){
-		CommentDto target = cService.update(commentId, dto);
-		return ResponseEntity.status(HttpStatus.OK).body(target);
+	@PatchMapping("/{commentId}/edit_comment")
+	public ResponseEntity<CommentDto> update(@PathVariable("commentId")Long commentId,@RequestBody CommentDto comment){
+		CommentDto comments = cService.update(commentId, comment);
+		return ResponseEntity.status(HttpStatus.OK).body(comments);
 	}
 	
-	@DeleteMapping("/{commentId}/delete")
-	public ResponseEntity<CommentDto> update(@PathVariable("commentId")Long commentId){
-		CommentDto target = cService.delete(commentId);
-		return (target!=null)? ResponseEntity.status(HttpStatus.NO_CONTENT).body(target) :
+	@DeleteMapping("/{commentId}/delete_comment")
+	public ResponseEntity<CommentDto> update(@PathVariable("commentId")Long commentId ,@RequestBody String pw){
+		CommentDto comments = cService.delete(commentId,pw);
+		return (comments!=null)? ResponseEntity.status(HttpStatus.NO_CONTENT).body(comments) :
 			ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 	}
 }

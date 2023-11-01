@@ -41,7 +41,7 @@ public class CartServiceImpl implements CartService {
 
 	@Override
 	public FUserCartResponseDto findfUserCartList(CartDto dto) {
-		OptionSet findOptionset = optionSetDao.findById(dto.getId());
+		OptionSet findOptionset = optionSetDao.findById(dto.getOptionSetId());
 		return FUserCartResponseDto.toDto(findOptionset, dto.getQty());
 	}
 
@@ -49,10 +49,11 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public void addCart(CartDto dto, String value) throws Exception {
 		// 로그인 유저 아이디와 OptionSetId 로 동일제품 찾기
-		Cart findCart = cartRepository.findByOptionSetIdAndMemberId(dto.getId(), memberDao.findMember(value).getId());
+		Cart findCart = cartRepository.findByOptionSetIdAndMemberId(dto.getOptionSetId(),
+				memberDao.findMember(value).getId());
 		// 인서트할 카트
-		Cart addCart = Cart.builder().member(memberDao.findMember(value)).optionSet(optionSetDao.findById(dto.getId()))
-				.qty(dto.getQty()).build();
+		Cart addCart = Cart.builder().member(memberDao.findMember(value))
+				.optionSet(optionSetDao.findById(dto.getOptionSetId())).qty(dto.getQty()).build();
 		if (findCart == null) {
 			cartRepository.save(addCart);
 		} else {
@@ -65,10 +66,10 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public CartDto updateCartQty(CartDto dto, String value) throws Exception {
 		Long memberId = memberDao.findMember(value).getId();
-		Cart findCart = cartRepository.findByOptionSetIdAndMemberId(dto.getId(), memberId);
+		Cart findCart = cartRepository.findByOptionSetIdAndMemberId(dto.getOptionSetId(), memberId);
 		findCart.setQty(dto.getQty());
 		cartRepository.save(findCart);
-		return CartDto.builder().id(findCart.getId()).qty(dto.getQty()).build();
+		return CartDto.builder().optionSetId(findCart.getId()).qty(dto.getQty()).build();
 	}
 
 	@Override
