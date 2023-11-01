@@ -241,6 +241,17 @@ $(function(){
         			$('#reg-birthday').tooltip('dispose');
         			$('#join-action-btn').removeAttr('disabled');
         		}
+        		if(new Date($('#reg-birthday').val()) > new Date()) {
+        			$('#reg-birthday').css('border','0.5px dotted orange');
+        			$('#reg-birthday').tooltip({'trigger':'hover', 'title':'선택할 수 없는 날짜 입니다.'});
+        			$('#reg-birthday').tooltip('show');
+        			$('#join-action-btn').attr('disabled', 'disabled');
+        		} else {
+        			$('#reg-birthday').css('border','');
+        			$('#reg-birthday').tooltip('hide');
+        			$('#reg-birthday').tooltip('dispose');
+        			$('#join-action-btn').removeAttr('disabled');
+        		}
         		if($('#reg-address').val()=="") {
         			$('#reg-address').css('border','0.5px dotted orange');
         			$('#reg-address').tooltip({'trigger':'hover', 'title':'입력하세요.'});
