@@ -34,7 +34,7 @@ public class CartController {
 	@GetMapping("/cart_list")
 	public String findCarts(HttpSession session, Model model) throws Exception {
 		sUserId = (String) session.getAttribute("sUserId");
-		fUserCarts=(List<CartDto>)session.getAttribute("fUserCarts");
+		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
 		if (sUserId != null) { // 회원
 			List<SUserCartResponseDto> carts = cartService.findsUserCartList(sUserId);
 			for (int i = 0; i < carts.size(); i++) {
@@ -42,7 +42,6 @@ public class CartController {
 				carts.get(i).setElseOptionSets(findLists.getData().stream().map(t -> new CartElseOptionsetDto(t))
 						.collect(Collectors.toList()));
 			}
-			System.out.println(">>>>>>" + carts.get(0).getElseOptionSets().get(0).getOsId());
 			session.setAttribute("countCarts", carts.size());
 			model.addAttribute("cart", carts);
 		} else {// 비회원
