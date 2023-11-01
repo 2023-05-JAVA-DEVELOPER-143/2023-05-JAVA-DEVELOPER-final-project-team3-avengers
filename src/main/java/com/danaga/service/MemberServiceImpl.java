@@ -74,13 +74,14 @@ public class MemberServiceImpl implements MemberService {
 		}
 	}
 	@Transactional
-	public MemberResponseDto updateMember(MemberUpdateDto memberUpdateDto) throws Exception, ExistedMemberByUserNameException {
+	public MemberResponseDto updateMember(MemberUpdateDto memberUpdateDto) throws Exception, ExistedMemberByNicknameException {
 		Member originalMember = memberRepository.findById(memberUpdateDto.getId()).get();
 		Member member = Member.builder().id(memberUpdateDto.getId()).password(memberUpdateDto.getPassword()).nickname(memberUpdateDto.getNickname()).address(memberUpdateDto.getAddress()).build();
+		System.out.println(memberUpdateDto);
 		if (originalMember.getNickname().equals(member.getNickname())) {
 			
 		} else if(memberRepository.findByNickname(member.getNickname()).isPresent()) {
-			throw new ExistedMemberByUserNameException(member.getNickname()+"는 사용중인 닉네임 입니다.");
+			throw new ExistedMemberByNicknameException(member.getNickname()+"는 사용중인 닉네임 입니다.");
 		}
 		//Member updatedMember = Member.toUpdateEntity(memberUpdateDto);
 		return MemberResponseDto.toDto(memberDao.update(member));

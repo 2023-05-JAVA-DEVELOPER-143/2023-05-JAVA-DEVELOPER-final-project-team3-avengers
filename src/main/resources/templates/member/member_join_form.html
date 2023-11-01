@@ -111,7 +111,7 @@ function isNoValidPhoneNo(phoneNo) {
 	}
     return true;
 }
-var account_join_action_rest=function(data){
+var member_join_action_rest=function(data){
 		console.log('33333');
 		
 		$.ajax({
@@ -140,17 +140,6 @@ var account_join_action_rest=function(data){
 					} else {
 						alert("회원가입을 환영합니다!!");
 						location.href="/member_login_form";
-						/*$('#form-account-regist').tooltip({'trigger':'hover', 'title': resultJson.msg});
-			    		$('#form-account-regist').tooltip('show');
-			    		$('#form-account-regist input').each(function(i,e){
-			    			$(e).fadeOut('slow',function(){
-			    				$(e).val("");
-			    				$(e).fadeIn('slow',function(){
-			    					$('#form-account-regist').tooltip('dispose');
-			    				});
-			    			});
-			    			
-			    		});*/
 		   			}
 				}
 			});
@@ -232,93 +221,8 @@ $(function(){
         		}
         	});
         	/******************************/
-        	/*$('#form-account-regist').on('focusout',function(e){
-				//이메일
-        		if($('#reg-email').val()=="") {
-        			$('#reg-email').css('border','0.5px dotted orange');
-        			$('#reg-email').tooltip({'trigger':'hover', 'title':'입력하세요.'});
-        			$('#reg-email').tooltip('show');
-        		} else {
-        			$('#reg-email').css('border','');
-        			$('#reg-email').tooltip('hide');
-        			$('#reg-email').tooltip('dispose');
-        		}
-        		//주소
-        		if($('#reg-address').val()=="") {
-        			$('#reg-address').css('border','0.5px dotted orange');
-        			$('#reg-address').tooltip({'trigger':'hover', 'title':'입력하세요.'});
-        			$('#reg-address').tooltip('show');
-        		} else {
-        			$('#reg-address').css('border','');
-        			$('#reg-address').tooltip('hide');
-        			$('#reg-address').tooltip('dispose');
-        		}
-        		//닉네임
-        		if($('#reg-nickname').val()=="") {
-        			$('#reg-nickname').css('border','0.5px dotted orange');
-        			$('#reg-nickname').tooltip({'trigger':'hover', 'title':'입력하세요.'});
-        			$('#reg-nickname').tooltip('show');
-        		} else {
-        			$('#reg-nickname').css('border','');
-        			$('#reg-nickname').tooltip('hide');
-        			$('#reg-nickname').tooltip('dispose');
-        		}
-        		//번호
-        		if($('#reg-phone').val()=="") {
-        			$('#reg-phone').css('border','0.5px dotted orange');
-        			$('#reg-phone').tooltip({'trigger':'hover', 'title':'입력하세요.'});
-        			$('#reg-phone').tooltip('show');
-        		} else {
-        			$('#reg-phone').css('border','');
-        			$('#reg-phone').tooltip('hide');
-        			$('#reg-phone').tooltip('dispose');
-        		}
-        		//비밀번호
-        		if($('#reg-pass').val()=="") {
-        			$('#reg-pass').css('border','0.5px dotted orange');
-        			$('#reg-pass').tooltip({'trigger':'hover', 'title':'입력하세요.'});
-        			$('#reg-pass').tooltip('show');
-        		} else {
-        			$('#reg-pass').css('border','');
-        			$('#reg-pass').tooltip('hide');
-        			$('#reg-pass').tooltip('dispose');
-        		}
-        		//이름
-        		if($('#reg-name').val()=="") {
-        			$('#reg-name').css('border','0.5px dotted orange');
-        			$('#reg-name').tooltip({'trigger':'hover', 'title':'입력하세요.'});
-        			$('#reg-name').tooltip('show');
-        		} else {
-        			$('#reg-name').css('border','');
-        			$('#reg-name').tooltip('hide');
-        			$('#reg-name').tooltip('dispose');
-        		}
-        		//아이디
-        		if($('#reg-username').val()=="") {
-        			$('#reg-username').css('border','0.5px dotted orange');
-        			$('#reg-username').tooltip({'trigger':'hover', 'title':'입력하세요.'});
-        			$('#reg-username').tooltip('show');
-        		} else {
-        			$('#reg-username').css('border','');
-        			$('#reg-username').tooltip('hide');
-        			$('#reg-username').tooltip('dispose');
-        		}
-        	});
-        	//생일
-        	$('#form-account-regist').on('focusout',function(e){
-        		if($('#reg-birthday').val()=="") {
-        			$('#reg-birthday').css('border','0.5px dotted orange');
-        			$('#reg-birthday').tooltip({'trigger':'hover', 'title':'선택하세요.'});
-        			$('#reg-birthday').tooltip('show');
-        		} else {
-        			$('#reg-birthday').css('border','');
-        			$('#reg-birthday').tooltip('hide');
-        			$('#reg-birthday').tooltip('dispose');
-        		}
-        	});*/
     		/**********회원가입submit버튼[ajax]************/
         	$('#form-account-regist').on('submit',function(e){
-        		console.log('11111111');
     			//var params=$(e.target).serialize();
     			let regUserName = $('#reg-username').val();
 				let regName = $('#reg-name').val();
@@ -342,9 +246,7 @@ $(function(){
     			$('#reg-username').css('border','');
     			$('#reg-username').tooltip('dispose');
     			$('#form-account-regist').tooltip('dispose');
-        		console.log('222222');
-        		account_join_action_rest(data);
-        		console.log('444444');
+        		member_join_action_rest(data);
     			e.preventDefault();
     		});
 });
