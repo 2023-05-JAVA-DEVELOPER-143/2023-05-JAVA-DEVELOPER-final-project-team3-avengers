@@ -138,7 +138,7 @@ class OptionSetServiceImplTest {
 				.product(ProductSaveDto.builder()
 						.brand("custom")
 						.descImage("custom")
-						.prevDesc("custom")
+						.prevImage("custom")
 						.img("custome")
 						.price(300000000)
 						.name("custom")

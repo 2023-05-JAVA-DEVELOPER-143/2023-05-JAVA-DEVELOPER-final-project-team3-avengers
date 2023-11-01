@@ -26,6 +26,7 @@ public class ProductDto {
 	private Double rating;
 	private LocalDateTime updateTime;
 	private String descImage;
+	private String prevImage;
 	private String pImage;
 	//@Builder.Default
 	//private List<Review> reviews = new ArrayList<>();
@@ -45,6 +46,7 @@ public class ProductDto {
 		this.rating=entity.getProduct().getRating();
 		this.updateTime=entity.getUpdateTime();
 		this.descImage=entity.getProduct().getDescImage();
+		this.prevImage=entity.getProduct().getPrevImage();
 		this.pImage=entity.getProduct().getImg();
 		this.stock=entity.getStock();
 		this.totalPrice=entity.getTotalPrice();
@@ -58,6 +60,7 @@ public class ProductDto {
 		this.rating=entity.getProduct().getRating();
 		this.updateTime=entity.getUpdateTime();
 		this.descImage=entity.getProduct().getDescImage();
+		this.prevImage=entity.getProduct().getPrevImage();
 		this.pImage=entity.getProduct().getImg();
 		this.stock=entity.getStock();
 		this.totalPrice=entity.getTotalPrice();

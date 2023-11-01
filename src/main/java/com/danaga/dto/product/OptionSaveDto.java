@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OptionSaveDto {
+	private Long id;
 	private String name;
 	private String value;
 	private Integer extraPrice;
@@ -20,6 +21,7 @@ public class OptionSaveDto {
 	
 	public Options toEntity() {
 		return Options.builder()
+				.id(id)
 				.name(name)
 				.value(value)
 				.extraPrice(extraPrice)
@@ -27,6 +29,7 @@ public class OptionSaveDto {
 				.build();
 	}
 	public OptionSaveDto(Options entity){
+		this.id=entity.getId();
 		this.name=entity.getName();
 		this.value=entity.getValue();
 		this.extraPrice=entity.getExtraPrice();

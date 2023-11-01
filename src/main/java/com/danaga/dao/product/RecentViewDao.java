@@ -10,4 +10,5 @@ public interface RecentViewDao {
 	void delete(RecentView entity);
 	void deleteAll(Long memberId);
 	RecentView save(RecentView entity);
+	void removeOldRecents();
 }

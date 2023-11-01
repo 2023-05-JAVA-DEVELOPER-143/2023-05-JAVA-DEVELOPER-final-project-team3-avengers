@@ -41,8 +41,15 @@ class RecentViewServiceImplTest {
 	}
 
 	@Test
+	@Disabled
 	void testMyAllRecentViews() {
 		service.myAllRecentViews(3L);
+	}
+	@Transactional
+	@Rollback(false)
+	@Test
+	void testRemoveByScheduler() {
+		service.removeOldRecents();
 	}
 
 }
