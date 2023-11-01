@@ -216,7 +216,10 @@ public class OrderController {
 			List<OrdersDto> ordersDtoList = orderService.guestOrderList(ordersGuestDetailDto.getOrderNo(),
 					ordersGuestDetailDto.getPhoneNumber(), ordersGuestDetailDto.getName());
 			System.out.println("@@@@@@@@@@@@@@@@ordersDtoList: "+ordersDtoList);
+			System.out.println("@@@@@@@@@@@@@@@@ordersItemDtoList: "+ordersDtoList.get(0).getOrderItemDtoList());
+			List<OrderItemDto> orderItemDtoList = ordersDtoList.get(0).getOrderItemDtoList();
 			model.addAttribute("ordersDtoList", ordersDtoList);
+			model.addAttribute("orderItemDtoList",orderItemDtoList);
 			return "orders/order_guest_detail";
 
 		} catch (Exception e) {
