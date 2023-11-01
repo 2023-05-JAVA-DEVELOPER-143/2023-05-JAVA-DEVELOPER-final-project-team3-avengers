@@ -16,6 +16,7 @@ import com.danaga.dto.CommentDto;
 import com.danaga.service.BoardService;
 import com.danaga.service.CommentsService;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -32,6 +33,7 @@ public class BoardController {
 	public String list(@PathVariable Long boardGroupId,Model model) {
 		List<BoardDto>boardList=bService.boards(boardGroupId);
 		List<BoardDto> top10List = bService.popularPost();
+		
 		String name = bService.getBoardGroupName(boardGroupId);
 		model.addAttribute("boardGroupId",boardGroupId);
 		model.addAttribute("boardGroupName",name);
@@ -40,16 +42,18 @@ public class BoardController {
 		return "board/board_list";
 	}
 	@GetMapping("/board_create{boardGroupId}")
-	public String createForm(@PathVariable Long boardGroupId ,Model model) {
+	public String createForm(@PathVariable Long boardGroupId ,Model model,HttpSession session) {
+		log.info("session : {} ",session.getAttribute("sUserId"));
 		model.addAttribute("boardGroupId",boardGroupId);
 		model.addAttribute("board",new BoardDto());
 		return "board/create_board";
 	}
 	
 	@PostMapping("/board_create{boardGroupId}")
-	public String createBoard(@PathVariable("boardGroupId")Long boardGruopId, @ModelAttribute("board") BoardDto dto,Model model) {
+	public String createBoard(@PathVariable("boardGroupId")Long boardGruopId, @ModelAttribute("board") BoardDto dto,Model model,HttpSession session) {
 		log.info("dto : {} ",dto);
-		
+		String user =(String)session.getAttribute("sUserId");
+		log.info("세션정보 : {} ",user);
 		BoardDto saved = bService.createBoard(dto);
 		log.info("saved: {}",saved);
 		
@@ -84,13 +88,13 @@ public class BoardController {
 	}
 	
 	@GetMapping("/board_delete{id}")
-	public String delete(@PathVariable Long id, RedirectAttributes rttr) {
+	public String delete(@PathVariable Long id, RedirectAttributes rttr, HttpSession session) {
 		//1. 삭제 대상을 가져온다~
 		BoardDto target =bService.boardDetail(id);
-		
+		String user = (String)session.getAttribute("sUserId");
 		//2. 대상을 삭제한다~
 		if(target!=null) {
-			bService.delete(target);
+			bService.delete(target,user);
 			rttr.addFlashAttribute("msg","삭제가 완료 되었습니다."); 
 		}
 		//3. 결과페이지로 리다이렉트한다.

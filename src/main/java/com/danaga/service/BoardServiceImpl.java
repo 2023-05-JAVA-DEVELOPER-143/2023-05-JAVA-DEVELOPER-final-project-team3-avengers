@@ -92,7 +92,7 @@ public class BoardServiceImpl implements BoardService{
 	@Transactional
 	public BoardDto createBoard(BoardDto dto) {
 	    // 게시글 조회 및 예외처리
-	    Member memberT = mRepository.findById(dto.getMemberId())
+	    Member memberT = mRepository.findByUserName(dto.getUserName())
 	            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 	    BoardGroup boardGroupT = bgRepository.findById(dto.getBoardGroupId())
 	            .orElseThrow(() -> new IllegalArgumentException("게시판을 찾을 수 없습니다."));
@@ -121,11 +121,11 @@ public class BoardServiceImpl implements BoardService{
 	// 좋아요
 	@Override
 	@Transactional
-	public BoardDto upIsLike(Long boardId, Long memberId) {
+	public BoardDto upIsLike(Long boardId, String userName) {
 	    // board와 member config 객체 조회 및 예외처리
 	    Board board = bRepository.findById(boardId)
 	            .orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다.(대상게시글이 없음)"));
-	    Member member = mRepository.findById(memberId)
+	    Member member = mRepository.findByUserName(userName)
 	            .orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다.(회원정보없음)"));
 
 	    // LikeConfig 객체 조회
@@ -166,11 +166,11 @@ public class BoardServiceImpl implements BoardService{
 	// 싫어요
 	@Override
 	@Transactional
-	public BoardDto upDisLike(Long boardId, Long memberId) {
+	public BoardDto upDisLike(Long boardId, String userName) {
 		 // board와 member config 객체 조회 및 예외처리
 	    Board board = bRepository.findById(boardId)
 	            .orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다.(대상게시글이 없음)"));
-	    Member member = mRepository.findById(memberId)
+	    Member member = mRepository.findByUserName(userName)
 	            .orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다.(회원정보없음)"));
 
 	    // LikeConfig 객체 조회
@@ -213,7 +213,9 @@ public class BoardServiceImpl implements BoardService{
 	public BoardDto update(BoardDto dto) {
 		// 타겟 게시물 조회 및 예외처리
 		Board target = bRepository.findById(dto.getId()).orElseThrow(() -> new IllegalArgumentException("대상이없습니다."));
-
+		if(!target.getMember().getUserName().equals(dto.getUserName())) {
+			throw new  IllegalArgumentException("회원이 일치하지 않습니다.");
+		}
 		// 댓글 수정
 		target.patch(dto);
 
@@ -227,16 +229,24 @@ public class BoardServiceImpl implements BoardService{
 	// 게시물 삭제
 	@Override
 	@Transactional
-	public BoardDto delete(BoardDto dto) {
+	public BoardDto delete(BoardDto dto,String userName) {
 		// config상태 삭제
+		if(!dto.getUserName().equals(userName)) {
+			throw new  IllegalArgumentException("회원이 일치하지 않습니다.");
+			
+		}
 		lcRepository.deleteByBoard_Id(dto.getId());
 		
 		// 게시물 조회 및 예외처리
 		Board target = bRepository.findById(dto.getId())
 				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시물입니다."));
-
-		// 게시물 DB에서 삭제
-		bRepository.delete(target);
+		if(dto.getUserName() == target.getMember().getUserName()) {
+			// DTO와 entity의 멤버아이디가 같다면 게시물 DB에서 삭제
+			bRepository.delete(target);
+		}else {
+			return null;
+		}
+		
 
 		// 삭제된 댓글을 dto로 반환
 		return BoardDto.responseDto(target);

@@ -12,6 +12,7 @@ import com.danaga.dto.BoardDto;
 import com.danaga.service.BoardService;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,18 +25,18 @@ public class BoardRestController {
 	private final BoardService bService;
 	
 	@PatchMapping("/{boardId}/upIsLike/{memberId}")
-	public ResponseEntity<BoardDto> upIsLike(@PathVariable("boardId") Long boardId, @PathVariable("memberId") Long memberId) {
-		log.info("memberId = {}",memberId);
+	public ResponseEntity<BoardDto> upIsLike(@PathVariable("boardId") Long boardId, HttpSession session) {
+		
 		log.info("boardId = {}",boardId);
-		BoardDto dtos = bService.upIsLike(boardId,memberId);
+		BoardDto dtos = bService.upIsLike(boardId,(String)session.getAttribute("sUserId"));
 		log.info("dto = {}",dtos);
 		return ResponseEntity.status(HttpStatus.OK).body(dtos);
 	}
 	
 	@PatchMapping("/{boardId}/upDisLike/{memberId}")
-	public ResponseEntity<BoardDto> upDisLike(@PathVariable("boardId") Long boardId, @PathVariable("memberId") Long memberId) {
+	public ResponseEntity<BoardDto> upDisLike(@PathVariable("boardId") Long boardId, HttpSession session) {
 		log.info("boardId",boardId);
-		BoardDto dtos = bService.upDisLike(boardId,memberId);
+		BoardDto dtos = bService.upDisLike(boardId,(String)session.getAttribute("sUserId"));
 		log.info("dto = {}",dtos);
 		return ResponseEntity.status(HttpStatus.OK).body(dtos);
 	}

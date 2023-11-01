@@ -42,6 +42,7 @@ public class Board extends BaseEntity {
 	private Long id;
 
 	private String title;
+	@Column(length = 2000)
 	private String content;
 	private String img1;
 	private String img2;
@@ -106,7 +107,7 @@ public class Board extends BaseEntity {
 		if (this.id != dto.getId()) {
 			throw new IllegalArgumentException("수정 실패!~ 대상이 잘못됬습니다.");
 		}
-		if (this.getMember().getId() != dto.getMemberId()) {
+		if (this.getMember().getUserName() != dto.getUserName()) {
 			throw new IllegalArgumentException("수정 실패!~ 회원이 잘못됬습니다.");
 		}
 		if (this.getBoardGroup().getId() != dto.getBoardGroupId()) {

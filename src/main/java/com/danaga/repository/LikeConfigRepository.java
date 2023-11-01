@@ -10,7 +10,7 @@ import com.danaga.entity.Member;
 
 public interface LikeConfigRepository extends JpaRepository<LikeConfig, Long>{
 
-	Optional<LikeConfig> findByBoard_IdAndMember_id(Long boardId,Long MemberId);
+	Optional<LikeConfig> findByBoard_IdAndMember_UserName(Long boardId,String userName);
 	
 	Optional<LikeConfig> findByBoardAndMember(Board board, Member member);	
 	
