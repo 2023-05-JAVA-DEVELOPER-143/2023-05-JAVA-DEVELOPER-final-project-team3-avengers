@@ -157,6 +157,9 @@ public class ProductController {
 			}else{
 			List<ProductDto> hits = service.displayHitProducts(optionSetId).getData();
 			model.addAttribute("hits",hits);
+			List<Boolean> isInterested=new ArrayList<>();
+			isInterested.add(false);
+			model.addAttribute("isInterested",isInterested.get(0));
 			}
 			//같은 카테고리의 히트상품도 표시
 			model.addAttribute("productList",productList);

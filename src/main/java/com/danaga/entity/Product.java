@@ -28,7 +28,7 @@ import lombok.ToString;
 @Builder
 @Data
 @EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
+@ToString(callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 public class Product extends BaseEntity {//제품의 기본 모델 정보

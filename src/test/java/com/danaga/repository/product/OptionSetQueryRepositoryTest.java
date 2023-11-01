@@ -32,12 +32,12 @@ class OptionSetQueryRepositoryTest {
 		System.out.println(repository.findByFilter(
 				QueryStringDataDto.builder()
 				.orderType(OptionSetQueryData.BY_TOTAL_PRICE)
-				.category(CategoryDto.builder().name("전체").parentId(1L).id(3L)
+				.category(CategoryDto.builder().name("전체").parentId(1L)
 						.build())
 				.minPrice(0)
 				.nameKeyword("Mr")
 				.optionset(list)
-				.build()).size());
+				.build()));
 	}
 
 }

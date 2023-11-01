@@ -37,10 +37,9 @@
 					<div class="row margin-top-1x">
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label for="otherOptions">다른 옵션 보기</label>
-								<select class="form-control" id="otherOptions" th:each="options:${otherOptions}">
-									<option th:text="${options.optionSet}" th:value="${options.osId}" th:if="${options.osId==productList.osId}" th:selected="selected">11.5</option>
-									<option th:text="${options.optionSet}" th:value="${options.osId}" th:unless="${options.osId==productList.osId}">11.5</option>
+								<label for="otherOptions" >다른 옵션 보기</label>
+								<select class="form-control" id="otherOptions">
+									<option th:each="options:${otherOptions}" th:text="${options.optionSet}" th:value="${options.osId}" th:selected="${options.osId==productList.osId}">11.5</option>
 								</select>
 							</div>
 						</div>
@@ -60,14 +59,14 @@
 					<hr class="mb-3">
 					<div class="d-flex flex-wrap justify-content-between">
 						<div class="sp-buttons mt-2 mb-2">
-							
-							<button th:if="${param.sUserId!=null && isInterested}"
+						
+							<button th:if="${isInterested==true}"
 									class="btn btn-outline-secondary btn-sm btn-wishlist active"
 									data-toggle="tooltip" th:product-heart="|${productList.osId}|"
 									title="Whishlist">
 									<i class="icon-heart" th:heart="|${productList.osId}|"></i>
 								</button>
-								<button th:unless="${param.sUserId!=null && isInterested}"
+								<button th:unless="${isInterested==true}"
 									class="btn btn-outline-secondary btn-sm btn-wishlist"
 									 data-toggle="tooltip"
 									title="Whishlist" th:product-heart-yet="|${productList.osId}|">
@@ -179,13 +178,13 @@
 						<h3 class="product-title" th:text="${productDto.name}"><a href="product-detail.html">상품명</a></h3>
 						<h4 class="product-price" th:text="${productDto.totalPrice}">$34.99</h4>
 						<div class="product-buttons">
-							<button th:if="${param.sUserId!=null && productList.isInterested}"
+							<button th:if="${productList.isInterested}"
 									class="btn btn-outline-secondary btn-sm btn-wishlist active"
 									data-toggle="tooltip" th:product-heart="|${productList.osId}|"
 									title="Whishlist">
 									<i class="icon-heart" th:heart="|${productList.osId}|"></i>
 								</button>
-								<button th:unless="${param.sUserId!=null && productList.isInterested}"
+								<button th:unless="${productList.isInterested}"
 									class="btn btn-outline-secondary btn-sm btn-wishlist"
 									 data-toggle="tooltip"
 									title="Whishlist" th:product-heart-yet="|${productList.osId}|">

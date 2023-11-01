@@ -84,13 +84,13 @@
 								th:text="'등록일 : '+${productDto.updateTime}">{{updateTime}}</div>
 							<div class="d-inline text-success">리뷰수</div>
 							<div class="product-buttons">
-								<button th:if="${param.sUserId!=null && productDto.isInterested}"
+								<button th:if="${productDto.isInterested}"
 									class="btn btn-outline-secondary btn-sm btn-wishlist active"
 									data-toggle="tooltip" th:product-heart="|${productDto.osId}|"
 									title="Whishlist">
 									<i class="icon-heart" th:heart="|${productDto.osId}|"></i>
 								</button>
-								<button th:unless="${param.sUserId!=null && productDto.isInterested}"
+								<button th:unless="${productDto.isInterested}"
 									class="btn btn-outline-secondary btn-sm btn-wishlist"
 									 data-toggle="tooltip"
 									title="Whishlist" th:product-heart-yet="|${productDto.osId}|">
