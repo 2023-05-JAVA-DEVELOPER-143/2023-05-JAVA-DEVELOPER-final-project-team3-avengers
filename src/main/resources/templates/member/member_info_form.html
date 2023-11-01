@@ -57,13 +57,13 @@
 						<div class="col-sm-8">
 							<div class="form-group">
 								<label for="reg-address">주소</label><br>
-								<input name="postcode" th:value="${#strings.substring(loginUser.address, startIndex, endIndex)}"
+								<input name="postcode" th:value="*{postCode}"
 								type="text" class="form-control" id="postcode" placeholder="우편번호" disabled>
 								<input name="findaddr"
 								type="button" class="form-control" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
-								<input name="address" th:value="${#strings.substring(loginUser.address, startIndex, endIndex)}"
+								<input name="address" th:value="*{address}"
 								type="text" class="form-control" id="address" placeholder="주소" disabled>
-								<input name="detailaddress" th:value="${#strings.substring(loginUser.address, startIndex, endIndex)}"
+								<input name="detailaddress" th:value="*{detailAddress}"
 								type="text" class="form-control" id="detailaddress" placeholder="상세주소">
 							</div>	
 						</div>
