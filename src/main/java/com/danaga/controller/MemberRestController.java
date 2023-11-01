@@ -150,23 +150,28 @@ public class MemberRestController {
 				result = 1;
 				map.put("result", result);
 				map.put("member", member);
+				map.put("msg", member.getUserName() + "는 사용중인 아이디입니다.");
 				return map;
 			} catch (ExistedMemberByEmailException e) {
 				result = 2;
 				map.put("result", result);
 				map.put("member", member);
+				map.put("msg", member.getEmail() + "는 사용중인 이메일입니다.");
 				return map;
 			} catch (ExistedMemberByPhoneNoException e) {
 				result = 3;
 				map.put("result", result);
 				map.put("member", member);
+				map.put("msg", member.getPhoneNo() + "는 사용중인 번호입니다.");
 				return map;
 			} catch (ExistedMemberByNicknameException e) {
 				result = 4;
 				map.put("result", result);
 				map.put("member", member);
+				map.put("msg", member.getNickname() + "는 사용중인 닉네임입니다.");
 				return map;
 			}
+			map.put("member", member);
 			return map;
 	}
 
