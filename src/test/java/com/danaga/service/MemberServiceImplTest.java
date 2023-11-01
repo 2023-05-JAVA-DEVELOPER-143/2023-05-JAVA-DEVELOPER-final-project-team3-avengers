@@ -77,11 +77,11 @@ class MemberServiceImplTest {
 		memberRepository.deleteById(9L);
 		memberRepository.deleteById(10L);
 	}
-	@Test
-	@Disabled
-	void isDuplicate() throws Exception {
-		memberService.isDuplicate("010-1123-3512");
-	}
+//	@Test
+//	@Disabled
+//	void isDuplicate() throws Exception {
+//		memberService.isDuplicate("010-1123-3512");
+//	}
 	@Test
 	@Disabled
 	void login() throws Exception {
