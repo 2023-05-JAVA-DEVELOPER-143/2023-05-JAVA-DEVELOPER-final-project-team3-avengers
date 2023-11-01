@@ -5,10 +5,11 @@
 <!-- Header -->
 
 <head>
-</head>
+
 
 <body>
 	<!-- comment Modal -->
+	<th:block layout:fragment="modal" />
 	<th:block th:object="${comments}">
 		<!-- 댓글 수정모달-->
 		<div class="modal fade" id="comment-edit-modal" tabindex="-1">
@@ -124,11 +125,11 @@
 							</div>
 						</div>
 					</div>
-					
-					<div class="toolbar" >
+
+					<div class="toolbar">
 						<div th:if="${board.memberId} eq ${session.sUserId} or ${board.isAdmin} eq 2" th:remove="tag">
-						<a th:href="@{/board_edit{id} (id=${board.id})}" class="btn btn-primary">수정</a>
-						<a th:href="@{/board_edit{id} (id=${board.id})}" class="btn btn-danger">삭제</a>
+							<a th:href="@{/board_edit{id} (id=${board.id})}" class="btn btn-primary">수정</a>
+							<a th:href="@{/board_edit{id} (id=${board.id})}" class="btn btn-danger">삭제</a>
 						</div>
 						<a th:href="@{/board{boardGroupId} (boardGroupId=${board.boardGroupId})}"
 							class="btn btn-primary">목록가기</a>
@@ -136,9 +137,8 @@
 					<div class="container padding-bottom-3x mb-2">
 						<div class="row">
 							<!-- Results-->
-							<div class="col-xl-9 col-lg-12">
+							<div class="col-xl-12 col-lg-12">
 								<div class="card mb-4">
-
 
 									<div class="card-header">
 										<h3>제목 : [[${board.title}]] </h3><span class="badge badge-pill badge-primary"
@@ -153,9 +153,16 @@
 												<hr>
 												<h6>작성일 : [[${#temporals.format(board.createTime,'yyyy-MM-dd
 													HH:mm:ss')}]]</h6>
-												<p> 내용 <br> <span class='text-highlighted'
-														th:text="${board.content}">lorem
-														ipsum</span></p>
+												<p> 내용 </p><br>
+												<div class="video-container" th:utext="${board.content}">
+													<div th:if="${#strings.contains(board.content, '&lt;oembed url=')}">
+														
+													</div>
+												</div>
+<script>
+	const getContent='[[${board.content}]]';
+
+</script>
 											</div>
 										</div>
 										<a id="up-IsLike-btn" class="btn btn-outline-info"
@@ -369,8 +376,7 @@
 
 
 								</div>
-								<a class="btn btn-outline-info" id="toggle-comment-form"
-									onclick="toggleCommentForm()">댓글 달기</a>
+
 
 								<!-- modal event 처리 -->
 								<script>
@@ -518,6 +524,8 @@
 								</script>
 
 							</div>
+							<a class="btn btn-outline-info" id="toggle-comment-form" onclick="toggleCommentForm()">댓글
+								달기</a>
 							<!-- 요기에다가 myinfo넣어놓으면 좋을듯.-->
 						</div>
 					</div>
