@@ -11,15 +11,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.danaga.dto.ResponseDto;
+import com.danaga.dto.product.CategoryDto;
+import com.danaga.dto.product.ProductDto;
+import com.danaga.dto.product.QueryStringDataDto;
+import com.danaga.entity.OptionSet;
 import com.danaga.entity.Statistic;
 import com.danaga.repository.BoardRepository;
 import com.danaga.repository.OrderRepository;
+import com.danaga.repository.product.OptionSetQueryData;
+import com.danaga.repository.product.OptionSetRepository;
 import com.danaga.repository.product.ProductRepository;
 import com.danaga.service.BoardService;
 import com.danaga.service.BoardServiceImpl;
 import com.danaga.service.MemberService;
 import com.danaga.service.OrderService;
 import com.danaga.service.StatisticService;
+import com.danaga.service.product.CategoryService;
 import com.danaga.service.product.OptionSetService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,7 +43,7 @@ public class StatisticController {
 	private final OrderRepository orderRepository;
 	private final BoardService boardService;
 	private final BoardRepository boardRepository;
-	private final ProductRepository productRepository;
+	private final OptionSetRepository optionSetRepository;
 	
 	@GetMapping
 	public String main(Model model) {
@@ -51,7 +59,8 @@ public class StatisticController {
 	}
 	@GetMapping("/admin_product_list")
 	public String adminProductList(Model model) {
-		model.addAttribute("productList", productRepository.findAll());
+		List<OptionSet> productList = optionSetRepository.findAll();
+		model.addAttribute("productList",productList);
 		return "admin/admin_product_list";
 	}
 	@GetMapping("/admin_order_list")

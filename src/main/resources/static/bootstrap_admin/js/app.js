@@ -15,7 +15,7 @@ $(function() {
 	});
 });
 
-//월별/일별 전환 버튼ㄴ
+//월별/일별 전환 버튼
 $(function() {
 	$('#optionYear').click(function() {
 		$.ajax({
