@@ -18,7 +18,6 @@ public class ProductSaveDto {
 	private String brand;
 	private Integer price;
 	private String descImage;
-	private String prevDesc;
 	private String img;
 	private Double rating;
 	
@@ -27,7 +26,6 @@ public class ProductSaveDto {
 				.id(id)
 				.name(name)
 				.brand(brand)
-				.prevDesc(prevDesc)
 				.descImage(descImage)
 				.img(img)
 				.rating(rating)

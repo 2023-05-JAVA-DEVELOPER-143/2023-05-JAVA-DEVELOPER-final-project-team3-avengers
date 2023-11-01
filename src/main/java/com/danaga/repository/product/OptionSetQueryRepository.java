@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.danaga.dto.product.ProductDto;
+import com.danaga.dto.product.ProductListOutputDto;
 import com.danaga.dto.product.QueryStringDataDto;
 import com.danaga.entity.OptionSet;
 
@@ -26,7 +27,7 @@ public class OptionSetQueryRepository {
 		TypedQuery<OptionSet> query = em.createQuery(jpql,OptionSet.class);
 		return query.getResultList();
 	}
-	public List<ProductDto> findForMemberByFilter(QueryStringDataDto dataDto, String username){
+	public List<ProductListOutputDto> findForMemberByFilter(QueryStringDataDto dataDto, String username){
 		String mainJpql = new OptionSetSearchQuery(dataDto).build();
 		TypedQuery<OptionSet> query = em.createQuery(mainJpql,OptionSet.class);
 		String findHeartJpql = "SELECT i.optionSet.id FROM Interest i WHERE i.member.userName= :username";
@@ -34,8 +35,8 @@ public class OptionSetQueryRepository {
 		heart.setParameter("username", username);
 		List<Long> heartOptionSetId = heart.getResultList();
 		List<OptionSet> searchResult = query.getResultList();
-		List<ProductDto> finalResult = searchResult.stream().map(t -> {
-			ProductDto productDto = new ProductDto(t);
+		List<ProductListOutputDto> finalResult = searchResult.stream().map(t -> {
+			ProductListOutputDto productDto = new ProductListOutputDto(t);
 			productDto.setIsInterested(heartOptionSetId.contains(t.getId()));
 			return productDto;
 				}).collect(Collectors.toList());

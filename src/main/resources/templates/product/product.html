@@ -64,7 +64,7 @@
 						th:each="productDto : ${productList}">
 						<!-- 최초 요청 -->
 						<a class="product-thumb" href="product_detail.html"
-							th:href="@{http://localhost/product${productDto.osId}}"> <img
+							th:href="@{'http://localhost/product'+${productDto.osId}}"> <img
 							src="/bootstrap/img/shop/products/01.jpg" alt="Product"
 							th:src="@{${productDto.pImage}}">
 						</a>

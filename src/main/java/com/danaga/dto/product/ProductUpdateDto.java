@@ -20,7 +20,6 @@ public class ProductUpdateDto {
 	private Optional<String> brand;
 	private Optional<Integer> price;
 	private Optional<String> descImage;
-	private Optional<String> prevDesc;
 	private Optional<String> img;
 	private Optional<Double> rating;
 	
@@ -29,7 +28,6 @@ public class ProductUpdateDto {
 				.id(id)
 				.name(name.get())
 				.brand(brand.get())
-				.prevDesc(prevDesc.get())
 				.descImage(descImage.get())
 				.img(img.get())
 				.rating(rating.get())

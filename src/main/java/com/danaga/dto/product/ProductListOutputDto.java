@@ -20,49 +20,39 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class ProductDto {
+public class ProductListOutputDto {
 	private String brand;
 	private String name;
 	private Double rating;
 	private LocalDateTime updateTime;
-	private String descImage;
 	private String pImage;
-	//@Builder.Default
-	//private List<Review> reviews = new ArrayList<>();
-//	@Builder.Default
-//	private List<Category> categorySet=new ArrayList<>();
-	private Integer stock;
 	private Integer totalPrice;
 	private Long osId;
 	@Builder.Default
-	private List<OptionDto> optionSet = new ArrayList<>();
+	private List<OptionBasicDto> optionSet = new ArrayList<>();
 	private Boolean isInterested;
 	
 	
-	public ProductDto(OptionSet entity) {
+	public ProductListOutputDto(OptionSet entity) {
 		this.brand=entity.getProduct().getBrand();
 		this.name=entity.getProduct().getName();
 		this.rating=entity.getProduct().getRating();
 		this.updateTime=entity.getUpdateTime();
-		this.descImage=entity.getProduct().getDescImage();
 		this.pImage=entity.getProduct().getImg();
-		this.stock=entity.getStock();
 		this.totalPrice=entity.getTotalPrice();
 		this.osId=entity.getId();
-		this.optionSet = entity.getOptions().stream().map(t -> new OptionDto(t)).collect(Collectors.toList());
+		this.optionSet = entity.getOptions().stream().map(t -> new OptionBasicDto(t)).collect(Collectors.toList());
 		this.isInterested=false;
 	}
-	public ProductDto(OptionSet entity, String username) {
+	public ProductListOutputDto(OptionSet entity, String username) {
 		this.brand=entity.getProduct().getBrand();
 		this.name=entity.getProduct().getName();
 		this.rating=entity.getProduct().getRating();
 		this.updateTime=entity.getUpdateTime();
-		this.descImage=entity.getProduct().getDescImage();
 		this.pImage=entity.getProduct().getImg();
-		this.stock=entity.getStock();
 		this.totalPrice=entity.getTotalPrice();
 		this.osId=entity.getId();
-		this.optionSet = entity.getOptions().stream().map(t -> new OptionDto(t)).collect(Collectors.toList());
+		this.optionSet = entity.getOptions().stream().map(t -> new OptionBasicDto(t)).collect(Collectors.toList());
 		this.isInterested=entity.getInterests().stream().anyMatch(t -> t.getMember().getUserName().equals(username));
 	}
 }
