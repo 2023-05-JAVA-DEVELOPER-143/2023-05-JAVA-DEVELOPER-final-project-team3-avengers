@@ -43,6 +43,8 @@ public class OrderController {
 //		   String sUserId = "User1";
 			String loginUser = (String) request.getSession().getAttribute("sUserId");
 			List<OrdersDto> orderDtoList = orderService.memberOrderList(loginUser);
+		    // orderDtoList를 id 기준으로 오름차순 정렬
+		    orderDtoList.sort(Comparator.comparing(OrdersDto::getId));
 			model.addAttribute("orderDtoList", orderDtoList);
 			Long id = memberService.findIdByUsername(loginUser);
 			Member member = memberRepository.findById(id).get();

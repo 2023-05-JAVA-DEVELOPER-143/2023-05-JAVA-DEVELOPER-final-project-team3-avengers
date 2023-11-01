@@ -99,7 +99,8 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr th:each="ordersDto : ${orderDtoList}">
+								<tr th:each="ordersDto : ${orderDtoList}"
+									th:each-sort="${ordersDto.id}"	>
 									<td>
 										<button class="btn " data-bs-toggle="modal" data-bs-target="#orderDetails"
 											th:data-order-id="${ordersDto.id}">
