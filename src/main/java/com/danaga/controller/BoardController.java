@@ -55,7 +55,7 @@ public class BoardController {
 		
 		model.addAttribute("saved",saved);
 		model.addAttribute("msg","새로운 글이 생성 되었습니다.");
-		return "redirect:/board/show"+saved.getId();
+		return "redirect:/show"+saved.getId();
 	}
 	
 	@GetMapping("/show{id}")
