@@ -31,6 +31,10 @@ public interface StatisticService {
 	//월별 업데이트
 	void createMoData(String month);
 	
+	/****************** Others ***************/
+	//주문 상태 변경
+	void updateOrderStatement(Long id, String stmt);
+	
 
 
 	

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.danaga.dto.AdminOrderUpdate;
 import com.danaga.entity.Member;
 import com.danaga.entity.Statistic;
 import com.danaga.repository.BoardRepository;
@@ -71,12 +72,13 @@ public class StatisticRestController {
 	}
 	
 	@PutMapping("/order/{id}")
-	public ResponseEntity<?> updateOrder(@PathVariable Long id, @RequestBody Map<String, Object> requestBody) {
+	public ResponseEntity<?> updateOrder(@PathVariable Long id, @RequestBody AdminOrderUpdate adminOrderUpdate) {
 		 try {
-			 	System.out.println(requestBody.get("statement"));
+			 	statisticService.updateOrderStatement(adminOrderUpdate.getOrderId(),adminOrderUpdate.getStatement());
 	            return new ResponseEntity<>("Order statement changed successfully", HttpStatus.OK);
 	        } catch (Exception e) {
-	            return new ResponseEntity<>("Error deleting member", HttpStatus.INTERNAL_SERVER_ERROR);
+	        	e.printStackTrace();
+	            return new ResponseEntity<>("Error changing order statement", HttpStatus.INTERNAL_SERVER_ERROR);
 	        }
 	}
 	

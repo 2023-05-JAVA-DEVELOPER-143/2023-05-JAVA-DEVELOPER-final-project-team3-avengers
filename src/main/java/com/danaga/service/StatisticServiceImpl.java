@@ -8,13 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.danaga.config.OrderStateMsg;
+import com.danaga.entity.Orders;
 import com.danaga.entity.Statistic;
+import com.danaga.repository.OrderRepository;
 import com.danaga.repository.StatisticRepository;
 
 @Service
 public class StatisticServiceImpl implements StatisticService {
 	@Autowired
 	private StatisticRepository statisticRepository;
+	@Autowired
+	private OrderRepository orderRepository;
 
 	// 수동업데이트 및 반환
 	@Override
@@ -35,29 +40,29 @@ public class StatisticServiceImpl implements StatisticService {
 		List<Statistic> statisticList = statisticRepository.findTop7ByOrderByIdDesc();
 		return statisticList;
 	}
-	
+
 	// 이번 달 기록
-		@Override
-		public List<Statistic> thisMonthStatistic() {
-			List<Statistic> statisticList = statisticRepository
-					.findByIdStartsWith(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMM")));
-			return statisticList;
-		}
-	
+	@Override
+	public List<Statistic> thisMonthStatistic() {
+		List<Statistic> statisticList = statisticRepository
+				.findByIdStartsWith(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMM")));
+		return statisticList;
+	}
+
 	// YYYYMM월 기록 단순반환
 	@Override
 	public List<Statistic> monthlyStatistic(String month) {
 		List<Statistic> statisticList = statisticRepository.findByIdStartsWith(month);
 		return statisticList;
 	}
-	
+
 	// YYYY년 월별 기록 단순 반환
 	@Override
 	public List<Statistic> yearlyStatistic(String year) {
-		List<Statistic> statisticList = statisticRepository.findByIdStartsWith("1M"+year);
+		List<Statistic> statisticList = statisticRepository.findByIdStartsWith("1M" + year);
 		return statisticList;
 	}
-	
+
 	/******************** Batch *****************/
 
 	// 이번 달 업데이트
@@ -76,7 +81,7 @@ public class StatisticServiceImpl implements StatisticService {
 	@Override
 	public void createMoData(String month) {
 		List<Statistic> statisticList = monthlyStatistic(month);
-		Long salesTotQty  = 0l;
+		Long salesTotQty = 0l;
 		Long salesRevenue = 0l;
 		Long newMember = 0l;
 		Long newBoard = 0l;
@@ -86,11 +91,24 @@ public class StatisticServiceImpl implements StatisticService {
 			newMember += statistic.getDailyNewMember();
 			newBoard += statistic.getDailyBoardInquiry();
 		}
-		Statistic stat = Statistic.builder().id("1M"+month).dailySalesTotQty(salesTotQty).dailySalesRevenue(salesRevenue).dailyNewMember(newMember).dailyBoardInquiry(newBoard).build();
+		Statistic stat = Statistic.builder().id("1M" + month).dailySalesTotQty(salesTotQty)
+				.dailySalesRevenue(salesRevenue).dailyNewMember(newMember).dailyBoardInquiry(newBoard).build();
 		statisticRepository.save(stat);
 		return;
 	}
 
-	
+	// 주문 상태 변경
+	@Override
+	public void updateOrderStatement(Long id, String stmt) {
+		Orders order = orderRepository.findById(id).get();
+		OrderStateMsg msg;
+		for (OrderStateMsg value : OrderStateMsg.values()) {
+			if (value.name().equalsIgnoreCase(stmt)) {
+				msg = value;
+				order.setStatement(msg);
+			}
+		}
+		return;
+	}
 
 }
