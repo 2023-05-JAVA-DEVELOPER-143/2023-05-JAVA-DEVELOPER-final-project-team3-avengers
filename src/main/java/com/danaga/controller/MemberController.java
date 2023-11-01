@@ -1,25 +1,13 @@
 package com.danaga.controller;
 
-import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import com.danaga.dto.MemberLoginDto;
 import com.danaga.dto.MemberResponseDto;
-import com.danaga.dto.MemberUpdateDto;
-import com.danaga.entity.Member;
-import com.danaga.exception.ExistedMemberByUserNameException;
-import com.danaga.exception.MemberNotFoundException;
-import com.danaga.exception.PasswordMismatchException;
 import com.danaga.service.MemberService;
 
 import jakarta.servlet.http.HttpSession;
