@@ -61,12 +61,12 @@ public class OrderController {
 	@GetMapping("/product_order_form")
 	public String memberProductOrderAddForm(@ModelAttribute("cartDto") CartDto cartDto, Model model) {
 
-		ResponseDto<?> responseDto = optionSetService.findById(cartDto.getId());
+		ResponseDto<?> responseDto = optionSetService.findById(cartDto.getOptionSetId());
 		List<ProductDto> productDtoList = (List<ProductDto>) responseDto.getData();
 		ProductDto productDto = productDtoList.get(0);
 
 		List<SUserCartOrderDto> sUserCartOrderDtoList = new ArrayList<>();
-		SUserCartOrderDto sUserCartOrderDto = SUserCartOrderDto.builder().id(cartDto.getId()).qty(cartDto.getQty())
+		SUserCartOrderDto sUserCartOrderDto = SUserCartOrderDto.builder().id(cartDto.getOptionSetId()).qty(cartDto.getQty())
 				.productName(productDto.getName()).totalPrice(productDto.getTotalPrice()).build();
 		sUserCartOrderDtoList.add(sUserCartOrderDto);
 		model.addAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
@@ -138,7 +138,7 @@ public class OrderController {
 						.getAttribute("sUserCartOrderDto");
 				List<CartDto> fUserCarts = new ArrayList<>();
 				for (int i = 0; i < sUserCartOrderDto.size(); i++) {
-					CartDto cartDto = CartDto.builder().id(sUserCartOrderDto.get(i).getId())
+					CartDto cartDto = CartDto.builder().optionSetId(sUserCartOrderDto.get(i).getId())
 							.qty(sUserCartOrderDto.get(i).getQty()).build();
 					fUserCarts.add(cartDto);
 				}
@@ -164,7 +164,7 @@ public class OrderController {
 						.getAttribute("sUserCartOrderDto");
 				List<CartDto> fUserCarts = new ArrayList<>();
 				for (int i = 0; i < sUserCartOrderDto.size(); i++) {
-					CartDto cartDto = CartDto.builder().id(sUserCartOrderDto.get(i).getId())
+					CartDto cartDto = CartDto.builder().optionSetId(sUserCartOrderDto.get(i).getId())
 							.qty(sUserCartOrderDto.get(i).getQty()).build();
 					fUserCarts.add(cartDto);
 				}
