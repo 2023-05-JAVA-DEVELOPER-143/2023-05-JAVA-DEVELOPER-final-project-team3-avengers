@@ -97,7 +97,8 @@ function registEvent() {
 			let optionSetId = $(e.target).attr('data-optionSetId');
 			let qty = 1;
 			if ($(e.target).attr('data-cart-qty')) {
-				qty = $('#qty:selected').text();
+				qty = $('#qty option:selected').text();
+				optionSetId=$('#otherOptions option:selected').val();
 			}
 			e.stopPropagation();
 			api.addToCart(optionSetId, qty);

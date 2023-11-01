@@ -32,7 +32,7 @@
 						customer reviews</span>
 					<h2 class="padding-top-1x text-normal" th:text="*{name}">Product Name</h2>
 					<span class="h2 d-block" th:text="*{totalPrice}">가격</span>
-					<input type="hidden" value="*{osId}">
+					<input type="hidden" th:value="*{osId}">
 					<p th:text="*{optionSet}">상품 옵션들 나열</p>
 					<div class="row margin-top-1x">
 						<div class="col-sm-4">
@@ -74,7 +74,7 @@
 								</button>
 							<button class="btn btn-primary" data-toast data-toast-type="success"
 								data-toast-position="topRight" data-toast-icon="icon-circle-check"
-								data-toast-title="Product" data-toast-message="successfuly added to cart!" data-optionSetId="*{osId}" data-cart-qty=""><i
+								data-toast-title="Product" data-toast-message="successfuly added to cart!" th:data-optionSetId="${productList.osId}" data-cart-qty="1"><i
 									class="icon-bag"></i> Add to Cart</button>
 						</div>
 					</div>
