@@ -40,6 +40,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+
 public class Orders {
 	
 	@Id
@@ -59,6 +60,7 @@ public class Orders {
 	@CreationTimestamp
 	private LocalDateTime createDate; //주문날짜
 
+	@EqualsAndHashCode.Exclude
 	@OneToOne(mappedBy = "orders", cascade = CascadeType.PERSIST)
 	private Delivery delivery; //배송
 	

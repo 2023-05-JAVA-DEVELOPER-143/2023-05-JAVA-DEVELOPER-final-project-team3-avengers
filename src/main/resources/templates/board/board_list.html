@@ -28,7 +28,7 @@
 					</div>
 				</div>
 				<!-- Page Title-->
-				<th:block layout:fragment="page-title(page_title=${boardGroupId})">
+				<th:block layout:fragment="page-title(page_title=${boardGroupName})">
 					<!-- Page Content-->
 
 					<div class="container padding-bottom-3x mb-2">
@@ -61,10 +61,11 @@
 							<script>
 									let memberId = '[[${session.sUserId}]]';
 									$("#change-write-page").on('click',()=>{
-										if(memberId==null){
+										if(memberId===null){
 										window.alert("글쓰기는 로그인이 필요한 기능입니다.")
+										event.preventDefault();
 										window.location.href = "member/member_login_form.html";
-										return;
+										return false;
 									}
 									});
 								
@@ -102,7 +103,7 @@
 														th:href="@{/show{id}(id=${list.id})}">78A643CD409</a></td>
 												<td><a class="text-medium navi-link" th:text="${list.title}"
 														th:href="@{/show{id}(id=${list.id})}">st 08, 2017</a></td>
-												<td><a class="text-medium navi-link" th:text="${list.content}"
+												<td><a class="text-medium navi-link" th:utext="${list.content}"
 														th:href="@{/show{id}(id=${list.id})}">August 08, 2017</a>
 												</td>
 												<td class="text-large" th:text="${list.nickname}">August 08, 2017</td>
