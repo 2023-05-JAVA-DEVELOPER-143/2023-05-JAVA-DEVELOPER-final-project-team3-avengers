@@ -44,19 +44,14 @@ public class StatisticRestController {
 	@Autowired
 	private MemberRepository memberRepository;
 	@Autowired
-	private OrderService orderService;
-	@Autowired
 	private BoardService boardService;
 	@Autowired
 	private BoardRepository boardRepository;
 	
 	@GetMapping("/daily_update")
-	public Map<String, Object> dailyUpdate() {
-		statisticService.updateAt(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
-		Map<String, Object> updatedData = new HashMap<>();
-		updatedData.put("updatedMonthlyStat", statisticService.thisMonthStatistic());
-		updatedData.put("updated7dStat", statisticService.latest7DaysStatistic());
-		return updatedData;
+	public ResponseEntity<?> dailyUpdate() {
+		statisticService.updateLatest7Days();
+		return new ResponseEntity<>("Statistic updated successfully", HttpStatus.OK);
 	}
 	
 	@GetMapping("/option_year")

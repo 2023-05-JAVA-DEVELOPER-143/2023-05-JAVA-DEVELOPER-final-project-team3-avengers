@@ -5,10 +5,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.danaga.config.OrderStateMsg;
+import com.danaga.dto.AdminOrderDataDto;
 import com.danaga.entity.Orders;
 import com.danaga.entity.Statistic;
 import com.danaga.repository.OrderRepository;
@@ -21,17 +21,10 @@ public class StatisticServiceImpl implements StatisticService {
 	@Autowired
 	private OrderRepository orderRepository;
 
-	// 수동업데이트 및 반환
+	// 오늘날짜 단순 반환
 	@Override
-	public Statistic updateAt(String findDate) {
-		Long salesTotQty = statisticRepository.countTotSalesOn(findDate);
-		Long salesRevenue = statisticRepository.countTotRevenueOn(findDate);
-		Long newMember = statisticRepository.countNewMembersOn(findDate);
-		Long newBoard = statisticRepository.countNewBoardsOn(findDate);
-		Statistic updatedStatistic = Statistic.builder().id(findDate).dailySalesTotQty(salesTotQty)
-				.dailySalesRevenue(salesRevenue).dailyNewMember(newMember).dailyBoardInquiry(newBoard).build();
-		statisticRepository.save(updatedStatistic);
-		return updatedStatistic;
+	public Statistic todayStatistic() {
+		return statisticRepository.findById(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"))).get();
 	}
 
 	// 최근 7일 통계 단순반환
@@ -63,12 +56,47 @@ public class StatisticServiceImpl implements StatisticService {
 		return statisticList;
 	}
 
+	// 이번달 배송율 반환
+	@Override
+	public AdminOrderDataDto deliveryRate() {
+		Long totSales = statisticRepository
+				.countTotSalesThisMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMM")));
+		Long toSales = statisticRepository
+				.countToSalesThisMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMM")));
+		Long failSales = statisticRepository
+				.countFailSalesThisMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMM")));
+		AdminOrderDataDto dto = AdminOrderDataDto.builder().totSales(totSales).toSales(toSales).failSales(failSales).build();
+		return dto;
+	}
+
 	/******************** Batch *****************/
+
+	// 수동업데이트 및 반환
+	@Override
+	public Statistic updateAt(String findDate) {
+		Long salesTotQty = statisticRepository.countTotSalesOn(findDate);
+		Long salesRevenue = statisticRepository.countTotRevenueOn(findDate);
+		Long newMember = statisticRepository.countNewMembersOn(findDate);
+		Long newBoard = statisticRepository.countNewBoardsOn(findDate);
+		Statistic updatedStatistic = Statistic.builder().id(findDate).dailySalesTotQty(salesTotQty)
+				.dailySalesRevenue(salesRevenue).dailyNewMember(newMember).dailyBoardInquiry(newBoard).build();
+		statisticRepository.save(updatedStatistic);
+		return updatedStatistic;
+	}
 
 	// 이번 달 업데이트
 	@Override
-	public void updateThisMonth() {
-		int date = Integer.valueOf(LocalDate.now().format(DateTimeFormatter.ofPattern("dd")));
+	public void updateLatest7Days() {
+		for (int i = 6; i >= 0; i--) {
+			updateAt(LocalDate.now().minusDays(i).format(DateTimeFormatter.ofPattern("yyyyMMdd")));
+		}
+		return;
+	}
+
+	// 저번 달 업데이트
+	@Override
+	public void updateLastMonth() {
+		int date = Integer.valueOf(LocalDate.now().minusMonths(1).format(DateTimeFormatter.ofPattern("dd")));
 		for (int i = date; i > 0; i--) {
 			String updateDate = String
 					.valueOf(Integer.valueOf(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"))) - i + 1);

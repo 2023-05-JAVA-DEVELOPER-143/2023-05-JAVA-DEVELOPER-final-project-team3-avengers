@@ -48,7 +48,8 @@ public class StatisticController {
 	@GetMapping
 	public String main(Model model) {
 		model.addAttribute("thisMonthList", statisticService.thisMonthStatistic());
-		model.addAttribute("todayStat", statisticService.updateAt(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"))));
+		model.addAttribute("todayStat", statisticService.todayStatistic());
+		model.addAttribute("delivery", statisticService.deliveryRate());
 		model.addAttribute("latest7List", changeDateFormat(statisticService.latest7DaysStatistic()));
 		//model.addAttribute("yearList", statisticService.latest7DaysStatistic());
 		return "admin/admin";

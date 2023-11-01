@@ -4,12 +4,13 @@ import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import com.danaga.dto.AdminOrderDataDto;
 import com.danaga.entity.Statistic;
 
 @Transactional
 public interface StatisticService {
-	//N일자 통계 입력 및 반환
-	Statistic updateAt(String string);
+	//오늘날짜 단순 반환
+	Statistic todayStatistic();
 	
 	//최근 7일치 기록 단순반환
 	List<Statistic> latest7DaysStatistic();
@@ -23,10 +24,18 @@ public interface StatisticService {
 	//YYYY년 기록 단순반환
 	List<Statistic> yearlyStatistic(String year);
 	
+	//이번달 배송율 반환
+	AdminOrderDataDto deliveryRate();
+	
 	/******************** Batch *****************/
+	//N일자 통계 입력 및 반환
+	Statistic updateAt(String string);
 	
 	//이번 달 업데이트
-	void updateThisMonth();
+	void updateLatest7Days();
+	
+	//저번 달 업데이트
+	void updateLastMonth();
 	
 	//월별 업데이트
 	void createMoData(String month);

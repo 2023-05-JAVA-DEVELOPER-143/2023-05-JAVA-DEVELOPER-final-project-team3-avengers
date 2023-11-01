@@ -80,7 +80,7 @@ class MemberServiceImplTest {
 	@Test
 	@Disabled
 	void isDuplicate() throws Exception {
-		memberService.isDuplicate("010-1123-3512");
+		//memberService.isDuplicate("010-1123-3512");
 	}
 	@Test
 	@Disabled
