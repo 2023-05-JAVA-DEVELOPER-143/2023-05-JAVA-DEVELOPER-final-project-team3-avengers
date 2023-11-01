@@ -49,8 +49,8 @@ class OrderServiceImplTest {
 		// List<CartCreateDto> fUserCarts, DeliveryDto deliveryDto
 		
 		
-		CartDto cartDto1 = CartDto.builder().qty(6).id(6L).build();
-		CartDto cartDto2 = CartDto.builder().qty(7).id(5L).build();
+		CartDto cartDto1 = CartDto.builder().qty(6).optionSetId(6L).build();
+		CartDto cartDto2 = CartDto.builder().qty(7).optionSetId(5L).build();
 		
 		List<CartDto> fUserCarts = new ArrayList();
 		fUserCarts.add(cartDto1);
@@ -107,8 +107,8 @@ class OrderServiceImplTest {
 				.build();
 		
 		
-		CartDto cartDto1 = CartDto.builder().qty(6).id(1L).build();
-		CartDto cartDto2 = CartDto.builder().qty(7).id(2L).build();
+		CartDto cartDto1 = CartDto.builder().qty(6).optionSetId(1L).build();
+		CartDto cartDto2 = CartDto.builder().qty(7).optionSetId(2L).build();
 		
 		
 		List<CartDto> fUserCarts = new ArrayList();
@@ -195,15 +195,15 @@ class OrderServiceImplTest {
 				.build();
 		
 		CartDto cartDto = CartDto.builder()
-								.id(2L)
+								.optionSetId(2L)
 								.qty(3)
 								.build();
 		CartDto cartDto2 = CartDto.builder()
-				.id(3L)
+				.optionSetId(3L)
 				.qty(3)
 				.build();
 		CartDto cartDto3 = CartDto.builder()
-				.id(4L)
+				.optionSetId(4L)
 				.qty(3)
 				.build();
 		
