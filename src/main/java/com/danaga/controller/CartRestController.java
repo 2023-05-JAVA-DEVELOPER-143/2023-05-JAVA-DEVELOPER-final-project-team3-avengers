@@ -72,19 +72,34 @@ public class CartRestController {
 			}
 		}
 	}
+	
+	@Operation(summary = "카트 옵션 변경")
+	@PostMapping("/optionset")
+	public void updateOptionset(@RequestBody List<Long> ids, HttpSession session)
+			throws Exception {
+		sUserId = (String) session.getAttribute("sUserId");
+		System.out.println(">>>>>>>>>>> ids " + ids.size());
+		Long oldId = ids.get(0); // 기존 옵션셋 아이디
+		Long changeId = ids.get(1); // 변경하고자 하는 옵션셋 아이디
+		List<SUserCartResponseDto> list = cartService.updateCartOptionSet(ids, sUserId);
 
+		
+	}
+	
+	/*
 	@Operation(summary = "카트 옵션 변경")
 	@PostMapping("/optionset")
 	public ResponseEntity<List<SUserCartResponseDto>> updateOptionset(@RequestBody List<Long> ids, HttpSession session)
 			throws Exception {
-		// sUserId = (String) session.getAttribute("sUserId");
+		sUserId = (String) session.getAttribute("sUserId");
 		System.out.println(">>>>>>>>>>> ids " + ids.size());
 		Long oldId = ids.get(0); // 기존 옵션셋 아이디
 		Long changeId = ids.get(1); // 변경하고자 하는 옵션셋 아이디
-		List<SUserCartResponseDto> list = cartService.updateCartOptionSet(ids, "User4");
+		List<SUserCartResponseDto> list = cartService.updateCartOptionSet(ids, sUserId);
 
 		return ResponseEntity.status(HttpStatus.OK).body(list);
 	}
+	*/
 
 	// 회원, 비회원 테스트 성공
 	@Operation(summary = "카트 수량 변경")

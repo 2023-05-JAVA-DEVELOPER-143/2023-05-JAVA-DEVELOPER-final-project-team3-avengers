@@ -23,13 +23,12 @@
                </div>
                <div class="modal-body" >
                   <select id="modalSelectbox" class="form-control">
-                     <option name="moddalrow">1</option>
                   </select>
                </div>
                <div class="modal-footer">
                   <button type="button" class="btn btn-secondary"
                      data-dismiss="modal">취소</button>
-                  <button type="button" class="btn btn-primary">변경</button>
+                  <button type="button" class="btn btn-primary" id="modalsave">변경</button>
                </div>
             </div>
          </div>
@@ -469,21 +468,59 @@ function selectAlldelete() {
 }
 
 
+/* 옵션 변경 */
+function selectOption(elseOptionSets, osId) {
+   let elseOptions = elseOptionSets;
+   let selectCartid = osId;
+   let data = [osId];
+   
+   let modalSelectbox = document.getElementById("modalSelectbox");
+    while (modalSelectbox.firstChild) {
+           modalSelectbox.removeChild(modalSelectbox.firstChild);
+       }
+   for(let i = 0; i < elseOptions.length ; i++){
+	      let option = document.createElement("option");
+	      option.textContent = elseOptions[i].osString;
+	      option.value = elseOptions[i].osId;
+		  modalSelectbox.appendChild(option);
+		  
+		  
+      if(option.value == selectCartid) {
+		  option.selected = true;
+	  }
+   }
+   
+   
+   $("#modalSelectbox").on('change', function() {
+	   let updateId = modalSelectbox.value;
+	   $("#modalsave").click(function() {
+		  data.push(updateId);
+		  $.ajax({
+			 url: "/cart/optionset",
+			 type: "post",
+			 contentType: 'application/json',
+			 data: JSON.stringify(data),
+			 success : function() {
+				 console.log(data);
+				 alert('변경완료 소리질러~');
+				 location.href="http://localhost:80/cart_list"
+			 },
+			 error : function() {
+				 alert('이미 담겨있는 상품입니다');
+			 }
+		  });
+	   });
+   });
+   
+   
+   
+   
+}
 
 
 
 
-/* 옵션 변경때 사용해야할듯싶다..
-$('#modalLarge').on('show.bs.modal',function(e) {
-	alert('#modalLarge가 보여지기직전에 띄어짐');
-	// ajax 요청
-	$(e.target).find('.modal-title').html("모달에 띄어지는 타이틀[ajax receive data]");
-	$(e.target).find('.modal-body p').html("모달에 띄어지는 타이틀[ajax receive data]");
-	$(e.target).find('.modal-footer .btn-primary').click(function(e1) {
-		alert('close button click!!')   // 옵션 변경후 save 시킬 버튼 여기다 ajax처리
-	});
-});
-*/
+
 
 
 </script>

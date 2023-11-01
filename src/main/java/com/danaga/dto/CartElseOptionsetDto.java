@@ -36,7 +36,7 @@ public class CartElseOptionsetDto {
 				os += list.get(i).getName() + " : ";
 				os += list.get(i).getValue() + " , ";
 			}
-			os = os.substring(0, os.length() - 2);
+			os = os.substring(0, os.length());
 		}
 		return os;
 	}
