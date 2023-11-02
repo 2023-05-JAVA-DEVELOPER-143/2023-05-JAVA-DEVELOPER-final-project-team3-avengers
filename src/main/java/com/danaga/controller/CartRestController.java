@@ -80,12 +80,13 @@ public class CartRestController {
 
 	@Operation(summary = "카트 옵션 변경")
 	@PostMapping("/optionset")
-	public ResponseEntity<?> updateOptionset(@RequestParam List<Long> ids, HttpSession session) throws Exception {
+	public ResponseEntity<?> updateOptionset(@RequestBody List<Long> ids, HttpSession session) throws Exception {
 		sUserId = (String) session.getAttribute("sUserId");
 		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
-
+		System.out.println(ids.size());
+		System.out.println(ids);
 		if (sUserId != null) {
-			List<SUserCartResponseDto> list = cartService.updateCartOptionSet(ids, "User1");
+			List<SUserCartResponseDto> list = cartService.updateCartOptionSet(ids, sUserId);
 			return ResponseEntity.status(HttpStatus.OK).body(list);
 		} else if (fUserCarts == null) {
 			// 말도 안되는 상황

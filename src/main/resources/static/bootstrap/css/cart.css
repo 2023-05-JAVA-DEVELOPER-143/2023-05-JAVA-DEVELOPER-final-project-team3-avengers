@@ -74,10 +74,16 @@ td.empty-cart-message {
     color: #777;
 }
 
+td > .td_price_wrap {
+	text-align: center;
+}
 
 
-
-
+#beforetotalPrice {
+    font-weight: bold;
+    text-decoration: line-through;
+    color: #000;
+}
 
 
 
