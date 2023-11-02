@@ -66,12 +66,19 @@
                   <input class="form-control" name="password2" type="password" id="reg-pass-confirm" required>
                 </div>
               </div>
-              <div class="col-sm-12">
-                <div class="form-group">
-                  <label for="reg-address">주소</label>
-                  <input class="form-control" name="address" type="text" id="reg-address" required>
-                </div>
-              </div>
+              <div class="col-sm-10">
+				<div class="form-group">
+					<label for="reg-address">주소</label><br>
+					<input name="postcode"
+					type="text" class="form-control" id="reg-postcode" placeholder="우편번호" disabled required>
+					<input name="findaddr"
+					type="button" class="form-control" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
+					<input name="address"
+					type="text" class="form-control" id="reg-address" placeholder="주소" disabled required>
+					<input name="detailaddress"
+					type="text" class="form-control" id="reg-detailaddress" placeholder="상세주소" required>
+				</div>	
+			  </div>
               <div class="col-12 text-center text-sm-right">
                 <button class="btn-account-register btn btn-primary margin-bottom-none" id="join-action-btn" type="submit">회원가입</button>
                 <button class="btn-account-reset btn btn-primary margin-bottom-none" type="reset">초기화</button>
@@ -84,6 +91,19 @@
     <th:block layout:fragment="script" >
      <script type="text/javascript">
 		  /**************** 회원가입 **********************/
+function isNoValidName(name) {
+    // 간단한 이메일 유효성 검사를 수행합니다.
+    const nameRegex =  /^[가-힣]{2,5}$/;
+    if(nameRegex.test(name)) {
+		return false;
+	}
+    return true;
+}
+function isNoValidUserName(userName) {
+    // 간단한 이메일 유효성 검사를 수행합니다.
+    const userNameRegex = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+    return userNameRegex.test(userName);
+}
 function isNoValidEmail(email) {
     // 간단한 이메일 유효성 검사를 수행합니다.
     const emailRegex =  /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
@@ -152,9 +172,9 @@ $(function(){
     		/**************회원가입폼 유효성체크*********************/
     		//아이디
     		$('#reg-username').on('change',function(e){
-				if($('#reg-username').val().length < 8 || $('#reg-username').val().length > 20){
+				if(isNoValidUserName($('#reg-username').val())){
         			$('#reg-username').css('border','0.5px dotted orange');
-        			$('#reg-username').tooltip({'trigger':'hover', 'title':'아이디는 8 ~ 20자 이내여야 합니다'});
+        			$('#reg-username').tooltip({'trigger':'hover', 'title':'아이디는 한글 미포함 8 ~ 20자 이내여야 합니다'});
         			$('#reg-username').tooltip('show');
         		} else {
         			$('#reg-username').css('border','');
@@ -234,7 +254,9 @@ $(function(){
 				let regPhone = $('#reg-phone').val();
 				let regNickname = $('#reg-nickname').val();
 				let regPassword = $('#reg-pass').val();
+				let regPostCode = $('#reg-postcode').val();
 				let regAddress = $('#reg-address').val();
+				let regDetailAddress = $('#reg-detailaddress').val();
     			let data = {
 				"userName" : regUserName, //안되면 ' ' 붙이기
 				"name" : regName,
@@ -243,7 +265,9 @@ $(function(){
 				"phoneNo" : regPhone,
 				"nickname" : regNickname,
 				"password" : regPassword,
+				"postCode" : regPostCode,
 				"address" : regAddress,
+				"detailAddress" : regDetailAddress,
 				
 			}
     			$('#reg-username').css('border','');
@@ -254,7 +278,7 @@ $(function(){
     		});
 });
 //지도
-function sample6_execDaumPostcode() {
+function execDaumPostcode() {
         new daum.Postcode({
             oncomplete: function(data) {
                 // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
@@ -287,17 +311,13 @@ function sample6_execDaumPostcode() {
                         extraAddr = ' (' + extraAddr + ')';
                     }
                     // 조합된 참고항목을 해당 필드에 넣는다.
-                    document.getElementById("sample6_extraAddress").value = extraAddr;
-                
-                } else {
-                    document.getElementById("sample6_extraAddress").value = '';
                 }
 
                 // 우편번호와 주소 정보를 해당 필드에 넣는다.
-                document.getElementById('sample6_postcode').value = data.zonecode;
-                document.getElementById("sample6_address").value = addr;
+                document.getElementById('reg-postcode').value = data.zonecode;
+                document.getElementById("reg-address").value = addr;
                 // 커서를 상세주소 필드로 이동한다.
-                document.getElementById("sample6_detailAddress").focus();
+                document.getElementById("reg-detailaddress").focus();
             }
         }).open();
     }
