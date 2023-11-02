@@ -28,6 +28,10 @@ public class Delivery {
 	private String phoneNumber; //수령인전화번호
 	@Column(length = 100)
 	private String address; //수령인 주소
+	@Column(length = 100)
+	private String detailAddress; //수령인 상세주소
+	@Column(length = 100)
+	private String postCode; //수령인 우편번호
 	
 	@OneToOne
 	@JoinColumn(name = "orderId")
