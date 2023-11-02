@@ -12,10 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -65,7 +63,6 @@ public class MemberRestController {
 		
 		try {
 			memberService.login(memberLoginDto.getUserName(), memberLoginDto.getPassword());
-			
 		} catch (MemberNotFoundException e) {
 			result = 0;
 			map.put("result", result);
@@ -77,8 +74,11 @@ public class MemberRestController {
 			map.put("member", memberLoginDto);
 			return map;
 		}
-		session.setAttribute("sUserId", memberLoginDto.getUserName());
-		session.setAttribute("role", memberLoginDto.getRole());
+		MemberResponseDto loginUser = memberService.getMemberBy(memberLoginDto.getUserName());
+		session.setAttribute("sUserId", loginUser.getUserName());
+		if (loginUser.getRole().equals("Admin")) {
+			session.setAttribute("role", loginUser.getRole());
+		}
 		map.put("result", result);
 		map.put("member", memberLoginDto);
 		return map;
