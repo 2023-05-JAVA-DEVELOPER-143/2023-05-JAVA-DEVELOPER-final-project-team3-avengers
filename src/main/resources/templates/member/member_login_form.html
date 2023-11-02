@@ -71,6 +71,9 @@
     	    				 $('#loginPassword').tooltip('dispose');
     		    			 location.href='/index';
     		    		 }
+    				},
+    				error:function(){
+    					location.href="/404";
     				}
     			});
 };
