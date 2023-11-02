@@ -142,9 +142,9 @@ public class OrderDaoImpl implements OrderDao {
 
 	// 비회원(주문번호,회원이름,회원전화번호) 로 주문1개보기
 	@Override
-	public Orders findOrdersByIdAndNameAndPhoneNo(Long orderNo, String userName, String phoneNo) throws Exception {
+	public Orders findOrdersByIdAndNameAndPhoneNo(Long orderNo, String name, String phoneNo) throws Exception {
 
-		Orders guestFindOrder = orderRepository.findOrdersByIdAndMember_NameAndMember_PhoneNo(orderNo, userName,
+		Orders guestFindOrder = orderRepository.findOrdersByIdAndMember_NameAndMember_PhoneNo(orderNo, name,
 				phoneNo);
 
 		return guestFindOrder;

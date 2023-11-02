@@ -17,7 +17,7 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
 //	void deleteByCreatedAtBefore(LocalDateTime timeAgo);
 
 	// 비회원 : 주문 번호, 회원 이름, 회원 전화번호를 기반으로 주문 조회
-	Orders findOrdersByIdAndMember_NameAndMember_PhoneNo(Long orderNo, String userName, String phoneNo);
+	Orders findOrdersByIdAndMember_NameAndMember_PhoneNo(Long orderNo, String Name, String phoneNo);
 	
 
 }
