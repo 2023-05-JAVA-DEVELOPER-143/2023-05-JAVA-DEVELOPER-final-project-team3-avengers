@@ -18,6 +18,7 @@ import com.mysql.cj.x.protobuf.MysqlxCrud.Order;
 import jakarta.servlet.http.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.*;
+
 @Slf4j
 @Controller
 @RequiredArgsConstructor
@@ -41,8 +42,8 @@ public class OrderController {
 //		   String sUserId = "User1";
 			String loginUser = (String) request.getSession().getAttribute("sUserId");
 			List<OrdersDto> orderDtoList = orderService.memberOrderList(loginUser);
-		    // orderDtoList를 id 기준으로 오름차순 정렬
-		    orderDtoList.sort(Comparator.comparing(OrdersDto::getId));
+			// orderDtoList를 id 기준으로 오름차순 정렬
+			orderDtoList.sort(Comparator.comparing(OrdersDto::getId));
 			model.addAttribute("orderDtoList", orderDtoList);
 			Long id = memberService.findIdByUsername(loginUser);
 			Member member = memberRepository.findById(id).get();
@@ -59,18 +60,27 @@ public class OrderController {
 	 * 상품에서 주문(form)(공통)
 	 */
 	@GetMapping("/product_order_form")
-	public String memberProductOrderAddForm(@ModelAttribute("cartDto") CartDto cartDto, Model model) {
+	public String memberProductOrderAddForm(@ModelAttribute("cartDto") CartDto cartDto, Model model,HttpSession session) {
 
 		ResponseDto<?> responseDto = optionSetService.findById(cartDto.getOptionSetId());
 		List<ProductDto> productDtoList = (List<ProductDto>) responseDto.getData();
 		ProductDto productDto = productDtoList.get(0);
 
 		List<SUserCartOrderDto> sUserCartOrderDtoList = new ArrayList<>();
-		SUserCartOrderDto sUserCartOrderDto = SUserCartOrderDto.builder().id(cartDto.getOptionSetId()).qty(cartDto.getQty())
-				.productName(productDto.getName()).totalPrice(productDto.getTotalPrice()).build();
+		SUserCartOrderDto sUserCartOrderDto = SUserCartOrderDto.builder().id(cartDto.getOptionSetId())
+				.qty(cartDto.getQty()).productName(productDto.getName()).totalPrice(productDto.getTotalPrice()).build();
 		sUserCartOrderDtoList.add(sUserCartOrderDto);
+		
+		Integer realTotalPrice = 0;
+		for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
+			realTotalPrice += sUserCartOrderDtoList.get(i).getTotalPrice();
+			System.out.println(realTotalPrice);
+		}
+		
+		model.addAttribute("realTotalPrice", realTotalPrice);
 		model.addAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
-
+		session.setAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
+		session.setAttribute("realTotalPrice", realTotalPrice);
 		return "orders/order_save_form";
 
 	}
@@ -78,11 +88,12 @@ public class OrderController {
 	/*
 	 * 상품에서 주문(action)(공통)
 	 */
-	@PostMapping("/product_order_action") 
+	@PostMapping("/product_order_action")
 	public String memberProductOrderAddAction(@ModelAttribute("ordersProductDto") OrdersProductDto ordersProductDto,
 			@ModelAttribute("orderGuestDto") OrderGuestDto orderGuestDto, Model model, HttpSession session) {
 
 		String sUserId = (String) session.getAttribute("sUserId");
+
 		if (sUserId == null) {// 비회원
 			try {
 				orderService.guestProductOrderSave(ordersProductDto, orderGuestDto);
@@ -110,41 +121,58 @@ public class OrderController {
 	@PostMapping("/cart_order_form")
 	public String memberCartOrderAddForm(@RequestBody List<SUserCartOrderDto> sUserCartOrderDtoList, Model model,
 			HttpSession session) throws Exception {
-		System.out.println("###########"+sUserCartOrderDtoList.size());
+		System.out.println("###########" + sUserCartOrderDtoList.size());
 		System.out.println(sUserCartOrderDtoList);
-		
-		String sUserId=(String)session.getAttribute("sUserId");
-		MemberResponseDto memberResponseDto= memberService.getMemberBy(sUserId);
-		Integer discountRate= gradePoint(memberResponseDto.getGrade());
-		Integer realTotalPrice = 0;
-		for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
-			sUserCartOrderDtoList.get(i).setTotalPrice((sUserCartOrderDtoList.get(i).getTotalPrice()*sUserCartOrderDtoList.get(i).getQty())-sUserCartOrderDtoList.get(i).getTotalPrice()*sUserCartOrderDtoList.get(i).getQty()*discountRate/10);
-			realTotalPrice+=sUserCartOrderDtoList.get(i).getTotalPrice();
-			System.out.println(realTotalPrice);
+		String sUserId = (String) session.getAttribute("sUserId");
+		if (sUserId != null) {
+			MemberResponseDto memberResponseDto = memberService.getMemberBy(sUserId);
+			Integer discountRate = gradePoint(memberResponseDto.getGrade());
+			Integer realTotalPrice = 0;
+			for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
+				sUserCartOrderDtoList.get(i).setTotalPrice(
+						(sUserCartOrderDtoList.get(i).getTotalPrice() * sUserCartOrderDtoList.get(i).getQty())
+								- sUserCartOrderDtoList.get(i).getTotalPrice() * sUserCartOrderDtoList.get(i).getQty()
+										* discountRate / 10);
+				realTotalPrice += sUserCartOrderDtoList.get(i).getTotalPrice();
+				System.out.println(realTotalPrice);
+			}
+			System.out.println("333333333" + realTotalPrice);
+			model.addAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
+			model.addAttribute("realTotalPrice", realTotalPrice);
+			session.setAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
+			session.setAttribute("realTotalPrice", realTotalPrice);
+			return "orders/order_save_form";
+		} else {
+			Integer realTotalPrice = 0;
+			for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
+				realTotalPrice += sUserCartOrderDtoList.get(i).getTotalPrice();
+				System.out.println(realTotalPrice);
+			}
+			model.addAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
+			model.addAttribute("realTotalPrice", realTotalPrice);
+			session.setAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
+			session.setAttribute("realTotalPrice", realTotalPrice);
+			return "orders/order_save_form";
 		}
-		System.out.println(realTotalPrice);
-		model.addAttribute("sUserCartOrderDto",sUserCartOrderDtoList);
-		model.addAttribute("realTotalPrice",realTotalPrice);
-		session.setAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
-		session.setAttribute("realTotalPrice", realTotalPrice);
-		return "orders/order_save_form";
+
 	}
-	
+
 	@GetMapping("/order_save_form")
 	public String orderSaveForm(Model model, HttpSession session) {
-		model.addAttribute("sUserCartOrderDto",session.getAttribute("sUserCartOrderDto"));
-		model.addAttribute("realTotalPrice",session.getAttribute("realTotalPrice"));
+
+		model.addAttribute("sUserCartOrderDto", session.getAttribute("sUserCartOrderDto"));
+		model.addAttribute("realTotalPrice", session.getAttribute("realTotalPrice"));
 		return "orders/order_save_form";
+
 	}
-	
+
 	/*
 	 * 카트에서 보내온 데이터로 주문(action)(공통)
 	 */
 	@PostMapping("/cart_order_action")
-	public String memberCartSelectOrderAddAction(
-			@ModelAttribute("orderTotalDto") OrderTotalDto orderTotalDto, Model model, HttpSession session) {
+	public String memberCartSelectOrderAddAction(@ModelAttribute("orderTotalDto") OrderTotalDto orderTotalDto,
+			Model model, HttpSession session) {
 		String sUserId = (String) session.getAttribute("sUserId");
-
 		if (sUserId == null) { // 비회원주문
 			try {
 				List<SUserCartOrderDto> sUserCartOrderDto = (List<SUserCartOrderDto>) session
@@ -155,14 +183,16 @@ public class OrderController {
 							.qty(sUserCartOrderDto.get(i).getQty()).build();
 					fUserCarts.add(cartDto);
 				}
-				DeliveryDto deliveryDto= new DeliveryDto();
-				deliveryDto.setName(orderTotalDto.getReceiverAddress());
+				DeliveryDto deliveryDto = new DeliveryDto();
+				deliveryDto.setName(orderTotalDto.getReceiverName());
 				deliveryDto.setPhoneNumber(orderTotalDto.getReceiverPhoneNo());
 				deliveryDto.setAddress(orderTotalDto.getReceiverAddress());
+				deliveryDto.setDetailAddress(orderTotalDto.getReceiverDetailAddress());
+				deliveryDto.setPostCode(orderTotalDto.getReceiverPostCode());
 				OrderGuestDto orderGuestDto = new OrderGuestDto();
 				orderGuestDto.setName(orderTotalDto.getOrdererName());
 				orderGuestDto.setPhoneNo(orderTotalDto.getOrdererPhoneNo());
-				
+
 				orderService.guestCartSelectOrderSave(deliveryDto, fUserCarts, orderGuestDto);
 //				session.invalidate();
 				return "redirect:/member_order_List";
@@ -181,10 +211,12 @@ public class OrderController {
 							.qty(sUserCartOrderDto.get(i).getQty()).build();
 					fUserCarts.add(cartDto);
 				}
-				DeliveryDto deliveryDto= new DeliveryDto();
-				deliveryDto.setName(orderTotalDto.getReceiverAddress());
+				DeliveryDto deliveryDto = new DeliveryDto();
+				deliveryDto.setName(orderTotalDto.getReceiverName());
 				deliveryDto.setPhoneNumber(orderTotalDto.getReceiverPhoneNo());
 				deliveryDto.setAddress(orderTotalDto.getReceiverAddress());
+				deliveryDto.setDetailAddress(orderTotalDto.getReceiverDetailAddress());
+				deliveryDto.setPostCode(orderTotalDto.getReceiverPostCode());
 				orderService.memberCartSelectOrderSave(sUserId, deliveryDto, fUserCarts);
 //				for (CartDto cartDto : fUserCarts) {
 //					cartService.deleteCart(cartDto.getId(), sUserId);
@@ -199,15 +231,15 @@ public class OrderController {
 	}
 
 	/******************************* 비회원 ****************************/
-	
+
 	/*
-	 * 로그아웃 상태에서 메인페이지에서 상단에서 페이지버튼 클릭 후 FIND ORDER GUEST를 클릭하면 비회원 찾기 폼으로 넘어가는 거 
+	 * 로그아웃 상태에서 메인페이지에서 상단에서 페이지버튼 클릭 후 FIND ORDER GUEST를 클릭하면 비회원 찾기 폼으로 넘어가는 거
 	 */
-	
+
 	@GetMapping("/find_order_guest")
 	public String guestOrderList(Model model) {
 		OrdersGuestDetailDto ordersGuestDetailDto = new OrdersGuestDetailDto();
-		model.addAttribute("ordersGuestDetailDto",ordersGuestDetailDto);
+		model.addAttribute("ordersGuestDetailDto", ordersGuestDetailDto);
 		return "orders/find_order_guest";
 	}
 
@@ -215,21 +247,21 @@ public class OrderController {
 	 * 주문+주문아이템 목록(비회원) 주문List보기(비회원) 비회원 찾는 폼에서 데이터를 보내줘서 이 url로 받으면 list뿌려주고 디테일까지
 	 */
 	@GetMapping("/order_guest_detail")
-	public String guestOrderList(@ModelAttribute("ordersGuestDetailDto") OrdersGuestDetailDto ordersGuestDetailDto, Model model) {
+	public String guestOrderList(@ModelAttribute("ordersGuestDetailDto") OrdersGuestDetailDto ordersGuestDetailDto,
+			Model model) {
 		try {
-		 	log.info("orderNo={}", "name={}","phoneNumber={}",
-		 			ordersGuestDetailDto.getOrderNo(), ordersGuestDetailDto.getName(),ordersGuestDetailDto.getPhoneNumber());
-		    log.info("ordersGuestDetailDto={}", ordersGuestDetailDto);
-		    System.out.println("@@@@@@getOrderNo: "+ordersGuestDetailDto.getOrderNo());
-			
-			
+			log.info("orderNo={}", "name={}", "phoneNumber={}", ordersGuestDetailDto.getOrderNo(),
+					ordersGuestDetailDto.getName(), ordersGuestDetailDto.getPhoneNumber());
+			log.info("ordersGuestDetailDto={}", ordersGuestDetailDto);
+			System.out.println("@@@@@@getOrderNo: " + ordersGuestDetailDto.getOrderNo());
+
 			List<OrdersDto> ordersDtoList = orderService.guestOrderList(ordersGuestDetailDto.getOrderNo(),
 					ordersGuestDetailDto.getPhoneNumber(), ordersGuestDetailDto.getName());
-			System.out.println("@@@@@@@@@@@@@@@@ordersDtoList: "+ordersDtoList);
-			System.out.println("@@@@@@@@@@@@@@@@ordersItemDtoList: "+ordersDtoList.get(0).getOrderItemDtoList());
+			System.out.println("@@@@@@@@@@@@@@@@ordersDtoList: " + ordersDtoList);
+			System.out.println("@@@@@@@@@@@@@@@@ordersItemDtoList: " + ordersDtoList.get(0).getOrderItemDtoList());
 			List<OrderItemDto> orderItemDtoList = ordersDtoList.get(0).getOrderItemDtoList();
 			model.addAttribute("ordersDtoList", ordersDtoList);
-			model.addAttribute("orderItemDtoList",orderItemDtoList);
+			model.addAttribute("orderItemDtoList", orderItemDtoList);
 			return "orders/order_guest_detail";
 
 		} catch (Exception e) {
@@ -239,7 +271,6 @@ public class OrderController {
 		}
 	}
 
-	
 	static Integer gradePoint(String value) {
 		String grade = value;
 		Integer gradePoint = 0;

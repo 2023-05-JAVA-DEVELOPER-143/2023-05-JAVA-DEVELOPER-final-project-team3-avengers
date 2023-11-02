@@ -382,6 +382,19 @@ function checkValue() {
 		type : "post",
 		contentType : 'application/json',
 		data : JSON.stringify(checkedData),
+		success : function(response) {
+           console.log("Ajax 요청 성공");
+           // 서버로부터의 응답이 response 변수에 들어온다.
+           
+           // 서버에서 처리된 결과를 기반으로 페이지 이동
+           window.location.href = "/order_save_form"; // 이동할 페이지 URL
+       },
+       error : function(xhr, status, error) {
+           console.error("Ajax 요청 실패");
+           console.log("Status: " + status);
+           console.log("Error: " + error);
+       }
+
 	});
 }
 /* 전체 선택 체크 유무 */

@@ -8,9 +8,8 @@
 
 	</head>
   
-  <th:block layout:fragment="content">
   <body>
-
+  <th:block layout:fragment="content">
       <!-- Page Content-->
       <div class="container padding-bottom-3x mb-2" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
           <div class="col-md-6">
@@ -139,7 +138,7 @@ var member_join_action_rest=function(data){
 				method:'POST',
 				data:JSON.stringify(data),
 				dataType:'json',
-				contentType: 'application/json;chrset=UTF-8',
+				contentType: 'application/json;charset=UTF-8',
 				success:function(resultJson){
 					if(resultJson.result==1){
 						$('#reg-username').css('border','0.5px solid orange');
