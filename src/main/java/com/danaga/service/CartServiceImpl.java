@@ -67,6 +67,7 @@ public class CartServiceImpl implements CartService {
 	public CartDto updateCartQty(CartDto dto, String value) throws Exception {
 		Long memberId = memberDao.findMember(value).getId();
 		Cart findCart = cartRepository.findByOptionSetIdAndMemberId(dto.getOptionSetId(), memberId);
+		System.out.println(">>>>>>>>>>>>>>>>>>>>" + findCart.getQty());
 		findCart.setQty(dto.getQty());
 		cartRepository.save(findCart);
 		return CartDto.builder().optionSetId(findCart.getId()).qty(dto.getQty()).build();

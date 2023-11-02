@@ -35,7 +35,7 @@ public class AuthLoginAnnotationInterceptor implements HandlerInterceptor {
 			HttpServletResponse response, 
 			Object handler)
 			throws Exception {
-		System.out.println("### AuthLoginAnnotationInterceptor.preHandle()메써드");
+		//System.out.println("### AuthLoginAnnotationInterceptor.preHandle()메써드");
 		/*
 		[ 핸들러 메소드(HandlerMethod)란? ]
 			HandlerMethod는 @RequestMapping이 붙은 메소드의 정보를 추상화한 객체이다. 
