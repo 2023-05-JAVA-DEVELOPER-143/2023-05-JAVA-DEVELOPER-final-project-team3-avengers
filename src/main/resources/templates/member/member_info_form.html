@@ -129,11 +129,15 @@
     			//var params = $('#form-account-update').serialize();
 				let nickname = $('#nickname').val();
 				let password = $('#pass').val();
-				let address = $('#postcode').val()+""+$('#address').val()+""+$('#detailaddress').val();
+				let postCode = $('#postcode').val();
+				let address = $('#address').val();
+				let detailAddress = $('#detailaddress').val();
     			let data = {
 				"nickname" : nickname,
 				"password" : password,
-				"address" : address
+				"postCode" : postCode,
+				"address" : address,
+				"detailAddress" : detailAddress
 				}
         		member_modify_action_rest(data);
     		}
@@ -164,7 +168,7 @@
         		}
         	});
 // 지도
-function sample6_execDaumPostcode() {
+function execDaumPostcode() {
         new daum.Postcode({
             oncomplete: function(data) {
                 // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
