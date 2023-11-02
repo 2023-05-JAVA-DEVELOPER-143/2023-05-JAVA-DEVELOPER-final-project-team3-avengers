@@ -106,8 +106,15 @@ export function addToCart(optionSetId, qty){
 	}
 	return call(ADD_TO_CART.url,ADD_TO_CART.method,cartDto)
 	.then((response)=>{
-		console.log(cartDto);
-		console.log(response);
-		
 	});
 }
+/*export function productOrder(optionSetId,qty){
+	let cartDto={
+		"optionSetId": optionSetId,
+		"qty":qty
+	}
+	return call(PRODUCT_ORDER.url,PRODUCT_ORDER.method,cartDto)
+	.then((response)=>{
+		
+	});
+}*/

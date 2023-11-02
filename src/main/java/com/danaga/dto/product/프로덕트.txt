@@ -1,0 +1,44 @@
+프로덕트
+쿼리 가격, 키워드 검색 안됨 그냥 값이 안들어옴 
+링크, 이미지
+제품 설명 꾸미기
+키워드, 가격범위 초기화 및 validation
+
+디테일
+제품 이름, 가격 등 꾸미기 
+옵션 선택창 꾸미기
+
+---------------------------------------
+
+카테고리 전체일 때 뽑는거 안됨 
+하트 추가하는거 불안정 
+
+
+다 끝난뒤 수정한거 
+--recentview엔터티에서 멤버로 접근하는거 tostring.exclude
+
+일단 서비스랑 dao,controller에서 최적화된 dto 싹 만들고 나중에 안쓰는거 싹 정리 중복 정리 
+하고 하나의 DTO 객체에 innerclass로 정리 
+
+안쓰는 메소드들도 나중에 정리
+
+dao 같은거 create하면 반환해주는데 나중에 서비스나 컨트롤러에서 create한 객체를 반환받을 필요가 없다면 그냥 void
+ 
+dao 반환객체 dto 맞는지 
+
+dao나 service에서 optional로 반환된 객체 어떻게 처리할지
+
+지금은 그냥 파라메터로 들어가는 객체만 확인하는 중 
+
+페이징작업, 크롤링, 배포, 배치 할 거 있을까?
+
+dto.innerclass
+static innerclass
+
+exception
+
+statuscode
+
+errormsg
+
+errorpage

@@ -37,7 +37,7 @@ public class BoardDto {
     private LocalDateTime updateTime;
     private String nickname;
     private String boardGroupName;
-    private Long memberId;
+    private String userName;
     private Long boardGroupId;
     @Builder.Default
     private List<LikeConfigDto> lConfigs = new ArrayList<>();
@@ -48,7 +48,7 @@ public class BoardDto {
     			.img2(dto.getImg2()).img3(dto.getImg3()).img4(dto.getImg4()).img5(dto.getImg5())
     			.isLike(0).disLike(0).readCount(0).isAdmin(1)
     			.createTime(dto.getCreateTime()).nickname(dto.getNickname())
-    			.memberId(dto.getMemberId()).boardGroupId(dto.getBoardGroupId())
+    			.userName(dto.getUserName()).boardGroupId(dto.getBoardGroupId())
     			.build();
     }
     
@@ -61,7 +61,7 @@ public class BoardDto {
     			.img2(board.getImg2()).img3(board.getImg3()).img4(board.getImg4()).img5(board.getImg5())
     			.isLike(board.getIsLike()).disLike(board.getDisLike()).readCount(board.getReadCount()).isAdmin(board.getIsAdmin())
     			.createTime(board.getCreateTime()).nickname(board.getMember().getNickname())
-    			.memberId(board.getMember().getId()).boardGroupId(board.getBoardGroup().getId())
+    			.userName(board.getMember().getUserName()).boardGroupId(board.getBoardGroup().getId())
     			.boardGroupName(board.getBoardGroup().getName())
     			.lConfigs(board.getLConfigs().stream().map(t -> LikeConfigDto.responsDto(t)).collect(Collectors.toList())).build();
     }

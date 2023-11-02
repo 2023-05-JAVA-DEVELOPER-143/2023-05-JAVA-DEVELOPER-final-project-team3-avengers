@@ -13,12 +13,12 @@ public interface BoardService {
 	
 	BoardDto createBoard(BoardDto dto);
 	
-	BoardDto upIsLike(Long boardId, Long memberId);
+	BoardDto upIsLike(Long boardId, String userName);
 	
-	BoardDto upDisLike(Long boardId, Long memberId);
+	BoardDto upDisLike(Long boardId, String userName);
 	
 	BoardDto update(BoardDto dto);
 	
-	BoardDto delete(BoardDto dto);
+	BoardDto delete(BoardDto dto,String userName);
 	String getBoardGroupName(Long boardGroupId);
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +18,7 @@ import com.danaga.dao.product.OptionSetDao;
 import com.danaga.dto.CartDto;
 import com.danaga.dto.SUserCartResponseDto;
 import com.danaga.service.CartService;
+import com.danaga.service.product.OptionSetService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpSession;
@@ -28,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CartRestController {
 	private final CartService cartService;
-	private final OptionSetDao op;
+	private final OptionSetService optionSetService;
 
 	static List<CartDto> fUserCarts; // 비회원 장바구니(세션)
 	static String sUserId; // 로그인 유저 아이디
@@ -75,42 +77,46 @@ public class CartRestController {
 		}
 		return ResponseEntity.status(HttpStatus.OK).body("ㄴ");
 	}
-	
+
 	@Operation(summary = "카트 옵션 변경")
 	@PostMapping("/optionset")
-	public void updateOptionset(@RequestBody List<Long> ids, HttpSession session)
-			throws Exception {
+	public ResponseEntity<?> updateOptionset(@RequestParam List<Long> ids, HttpSession session) throws Exception {
 		sUserId = (String) session.getAttribute("sUserId");
-		System.out.println(">>>>>>>>>>> ids " + ids.size());
-		Long oldId = ids.get(0); // 기존 옵션셋 아이디
-		Long changeId = ids.get(1); // 변경하고자 하는 옵션셋 아이디
-		List<SUserCartResponseDto> list = cartService.updateCartOptionSet(ids, sUserId);
+		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
 
-		
-	}
-	
-	/*
-	@Operation(summary = "카트 옵션 변경")
-	@PostMapping("/optionset")
-	public ResponseEntity<List<SUserCartResponseDto>> updateOptionset(@RequestBody List<Long> ids, HttpSession session)
-			throws Exception {
-<<<<<<< HEAD
-		// sUserId = (String) session.getAttribute("sUserId");
-=======
-		sUserId = (String) session.getAttribute("sUserId");
-		System.out.println(">>>>>>>>>>> ids " + ids.size());
->>>>>>> refs/heads/feature/bj15
-		Long oldId = ids.get(0); // 기존 옵션셋 아이디
-		Long changeId = ids.get(1); // 변경하고자 하는 옵션셋 아이디
-<<<<<<< HEAD
-		List<SUserCartResponseDto> list = cartService.updateCartOptionSet(ids, "User1");
-=======
-		List<SUserCartResponseDto> list = cartService.updateCartOptionSet(ids, sUserId);
->>>>>>> refs/heads/feature/bj15
+		if (sUserId != null) {
+			List<SUserCartResponseDto> list = cartService.updateCartOptionSet(ids, "User1");
+			return ResponseEntity.status(HttpStatus.OK).body(list);
+		} else if (fUserCarts == null) {
+			// 말도 안되는 상황
+			return null;
+		} else {
+			/*
+			 * 1. 변경 전 옵션셋 아이디 수량 1 + 변경 want 옵션셋 존재 
+			 * 2. 변경 전 옵션셋 아이디 수량 1 + 변경 want 옵션셋 존재 X
+			 * 3. 변경 전 옵션셋 아이디 수량 >=2 + 변경 want 옵션셋 존재 
+			 * 4. 변경 전 옵션셋 아이디 수량 >=2 + 변경 want 옵션셋 존재 X
+			 */
+			Long oldId = ids.get(0); // 기존 옵션셋 아이디
+			Integer oldIdQty =0 ;
+			Long changeId = ids.get(1); // 변경하고자 하는 옵션셋 아이디
+			Long duplicateId = 0L;
+			Integer changeIdQty =0;
+			for (int i = 0; i < fUserCarts.size(); i++) {
+				/*
+				 * // 기존옵션셋 아이디 수량 , 변경하고자 하는옵션셋 아이디 수량 ,
+				 * if (oldId == fUserCarts.get(i).getOptionSetId()) { oldIdQty =
+				 * fUserCarts.get(i).getQty(); }else
+				 * if(changeId==fUserCarts.get(i).getOptionSetId()) { changeIdQty =
+				 * fUserCarts.get(i).getQty(); }else {
+				 * }
+				 */
+				
+			}
+			return null;
+		}
 
-		return ResponseEntity.status(HttpStatus.OK).body(list);
 	}
-	*/
 
 	// 회원, 비회원 테스트 성공
 	@Operation(summary = "카트 수량 변경")
@@ -194,3 +200,4 @@ public class CartRestController {
 }
 
 /*****************************************************************************************/
+

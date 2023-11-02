@@ -26,6 +26,7 @@
 				</div>
 				<!-- Product Info-->
 				<div class="col-md-6">
+					<form id="productOrderForm" method="post" action="/product_order_form">
 					<div class="padding-top-2x mt-2 hidden-md-up"></div><!--별점 -->
 					<div class="rating-stars" ><i class="icon-star filled"></i><i class="icon-star"></i>
 					</div><span class="text-muted align-middle" >&nbsp;&nbsp;4.2 | 3
@@ -76,8 +77,11 @@
 								data-toast-position="topRight" data-toast-icon="icon-circle-check"
 								data-toast-title="Product" data-toast-message="successfuly added to cart!" th:data-optionSetId="${productList.osId}" data-cart-qty="1"><i
 									class="icon-bag"></i> Add to Cart</button>
+							<button class="btn btn-primary" th:toOrder="1" th:data-optionSetId="${productList.osId}" data-cart-qty="1"><i
+									class="icon-bag"></i> 주문하기</button>
 						</div>
 					</div>
+					</form>
 				</div>
 			</div>
 			<!-- Product Tabs-->

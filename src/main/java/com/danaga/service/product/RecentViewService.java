@@ -8,4 +8,5 @@ public interface RecentViewService {
 	ResponseDto<?> removeMyRecentViews(Long memberId);
 	ResponseDto<?> removeRecentView(RecentViewDto dto);
 	ResponseDto<?> myAllRecentViews(Long memberId);
+	ResponseDto<?> removeOldRecents();
 }

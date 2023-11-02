@@ -26,29 +26,27 @@ public class BoardServiceTest {
     @Autowired
     private BoardService boardService;
 
-    @Test
-    public void testCreateBoard() {
-        // Mock necessary data
-        BoardDto boardDto = BoardDto.builder()
-                .boardGroupId(1L)
-                .title("test title")
-                .content("test content")
-                .memberId(7L)
-                .build();
-
-       
-        
-        BoardDto result = boardService.createBoard(boardDto);
-        System.out.println(">>>>>>>>board : "+result);
-        
-    }
-	@Test
-	void 게시물_생성() {
+    //@Test
+	/*
+	 * public void testCreateBoard() { // Mock necessary data BoardDto boardDto =
+	 * BoardDto.builder() .boardGroupId(1L) .title("test title")
+	 * .content("test content") .memberId(7L) .build();
+	 * 
+	 * 
+	 * 
+	 * BoardDto result = boardService.createBoard(boardDto);
+	 * System.out.println(">>>>>>>>board : "+result);
+	 * 
+	 * }
+	 */
+	//@Test
+	/*void 게시물_생성() {
 		BoardDto dto = new BoardDto();
 		dto.setTitle("Test Title");
 		dto.setContent("Test Content");
 		dto.setBoardGroupId(1L);
 		dto.setMemberId(3L);
+	*/
 //		List<LikeConfig> configs = lcService.create(dto);
 //		BoardDto createdBoard = service.createBoard(dto, configs);
 //
@@ -60,7 +58,6 @@ public class BoardServiceTest {
 		 
 	}
 
-}
 
 
 

@@ -60,6 +60,13 @@ public class RecentViewServiceImpl implements RecentViewService{
 		return ResponseDto.<ProductDto>builder().data(myRecentViews).build();
 	}
 	
-	
+	//30일 지난 상품 삭제 
+	public ResponseDto<?> removeOldRecents(){
+		recentViewDao.removeOldRecents();
+		
+		List<String> data = new ArrayList<>();
+		data.add("30일이 지난 상품은 삭제됩니다.");
+		return ResponseDto.<String>builder().data(data).build();
+	}
 	
 }

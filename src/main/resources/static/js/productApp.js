@@ -98,29 +98,35 @@ function registEvent() {
 			let qty = 1;
 			if ($(e.target).attr('data-cart-qty')) {
 				qty = $('#qty option:selected').text();
-				optionSetId=$('#otherOptions option:selected').val();
+				optionSetId = $('#otherOptions option:selected').val();
 			}
 			e.stopPropagation();
 			api.addToCart(optionSetId, qty);
 		} else if ($(e.target).attr('heart')) {
 			let parentButton = undefined;
 			if ($(e.target).parent().attr('product-heart')) {
-				parentButton=$(e.target).parent();
+				parentButton = $(e.target).parent();
 				let optionSetId = parentButton.attr('product-heart');
-			api.untapHeart(optionSetId, function callback() {
-				// product-heart-yet 속성의 값을 product-heart로 옮기기
-				parentButton.attr('product-heart-yet', parentButton.attr('product-heart'));
-				parentButton.removeAttr('product-heart');
-			});
+				api.untapHeart(optionSetId, function callback() {
+					// product-heart-yet 속성의 값을 product-heart로 옮기기
+					parentButton.attr('product-heart-yet', parentButton.attr('product-heart'));
+					parentButton.removeAttr('product-heart');
+				});
 			} else if ($(e.target).parent().attr('product-heart-yet')) {
-				parentButton=$(e.target).parent();
+				parentButton = $(e.target).parent();
 				let optionSetId = parentButton.attr('product-heart-yet');
-			api.tapHeart(optionSetId, function callback() {
-				// product-heart-yet 속성의 값을 product-heart로 옮기기
-				parentButton.attr('product-heart', parentButton.attr('product-heart-yet'));
-				parentButton.removeAttr('product-heart-yet');
-			});
-		}
+				api.tapHeart(optionSetId, function callback() {
+					// product-heart-yet 속성의 값을 product-heart로 옮기기
+					parentButton.attr('product-heart', parentButton.attr('product-heart-yet'));
+					parentButton.removeAttr('product-heart-yet');
+				});
+			}
+		} else if ($(e.target).attr('toOrder')) {
+			/*let qty = $('#qty option:selected').text();
+			let	optionSetId = $('#otherOptions option:selected').val();
+			e.stopPropagation();
+			api.productOrder(optionSetId, qty);*/
+			$('#productOrderForm').submit();
 		}
 	});
 
