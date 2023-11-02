@@ -76,7 +76,9 @@ public class MemberServiceImpl implements MemberService {
 	@Transactional
 	public MemberResponseDto updateMember(MemberUpdateDto memberUpdateDto) throws Exception, ExistedMemberByNicknameException {
 		Member originalMember = memberRepository.findById(memberUpdateDto.getId()).get();
-		Member member = Member.builder().id(memberUpdateDto.getId()).password(memberUpdateDto.getPassword()).nickname(memberUpdateDto.getNickname()).address(memberUpdateDto.getAddress()).build();
+		Member member = Member.builder().id(memberUpdateDto.getId()).password(memberUpdateDto.getPassword())
+				.nickname(memberUpdateDto.getNickname()).postCode(memberUpdateDto.getPostCode()).address(memberUpdateDto.getAddress())
+				.detailAddress(memberUpdateDto.getDetailAddress()).build();
 		System.out.println(memberUpdateDto);
 		if (originalMember.getNickname().equals(member.getNickname())) {
 			
@@ -113,7 +115,7 @@ public class MemberServiceImpl implements MemberService {
 		} else if (findOptionalMember.isPresent()) {
 			if (password.equals(findOptionalMember.get().getPassword())) {
 			} else {
-				throw new PasswordMismatchException("패쓰워드가 일치하지않습니다.");
+				throw new PasswordMismatchException("비밀번호가 일치하지않습니다.");
 			}
 		}
 		return true;
