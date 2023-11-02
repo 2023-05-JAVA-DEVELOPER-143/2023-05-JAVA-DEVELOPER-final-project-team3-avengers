@@ -78,6 +78,7 @@ public class MemberRestController {
 			return map;
 		}
 		session.setAttribute("sUserId", memberLoginDto.getUserName());
+		
 		map.put("result", result);
 		map.put("member", memberLoginDto);
 		return map;
