@@ -63,8 +63,11 @@
 						</tr>
 					</thead>
 					<tbody>
+						<tr th:if="${cart == null}">
+							<td colspan="9" class="empty-cart-message">장바구니에 담긴 상품이 없습니다.</td>
+						</tr>
 						<!-- 반복문 가즈아 -->
-						<tr class="cart_info" th:each="cart:${cart}">
+						<tr class="cart_info" th:each="cart:${cart}" th:if="${cart != null}">
 							<td class="prd-check-td">
 								<div class="prd-check">
 									<input type="checkbox" checked="checked" class="checkbox" name="checkboxid" th:value="${cart.osId}" th:data-selectid="${cart.osId}"> 
@@ -107,7 +110,7 @@
 								</div>
 							</td>
 							<td class="text-center text-lg text-medium" th:text="${cart.totalPrice} * ${cart.qty}">
-								2,332,000</td>
+								2,332,000</td><br> 2000
 							<td class="text-center text-lg text-medium" th:text="${cart.totalPrice}">0원</td>
 							<td class="text-center">
 								<a class="plain-btn" id="modalvalue" data-toggle="modal"
@@ -123,10 +126,10 @@
 				</table>
 			</div>
 			<div class="shopping-cart-footer">
-
 				<div class="column text-lg">
-					총 결제금액: <span class="text-medium" id="finalTotalPrice">0원</span>
+					총 결제 금액: <span class="text-medium" id="finalTotalPrice">0원</span>
 				</div>
+			
 			</div>
 			<div class="shopping-cart-footer">
 				<div class="column">
@@ -494,7 +497,7 @@ function selectOption(elseOptionSets, osId) {
    $("#modalSelectbox").on('change', function() {
 	   let updateId = modalSelectbox.value;
 	   $("#modalsave").click(function() {
-		  data.push(updateId);
+		 data.push(updateId);
 		  $.ajax({
 			 url: "/cart/optionset",
 			 type: "post",
@@ -511,9 +514,6 @@ function selectOption(elseOptionSets, osId) {
 		  });
 	   });
    });
-   
-   
-   
    
 }
 

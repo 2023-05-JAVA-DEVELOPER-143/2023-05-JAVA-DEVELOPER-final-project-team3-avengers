@@ -66,9 +66,13 @@ a {
 }
 
 
-
-
-
+td.empty-cart-message {
+	vertical-align: middle;
+	text-align: center;
+    padding: 20px 0; /* 위아래 공백을 20px로 설정 */
+    height: 200px;
+    color: #777;
+}
 
 
 
@@ -7022,7 +7026,7 @@ video {
 
 .toolbar .cart>.toolbar-dropdown>.toolbar-dropdown-group>.column {
     display: table-cell;
-    vertical-align: top
+    vertical-align: top;
 }
 
 .toolbar .cart>.toolbar-dropdown>.toolbar-dropdown-group>.column:first-child {
