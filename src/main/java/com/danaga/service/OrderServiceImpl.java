@@ -495,7 +495,7 @@ public class OrderServiceImpl implements OrderService {
 	 */
 	@Transactional
 	@Override
-	public OrdersDto updateStatementByNormalOrder(Long orderNo) {
+	public OrdersDto updateStatementByNormalOrder(Long orderNo)throws Exception {
 		
 		Orders updateOrder= orderDao.updateStatementByNormalOrder(orderNo);
 		orderDao.save(updateOrder);
