@@ -132,7 +132,7 @@
 			<div class="toolbar">
 				<div class="inner">
 					<div class="tools">
-						<div class="account" onclick="window.location.href = '/admin';">
+						<div class="account" th:if="${session.role != null}" onclick="window.location.href = '/admin';">
 							<i class="icon-head"></i>
 						</div>
 						<div class="search">

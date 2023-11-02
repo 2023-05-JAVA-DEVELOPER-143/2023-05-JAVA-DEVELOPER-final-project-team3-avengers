@@ -6,6 +6,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.danaga.controller.AdminAnnotationInterceptor;
 import com.danaga.controller.AuthLoginAnnotationInterceptor;
 
 
@@ -19,6 +20,14 @@ public class WebConfig implements WebMvcConfigurer{
 		AuthLoginAnnotationInterceptor authLoginAnnotationInterceptor=
 				new AuthLoginAnnotationInterceptor();
 		registry.addInterceptor(authLoginAnnotationInterceptor)
+		.addPathPatterns("/**")
+		.excludePathPatterns("/css/**")
+		.excludePathPatterns("/js/**")
+		.excludePathPatterns("/image/**");
+		
+		AdminAnnotationInterceptor adminAnnotationInterceptor =
+				new AdminAnnotationInterceptor();
+		registry.addInterceptor(adminAnnotationInterceptor)
 		.addPathPatterns("/**")
 		.excludePathPatterns("/css/**")
 		.excludePathPatterns("/js/**")
