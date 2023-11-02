@@ -67,18 +67,23 @@ public class OrderDaoImpl implements OrderDao {
 	//주문상태업데이트
 	// 1.정상주문
 	@Override
-	public Orders updateStatementByNormalOrder(Long orderNo) {
+	public Orders updateStatementByNormalOrder(Long orderNo)throws Exception {
 
-		
-		Orders findOrder = orderRepository.findById(orderNo).get();
-		
-		if(findOrder.getStatement()==OrderStateMsg.입금대기중) {
-			findOrder.setStatement(OrderStateMsg.배송중);
-		}else if(findOrder.getStatement()==OrderStateMsg.배송중) {
-			findOrder.setStatement(OrderStateMsg.배송완료);
+		if(orderNo!=null) {
+			Orders findOrder = orderRepository.findById(orderNo).get();
+			
+			if(findOrder.getStatement()==OrderStateMsg.입금대기중) {
+				findOrder.setStatement(OrderStateMsg.배송중);
+			}else if(findOrder.getStatement()==OrderStateMsg.배송중) {
+				findOrder.setStatement(OrderStateMsg.배송완료);
+			}
+			return findOrder;
+		    }else {
+		    	throw new Exception();
+		    }
 		}
-		return findOrder;
-	    }
+		
+	
 	
 	// 2.취소주문
 	public Orders updateStatementByCancleOrder(Long orderNo) {

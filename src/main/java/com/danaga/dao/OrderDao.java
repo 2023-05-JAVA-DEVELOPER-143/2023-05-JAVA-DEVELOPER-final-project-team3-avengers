@@ -21,7 +21,7 @@ public interface OrderDao {
 	
 	//  주문상태업데이트(특정주문)
 	  // 1.정상주문
-	  Orders updateStatementByNormalOrder(Long orderNo);
+	  Orders updateStatementByNormalOrder(Long orderNo)throws Exception;
 	  // 2.취소주문
 	  Orders updateStatementByCancleOrder(Long orderNo);
 	  // 3.환불주문(client)
