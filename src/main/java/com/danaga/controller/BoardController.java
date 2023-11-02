@@ -19,6 +19,8 @@ import com.danaga.service.CommentsService;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
+
+
 @Controller
 @Slf4j
 public class BoardController {
