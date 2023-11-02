@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.danaga.dao.product.OptionSetDao;
 import com.danaga.dto.CartDto;
 import com.danaga.dto.SUserCartResponseDto;
 import com.danaga.service.CartService;
@@ -40,7 +39,6 @@ public class CartRestController {
 	public ResponseEntity<String> addCart(@RequestBody CartDto dto, HttpSession session) throws Exception {
 		sUserId = (String) session.getAttribute("sUserId");
 		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
-		System.out.println(">>>>>>>>>>>>>>>>>>> add dto " + dto.getQty());
 		// 1번 경우 = 회원 + 세션 장바구니 비어있음
 		if (sUserId != null && fUserCarts == null) {
 			cartService.addCart(dto, sUserId);
@@ -58,7 +56,6 @@ public class CartRestController {
 		} else {// 3번 경우 = 비회원 + 세션 장바구니 X
 			if (sUserId == null && fUserCarts == null) {
 				// 들어온 dto -> list에 추가 후 세션에 저장
-				System.out.println(">>>>>>>>>>>>>>>>" + dto.getQty());
 				fUserCarts = new ArrayList<>();
 				fUserCarts.add(dto);
 				session.setAttribute("fUserCarts", fUserCarts);
@@ -80,40 +77,77 @@ public class CartRestController {
 
 	@Operation(summary = "카트 옵션 변경")
 	@PostMapping("/optionset")
-	public ResponseEntity<?> updateOptionset(@RequestParam List<Long> ids, HttpSession session) throws Exception {
+	public void updateOptionset(@RequestBody List<Long> ids, HttpSession session) throws Exception {
 		sUserId = (String) session.getAttribute("sUserId");
 		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
+		Long oldId = ids.get(0); // 기존 옵션셋 아이디
+		Long changeId = ids.get(1); // 변경하고자 하는 옵션셋 아이디
+		CartDto oldFUserCart = null;
+		CartDto changeFUserCart = null;
+		boolean isDuplicateId = false;// 변경하고자 하는 옵션셋 아이디 존재 체크
 
 		if (sUserId != null) {
 			List<SUserCartResponseDto> list = cartService.updateCartOptionSet(ids, "User1");
-			return ResponseEntity.status(HttpStatus.OK).body(list);
-		} else if (fUserCarts == null) {
-			// 말도 안되는 상황
-			return null;
-		} else {
-			/*
-			 * 1. 변경 전 옵션셋 아이디 수량 1 + 변경 want 옵션셋 존재 
-			 * 2. 변경 전 옵션셋 아이디 수량 1 + 변경 want 옵션셋 존재 X
-			 * 3. 변경 전 옵션셋 아이디 수량 >=2 + 변경 want 옵션셋 존재 
-			 * 4. 변경 전 옵션셋 아이디 수량 >=2 + 변경 want 옵션셋 존재 X
-			 */
-			Long oldId = ids.get(0); // 기존 옵션셋 아이디
-			Integer oldIdQty =0 ;
-			Long changeId = ids.get(1); // 변경하고자 하는 옵션셋 아이디
-			Long duplicateId = 0L;
-			Integer changeIdQty =0;
+			//return ResponseEntity.status(HttpStatus.OK).body(list);
+		} else if (fUserCarts != null) {
+			// 기존 제품 == 변경하고자 하는 제품 예외
+			
+			int oldFUserCartIndex = fUserCarts.indexOf(oldFUserCart);
+			int ChangeFUserIndex = fUserCarts.indexOf(changeFUserCart);
+			
 			for (int i = 0; i < fUserCarts.size(); i++) {
-				/*
-				 * // 기존옵션셋 아이디 수량 , 변경하고자 하는옵션셋 아이디 수량 ,
-				 * if (oldId == fUserCarts.get(i).getOptionSetId()) { oldIdQty =
-				 * fUserCarts.get(i).getQty(); }else
-				 * if(changeId==fUserCarts.get(i).getOptionSetId()) { changeIdQty =
-				 * fUserCarts.get(i).getQty(); }else {
-				 * }
-				 */
+				// 기존옵션셋 아이디 수량 , 변경하고자 하는옵션셋 아이디 수량 ,
+				if (oldId == fUserCarts.get(i).getOptionSetId()) {
+					oldFUserCart = fUserCarts.get(i);
+				} else if (changeId == fUserCarts.get(i).getOptionSetId()) {
+					isDuplicateId = true;
+					changeFUserCart = fUserCarts.get(i);
+				}
+			}
+			//1. 변경 전 옵션셋 아이디 수량 1 + 변경 want 옵션셋 존재 --> 변경 전 CartDto 삭제 , 변경 want CartDto 수량 + 1
+			//2. 변경 전 옵션셋 아이디 수량 1 + 변경 want 옵션셋 존재 X --> 변경 전 CartDto 삭제 , 변경 want CartDto 생성
+			//3. 변경 전 옵션셋 아이디 수량 >=2 + 변경 want 옵션셋 존재 --> 변경 전 CartDto 수량 -1 , 변경 want CartDto 수량 +1
+			// 4. 변경 전 옵션셋 아이디 수량 >=2 + 변경 want 옵션셋 X --> 변경 전 CartDto 수량 -1 , 변경 want CartDto 생성
+			 
+			// 변경하고자하는 옵션셋 아이디 이미 존재
+			if (isDuplicateId == true) {
+				// 1번 경우
+				if (oldFUserCart.getQty() == 1) {
+					fUserCarts.remove(oldFUserCart);
+					changeFUserCart.setQty(changeFUserCart.getQty() + 1);
+					fUserCarts.set(ChangeFUserIndex,changeFUserCart);
+					session.setAttribute("fUserCarts", fUserCarts);
+					countCarts(session);
+				} else if (oldFUserCart.getQty() >= 2) {
+					// 3번 경우
+					oldFUserCart.setQty(oldFUserCart.getQty() - 1);
+					changeFUserCart.setQty(changeFUserCart.getQty() + 1);
+					fUserCarts.set(oldFUserCartIndex, oldFUserCart);
+					fUserCarts.set(ChangeFUserIndex, changeFUserCart);
+					session.setAttribute("fUserCarts", fUserCarts);
+				}
+			} else if (isDuplicateId == false) {
+				//2번경우
+				if(oldFUserCart.getQty() == 1) {
+					fUserCarts.remove(oldFUserCart);
+					CartDto newFUserCart = CartDto.builder().optionSetId(changeId).qty(1).build();
+					fUserCarts.add(newFUserCart);
+					session.setAttribute("fUserCarts", fUserCarts);
+				}else if (oldFUserCart.getQty() >= 2) {
+				// 4번 경우	
+					oldFUserCart.setQty(oldFUserCart.getQty()-1);
+					CartDto newFUserCart = CartDto.builder().optionSetId(changeId).qty(1).build();
+					fUserCarts.set(oldFUserCartIndex, oldFUserCart);
+					fUserCarts.add(newFUserCart);
+					session.setAttribute("fUserCarts", fUserCarts);
+				}
 				
 			}
-			return null;
+
+			//return null;
+		} else {
+			// 말도 안되는 상황
+			//return null;
 		}
 
 	}
@@ -200,4 +234,3 @@ public class CartRestController {
 }
 
 /*****************************************************************************************/
-

@@ -7,24 +7,29 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.danaga.dto.CartDto;
 import com.danaga.dto.ResponseDto;
 import com.danaga.dto.product.ProductDto;
 import com.danaga.dto.product.QueryStringDataDto;
 import com.danaga.repository.product.OptionSetQueryData;
+import com.danaga.service.CartService;
 import com.danaga.service.product.OptionSetService;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequiredArgsConstructor
 public class IndexController {
+	private final CartService cartService;
 	
 	//메인페이지에서 카테고리별 인기상품
 	//최신상품 뽑는 거 
 	@RequestMapping("/index")
-	public String main() {
+	public String main(HttpSession session) {
 		try {
+			countCarts(session);
 //			ResponseDto<ProductDto> responseDto = service.searchProducts(//주문수로 전체상품 정렬하여 조회
 //					QueryStringDataDto.builder()
 //					.orderType(OptionSetQueryData.BY_ORDER_COUNT)
@@ -42,4 +47,18 @@ public class IndexController {
 	public String error_page() {
 		return "404";
 	}
+	
+	void countCarts(HttpSession session) throws Exception {
+		String sUserId = (String) session.getAttribute("sUserId");
+		List<CartDto> fUserCarts = (List<CartDto>)session.getAttribute("fUserCarts");
+		if (sUserId != null) {
+			session.setAttribute("countCarts", cartService.countCarts(sUserId));
+		} else if (fUserCarts != null) { // 비회원 일시 장바구니 리스트의 사이즈
+			fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
+			//fUserCarts.size();
+			session.setAttribute("countCarts", 2);
+		}
+	};
+	
+	
 }
