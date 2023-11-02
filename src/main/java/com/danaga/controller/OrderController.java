@@ -78,31 +78,31 @@ public class OrderController {
 	/*
 	 * 상품에서 주문(action)(공통)
 	 */
-//	@PostMapping("/product_order_action") 
-//	public String memberProductOrderAddAction(@ModelAttribute("ordersProductDto") OrdersProductDto ordersProductDto,
-//			@ModelAttribute("orderGuestDto") OrderGuestDto orderGuestDto, Model model, HttpSession session) {
-//
-//		String sUserId = (String) session.getAttribute("sUserId");
-//		if (sUserId == null) {// 비회원
-//			try {
-//				orderService.guestProductOrderSave(ordersProductDto, orderGuestDto);
-//				return "redirect:orders/guest/order_list";
-//			} catch (Exception e) {
-//				model.addAttribute("msg", e.getMessage());
-//				e.printStackTrace();
-//				return "product/product_detail/" + ordersProductDto.getOptionSetId();
-//			}
-//		} else { // 회원
-//			try {
-//				orderService.memberProductOrderSave(sUserId, ordersProductDto);
-//				return "redirect:orders/order_list";
-//			} catch (Exception e) {
-//				model.addAttribute("msg", e.getMessage());
-//				e.printStackTrace();
-//				return "product/product_detail/" + ordersProductDto.getOptionSetId();
-//			}
-//		}
-//	}
+	@PostMapping("/product_order_action") 
+	public String memberProductOrderAddAction(@ModelAttribute("ordersProductDto") OrdersProductDto ordersProductDto,
+			@ModelAttribute("orderGuestDto") OrderGuestDto orderGuestDto, Model model, HttpSession session) {
+
+		String sUserId = (String) session.getAttribute("sUserId");
+		if (sUserId == null) {// 비회원
+			try {
+				orderService.guestProductOrderSave(ordersProductDto, orderGuestDto);
+				return "redirect:orders/guest/order_list";
+			} catch (Exception e) {
+				model.addAttribute("msg", e.getMessage());
+				e.printStackTrace();
+				return "product/product_detail/" + ordersProductDto.getOptionSetId();
+			}
+		} else { // 회원
+			try {
+				orderService.memberProductOrderSave(sUserId, ordersProductDto);
+				return "redirect:orders/order_list";
+			} catch (Exception e) {
+				model.addAttribute("msg", e.getMessage());
+				e.printStackTrace();
+				return "product/product_detail/" + ordersProductDto.getOptionSetId();
+			}
+		}
+	}
 
 	/*
 	 * 카트에서 보내온 데이터로 주문(form)(공통)
