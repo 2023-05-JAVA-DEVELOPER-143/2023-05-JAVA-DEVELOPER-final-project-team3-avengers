@@ -15,6 +15,8 @@ public class OrderTotalDto {
     private String receiverName;
     private String receiverPhoneNo;
     private String receiverAddress;
+    private String receiverDetailAddress;
+    private String receiverPostCode;
 
     
 
