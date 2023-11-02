@@ -4,30 +4,24 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.danaga.dto.ResponseDto;
-import com.danaga.dto.product.CategoryDto;
 import com.danaga.dto.product.ProductDto;
 import com.danaga.dto.product.QueryStringDataDto;
 import com.danaga.entity.OptionSet;
+import com.danaga.entity.Product;
 import com.danaga.entity.Statistic;
 import com.danaga.repository.BoardRepository;
 import com.danaga.repository.OrderRepository;
 import com.danaga.repository.product.OptionSetQueryData;
 import com.danaga.repository.product.OptionSetRepository;
 import com.danaga.repository.product.ProductRepository;
-import com.danaga.service.BoardService;
-import com.danaga.service.BoardServiceImpl;
 import com.danaga.service.MemberService;
-import com.danaga.service.OrderService;
 import com.danaga.service.StatisticService;
-import com.danaga.service.product.CategoryService;
 import com.danaga.service.product.OptionSetService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,6 +36,8 @@ public class StatisticController {
 	private final OrderRepository orderRepository;
 	private final BoardRepository boardRepository;
 	private final OptionSetRepository optionSetRepository;
+	private final OptionSetService optionSetService;
+	private final ProductRepository productRepository;
 	
 	@GetMapping
 	public String main(Model model) {
@@ -49,7 +45,6 @@ public class StatisticController {
 		model.addAttribute("todayStat", statisticService.todayStatistic());
 		model.addAttribute("delivery", statisticService.deliveryRate());
 		model.addAttribute("latest7List", changeDateFormat(statisticService.latest7DaysStatistic()));
-		//model.addAttribute("yearList", statisticService.latest7DaysStatistic());
 		return "admin/admin";
 	}
 	@GetMapping("/m")
@@ -58,11 +53,24 @@ public class StatisticController {
 		model.addAttribute("todayStat", statisticService.todayStatistic());
 		model.addAttribute("delivery", statisticService.deliveryRate());
 		model.addAttribute("latest7List", statisticService.yearlyStatistic(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy"))));
-		//model.addAttribute("yearList", statisticService.latest7DaysStatistic());
 		return "admin/admin_month";
 	}
+	@GetMapping("/rescue")
+	//DB초기화한 뒤, 초기데이터 생성
+	public String main_rescue(Model model) {
+		statisticService.updateLatest7Days();
+		statisticService.updateLastMonth();
+		statisticService.createMoData(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMM")));
+		return "redirect:/admin";
+	}
 	@GetMapping("/admin_product_insert")
-	public String adminProductInsert() {
+	public String adminProductInsert(Model model) {
+//		ResponseDto<ProductDto> productDto = optionSetService.searchProducts(QueryStringDataDto.builder()
+//				.orderType(OptionSetQueryData.BY_ORDER_COUNT)
+//				.build());
+//		List<ProductDto> productList = productDto.getData();
+		List<Product> productList = productRepository.findAll();
+		model.addAttribute("productList", productList);
 		return "admin/admin_product_insert";
 	}
 	@GetMapping("/admin_product_list")

@@ -2,6 +2,7 @@ package com.danaga.controller;
 
 import java.util.*;
 
+import org.springframework.data.domain.jaxb.SpringDataJaxb.OrderDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.*;
 import org.springframework.web.bind.annotation.*;
@@ -193,7 +194,9 @@ public class OrderController {
 				orderGuestDto.setName(orderTotalDto.getOrdererName());
 				orderGuestDto.setPhoneNo(orderTotalDto.getOrdererPhoneNo());
 
-				orderService.guestCartSelectOrderSave(deliveryDto, fUserCarts, orderGuestDto);
+				OrdersDto ordersDto= orderService.guestCartSelectOrderSave(deliveryDto, fUserCarts, orderGuestDto);
+				
+				model.addAttribute("orderId",ordersDto.getId());
 //				session.invalidate();
 				return "redirect:/member_order_List";
 			} catch (Exception e) {
