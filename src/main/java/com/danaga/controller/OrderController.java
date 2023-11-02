@@ -78,49 +78,62 @@ public class OrderController {
 	/*
 	 * 상품에서 주문(action)(공통)
 	 */
-//	@PostMapping("/product_order_action") 
-//	public String memberProductOrderAddAction(@ModelAttribute("ordersProductDto") OrdersProductDto ordersProductDto,
-//			@ModelAttribute("orderGuestDto") OrderGuestDto orderGuestDto, Model model, HttpSession session) {
-//
-//		String sUserId = (String) session.getAttribute("sUserId");
-//		if (sUserId == null) {// 비회원
-//			try {
-//				orderService.guestProductOrderSave(ordersProductDto, orderGuestDto);
-//				return "redirect:orders/guest/order_list";
-//			} catch (Exception e) {
-//				model.addAttribute("msg", e.getMessage());
-//				e.printStackTrace();
-//				return "product/product_detail/" + ordersProductDto.getOptionSetId();
-//			}
-//		} else { // 회원
-//			try {
-//				orderService.memberProductOrderSave(sUserId, ordersProductDto);
-//				return "redirect:orders/order_list";
-//			} catch (Exception e) {
-//				model.addAttribute("msg", e.getMessage());
-//				e.printStackTrace();
-//				return "product/product_detail/" + ordersProductDto.getOptionSetId();
-//			}
-//		}
-//	}
+	@PostMapping("/product_order_action") 
+	public String memberProductOrderAddAction(@ModelAttribute("ordersProductDto") OrdersProductDto ordersProductDto,
+			@ModelAttribute("orderGuestDto") OrderGuestDto orderGuestDto, Model model, HttpSession session) {
+
+		String sUserId = (String) session.getAttribute("sUserId");
+		if (sUserId == null) {// 비회원
+			try {
+				orderService.guestProductOrderSave(ordersProductDto, orderGuestDto);
+				return "redirect:orders/guest/order_list";
+			} catch (Exception e) {
+				model.addAttribute("msg", e.getMessage());
+				e.printStackTrace();
+				return "product/product_detail/" + ordersProductDto.getOptionSetId();
+			}
+		} else { // 회원
+			try {
+				orderService.memberProductOrderSave(sUserId, ordersProductDto);
+				return "redirect:orders/order_list";
+			} catch (Exception e) {
+				model.addAttribute("msg", e.getMessage());
+				e.printStackTrace();
+				return "product/product_detail/" + ordersProductDto.getOptionSetId();
+			}
+		}
+	}
 
 	/*
 	 * 카트에서 보내온 데이터로 주문(form)(공통)
 	 */
 	@PostMapping("/cart_order_form")
-	public String memberCartOrderAddForm(@RequestBody List<SUserCartOrderDto> sUserCartOrderDto, Model model,
+	public String memberCartOrderAddForm(@RequestBody List<SUserCartOrderDto> sUserCartOrderDtoList, Model model,
 			HttpSession session) throws Exception {
-		System.out.println(sUserCartOrderDto.size());
-		System.out.println(sUserCartOrderDto);
-		model.addAttribute("sUserCartOrderDto", sUserCartOrderDto);
-		session.setAttribute("sUserCartOrderDto", sUserCartOrderDto);
-
+		System.out.println("###########"+sUserCartOrderDtoList.size());
+		System.out.println(sUserCartOrderDtoList);
+		
+		String sUserId=(String)session.getAttribute("sUserId");
+		MemberResponseDto memberResponseDto= memberService.getMemberBy(sUserId);
+		Integer discountRate= gradePoint(memberResponseDto.getGrade());
+		Integer realTotalPrice = 0;
+		for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
+			sUserCartOrderDtoList.get(i).setTotalPrice((sUserCartOrderDtoList.get(i).getTotalPrice()*sUserCartOrderDtoList.get(i).getQty())-sUserCartOrderDtoList.get(i).getTotalPrice()*sUserCartOrderDtoList.get(i).getQty()*discountRate/10);
+			realTotalPrice+=sUserCartOrderDtoList.get(i).getTotalPrice();
+			System.out.println(realTotalPrice);
+		}
+		System.out.println(realTotalPrice);
+		model.addAttribute("sUserCartOrderDto",sUserCartOrderDtoList);
+		model.addAttribute("realTotalPrice",realTotalPrice);
+		session.setAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
+		session.setAttribute("realTotalPrice", realTotalPrice);
 		return "orders/order_save_form";
 	}
 	
 	@GetMapping("/order_save_form")
 	public String orderSaveForm(Model model, HttpSession session) {
 		model.addAttribute("sUserCartOrderDto",session.getAttribute("sUserCartOrderDto"));
+		model.addAttribute("realTotalPrice",session.getAttribute("realTotalPrice"));
 		return "orders/order_save_form";
 	}
 	
@@ -226,7 +239,38 @@ public class OrderController {
 		}
 	}
 
-
+	
+	static Integer gradePoint(String value) {
+		String grade = value;
+		Integer gradePoint = 0;
+		switch (grade) {
+		case "Rookie": {
+			gradePoint = 1;
+			break;
+		}
+		case "Bronze": {
+			gradePoint = 2;
+			break;
+		}
+		case "Silver": {
+			gradePoint = 3;
+			break;
+		}
+		case "Gold": {
+			gradePoint = 4;
+			break;
+		}
+		case "Platinum": {
+			gradePoint = 5;
+			break;
+		}
+		case "Diamond": {
+			gradePoint = 6;
+			break;
+		}
+		}
+		return gradePoint;
+	}
 	/******************************* 회원 ****************************/
 
 	// 주문상세보기(회원)(이미 완성됨)
