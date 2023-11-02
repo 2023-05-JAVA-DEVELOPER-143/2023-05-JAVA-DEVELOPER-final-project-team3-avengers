@@ -47,7 +47,9 @@ public class Member {
 	private String name;
 	@Column(unique = true)
 	private String nickname;
+	private String postCode;
 	private String address;
+	private String detailAddress;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date birthday;
 	@Column(unique = true)

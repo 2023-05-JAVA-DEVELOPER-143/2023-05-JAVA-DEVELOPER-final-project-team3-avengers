@@ -18,14 +18,18 @@ public class MemberUpdateDto {
 	private Long id;
 	private String password;
 	private String nickname;
+	private String postCode;
 	private String address;
+	private String detailAddress;
 	
 	public static MemberUpdateDto toDto(Member entity) {
     	return MemberUpdateDto.builder()
     			.id(entity.getId())
     			.password(entity.getPassword())
     			.nickname(entity.getNickname())
+    			.postCode(entity.getPostCode())
     			.address(entity.getAddress())
+    			.detailAddress(entity.getDetailAddress())
     			.build();
     }
 }

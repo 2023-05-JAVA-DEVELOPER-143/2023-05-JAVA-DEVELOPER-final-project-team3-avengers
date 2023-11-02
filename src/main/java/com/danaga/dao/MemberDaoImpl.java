@@ -50,7 +50,9 @@ public class MemberDaoImpl implements MemberDao {
 			Member member = findOptionalMember.get();
 			member.setPassword(updateMember.getPassword());
 			member.setNickname(updateMember.getNickname());
+			member.setPostCode(updateMember.getPostCode());
 			member.setAddress(updateMember.getAddress());
+			member.setDetailAddress(updateMember.getDetailAddress());
 			member.setGradePoint(updateMember.getGradePoint());
 			member.setGrade(updateMember.getGrade());
 			updatedMember = memberRepository.save(member);

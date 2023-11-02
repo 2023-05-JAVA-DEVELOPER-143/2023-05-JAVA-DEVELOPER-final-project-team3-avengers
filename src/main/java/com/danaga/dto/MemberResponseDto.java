@@ -24,7 +24,9 @@ public class MemberResponseDto {
 	private String email;
 	private String name;
 	private String nickname;
+	private String postCode;
 	private String address;
+	private String detailAddress;
 	private String phoneNo;
 	private LocalDateTime joinDate;
 	private Date birthday;
@@ -40,7 +42,9 @@ public class MemberResponseDto {
     			.email(entity.getEmail())
     			.name(entity.getName())
     			.nickname(entity.getNickname())
+    			.postCode(entity.getPostCode())
     			.address(entity.getAddress())
+    			.detailAddress(entity.getDetailAddress())
     			.phoneNo(entity.getPhoneNo())
     			.joinDate(entity.getJoinDate())
     			.birthday(entity.getBirthday())

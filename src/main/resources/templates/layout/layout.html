@@ -68,26 +68,27 @@
 		<th:block layout:fragment="recommendation"></th:block>
 		<!--추천상품 영역   -->
 
-		<!-- Site Footer-->
-		<!-- common-footer.html start -->
-		<footer class="site-footer"
-			th:insert="~{fragment/common-footer::common-footer}"></footer>
-		<!-- common-footer.html end -->
-	</div>
-	<!-- Back To Top Button-->
-	<a class="scroll-to-top-btn" href="#"><i class="icon-arrow-up"></i></a>
-	<!-- Backdrop-->
-	<div class="site-backdrop"></div>
-	<!-- JavaScript (jQuery) libraries, plugins and custom scripts-->
-	<!--Common JS-->
-	<script type="text/javascript"
-		src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script defer type="text/javascript"
-		src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js"></script>
-	<script src="bootstrap/js/vendor.min.js" defer="defer"></script>
-	<script src="bootstrap/js/scripts.min.js" defer="defer"></script>
-	<script defer src="js/app.js" type="module"></script>
-	<th:block layout:fragment="script"></th:block>
+      <!-- Site Footer-->
+      <!-- common-footer.html start -->
+      <footer class="site-footer"
+         th:insert="~{fragment/common-footer::common-footer}"></footer>
+      <!-- common-footer.html end -->
+   </div>
+   <!-- Back To Top Button-->
+   <a class="scroll-to-top-btn" href="#"><i class="icon-arrow-up"></i></a>
+   <!-- Backdrop-->
+   <div class="site-backdrop"></div>
+   <!-- JavaScript (jQuery) libraries, plugins and custom scripts-->
+   <!--Common JS-->
+   <script type="text/javascript"
+      src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <script defer type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js"></script>
+   <script src="bootstrap/js/vendor.min.js" defer="defer"></script>
+   <script src="bootstrap/js/scripts.min.js" defer="defer"></script>
+   <script defer src="js/app.js" type="module"></script>
+   <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+   <th:block layout:fragment="script"></th:block>
 
 </body>
 </html>
