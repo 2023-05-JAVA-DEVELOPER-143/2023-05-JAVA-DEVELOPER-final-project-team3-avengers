@@ -55,9 +55,6 @@ public class OptionSetSearchQuery {
 		if(searchDto.getNameKeyword()!=null) {
 			nameKeyword(searchDto.getNameKeyword());
 		}
-//		if(searchDto.getBrand()!=null) {
-//			brandFilter(searchDto.getBrand());
-//		}
 		if(searchDto.getMinPrice()!=null&&searchDto.getMaxPrice()!=null) {
 			priceRange(searchDto.getMinPrice(), searchDto.getMaxPrice());
 		}
@@ -89,29 +86,23 @@ public class OptionSetSearchQuery {
 		}
 	}
 	
-	
-
 	public void categoryFilter(CategoryDto category) {
 		String category_filter="";
 		if(category.getName().equals("전체")) {
 			category_filter = "AND c.parent.id = :categoryFilter ";
-			category_filter = category_filter.replace(":categoryFilter", ""+category.getParentId()+"");
+			category_filter = category_filter.replace(":categoryFilter", ""+category.getId()+"");
 		}else {
 			category_filter = "AND c.id = :categoryFilter ";
 			category_filter = category_filter.replace(":categoryFilter", ""+category.getId()+"");
 		}
 		this.searchQuery+=category_filter;
 	}
-//	public void brandFilter(String brand) {
-//		String brand_filter = "AND os.product.brand like :brandFilter ";
-//		brand_filter = brand_filter.replace(":brandFilter", "'%"+brand+"%'");
-//		this.searchQuery+=brand_filter;
-//	}
 	public void optionFilter(String optionName,List<String> optionValue) {
+		if(optionValue!=null) {
 		String valueString = "o.value= :optionValue1";
-		if(optionValue!=null&&optionValue.size()==1) {
+		if(optionValue.size()==1) {
 			valueString=valueString.replace(":optionValue1", "'"+optionValue.get(0)+"' ");
-		}else if(optionValue!=null&&optionValue.size()>1) {
+		}else if(optionValue.size()>1) {
 			valueString=valueString.replace(":optionValue1", "'"+optionValue.get(0)+"' ");
 			for (int i = 1; i < optionValue.size(); i++) {
 				valueString+=" OR o.value="+"'"+optionValue.get(i)+"' ";
@@ -120,6 +111,7 @@ public class OptionSetSearchQuery {
 		String option_filter = "AND EXISTS ( SELECT 1 FROM Options o WHERE o.optionSet = os AND o.name = :optionName AND ("+valueString+") ) ";
 		option_filter = option_filter.replace(":optionName", "'"+optionName+"'");
 		this.searchQuery+=option_filter;
+		}
 	}
 	public void priceRange(int minPrice,int maxPrice) {
 		String price_range = "AND os.totalPrice between :minPrice and :maxPrice ";
