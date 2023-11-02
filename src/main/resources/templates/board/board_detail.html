@@ -13,8 +13,8 @@
 
 <body>
 	<!-- comment Modal -->
-	<th:block layout:fragment="modal" />
-	<th:block th:object="${comments}">
+	<th:block layout:fragment="modal" >
+	
 		<!-- 댓글 수정모달-->
 		<div class="modal fade" id="comment-edit-modal" tabindex="-1">
 			<div class="modal-dialog">
@@ -85,7 +85,7 @@
 
 							<!-- 히든 인풋 -->
 							<input type="hidden" id="reply-comment-id">
-							<input type="hidden" id="reply-comment-article-id" th:value="*{boardId}">
+							<input type="hidden" id="reply-comment-article-id" >
 
 							<!-- 전송 버튼 -->
 							<button type="button" class="btn btn-outline-primary btn-sm"
