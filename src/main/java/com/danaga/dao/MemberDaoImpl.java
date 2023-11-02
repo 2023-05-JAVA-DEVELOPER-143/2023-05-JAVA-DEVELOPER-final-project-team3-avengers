@@ -53,8 +53,6 @@ public class MemberDaoImpl implements MemberDao {
 			member.setPostCode(updateMember.getPostCode());
 			member.setAddress(updateMember.getAddress());
 			member.setDetailAddress(updateMember.getDetailAddress());
-			member.setGradePoint(updateMember.getGradePoint());
-			member.setGrade(updateMember.getGrade());
 			updatedMember = memberRepository.save(member);
 		} else {
 			throw new MemberNotFoundException("존재하지 않는 회원입니다");

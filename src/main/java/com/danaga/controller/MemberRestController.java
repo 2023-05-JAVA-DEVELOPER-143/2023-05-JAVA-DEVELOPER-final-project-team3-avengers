@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.danaga.dto.MemberLoginDto;
@@ -71,7 +73,6 @@ public class MemberRestController {
 		} catch (PasswordMismatchException e) {
 			result = 1;
 			map.put("result", result);
-			map.put("member", memberLoginDto);
 			return map;
 		}
 		MemberResponseDto loginUser = memberService.getMemberBy(memberLoginDto.getUserName());
@@ -80,7 +81,6 @@ public class MemberRestController {
 			session.setAttribute("role", loginUser.getRole());
 		}
 		map.put("result", result);
-		map.put("member", memberLoginDto);
 		return map;
 	}
 	
@@ -122,29 +122,25 @@ public class MemberRestController {
 			} catch (ExistedMemberByUserNameException e) {
 				result = 1;
 				map.put("result", result);
-				map.put("member", member);
 				map.put("msg", member.getUserName() + "는 사용중인 아이디입니다.");
 				return map;
 			} catch (ExistedMemberByEmailException e) {
 				result = 2;
 				map.put("result", result);
-				map.put("member", member);
 				map.put("msg", member.getEmail() + "는 사용중인 이메일입니다.");
 				return map;
 			} catch (ExistedMemberByPhoneNoException e) {
 				result = 3;
 				map.put("result", result);
-				map.put("member", member);
 				map.put("msg", member.getPhoneNo() + "는 사용중인 번호입니다.");
 				return map;
 			} catch (ExistedMemberByNicknameException e) {
 				result = 4;
 				map.put("result", result);
-				map.put("member", member);
 				map.put("msg", member.getNickname() + "는 사용중인 닉네임입니다.");
 				return map;
 			}
-			map.put("member", member);
+			map.put("result", result);
 			return map;
 	}
 
@@ -163,12 +159,11 @@ public class MemberRestController {
 //		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
 //	}
 	@LoginCheck
-	@PostMapping(value = "/modify_action_rest",produces = "application/json;charset=UTF-8")
+	@PutMapping(value = "/modify_action_rest",produces = "application/json;charset=UTF-8")
 	public Map member_modify_action(@RequestBody MemberUpdateDto memberUpdateDto,HttpSession session) throws Exception {
 		HashMap map = new HashMap<>();
 		int result = 2;
 		MemberResponseDto updatedMember = new MemberResponseDto();
-		System.out.println("######"+memberUpdateDto.getPassword()+"#########"+memberUpdateDto.getNickname());
 		try {
 			String sUserId = (String) session.getAttribute("sUserId");
 			Long sUserLongId = memberService.getMemberBy(sUserId).getId();
@@ -176,13 +171,10 @@ public class MemberRestController {
 			updatedMember = memberService.updateMember(memberUpdateDto);
 		} catch (ExistedMemberByNicknameException e) {
 			result = 1;
-			System.out.println("######################"+result);
-			map.put("member", memberUpdateDto);
 			map.put("result", result);
 			map.put("msg", memberUpdateDto.getNickname() + "는 사용중인 닉네임입니다.");
 			return map;
 		}
-		map.put("member", updatedMember);
 		map.put("result", result);
 		return map;
 	}
@@ -213,18 +205,27 @@ public class MemberRestController {
 		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
 	}
 	@LoginCheck
-	@DeleteMapping("/{id}")
-	public ResponseEntity<MemberResponse> member_delete(@PathVariable(name = "id") String id, HttpSession session) throws Exception {
-		memberService.deleteMember(id);
-		session.invalidate();
-
-		MemberResponse response = new MemberResponse();
-		response.setStatus(MemberResponseStatusCode.DELETE_USER);
-		response.setMessage(MemberResponseMessage.DELETE_USER);
-		
-		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
+	@DeleteMapping(value = "/delete_action_rest",produces = "application/json;charset=UTF-8")
+	public Map delete_action_rest(@RequestBody MemberLoginDto memberLoginDto,HttpSession session) throws Exception {
+		HashMap map = new HashMap<>();
+		int result = 2;
+		try {
+			String sUserId = (String) session.getAttribute("sUserId");
+			MemberResponseDto member = memberService.getMemberBy(sUserId);
+			if (member.getPassword().equals(memberLoginDto.getPassword())) {
+				memberService.deleteMember(member.getUserName());
+				session.invalidate();
+			} else {
+				throw new PasswordMismatchException("비밀번호가 일치하지않습니다.");
+			}
+		} catch (PasswordMismatchException e) {
+			result = 1;
+			map.put("result", result);
+			map.put("msg", "비밀번호가 일치하지않습니다.");
+			return map;
+		}
+		map.put("result", result);
+		return map;
 	}
 	
 
