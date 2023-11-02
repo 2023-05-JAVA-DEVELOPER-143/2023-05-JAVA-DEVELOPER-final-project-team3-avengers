@@ -13,12 +13,16 @@ public class DeliveryDto {
     private String name;
     private String phoneNumber;
     private String address;
+    private String detailAddress;
+    private String postCode;
     
 	public static DeliveryDto toDto(Delivery entity) {
 		return DeliveryDto.builder()
 				.name(entity.getName())
 				.phoneNumber(entity.getPhoneNumber())
 				.address(entity.getAddress())
+				.detailAddress(entity.getDetailAddress())
+				.postCode(entity.getPostCode())
 				.build();
 	}
 }

@@ -26,6 +26,7 @@ public class OrdersProductDto {
 	private String delivaryName;
 	private String delivaryPhoneNumber;
 	private String delivaryAddress;
+	private String deliveryPostCode;
 
 	
 	public static OrdersProductDto OrdersResponseDto(Orders entity) {
