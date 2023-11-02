@@ -100,7 +100,7 @@ public class BoardController {
 			rttr.addFlashAttribute("msg","삭제가 완료 되었습니다."); 
 		}
 		//3. 결과페이지로 리다이렉트한다.
-		return "redirect:/board/list/"+target.getBoardGroupId();
+		return "redirect:/board"+target.getBoardGroupId();
 	}
 		
 }

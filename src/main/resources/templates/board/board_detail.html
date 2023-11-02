@@ -12,94 +12,7 @@
 
 
 <body>
-	<!-- comment Modal -->
-	<th:block layout:fragment="modal" >
-	
-		<!-- 댓글 수정모달-->
-		<div class="modal fade" id="comment-edit-modal" tabindex="-1">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h1 class="modal-title fs-5" id="exampleModalLabel">댓글 수정</h1>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
-						<!-- 댓글 수정 폼 -->
-						<form>
-							<!-- 닉네임 입력 -->
-							<div class="mb-3">
-								<label class="form-label">닉네임</label>
-								<input class="form-control form-control-sm" id="edit-comment-nickname">
-							</div>
-							<!-- 댓글 본문 입력 -->
-							<div class="mb-3">
-								<label class="form-label">내용</label>
-								<textarea class="form-control form-control-sm" rows="3"
-									id="edit-comment-body"> </textarea>
-							</div>
-							<div class="mb-3">
-								<label class="form-label">비밀번호</label>
-								<input class="form-control form-control-sm" id="edit-comment-pw">
-							</div>
-
-							<!-- 히든 인풋 -->
-							<input type="hidden" id="edit-comment-id">
-							<input type="hidden" id="edit-comment-article-id">
-
-							<!-- 전송 버튼 -->
-							<button type="button" class="btn btn-outline-primary btn-sm" id="comment-update-btn">수정
-								완료</button>
-						</form>
-
-					</div>
-
-				</div>
-			</div>
-		</div>
-		<!-- 대댓글 모달-->
-		<div class="modal fade" id="comment-reply-modal" tabindex="-1">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h1 class="modal-title fs-5" id="exampleModalLabel">대댓글 달기</h1>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
-						<!-- 대댓글 생성 폼 -->
-						<form>
-							<!-- 닉네임 입력 -->
-							<div class="mb-3">
-								<label class="form-label">닉네임</label>
-								<input class="form-control form-control-sm" id="reply-comment-nickname">
-							</div>
-							<!-- 댓글 본문 입력 -->
-							<div class="mb-3">
-								<label class="form-label">내용</label>
-								<textarea class="form-control form-control-sm" rows="3"
-									id="reply-comment-body"> </textarea>
-							</div>
-							<div class="mb-3">
-								<label class="form-label">비밀번호</label>
-								<input class="form-control form-control-sm" id="reply-comment-pw">
-							</div>
-
-							<!-- 히든 인풋 -->
-							<input type="hidden" id="reply-comment-id">
-							<input type="hidden" id="reply-comment-article-id" >
-
-							<!-- 전송 버튼 -->
-							<button type="button" class="btn btn-outline-primary btn-sm"
-								id="comment-enter-btn">답글달기</button>
-						</form>
-
-					</div>
-
-				</div>
-			</div>
-		</div>
-
-	</th:block>
-	<!-- Page Content-->
+		<!-- Page Content-->
 	<th:block layout:fragment="content">
 		<!-- Main Slider-->
 		<section class="hero-slider" style="background-image: url(img/hero-slider/main-bg.jpg);">
@@ -133,7 +46,7 @@
 					<div class="toolbar">
 						<div th:if="${board.userName} eq ${session.sUserId} or ${board.isAdmin} eq 2" th:remove="tag">
 							<a th:href="@{/board_edit{id} (id=${board.id})}" class="btn btn-primary">수정</a>
-							<a th:href="@{/board_edit{id} (id=${board.id})}" class="btn btn-danger">삭제</a>
+							<a th:href="@{/board_delete{id} (id=${board.id})}" class="btn btn-danger">삭제</a>
 						</div>
 						<a th:href="@{/board{boardGroupId} (boardGroupId=${board.boardGroupId})}"
 							class="btn btn-primary">목록가기</a>
@@ -614,6 +527,95 @@
 	<th:block layout:fragment="recommendation"></th:block>
 	<th:block layout:fragment="script">
 	</th:block>
+	
+	<!-- comment Modal -->
+	<th:block layout:fragment="modal" >
+	
+		<!-- 댓글 수정모달-->
+		<div class="modal fade" id="comment-edit-modal" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="exampleModalLabel">댓글 수정</h1>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<!-- 댓글 수정 폼 -->
+						<form>
+							<!-- 닉네임 입력 -->
+							<div class="mb-3">
+								<label class="form-label">닉네임</label>
+								<input class="form-control form-control-sm" id="edit-comment-nickname">
+							</div>
+							<!-- 댓글 본문 입력 -->
+							<div class="mb-3">
+								<label class="form-label">내용</label>
+								<textarea class="form-control form-control-sm" rows="3"
+									id="edit-comment-body"> </textarea>
+							</div>
+							<div class="mb-3">
+								<label class="form-label">비밀번호</label>
+								<input class="form-control form-control-sm" id="edit-comment-pw">
+							</div>
+
+							<!-- 히든 인풋 -->
+							<input type="hidden" id="edit-comment-id">
+							<input type="hidden" id="edit-comment-article-id">
+
+							<!-- 전송 버튼 -->
+							<button type="button" class="btn btn-outline-primary btn-sm" id="comment-update-btn">수정
+								완료</button>
+						</form>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<!-- 대댓글 모달-->
+		<div class="modal fade" id="comment-reply-modal" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="exampleModalLabel">대댓글 달기</h1>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<!-- 대댓글 생성 폼 -->
+						<form>
+							<!-- 닉네임 입력 -->
+							<div class="mb-3">
+								<label class="form-label">닉네임</label>
+								<input class="form-control form-control-sm" id="reply-comment-nickname">
+							</div>
+							<!-- 댓글 본문 입력 -->
+							<div class="mb-3">
+								<label class="form-label">내용</label>
+								<textarea class="form-control form-control-sm" rows="3"
+									id="reply-comment-body"> </textarea>
+							</div>
+							<div class="mb-3">
+								<label class="form-label">비밀번호</label>
+								<input class="form-control form-control-sm" id="reply-comment-pw">
+							</div>
+
+							<!-- 히든 인풋 -->
+							<input type="hidden" id="reply-comment-id">
+							<input type="hidden" id="reply-comment-article-id" >
+
+							<!-- 전송 버튼 -->
+							<button type="button" class="btn btn-outline-primary btn-sm"
+								id="comment-enter-btn">답글달기</button>
+						</form>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+	</th:block>
+	
 </body>
 
 </html>
