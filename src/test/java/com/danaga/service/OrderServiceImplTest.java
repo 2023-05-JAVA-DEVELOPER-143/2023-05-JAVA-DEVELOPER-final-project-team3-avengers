@@ -41,33 +41,35 @@ class OrderServiceImplTest {
 	CartService cartService;
 	
 	/*************************************비회원*********************************/
-	@Transactional
-	@Rollback(false)
-	@Test
-	@Disabled
-	void testGuestCartOrderSave() throws Exception {
-		// List<CartCreateDto> fUserCarts, DeliveryDto deliveryDto
-		
-		
-		CartDto cartDto1 = CartDto.builder().qty(6).optionSetId(6L).build();
-		CartDto cartDto2 = CartDto.builder().qty(7).optionSetId(5L).build();
-		
-		List<CartDto> fUserCarts = new ArrayList();
-		fUserCarts.add(cartDto1);
-		fUserCarts.add(cartDto2);
-		
-		DeliveryDto deliveryDto = DeliveryDto.builder()
-				.address("어딘가10")
-				.phoneNumber("아무번호10")
-				.name("누군가10")
-				.build();
-		OrderGuestDto orderGuestDto = OrderGuestDto.builder()
-				.name("주문자명2")
-				.phoneNo("123-1231wewe22")
-				.build();
-		orderService.guestCartOrderSave(fUserCarts, deliveryDto,orderGuestDto);
-		
-	}
+//	@Transactional
+//	@Rollback(false)
+//	@Test
+//	@Disabled
+//	void testGuestCartOrderSave() throws Exception {
+//		// List<CartCreateDto> fUserCarts, DeliveryDto deliveryDto
+//		
+//		
+//		CartDto cartDto1 = CartDto.builder().qty(6).optionSetId(6L).build();
+//		CartDto cartDto2 = CartDto.builder().qty(7).optionSetId(5L).build();
+//		
+//		List<CartDto> fUserCarts = new ArrayList();
+//		fUserCarts.add(cartDto1);
+//		fUserCarts.add(cartDto2);
+//		
+//		DeliveryDto deliveryDto = DeliveryDto.builder()
+//				.phoneNumber("아무번호10")
+//				.name("누군가10")
+//				.address("서울시 관악구")
+//				.detailAddress("2020-902호")
+//				.postCode("123-123")
+//				.build();
+//		OrderGuestDto orderGuestDto = OrderGuestDto.builder()
+//				.name("주문자명2")
+//				.phoneNo("123-1231wewe22")
+//				.build();
+//		orderService.guestCartOrderSave(fUserCarts, deliveryDto,orderGuestDto);
+//		
+//	}
 	
 	@Transactional
 	@Rollback(false)
@@ -79,9 +81,11 @@ class OrderServiceImplTest {
 		OrdersProductDto ordersProductDto = OrdersProductDto.builder()
 															.optionSetId(3L)
 															.orderItem_qty(3)
-															.delivaryAddress("어딘가21310")
 															.delivaryName("ddd")
 															.delivaryPhoneNumber("010-3020492-2132")
+															.delivaryAddress("서울시 강남구")
+															.delivaryDetailAddress("빌라2034-302")
+															.deliveryPostCode("444-555")
 															.build();
 		
 		OrderGuestDto orderGuestDto = OrderGuestDto.builder()
@@ -101,9 +105,11 @@ class OrderServiceImplTest {
 		// List<CartCreateDto> fUserCarts, DeliveryDto deliveryDto
 		
 		DeliveryDto deliveryDto = DeliveryDto.builder()
-				.address("어딘가10")
 				.phoneNumber("아무번호10")
 				.name("누군가10")
+				.address("서울시 관악구")
+				.detailAddress("2020-902호")
+				.postCode("123-12333")
 				.build();
 		
 		
@@ -119,7 +125,7 @@ class OrderServiceImplTest {
 													.name("주문자명1232")
 													.phoneNo("123-123123232322")
 													.build();
-		//orderService.guestCartSelectOrderSave(deliveryDto,fUserCarts,orderGuestDto);
+		orderService.guestCartSelectOrderSave(deliveryDto,fUserCarts,orderGuestDto);
 		
 	}
 	
@@ -131,7 +137,7 @@ class OrderServiceImplTest {
 	void testGuestOrderList() throws Exception {
 		// List<CartCreateDto> fUserCarts, DeliveryDto deliveryDto
 		
-		System.out.println("$$$$$$$$$$$$$$$"+orderService.guestOrderList(1L,"123-123123232322","ㅇㅇ"));
+		System.out.println("$$$$$$$$$$$$$$$"+orderService.guestOrderList(1L,"55551235---2322","주문자명1"));
 		
 	}
 	
@@ -142,44 +148,47 @@ class OrderServiceImplTest {
 	@Transactional
 	@Rollback(false)
 	@Test
-	//@Disabled
+	@Disabled
 	void testMemberProductOrderSave()throws Exception {
 		
 		System.out.println("0000000000000000000000000000000000000");
 		
-		OrdersProductDto ordersDto = OrdersProductDto.builder()
-									   .delivaryAddress("dd")
-									   .delivaryName("dd")
-									   .delivaryPhoneNumber("221")
-									   .optionSetId(2L)
-									   .orderItem_qty(3)
-									   .build();
+		OrdersProductDto ordersProductDto = OrdersProductDto.builder()
+				.optionSetId(3L)
+				.orderItem_qty(3)
+				.delivaryName("ddd")
+				.delivaryPhoneNumber("010-3020492-2132")
+				.delivaryAddress("서울시 강남구")
+				.delivaryDetailAddress("빌라2034-302")
+				.deliveryPostCode("444-555")
+				.build();
 		
-		orderService.memberProductOrderSave("User1",ordersDto);
+		orderService.memberProductOrderSave("User1",ordersProductDto);
 	}
+//	@Transactional
+//	@Rollback(false)
+//	@Test
+//	@Disabled
+//	void testMemberCartOrderSave()throws Exception {
+//
+//		
+//		DeliveryDto deliveryDto = DeliveryDto.builder()
+//				.phoneNumber("아무번호10")
+//				.name("누군가10")
+//				.address("서울시 관악구")
+//				.detailAddress("2020-902호")
+//				.postCode("123-12333")
+//				.build();
+//		
+//		orderService.memberCartOrderSave("User2",deliveryDto);
+//	}
 	@Transactional
 	@Rollback(false)
 	@Test
-	@Disabled
-	void testMemberCartOrderSave()throws Exception {
-
-		
-		DeliveryDto deliveryDto = DeliveryDto.builder()
-									.address("ff")
-									.name("ff")
-									.phoneNumber("010-3023-323232")
-									.build();
-		
-		
-		orderService.memberCartOrderSave("User2",deliveryDto);
-	}
-	@Transactional
-	@Rollback(false)
-	@Disabled
-	@Test
+	//@Disabled
 	void testMemberOrderList()throws Exception {
 		
-		System.out.println("-----------------------------"+orderService.memberOrderList("User5"));
+		System.out.println("-----------------------------"+orderService.memberOrderList("User1"));
 		
 	}
 
@@ -189,10 +198,12 @@ class OrderServiceImplTest {
 	@Disabled
 	void testMemberCartSelectOrderSave()throws Exception {
 		DeliveryDto deliveryDto = DeliveryDto.builder()
-				.address("ff")
-				.name("ff")
-				.phoneNumber("010-3023-323232")
-				.build();
+		.phoneNumber("아무번호10")
+		.name("누군가10")
+		.address("서울시 관악구")
+		.detailAddress("2020-902호")
+		.postCode("123-12333")
+		.build();
 		
 		CartDto cartDto = CartDto.builder()
 								.optionSetId(2L)
@@ -225,17 +236,17 @@ class OrderServiceImplTest {
 	}
 	@Test
 	@Disabled
-	void testUpdateStatementByNormalOrder() {
+	void testUpdateStatementByNormalOrder()throws Exception {
 		
 		//System.out.println("44444444444444444444"+orderService.updateStatementByNormalOrder(5L));
 //		orderService.updateStatementByNormalOrder(1L);
-		orderService.updateStatementByNormalOrder(23L);
-		orderService.updateStatementByNormalOrder(23L);
+		orderService.updateStatementByNormalOrder(1L);
+		orderService.updateStatementByNormalOrder(2L);
 //		orderService.updateStatementByNormalOrder(3L);
 	}
 	@Test
 	@Disabled
-	void testUpdateStatementByCancleOrder() {
+	void testUpdateStatementByCancleOrder()throws Exception {
 		
 		orderService.updateStatementByCancleOrder(6L);
 		orderService.updateStatementByCancleOrder(19L);

@@ -66,12 +66,12 @@ public interface OrderService {
 	OrdersDto updateStatementByNormalOrder(Long orderNo)throws Exception;
 
 	// 2.취소주문
-	OrdersDto updateStatementByCancleOrder(Long orderNo);
+	OrdersDto updateStatementByCancleOrder(Long orderNo)throws Exception;
 
 	// 3.환불주문
-	OrdersDto updateStatementByClientRefundOrder(Long orderNo);
+	OrdersDto updateStatementByClientRefundOrder(Long orderNo)throws Exception;
 	// 4.환불주문
-	OrdersDto updateStatementByAdminRefundOrder(Long orderNo);
+	OrdersDto updateStatementByAdminRefundOrder(Long orderNo)throws Exception;
 	// 5.상태리셋
-	OrdersDto updateStatementByResetOrder(Long orderNo);
+	OrdersDto updateStatementByResetOrder(Long orderNo)throws Exception;
 }

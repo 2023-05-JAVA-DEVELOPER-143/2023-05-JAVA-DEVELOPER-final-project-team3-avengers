@@ -124,6 +124,8 @@ public class OrderServiceImpl implements OrderService {
 				.name(ordersProductDto.getDelivaryName())
 				.phoneNumber(ordersProductDto.getDelivaryPhoneNumber())
 				.address(ordersProductDto.getDelivaryAddress())
+				.detailAddress(ordersProductDto.getDelivaryDetailAddress())
+				.postCode(ordersProductDto.getDeliveryPostCode())
 				.build();
 		
 		System.out.println("@@@@@@@@@@@@@@@delivery= "+delivery);
@@ -202,6 +204,8 @@ public class OrderServiceImpl implements OrderService {
 					.name(deliveryDto.getName())
 					.phoneNumber(deliveryDto.getPhoneNumber())
 					.address(deliveryDto.getAddress())
+					.detailAddress(deliveryDto.getDetailAddress())
+					.postCode(deliveryDto.getPostCode())
 					.build();
 			System.out.println("@@@@@@@@@@@@@@@@@@delivery: "+delivery);
 
@@ -286,6 +290,8 @@ public class OrderServiceImpl implements OrderService {
 				.name(ordersProductDto.getDelivaryName())
 				.phoneNumber(ordersProductDto.getDelivaryPhoneNumber())
 				.address(ordersProductDto.getDelivaryAddress())
+				.detailAddress(ordersProductDto.getDelivaryDetailAddress())
+				.postCode(ordersProductDto.getDeliveryPostCode())
 				.build();
 		
 		System.out.println("@@@@@@@@@@@@@@@delivery= "+delivery);
@@ -423,6 +429,8 @@ public class OrderServiceImpl implements OrderService {
 					.name(deliveryDto.getName())
 					.phoneNumber(deliveryDto.getPhoneNumber())
 					.address(deliveryDto.getAddress())
+					.detailAddress(deliveryDto.getDetailAddress())
+					.postCode(deliveryDto.getPostCode())
 					.build();
 			System.out.println("@@@@@@@@@@@@@@@@@@delivery: "+delivery);
 
@@ -506,7 +514,7 @@ public class OrderServiceImpl implements OrderService {
 	 */
 	@Transactional
 	@Override
-	public OrdersDto updateStatementByCancleOrder(Long orderNo) {
+	public OrdersDto updateStatementByCancleOrder(Long orderNo)throws Exception {
 		Orders updateOrder= orderDao.updateStatementByCancleOrder(orderNo);
 		orderDao.save(updateOrder);
 		return OrdersDto.orderDto(updateOrder);
@@ -516,7 +524,7 @@ public class OrderServiceImpl implements OrderService {
 	 */
 	@Transactional
 	@Override
-	public OrdersDto updateStatementByClientRefundOrder(Long orderNo) {
+	public OrdersDto updateStatementByClientRefundOrder(Long orderNo)throws Exception {
 		Orders updateOrder= orderDao.updateStatementByClientRefundOrder(orderNo);
 		orderDao.save(updateOrder);
 		return OrdersDto.orderDto(updateOrder);
@@ -526,7 +534,7 @@ public class OrderServiceImpl implements OrderService {
 	 */
 	@Transactional
 	@Override
-	public OrdersDto updateStatementByAdminRefundOrder(Long orderNo) {
+	public OrdersDto updateStatementByAdminRefundOrder(Long orderNo)throws Exception {
 		Orders updateOrder= orderDao.updateStatementByAdminRefundOrder(orderNo);
 		orderDao.save(updateOrder);
 		return OrdersDto.orderDto(updateOrder);
@@ -536,7 +544,7 @@ public class OrderServiceImpl implements OrderService {
 	 */
 	@Transactional
 	@Override
-	public OrdersDto updateStatementByResetOrder(Long orderNo) {
+	public OrdersDto updateStatementByResetOrder(Long orderNo)throws Exception {
 		Orders updateOrder= orderDao.updateStatementByResetOrder(orderNo);
 		orderDao.save(updateOrder);
 		return OrdersDto.orderDto(updateOrder);
