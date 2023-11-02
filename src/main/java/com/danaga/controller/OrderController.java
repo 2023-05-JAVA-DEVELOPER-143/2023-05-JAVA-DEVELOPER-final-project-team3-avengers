@@ -29,6 +29,15 @@ public class OrderController {
 	private final MemberService memberService;
 	private final MemberRepository memberRepository;
 
+	/*
+	 * 주문완료알림페이지에서 index.html로 돌아가기  session으로 회원일 떄 비회원일 때
+	 */
+	@GetMapping("/order_complete_to_index")
+	public String orderCompleteToIndex() {
+		return "/index";
+	}
+	
+	
 	/******************************* 회원 ****************************/
 	/*
 	 * 주문+주문아이템 목록(회원)
@@ -86,7 +95,7 @@ public class OrderController {
 		if (sUserId == null) {// 비회원
 			try {
 				orderService.guestProductOrderSave(ordersProductDto, orderGuestDto);
-				return "redirect:orders/guest/order_list";
+				return "orders/order_complete";
 			} catch (Exception e) {
 				model.addAttribute("msg", e.getMessage());
 				e.printStackTrace();
@@ -95,7 +104,7 @@ public class OrderController {
 		} else { // 회원
 			try {
 				orderService.memberProductOrderSave(sUserId, ordersProductDto);
-				return "redirect:orders/order_list";
+				return "orders/order_complete";
 			} catch (Exception e) {
 				model.addAttribute("msg", e.getMessage());
 				e.printStackTrace();
@@ -165,7 +174,7 @@ public class OrderController {
 				
 				orderService.guestCartSelectOrderSave(deliveryDto, fUserCarts, orderGuestDto);
 //				session.invalidate();
-				return "redirect:/member_order_List";
+				return "orders/order_complete";
 			} catch (Exception e) {
 				model.addAttribute("msg", e.getMessage());
 				e.printStackTrace();
@@ -189,7 +198,7 @@ public class OrderController {
 //				for (CartDto cartDto : fUserCarts) {
 //					cartService.deleteCart(cartDto.getId(), sUserId);
 //				}
-				return "redirect:/member_order_List";
+				return "orders/order_complete";
 			} catch (Exception e) {
 				model.addAttribute("msg", e.getMessage());
 				e.printStackTrace();
