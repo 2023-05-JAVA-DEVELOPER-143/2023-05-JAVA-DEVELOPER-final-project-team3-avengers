@@ -1,13 +1,25 @@
 package com.danaga.controller;
 
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.danaga.dto.MemberLoginDto;
 import com.danaga.dto.MemberResponseDto;
+import com.danaga.dto.MemberUpdateDto;
+import com.danaga.entity.Member;
+import com.danaga.exception.ExistedMemberByUserNameException;
+import com.danaga.exception.MemberNotFoundException;
+import com.danaga.exception.PasswordMismatchException;
 import com.danaga.service.MemberService;
 
 import jakarta.servlet.http.HttpSession;
@@ -95,25 +107,30 @@ public class MemberController {
 
 	@LoginCheck
 	@GetMapping("/member_logout_action")
-	public String user_logout_action(HttpSession session) {
-
+	public String member_logout_action(HttpSession session) {
 		/************** login check **************/
 		/****************************************/
 		session.invalidate();
 
 		return "redirect:index";
 	}
-
 	@LoginCheck
-	@PostMapping("/member_remove_action")
-	public String member_remove_action(HttpSession session) throws Exception {
-		/************** login check **************/
-		/****************************************/
-		String sUserId = (String) session.getAttribute("sUserId");
-		memberService.deleteMember(sUserId);
-		session.invalidate();
-		return "redirect:index";
+	@GetMapping("/member_quit_form")
+	public String member_quit_form() {
+		
+		return "member/member_quit";
 	}
+
+//	@LoginCheck
+//	@PostMapping("/member_remove_action")
+//	public String member_remove_action(HttpSession session) throws Exception {
+//		/************** login check **************/
+//		/****************************************/
+//		String sUserId = (String) session.getAttribute("sUserId");
+//		memberService.deleteMember(sUserId);
+//		session.invalidate();
+//		return "redirect:index";
+//	}
 
 	@GetMapping({ "/member_join_action", "/member_login_action", "/member_modify_action", "/member_remove_action" })
 	public String user_get() {
