@@ -40,86 +40,140 @@
 			<!-- Main Content -->
 			<div id="content">
 
+				<div class="container-fluid">
 
-				<body class="bg-gradient-primary">
+					<h1 class="h3 mb-2 text-gray-800" style="margin-top: 20px; margin-bottom: 20px;">상품등록</h1>
 
-					<div class="container">
-						<h1 class="h3 mb-2 text-gray-800" style="margin-top: 20px;">상품등록</h1>
-
-						<div class="card o-hidden border-0 shadow-lg my-5">
-							<div class="card-body p-0">
-								<!-- Nested Row within Card Body -->
-								<div class="row">
-									<div class="col-lg-12">
-										<div class="p-5">
+					<div class="row">
+						<!--상품 등록하기 시작-->
+						<div class="col-lg-6">
+							<div class="card shadow mb-4">
+								<div class="card-header py-3">
+									<h6 class="m-0 font-weight-bold text-primary text-center">제품 등록하기</h6>
+								</div>
+								<div class="card o-hidden border-0 shadow-lg">
+									<div class="card-body p-0">
+										<!-- Nested Row within Card Body -->
+										<div class="p-4">
 											<form class="user">
 												<div class="text-center">
-													<h3 class="h5 text-gray-900 mb-4" style="font-weight: bold;">기본정보
+													<h3 class="h5 text-gray-900 mb-2" style="font-weight: bold;">
+														제품선택(Product)</h3>
+												</div>
+												<hr>
+												<div class="form-group row">
+													<div class="col-sm-6 mb-3 mb-sm-0">
+														<a>&nbsp&nbsp&nbsp&nbsp제품명(기존제품)</a>
+													</div>
+													<div class="text-right">
+														<input type="checkbox" id="checkNewProduct">(신규제품일 경우
+														체크)</input>
+													</div>
+												</div>
+												<select class="form-select" id="productSelect" >
+													<div th:each="product : ${productList}">
+													<option th:value="${product.id}" th:text="${product.id + '번 ' + product.name}">Two</option>
+													</div>
+												</select>
+												<div class="text-center">
+													<h3 class="h5 text-gray-900 mb-2"
+														style="margin-top: 30px; font-weight: bold;">
+														기본정보(OptionSet)
 													</h3>
 												</div>
 												<hr>
 												<div class="form-group row">
 													<div class="col-sm-6 mb-3 mb-sm-0">
-														<a>&nbsp&nbsp&nbsp&nbsp제품명</a>
+														<a>&nbsp&nbsp&nbsp&nbsp제품명(신규제품)</a>
 														<input type="text" class="form-control form-control-user"
-															id="exampleFirstName" placeholder="First Name" />
+															id="txtProductName" placeholder="New Product Name"
+															onchange="setInputValue('txtProductName', 'outputProductName');"
+															disabled />
 													</div>
 													<div class="col-sm-6">
 														<a>&nbsp&nbsp&nbsp&nbsp브랜드</a>
 														<input type="text" class="form-control form-control-user"
-															id="exampleLastName" placeholder="Last Name" />
+															id="txtBrand" placeholder="Brand"
+															onchange="setInputValue('txtBrand', 'outputBrand');"
+															disabled />
 													</div>
 													<div class="col-sm-6" style="margin-top: 10px;">
-														<a>&nbsp&nbsp&nbsp&nbsp가격</a>
+														<a>&nbsp&nbsp&nbsp&nbsp가격(Product)</a>
 														<input type="text" class="form-control form-control-user"
-															id="exampleLastName" placeholder="Last Name" />
+															id="txtProductPrice" placeholder="Price"
+															onchange="setInputValue('txtProductPrice', 'outputProductPrice');"
+															disabled />
+													</div>
+													<div class="col-sm-6" style="margin-top: 10px;">
+														<a>&nbsp&nbsp&nbsp&nbsp재고</a>
+														<input type="text" class="form-control form-control-user"
+															id="txtStock" placeholder="OptionSet Stock"
+															onchange="setInputValue('txtStock', 'outputStock');" />
 													</div>
 												</div>
 												<div class="text-center">
-													<h3 class="h5 text-gray-900 mb-4"
-														style="margin-top: 20px; font-weight: bold;">이미지</h3>
+													<h3 class="h5 text-gray-900 mb-2"
+														style="margin-top: 30px; font-weight: bold;">
+														카테고리 정보</h3>
+													<a class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"
+														id="deleteCategory">
+														<i class="fas fa-trash"></i></a>
+													<a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+														id="createCategory">
+														<i class="fas fa-arrow-right"></i></a>
+												</div>
+												<hr>
+												<div class="text-center">
+													<h3 class="h5 text-gray-900 mb-2"
+														style="margin-top: 30px; font-weight: bold;">
+														이미지</h3>
 												</div>
 												<hr>
 												<div class="form-group">
 													<a>&nbsp&nbsp&nbsp&nbsp제품 이미지</a>
-													<div style="margin-top: 20px; margin-bottom: 20px;" class="text-center">
+													<div style="margin-top: 20px; margin-bottom: 20px;"
+														class="text-center">
 														<input type="file" id="img" name="img"
 															accept="image/png, image/jpeg"
 															onchange="imagePreview(this);" />
 														<br />
-														<img id="preview" />
+
 													</div>
 													<a style="margin-top: 20px;">&nbsp&nbsp&nbsp&nbsp상세페이지 이미지</a>
-													<div style="margin-top: 20px; margin-bottom: 20px;" class="text-center">
+													<div style="margin-top: 20px; margin-bottom: 20px;"
+														class="text-center">
 														<input type="file" id="descImg" name="descImg"
 															accept="image/png, image/jpeg" />
 													</div>
 												</div>
 												<div class="text-center">
-													<h3 class="h5 text-gray-900 mb-4"
-														style="margin-top: 20px; font-weight: bold;">옵션정보</h3>
+													<h3 class="h5 text-gray-900 mb-2"
+														style="margin-top: 30px; font-weight: bold;">
+														옵션정보</h3>
+													<a class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"
+														id="deleteOption">
+														<i class="fas fa-trash"></i></a>
+													<a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+														id="createOption">
+														<i class="fas fa-arrow-right"></i></a>
 												</div>
 												<hr>
+												<div id="optionContainer"></div>
 												<div class="form-group row">
 													<div class="col-sm-6 mb-3 mb-sm-0">
 														<a>&nbsp&nbsp&nbsp&nbsp옵션성격</a>
 														<input type="text" class="form-control form-control-user"
-															id="exampleFirstName" placeholder="First Name" />
+															id="txtOptionName" placeholder="Option Name" />
 													</div>
 													<div class="col-sm-6">
-														<a>&nbsp&nbsp&nbsp&nbsp옵션값</a>
+														<a>&nbsp&nbsp&nbsp&nbsp옵션값(value)</a>
 														<input type="text" class="form-control form-control-user"
-															id="exampleLastName" placeholder="Last Name" />
+															id="txtOptionValue" placeholder="Option Value" />
 													</div>
 													<div class="col-sm-6" style="margin-top: 10px;">
 														<a>&nbsp&nbsp&nbsp&nbsp옵션가격</a>
 														<input type="text" class="form-control form-control-user"
-															id="exampleLastName" placeholder="Last Name" />
-													</div>
-													<div class="col-sm-6" style="margin-top: 10px;">
-														<a>&nbsp&nbsp&nbsp&nbsp재고</a>
-														<input type="text" class="form-control form-control-user"
-															id="exampleLastName" placeholder="Last Name" />
+															id="txtOptionPrice" placeholder="Option Price" />
 													</div>
 												</div>
 												<hr>
@@ -138,83 +192,282 @@
 								</div>
 							</div>
 						</div>
+						<!--상품 등록하기 끝-->
 
-					</div>
+						<!--상품 미리보기 시작-->
+						<div class="col-lg-6">
+							<div class="card shadow mb-4">
+								<div class="card-header py-3">
+									<h6 class="m-0 font-weight-bold text-primary text-center">등록제품 미리보기</h6>
+								</div>
+								<div class="card-body">
+									<div class="text-center">
+										<h3 class="h5 text-gray-900 mb-4" style="font-weight: bold;">
+											제품 미리보기
+										</h3>
+										<div class="text-center"
+											style="font-weight: bold; font-size: 1.5em; color: navy;">총가격 : 50,000원
+										</div>
+										<img id="preview" />
+									</div>
+									<hr>
+									<div class="text-center">
+										<h3 class="h5 text-gray-900 mb-2" style="font-weight: bold;">
+											선택제품(Product)</h3>
+										<div class="h3" id="selectedProduct"></div>
+										<div class="h3" id="outputProductName"></div>
+									</div>
+									<hr>
+									<div class="text-center">
+										<h3 class="h5 text-gray-900 mb-2" style="font-weight: bold;">
+											카테고리 정보</h3>
+										<div class="form-group row">
+											<div class="col-sm-6 mb-3 mb-sm-0">
+												<a>&nbsp&nbsp&nbsp&nbsp상위 카테고리</a>
+												<select class="form-select" id="parentCategory">
+													<option selected>Open this select menu</option>
+													<option value="1">One</option>
+													<option value="2">Two</option>
+													<option value="3">Three</option>
+												</select>
+											</div>
+											<div class="col-sm-6">
+												<a>&nbsp&nbsp&nbsp&nbsp하위 카테고리</a>
+												<select class="form-select" id="childCategory">
+													<option selected>Open this select menu</option>
+													<option value="1">One</option>
+													<option value="2">Two</option>
+													<option value="3">Three</option>
+												</select>
+											</div>
+										</div>
 
-					<!-- End of Main Content -->
-
-					<!-- Footer -->
-					<footer class="sticky-footer bg-white">
-						<div class="container my-auto">
-							<div class="copyright text-center my-auto">
-								<span>Copyright &copy; Your Website 2020</span>
+									</div>
+									<hr>
+									<div class="text-center">
+										<h3 class="h5 text-gray-900 mb-2" style="font-weight: bold;">
+											기본정보(OptionSet)</h3>
+										<table class="table" id="optionSetTable" width="100%" cellspacing="0">
+											<thead>
+												<tr>
+													<th>속성</th>
+													<th>값(value)</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>브랜드</td>
+													<td id="outputBrand"></td>
+												<tr>
+													<td>제품가격</td>
+													<td id="outputProductPrice"></td>
+												</tr>
+												<tr>
+													<td>재고</td>
+													<td id="outputStock"></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+									<hr>
+									<div class="text-center">
+										<h3 class="h5 text-gray-900 mb-2" style="font-weight: bold;">
+											옵션정보</h3>
+										<table class="table" id="optionTable" width="100%" cellspacing="0">
+											<thead>
+												<tr>
+													<th>속성</th>
+													<th>값(value)</th>
+													<th>가격</th>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<th colspan="2">옵션가격합계</th>
+													<th>1500000원</th>
+												</tr>
+											</tfoot>
+											<tbody>
+												<tr>
+													<td>CPU</td>
+													<td>i5</td>
+													<td>50000</td>
+												<tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
 							</div>
 						</div>
-					</footer>
-					<!-- End of Footer -->
-
-			</div>
-			<!-- End of Content Wrapper -->
-
-		</div>
-		<!-- End of Page Wrapper -->
-
-		<!-- Scroll to Top Button-->
-		<a class="scroll-to-top rounded" href="#page-top">
-			<i class="fas fa-angle-up"></i>
-		</a>
-
-		<!-- Logout Modal-->
-		<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-			aria-hidden="true">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-						<button class="close" type="button" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">×</span>
-						</button>
-					</div>
-					<div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-					<div class="modal-footer">
-						<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-						<a class="btn btn-primary" href="login.html">Logout</a>
+						<!--상품 미리보기 끝-->
 					</div>
 				</div>
 			</div>
+
+			<!-- End of Main Content -->
+
+			<!-- Footer -->
+			<footer class="sticky-footer bg-white">
+				<div class="container my-auto">
+					<div class="copyright text-center my-auto">
+						<span>Copyright &copy; Your Website 2020</span>
+					</div>
+				</div>
+			</footer>
+			<!-- End of Footer -->
+
 		</div>
+		<!-- End of Content Wrapper -->
 
-		<!-- Bootstrap core JavaScript-->
-		<script src="/bootstrap_admin/vendor/jquery/jquery.min.js"></script>
-		<script src="/bootstrap_admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	</div>
+	<!-- End of Page Wrapper -->
 
-		<!-- Core plugin JavaScript-->
-		<script src="/bootstrap_admin/vendor/jquery-easing/jquery.easing.min.js"></script>
+	<!-- Scroll to Top Button-->
+	<a class="scroll-to-top rounded" href="#page-top">
+		<i class="fas fa-angle-up"></i>
+	</a>
 
-		<!-- Custom scripts for all pages-->
-		<script src="/bootstrap_admin/js/sb-admin-2.min.js"></script>
+	<!-- Logout Modal-->
+	<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">Select "Logout" below if you are ready to end your current session.
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+					<a class="btn btn-primary" href="login.html">Logout</a>
+				</div>
+			</div>
+		</div>
+	</div>
 
-		<!-- Page level plugins -->
-		<script src="/bootstrap_admin/vendor/datatables/jquery.dataTables.min.js"></script>
-		<script src="/bootstrap_admin/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+	<!-- Bootstrap core JavaScript-->
+	<script src="/bootstrap_admin/vendor/jquery/jquery.min.js"></script>
+	<script src="/bootstrap_admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-		<!-- Page level custom scripts -->
-		<script src="/bootstrap_admin/js/demo/datatables-demo.js"></script>
+	<!-- Core plugin JavaScript-->
+	<script src="/bootstrap_admin/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-		<script>
-			function imagePreview(input) {
-				if (input.files && input.files[0]) {
-					var reader = new FileReader();
-					reader.onload = function (e) {
-						document.getElementById('preview').src = e.target.result;
+	<!-- Custom scripts for all pages-->
+	<script src="/bootstrap_admin/js/sb-admin-2.min.js"></script>
+
+	<!-- Page level plugins -->
+	<script src="/bootstrap_admin/vendor/datatables/jquery.dataTables.min.js"></script>
+	<script src="/bootstrap_admin/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+	<!-- Page level custom scripts -->
+	<script src="/bootstrap_admin/js/demo/datatables-demo.js"></script>
+
+	<script>
+		//이미지 미리보기(500*500)
+		function imagePreview(input) {
+			if (input.files && input.files[0]) {
+				var reader = new FileReader();
+				reader.onload = function (e) {
+					var img = new Image();
+					img.src = e.target.result;
+					img.onload = function () {
+						var canvas = document.createElement("canvas");
+						var ctx = canvas.getContext("2d");
+
+						// 이미지 크기 조절
+						var maxWidth = 500;
+						var maxHeight = 500;
+						var width = img.width;
+						var height = img.height;
+
+						if (width > maxWidth || height > maxHeight) {
+							var aspectRatio = width / height;
+
+							if (width > maxWidth) {
+								width = maxWidth;
+								height = width / aspectRatio;
+							}
+
+							if (height > maxHeight) {
+								height = maxHeight;
+								width = height * aspectRatio;
+							}
+						}
+
+						canvas.width = width;
+						canvas.height = height;
+						ctx.drawImage(img, 0, 0, width, height);
+
+						document.getElementById('preview').src = canvas.toDataURL("image/jpeg");
+
 					};
-					reader.readAsDataURL(input.files[0]);
-				} else {
-					document.getElementById('preview').src = "";
-				}
+				};
+				reader.readAsDataURL(input.files[0]);
+			} else {
+				document.getElementById('preview').src = "";
 			}
+		}
 
-		</script>
+		function updateSelectedValue() {
+			var selectElement = document.getElementById("productSelect");
+			var selectedValue = selectElement.options[selectElement.selectedIndex].text;
+			var displayElement = document.getElementById("selectedProduct");
+			displayElement.textContent = selectedValue;
+		}
+		updateSelectedValue();
+		$("#productSelect").change(updateSelectedValue);
+
+		// 옵션추가
+		$(function () {
+			var counter = 1;
+			$('#createOption').click(function () {
+				var newDiv = $('<div></div>');
+				newDiv.attr('id', 'txt' + counter);
+				newDiv.text('Text in Div ' + counter);
+				$('#optionContainer').append(newDiv);
+				counter++;
+			});
+			//옵션삭제
+			$('#deleteOption').click(function () {
+				if (counter > 1) {
+					$('#txt' + (counter - 1)).remove();
+					counter--;
+				}
+			});
+		});
+
+		//입력값 실시간 노출
+		function setInputValue(inputId, outputId) {
+			$('#' + outputId).text($('#' + inputId).val());
+		}
+
+		document.getElementById('checkNewProduct').addEventListener('change', function () {
+			var selectElement = document.getElementById('productSelect');
+			var inputElement = document.getElementById('txtProductName');
+
+			if (this.checked) {
+				selectElement.disabled = true;
+				inputElement.disabled = false;
+				document.getElementById('txtBrand').disabled = false;
+				document.getElementById('txtProductPrice').disabled = false;
+				$('#selectedProduct').hide();
+				$('#outputProductName').show();
+			} else {
+				selectElement.disabled = false;
+				inputElement.disabled = true;
+				inputElement.value = '';
+				document.getElementById('txtBrand').disabled = true;
+				document.getElementById('txtProductPrice').disabled = true;
+				$('#outputProductName').hide();
+				$('#selectedProduct').show();
+			}
+		});
+
+
+	</script>
 
 </body>
 
