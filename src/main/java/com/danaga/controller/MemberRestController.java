@@ -1,18 +1,10 @@
 package com.danaga.controller;
 
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,9 +22,6 @@ import com.danaga.exception.ExistedMemberByPhoneNoException;
 import com.danaga.exception.ExistedMemberByUserNameException;
 import com.danaga.exception.MemberNotFoundException;
 import com.danaga.exception.PasswordMismatchException;
-import com.danaga.memberResponse.MemberResponse;
-import com.danaga.memberResponse.MemberResponseMessage;
-import com.danaga.memberResponse.MemberResponseStatusCode;
 import com.danaga.service.CartService;
 import com.danaga.service.MemberService;
 
@@ -63,12 +52,7 @@ public class MemberRestController {
 	public Map member_login_action_rest(@RequestBody MemberLoginDto memberLoginDto, HttpSession session)
 			throws Exception {
 		HashMap map = new HashMap<>();
-<<<<<<< HEAD
-		// MemberResponseDto memberResponseDto =
-		// MemberResponseDto.builder().userName(userName).password(password).build();
-=======
 		//MemberResponseDto memberResponseDto = MemberResponseDto.builder().userName(userName).password(password).build();
->>>>>>> refs/heads/feature/ldh51
 		int result = 2;
 
 		try {
