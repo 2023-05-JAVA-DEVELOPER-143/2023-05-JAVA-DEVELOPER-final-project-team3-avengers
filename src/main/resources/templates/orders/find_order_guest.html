@@ -80,10 +80,15 @@
 	<th:block layout:fragment="script">
 		<script type="text/javascript">
 			function guestOrderDetail() {
-				var orderNo = $('#orderNo').val();
-				var phoneNumber = $('#phoneNumber').val();
-				var name = $('#name').val();
-
+				let orderNo = $('#orderNo').val();
+				let phoneNumber = $('#phoneNumber').val();
+				let name = $('#name').val();
+				let data = {
+						"orderNo": orderNo,
+						"phoneNumber": phoneNumber,
+						"name": name
+						
+				}
 				// 에러 메시지 초기화
 				$('#orderNoError').text('');
 				$('#phoneNumberError').text('');
@@ -96,6 +101,15 @@
 					});
 					return;
 				}
+				
+				if (isNaN(orderNo)) {
+					$('#orderNoError').text('주문번호는 숫자를 입력해야 됩니다.');
+					$('#orderNo').mouseenter(function() {
+						$('#orderNoError').text('');
+					});
+					return;
+				}
+				
 
 				if (!phoneNumber) {
 					$('#phoneNumberError').text('주문자전화번호가 입력되지 않았습니다.');
@@ -118,12 +132,57 @@
 						$('#nameError').text('');
 					});
 					return;
-
+					
 				}
-
+				
+				
+				$.ajax({
+    				url:'/order_guest_detail',
+    				method:'GET',
+    				data:JSON.stringify(data),
+    				dataType: "json",
+    				contentType: 'application/json;chrset=UTF-8',
+    				success:function(resultJson){
+						console.log('post 요청')
+    					$('#loginUserId').tooltip('dispose');
+    					$('#loginPassword').tooltip('dispose');
+    					/*
+    		    		 * 0 아이디존재안함
+    		    		 * 1 패쓰워드불일치
+    		    		 * 2 패쓰워드일치(로그인성공)
+    		    		 */
+    		    		 if(resultJson.result==0){
+    		    			 $('#loginUserId').css('border','0.5px solid orange');
+    		    			 $('#loginUserId').tooltip({'trigger':'hover', 'title': resultJson.member.userName+' 는 존재하지않는 아이디입니다.'});
+    		    			 $('#loginUserId').tooltip('show');
+    		    		 }else if(resultJson.result==1){
+    		    			 $('#loginPassword').css('border','0.5px solid orange');
+    		    			 $('#loginPassword').tooltip({'trigger':'hover', 'title': '비밀번호가 일치하지않습니다.'});
+    		    			 $('#loginPassword').tooltip('show');
+    		    		 }else if(resultJson.result==2){
+    		    			 $('#form-account-login input').css('border','');
+    	    				 $('#loginUserId').tooltip('dispose');
+    	    				 $('#loginPassword').tooltip('dispose');
+    		    			 location.href='/index';
+    		    		 }
+    				},
+    				error:function(){
+    					location.href="/404";
+    				}
+    			});
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
 				var form = document.createElement('form');
-				form.method = 'GET';
-				form.action = '/order_guest_detail';
 
 				var orderNoInput = document.createElement('input');
 				orderNoInput.type = 'hidden';
