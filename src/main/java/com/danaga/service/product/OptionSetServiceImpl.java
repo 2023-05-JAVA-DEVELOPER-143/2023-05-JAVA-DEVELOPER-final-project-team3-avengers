@@ -130,7 +130,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 						.category(CategoryDto.builder().name(findCategory.get(findCategory.size() - 1).getName())
 								.id(findCategory.get(findCategory.size() - 1).getId()).build())
 						.build(), username)
-				.stream().limit(20).collect(Collectors.toList());
+				.stream().filter(t -> t.getOsId()!=optionSetId).limit(20).collect(Collectors.toList());
 		;
 		return ResponseDto.<ProductDto>builder().data(searchResult).build();
 	}
@@ -139,6 +139,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 	// 조건에 해당하는 리스트 전체 조회
 	@Override
 	public ResponseDto<ProductDto> searchProducts(QueryStringDataDto dto) {
+		System.out.println("검색조건>>>>>>>>>>>>>>>"+dto);
 		List<ProductDto> data = optionSetDao.findByFilter(dto).stream().map(t -> new ProductDto(t))
 				.collect(Collectors.toList());
 		;
@@ -238,7 +239,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 
 	// 옵션셋 아이디로 옵션셋 찾기 디테일 들어갈때사용
 	@Override
-	public ResponseDto<?> findById(Long optionSetId) {
+	public ResponseDto<ProductDto> findById(Long optionSetId) {
 		OptionSet optionSet = optionSetDao.findById(optionSetId);
 		List<ProductDto> data = new ArrayList<>();
 		data.add(new ProductDto(optionSet));

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.danaga.dto.*;
+import com.danaga.dto.product.OptionSetUpdateDto;
 import com.danaga.dto.product.ProductDto;
 import com.danaga.entity.*;
 import com.danaga.repository.*;
@@ -45,11 +46,11 @@ public class OrderController {
 	 */
 	@LoginCheck
 	@GetMapping("/member_order_List")
-	public String memberOrderList(Model model, HttpServletRequest request) {// model은 데이터를 담아서 넘겨주는역활
+	public String memberOrderList(Model model, HttpSession session) {// model은 데이터를 담아서 넘겨주는역활
 
 		try {
 //		   String sUserId = "User1";
-			String loginUser = (String) request.getSession().getAttribute("sUserId");
+			String loginUser = (String) session.getAttribute("sUserId");
 			List<OrdersDto> orderDtoList = orderService.memberOrderList(loginUser);
 			// orderDtoList를 id 기준으로 오름차순 정렬
 			orderDtoList.sort(Comparator.comparing(OrdersDto::getId));
@@ -71,7 +72,10 @@ public class OrderController {
 	@GetMapping("/product_order_form")
 	public String memberProductOrderAddForm(@ModelAttribute("cartDto") CartDto cartDto, Model model,
 			HttpSession session) {
-
+		
+		
+		
+		
 		ResponseDto<?> responseDto = optionSetService.findById(cartDto.getOptionSetId());
 		List<ProductDto> productDtoList = (List<ProductDto>) responseDto.getData();
 		ProductDto productDto = productDtoList.get(0);
@@ -118,12 +122,26 @@ public class OrderController {
 				.phoneNo(orderTotalDto.getOrdererPhoneNo()).build();
 		if (sUserId == null) {// 비회원
 			try {
-				orderService.guestProductOrderSave(ordersProductDto, orderGuestDto);
+				OrdersDto ordersDto = orderService.guestProductOrderSave(ordersProductDto, orderGuestDto);
+
+				for (SUserCartOrderDto sUserCartOrderDto : sUserCartOrderDtoList) {
+
+					List<ProductDto> productDtoList=(List<ProductDto>) optionSetService.findById(sUserCartOrderDto.getId());
+					
+					OptionSetUpdateDto optionSetUpdateDto = OptionSetUpdateDto.builder()
+																			  .id(sUserCartOrderDto.getId())
+																			  .stock(productDtoList.get(0).getStock()-sUserCartOrderDto.getQty())
+																			  .build();
+					optionSetService.updateStock(optionSetUpdateDto);
+					
+				}
+
 				System.out.println("$$$$" + sUserCartOrderDtoList.size());
 				sUserCartOrderDtoList.clear();
 				System.out.println("$$$$" + sUserCartOrderDtoList.size());
 				session.setAttribute("sUserCartOrderDtoList", sUserCartOrderDtoList);
 				session.setAttribute("realTotalPrice", 0);
+				model.addAttribute("orderId", ordersDto.getId());
 				return "orders/order_complete";
 			} catch (Exception e) {
 				model.addAttribute("msg", e.getMessage());
@@ -132,11 +150,26 @@ public class OrderController {
 			}
 		} else { // 회원
 			try {
-				orderService.memberProductOrderSave(sUserId, ordersProductDto);
+				OrdersDto ordersDto = orderService.memberProductOrderSave(sUserId, ordersProductDto);
+				
+				for (SUserCartOrderDto sUserCartOrderDto : sUserCartOrderDtoList) {
+
+					List<ProductDto> productDtoList=(List<ProductDto>) optionSetService.findById(sUserCartOrderDto.getId());
+					
+					OptionSetUpdateDto optionSetUpdateDto = OptionSetUpdateDto.builder()
+																			  .id(sUserCartOrderDto.getId())
+																			  .stock(productDtoList.get(0).getStock()-sUserCartOrderDto.getQty())
+																			  .build();
+					optionSetService.updateStock(optionSetUpdateDto);
+					
+				}
+				
+				
 				sUserCartOrderDtoList.clear();
 				System.out.println("$$$$" + sUserCartOrderDtoList.size());
 				session.setAttribute("sUserCartOrderDtoList", sUserCartOrderDtoList);
 				session.setAttribute("realTotalPrice", 0);
+				model.addAttribute("orderId", ordersDto.getId());
 				return "orders/order_complete";
 			} catch (Exception e) {
 				model.addAttribute("msg", e.getMessage());
@@ -154,6 +187,7 @@ public class OrderController {
 			HttpSession session) throws Exception {
 		System.out.println("###########" + sUserCartOrderDtoList.size());
 		System.out.println(sUserCartOrderDtoList);
+		
 		String sUserId = (String) session.getAttribute("sUserId");
 		if (sUserId != null) {
 			MemberResponseDto memberResponseDto = memberService.getMemberBy(sUserId);
@@ -176,7 +210,7 @@ public class OrderController {
 		} else {
 			Integer realTotalPrice = 0;
 			for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
-				realTotalPrice += sUserCartOrderDtoList.get(i).getTotalPrice();
+				realTotalPrice += sUserCartOrderDtoList.get(i).getTotalPrice() * sUserCartOrderDtoList.get(i).getQty();
 				System.out.println(realTotalPrice);
 			}
 			model.addAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
@@ -208,13 +242,22 @@ public class OrderController {
 			try {
 				List<SUserCartOrderDto> sUserCartOrderDtoList = (List<SUserCartOrderDto>) session
 						.getAttribute("sUserCartOrderDto");
-
 				List<CartDto> fUserCarts = new ArrayList<>();
+				List<OptionSetUpdateDto> optionSetUpdateDtoList = new ArrayList<>();
 				for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
 					CartDto cartDto = CartDto.builder().optionSetId(sUserCartOrderDtoList.get(i).getId())
 							.qty(sUserCartOrderDtoList.get(i).getQty()).build();
 					fUserCarts.add(cartDto);
+
+					List<ProductDto> productDtoList = (List<ProductDto>) optionSetService
+							.findById(cartDto.getOptionSetId()).getData();
+
+					OptionSetUpdateDto optionSetUpdateDto = OptionSetUpdateDto.builder().id(cartDto.getOptionSetId())
+							.stock(productDtoList.get(0).getStock() - cartDto.getQty()).build();
+					optionSetService.updateStock(optionSetUpdateDto);
+					optionSetUpdateDtoList.add(optionSetUpdateDto);
 				}
+
 				DeliveryDto deliveryDto = new DeliveryDto();
 				deliveryDto.setName(orderTotalDto.getReceiverName());
 				deliveryDto.setPhoneNumber(orderTotalDto.getReceiverPhoneNo());
@@ -254,10 +297,19 @@ public class OrderController {
 				List<SUserCartOrderDto> sUserCartOrderDtoList = (List<SUserCartOrderDto>) session
 						.getAttribute("sUserCartOrderDto");
 				List<CartDto> fUserCarts = new ArrayList<>();
+				List<OptionSetUpdateDto> optionSetUpdateDtoList = new ArrayList<>();
 				for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
 					CartDto cartDto = CartDto.builder().optionSetId(sUserCartOrderDtoList.get(i).getId())
 							.qty(sUserCartOrderDtoList.get(i).getQty()).build();
 					fUserCarts.add(cartDto);
+
+					List<ProductDto> productDtoList = (List<ProductDto>) optionSetService
+							.findById(cartDto.getOptionSetId()).getData();
+
+					OptionSetUpdateDto optionSetUpdateDto = OptionSetUpdateDto.builder().id(cartDto.getOptionSetId())
+							.stock(productDtoList.get(0).getStock() - cartDto.getQty()).build();
+					optionSetUpdateDtoList.add(optionSetUpdateDto);
+					optionSetService.updateStock(optionSetUpdateDto);
 				}
 				DeliveryDto deliveryDto = new DeliveryDto();
 				deliveryDto.setName(orderTotalDto.getReceiverName());
@@ -265,7 +317,7 @@ public class OrderController {
 				deliveryDto.setAddress(orderTotalDto.getReceiverAddress());
 				deliveryDto.setDetailAddress(orderTotalDto.getReceiverDetailAddress());
 				deliveryDto.setPostCode(orderTotalDto.getReceiverPostCode());
-				OrdersDto ordersDto= orderService.memberCartSelectOrderSave(sUserId, deliveryDto, fUserCarts);
+				OrdersDto ordersDto = orderService.memberCartSelectOrderSave(sUserId, deliveryDto, fUserCarts);
 //				for (CartDto cartDto : fUserCarts) {
 //					cartService.deleteCart(cartDto.getOptionSetId(), sUserId);
 //				}
@@ -274,7 +326,7 @@ public class OrderController {
 //				session.setAttribute("sUserCartOrderDtoList", sUserCartOrderDtoList);
 //				session.setAttribute("realTotalPrice", 0);
 //				session.setAttribute("countCarts", cartService.countCarts(sUserId));
-				model.addAttribute("orderId",ordersDto.getId());
+				model.addAttribute("orderId", ordersDto.getId());
 				return "orders/order_complete";
 			} catch (Exception e) {
 				model.addAttribute("msg", e.getMessage());
@@ -311,6 +363,7 @@ public class OrderController {
 
 			List<OrdersDto> ordersDtoList = orderService.guestOrderList(ordersGuestDetailDto.getOrderNo(),
 					ordersGuestDetailDto.getPhoneNumber(), ordersGuestDetailDto.getName());
+		
 			System.out.println("@@@@@@@@@@@@@@@@ordersDtoList: " + ordersDtoList);
 			System.out.println("@@@@@@@@@@@@@@@@ordersItemDtoList: " + ordersDtoList.get(0).getOrderItemDtoList());
 			List<OrderItemDto> orderItemDtoList = ordersDtoList.get(0).getOrderItemDtoList();
@@ -321,7 +374,7 @@ public class OrderController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("errorMsg", e.getMessage());
-			return null;
+			return "orders/find_order_guest";
 		}
 	}
 

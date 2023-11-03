@@ -181,17 +181,17 @@
 						<h3 class="product-title" th:text="${productDto.name}"><a href="product-detail.html">상품명</a></h3>
 						<h4 class="product-price" th:text="${productDto.totalPrice}">$34.99</h4>
 						<div class="product-buttons">
-							<button th:if="${productList.isInterested}"
+							<button th:if="${productDto.isInterested}"
 									class="btn btn-outline-secondary btn-sm btn-wishlist active"
-									data-toggle="tooltip" th:product-heart="|${productList.osId}|"
+									data-toggle="tooltip" th:product-heart="|${productDto.osId}|"
 									title="Whishlist">
-									<i class="icon-heart" th:heart="|${productList.osId}|"></i>
+									<i class="icon-heart" th:heart="|${productDto.osId}|"></i>
 								</button>
-								<button th:unless="${productList.isInterested}"
+								<button th:unless="${productDto.isInterested}"
 									class="btn btn-outline-secondary btn-sm btn-wishlist"
 									 data-toggle="tooltip"
-									title="Whishlist" th:product-heart-yet="|${productList.osId}|">
-									<i class="icon-heart" th:heart="|${productList.osId}|"></i>
+									title="Whishlist" th:product-heart-yet="|${productDto.osId}|">
+									<i class="icon-heart" th:heart="|${productDto.osId}|"></i>
 								</button>
 							<button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success"
 								data-toast-position="topRight" data-toast-icon="icon-circle-check"

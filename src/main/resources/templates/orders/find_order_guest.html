@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="layout/layout(title='')">
 <!-- Body-->
 <!-- Header -->
@@ -16,19 +17,22 @@
 			<!-- Find Guest Form-->
 			<div class="col-xl-9 col-lg-8">
 				<h2>비회원 주문 찾기</h2>
-			</div>			<hr class="padding-bottom-1x">
+			</div>
+			<hr class="padding-bottom-1x">
 
 
 			<form class="custom-section" th:object="${ordersGuestDetailDto}">
 				<div class="col-sm-6">
 					<div class="form-group">
-						<label for="orderNo">주문번호</label> 
-						<input class="form-control" type="text" id="orderNo" name="orderNo" value="orderNo"
-							required th:field="*{orderNo}">
+						<label for="orderNo">주문번호</label> <input class="form-control"
+							type="text" id="orderNo" name="orderNo" value="orderNo" required
+							th:field="*{orderNo}">
+						<div id="orderNoError" class="error-message"
+							style="color: red; margin-left: 10px;"></div>
 					</div>
+
+					<!-- 주문번호 에러 메시지 -->
 				</div>
-
-
 
 				<div class="col-sm-6">
 					<div class="form-group">
@@ -36,71 +40,119 @@
 							class="form-control" type="text" id="phoneNumber"
 							name="phoneNumber" value="phoneNumber" required
 							th:field="*{phoneNumber}">
+							<div id="phoneNumberError" class="error-message"
+							style="color: red; margin-left: 10px;"></div>
 					</div>
+					
+					<!-- 주문자전화번호 에러 메시지 -->
 				</div>
-
-
 
 				<div class="col-sm-6">
 					<div class="form-group">
 						<label for="name">주문자이름</label> <input class="form-control"
 							type="text" id="name" name="name" value="name" required
 							th:field="*{name}">
+						<div id="nameError" class="error-message"
+							style="color: red; margin-left: 10px;"></div>
 					</div>
-				</div>
 
+					<!-- 주문자이름 에러 메시지 -->
+				</div>
 
 				<hr class="padding-bottom-1x">
 
 				<div class="checkout-footer">
 					<div class="column">
-						<a class="btn btn-primary" href="#" th:onclick="guestOrderDetail()">
-							<span class="hidden-xs-down">주문찾기 &nbsp;</span><i
+						<a class="btn btn-primary" href="#" onclick="guestOrderDetail()">
+							<span class="hidden-xs-down">주문찾기&nbsp;</span><i
 							class="icon-arrow-right"></i>
 						</a>
 					</div>
 				</div>
 			</form>
-			</div>
+
 
 		</section>
 
 	</th:block>
+
+
 	<th:block layout:fragment="script">
 		<script type="text/javascript">
 			function guestOrderDetail() {
-			    var form = document.createElement('form');
-			    form.method = 'GET';
-			    form.action = '/order_guest_detail';
-		
-					
-			    var orderNoInput = document.createElement('input');
-			    orderNoInput.type = 'hidden';
-			    orderNoInput.name = 'orderNo';
-			    orderNoInput.value = $('#orderNo').val();
-			    console.log('@@@@@@@@orderNoInput'+orderNoInput.value);
+				var orderNo = $('#orderNo').val();
+				var phoneNumber = $('#phoneNumber').val();
+				var name = $('#name').val();
 
-			    form.appendChild(orderNoInput);
+				// 에러 메시지 초기화
+				$('#orderNoError').text('');
+				$('#phoneNumberError').text('');
+				$('#nameError').text('');
 
-			    var phoneNumberInput = document.createElement('input');
-			    phoneNumberInput.type = 'hidden';
-			    phoneNumberInput.name = 'phoneNumber';
-			    phoneNumberInput.value = $('#phoneNumber').val();
-			    console.log('@@@@@@@@phoneNumberInput'+phoneNumberInput.value);
-			    form.appendChild(phoneNumberInput);
+				if (!orderNo) {
+					$('#orderNoError').text('주문번호가 입력되지 않았습니다.');
+					$('#orderNo').mouseenter(function() {
+						$('#orderNoError').text('');
+					});
+					return;
+				}
 
-			    var nameInput = document.createElement('input');
-			    nameInput.type = 'hidden';
-			    nameInput.name = 'name';
-			    nameInput.value = $('#name').val();
-			    console.log('@@@@@@@@nameInput'+nameInput.value);
-			    form.appendChild(nameInput);
-			    document.body.appendChild(form);
-			    
-			    form.submit();
+				if (!phoneNumber) {
+					$('#phoneNumberError').text('주문자전화번호가 입력되지 않았습니다.');
+					$('#phoneNumber').mouseenter(function() {
+						$('#phoneNumberError').text('');
+					});
+					return;
+				}
+				 if (!(phoneNumber.includes('-'))) {
+					$('#phoneNumberError').text('주문자전화번호의 양식이 잘못되었습니다.');
+					$('#phoneNumber').mouseenter(function() {
+						$('#phoneNumberError').text('');
+					});
+						return;
+					}
+
+				if (!name) {
+					$('#nameError').text('주문자이름이 입력되지 않았습니다.');
+					$('#name').mouseenter(function() {
+						$('#nameError').text('');
+					});
+					return;
+
+				}
+
+				var form = document.createElement('form');
+				form.method = 'GET';
+				form.action = '/order_guest_detail';
+
+				var orderNoInput = document.createElement('input');
+				orderNoInput.type = 'hidden';
+				orderNoInput.name = 'orderNo';
+				orderNoInput.value = $('#orderNo').val();
+				console.log('@@@@@@@@orderNoInput' + orderNoInput.value);
+
+				form.appendChild(orderNoInput);
+
+				var phoneNumberInput = document.createElement('input');
+				phoneNumberInput.type = 'hidden';
+				phoneNumberInput.name = 'phoneNumber';
+				phoneNumberInput.value = $('#phoneNumber').val();
+				console
+						.log('@@@@@@@@phoneNumberInput'
+								+ phoneNumberInput.value);
+				form.appendChild(phoneNumberInput);
+
+				var nameInput = document.createElement('input');
+				nameInput.type = 'hidden';
+				nameInput.name = 'name';
+				nameInput.value = $('#name').val();
+				console.log('@@@@@@@@nameInput' + nameInput.value);
+				form.appendChild(nameInput);
+				document.body.appendChild(form);
+
+				form.submit();
+
 			}
-
-
 		</script>
 	</th:block>
 
