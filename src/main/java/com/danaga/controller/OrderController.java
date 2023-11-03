@@ -71,7 +71,10 @@ public class OrderController {
 	@GetMapping("/product_order_form")
 	public String memberProductOrderAddForm(@ModelAttribute("cartDto") CartDto cartDto, Model model,
 			HttpSession session) {
-
+		
+		
+		
+		
 		ResponseDto<?> responseDto = optionSetService.findById(cartDto.getOptionSetId());
 		List<ProductDto> productDtoList = (List<ProductDto>) responseDto.getData();
 		ProductDto productDto = productDtoList.get(0);
@@ -154,6 +157,7 @@ public class OrderController {
 			HttpSession session) throws Exception {
 		System.out.println("###########" + sUserCartOrderDtoList.size());
 		System.out.println(sUserCartOrderDtoList);
+		
 		String sUserId = (String) session.getAttribute("sUserId");
 		if (sUserId != null) {
 			MemberResponseDto memberResponseDto = memberService.getMemberBy(sUserId);
