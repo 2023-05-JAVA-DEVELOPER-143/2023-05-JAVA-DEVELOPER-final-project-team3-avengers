@@ -144,7 +144,8 @@ public class MemberServiceImpl implements MemberService {
 		} else if (member.getGradePoint() > 35000) {
 			member.setGrade("Diamond");
 		}
-		memberDao.update(member);
+		memberDao.updatePoint(member);
+		System.out.println("멤버가 안찾아짐"+member);
 
 	}
 	@Override
