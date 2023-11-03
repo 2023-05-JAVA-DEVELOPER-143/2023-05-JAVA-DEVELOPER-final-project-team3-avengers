@@ -393,7 +393,6 @@ function confirmNumber(){
 
     if(number1 == number2){
 		$('#number').css('border','0.5px solid green');
-		$('#number').tooltip({'trigger':'hover', 'title':'인증되었습니다.'});
 		$('#number').tooltip('show');
 		setTimeout(function() {
 	    $('#number').tooltip('hide');
@@ -401,10 +400,10 @@ function confirmNumber(){
         emailCheck = true;
     }else{
         $('#number').css('border','0.5px dotted orange');
-		$('#number').tooltip({'trigger':'hover', 'title':'인증번호가 다릅니다.'});
 		$('#number').tooltip('show');
 		setTimeout(function() {
 	    $('#number').tooltip('hide');
+	    emailCheck = false;
 	    }, 2000);
     }
 }

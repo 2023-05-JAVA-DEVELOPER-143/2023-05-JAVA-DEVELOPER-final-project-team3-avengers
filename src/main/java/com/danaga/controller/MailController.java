@@ -20,13 +20,21 @@ public class MailController {
 //    }
     @ResponseBody
     @PostMapping("/emailAuthentication")
-    public String MailSend(String mail){
+    public String joinMailSend(String mail){
 
-       int number = mailService.sendMail(mail);
+       int number = mailService.joinSendMail(mail);
 
        String num = "" + number;
 
        return num;
+    }
+    @ResponseBody
+    @PostMapping("/findEmailAuthentication")
+    public String findPassMailSend(String mail){
+    	
+    	String randomPass = mailService.findPassSendMail(mail);
+    	
+    	return randomPass;
     }
 
 }

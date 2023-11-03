@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.danaga.dto.CartDto;
+import com.danaga.dto.MemberFindDto;
 import com.danaga.dto.MemberLoginDto;
 import com.danaga.dto.MemberResponseDto;
 import com.danaga.dto.MemberUpdateDto;
 import com.danaga.entity.Member;
+import com.danaga.exception.EmailMismatchException;
 import com.danaga.exception.ExistedMemberByEmailException;
 import com.danaga.exception.ExistedMemberByNicknameException;
 import com.danaga.exception.ExistedMemberByPhoneNoException;
@@ -48,6 +50,30 @@ public class MemberRestController {
 //		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 //		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
 //	}
+	@PostMapping(value = "/findpass_rest", produces = "application/json;charset=UTF-8")
+	public Map member_findPass_action_rest(@RequestBody MemberFindDto memberFindDto, HttpSession session)
+			throws Exception {
+		HashMap map = new HashMap<>();
+		//MemberResponseDto memberResponseDto = MemberResponseDto.builder().userName(userName).password(password).build();
+		int result = 2;
+		
+		try {
+			memberService.isMatchEmailByUserName(memberFindDto.getUserName(), memberFindDto.getEmail());
+		} catch (MemberNotFoundException e) {
+			result = 0;
+			map.put("result", result);
+			map.put("msg", memberFindDto.getUserName() + "는 존재하지 않는 아이디입니다.");
+			return map;
+		} catch (EmailMismatchException e) {
+			result = 1;
+			map.put("result", result);
+			map.put("msg", "해당 아이디에 등록된 이메일이 아닙니다.");
+			return map;
+		}
+		
+		map.put("result", result);
+		return map;
+	}
 	@PostMapping(value = "/login_rest", produces = "application/json;charset=UTF-8")
 	public Map member_login_action_rest(@RequestBody MemberLoginDto memberLoginDto, HttpSession session)
 			throws Exception {

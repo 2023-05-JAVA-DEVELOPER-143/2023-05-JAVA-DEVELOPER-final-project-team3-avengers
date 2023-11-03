@@ -1,8 +1,11 @@
 package com.danaga.service;
 
+import java.security.NoSuchAlgorithmException;
+
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import com.danaga.generator.RandomStringGenerator;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
@@ -16,12 +19,16 @@ public class MailService {
     private final JavaMailSender javaMailSender;
     //private static final String senderEmail= "danaga@gmail.com";
     private static int number;
+    private static String randomString;
 
     public static void createNumber(){
        number = (int)(Math.random() * (90000)) + 100000;// (int) Math.random() * (최댓값-최소값+1) + 최소값
     }
+    public static void createRandomPass() throws NoSuchAlgorithmException{
+    	randomString = RandomStringGenerator.generateRandomString();
+    }
 
-    public MimeMessage CreateMail(String mail){
+    public MimeMessage joinCreateMail(String mail){
         createNumber();
         MimeMessage message = javaMailSender.createMimeMessage();
         
@@ -39,13 +46,40 @@ public class MailService {
         }
         return message;
     }
+    public int joinSendMail(String mail){
 
-    public int sendMail(String mail){
-
-        MimeMessage message = CreateMail(mail);
+        MimeMessage message = joinCreateMail(mail);
 
         javaMailSender.send(message);
 
         return number;
+    }
+    public MimeMessage findPassCreateMail(String mail){
+    	createNumber();
+    	MimeMessage message = javaMailSender.createMimeMessage();
+    	
+    	try {
+    		//message.setFrom(new InternetAddress(senderEmail));
+    		message.setRecipients(MimeMessage.RecipientType.TO, mail);
+    		message.setSubject("다나가 임시 비밀번호 발급");
+    		String body = "";
+    		body += "<h3>" + "요청하신 임시 비밀번호입니다." + "</h3>";
+    		body += "<h1>" + randomString + "</h1>";
+    		body += "<h3>" + "감사합니다." + "</h3>";
+    		message.setText(body,"UTF-8", "html");
+    	} catch (MessagingException e) {
+    		e.printStackTrace();
+    	}
+    	return message;
+    }
+
+    
+    public String findPassSendMail(String mail){
+    	
+    	MimeMessage message = findPassCreateMail(mail);
+    	
+    	javaMailSender.send(message);
+    	
+    	return randomString;
     }
 }
