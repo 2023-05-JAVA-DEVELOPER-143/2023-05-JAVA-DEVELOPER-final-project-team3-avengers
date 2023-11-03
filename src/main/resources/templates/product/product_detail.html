@@ -26,15 +26,14 @@
 				</div>
 				<!-- Product Info-->
 				<div class="col-md-6">
-					<form id="productOrderForm" method="post" action="/product_order_form">
+					<form id="productOrderForm" method="get" action="/product_order_form">
 					<div class="padding-top-2x mt-2 hidden-md-up"></div><!--별점 -->
 					<div class="rating-stars" ><i class="icon-star filled"></i><i class="icon-star"></i>
 					</div><span class="text-muted align-middle" >&nbsp;&nbsp;4.2 | 3
 						customer reviews</span>
-					<h2 class="padding-top-1x text-normal" th:text="*{name}">Product Name</h2>
-					<span class="h2 d-block" th:text="*{totalPrice}">가격</span>
-					<input type="hidden" th:value="*{osId}">
-					<p th:text="*{optionSet}">상품 옵션들 나열</p>
+					<h2 class="padding-top-1x text-normal" th:text="${productList.name}">Product Name</h2>
+					<span class="h2 d-block" th:text="${productList.totalPrice}">가격</span>
+					<input type="hidden" name="optionSetId" id="optionSetId" th:value="${productList.osId}">
 					<div class="row margin-top-1x">
 						<div class="col-sm-4">
 							<div class="form-group">

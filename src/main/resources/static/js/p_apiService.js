@@ -94,8 +94,10 @@ export function showOptions(categoryId) {
 export function searchResult(filterDto) {//검색결과 보여주기
 	return call(SEARCH.url, SEARCH.method, filterDto)
 		.then((response) => {
+			console.log(response);
 			let template = Handlebars.compile($('#main-product-item-template').html());
 			let mixedTemplate = template(response);
+			console.log(mixedTemplate);
 			$('#main-product-item-template-position').html(mixedTemplate);
 		});
 }
