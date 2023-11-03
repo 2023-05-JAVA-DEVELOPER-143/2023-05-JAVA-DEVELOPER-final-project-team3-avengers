@@ -171,7 +171,7 @@ public class CartRestController {
 					fUserCarts.set(oldFUserCartIndex, oldFUserCart);
 					fUserCarts.add(newFUserCart);
 					session.setAttribute("fUserCarts", fUserCarts);
-					System.out.println(">>>>>>>>>> 기존 옵션셋 변경 후 옵션셋 수량 +1 돼야함  =  " + fUserCarts.get(oldFUserCartIndex).getQty());
+					System.out.println(">>>>>>>>>> 기존 옵션셋 변경 후 옵션셋 수량 -1 돼야함  =  " + fUserCarts.get(oldFUserCartIndex).getQty());
 					System.out.println(">>>>>>>>>> 4번 로직 실행 후 fUserCarts 사이즈 +1 돼야함  =  " + fUserCarts.size());
 				}
 
@@ -192,6 +192,9 @@ public class CartRestController {
 	public ResponseEntity<CartDto> updateQty(@RequestBody CartDto dto, HttpSession session) throws Exception {
 		// 로그인 유저 체크
 		System.out.println(" ---------------------- 비회원 카트 수량 변경 -----------------------");
+		System.out.println(">>> dto  =  "+dto);
+		System.out.println("변경 하고자 하는 수량  =  " + dto.getQty());
+		
 		sUserId = (String) session.getAttribute("sUserId");
 		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
 		if (sUserId != null) {
@@ -259,6 +262,7 @@ public class CartRestController {
 			session.setAttribute("countCarts", cartService.countCarts(sUserId));
 		} else if (fUserCarts != null) { // 비회원 일시 장바구니 리스트의 사이즈
 			fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
+			//System.out.println(">>>>>>>>>"+fUserCarts.size());
 			session.setAttribute("countCarts", fUserCarts.size());
 		}
 	};
