@@ -125,14 +125,14 @@ public class CartRestController {
 				if (oldFUserCart.getQty() == 1) {
 					System.out.println(">>>>> 1. 변경 전 옵션셋 아이디 수량 1 + 변경 want 옵션셋 존재 <<<<<");
 					System.out.println(">>>>>>>>>> 인덱스 제거 전 fUserCarts 사이즈  =  " + fUserCarts.size());
-					fUserCarts.remove(oldFUserCart);
 					System.out.println(">>>>>>>>>> 변경 want 변경 전 옵션셋 수량  =  " + fUserCarts.get(ChangeFUserIndex).getQty());
 					changeFUserCart.setQty(changeFUserCart.getQty() + 1);
 					fUserCarts.set(ChangeFUserIndex, changeFUserCart);
 					System.out.println(">>>>>>>>>> 변경 want 변경 후 옵션셋 수량  =  " + fUserCarts.get(ChangeFUserIndex).getQty());
+					fUserCarts.remove(oldFUserCart);
 					session.setAttribute("fUserCarts", fUserCarts);
 					countCarts(session);
-					System.out.println(">>>>>>>>>> 로직 후 fUserCarts 사이즈 위에거보다 + 1  =  " + fUserCarts.size());
+					System.out.println(">>>>>>>>>> 로직 후 fUserCarts 사이즈 위에거보다 - 1  =  " + fUserCarts.size());
 				} else if (oldFUserCart.getQty() >= 2) {
 					// 3번 경우
 					System.out.println(">>>>> 3. 변경 전 옵션셋 아이디 수량 >=2 + 변경 want 옵션셋 존재 <<<<<");
