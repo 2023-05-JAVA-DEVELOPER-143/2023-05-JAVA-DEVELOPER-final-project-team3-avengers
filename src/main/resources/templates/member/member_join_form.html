@@ -30,9 +30,33 @@
               </div>
               
               <div class="col-sm-6">
-                <div class="form-group">
+                <div class="form-group" id="mail_input" name="mail_input">
                   <label for="reg-email">E-mail 주소</label>
                   <input class="form-control"  name="email" type="email" placeholder="ex) email@google.com" id="reg-email" required>
+			      <button class="btn-account-register btn btn-primary margin-bottom-none"
+			       type="button" id="sendBtn" name="sendBtn" onclick="sendNumber()">이메일 인증</button>
+                </div>
+              </div>
+              <div class="col-sm-6">
+				<div class="form-group" id="mail_number" name="mail_number" style="display: none">
+				  <label for="mail_number">인증번호</label>
+				  <input class="form-control" type="text" name="number" id="number" placeholder="인증번호 입력" required>
+				  <button class="btn-account-register btn btn-primary margin-bottom-none"
+				     type="button" name="confirmBtn" id="confirmBtn" onclick="confirmNumber()">인증번호 확인</button>
+				</div>
+              </div>
+			  <br>
+			    <input type="text" id="Confirm" name="Confirm" style="display: none" value="">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="reg-pass">비밀번호</label>
+                  <input class="form-control" name="password" type="password" id="reg-pass" required>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="reg-pass-confirm">비밀번호 확인</label>
+                  <input class="form-control" name="password2" type="password" id="reg-pass-confirm" required>
                 </div>
               </div>
               <div class="col-sm-6">
@@ -51,18 +75,6 @@
                 <div class="form-group">
                   <label for="reg-birthday">생년월일</label>
                   <input class="form-control"  name="birthday" type="date" id="reg-birthday" required>
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label for="reg-pass">비밀번호</label>
-                  <input class="form-control" name="password" type="password" id="reg-pass" required>
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label for="reg-pass-confirm">비밀번호 확인</label>
-                  <input class="form-control" name="password2" type="password" id="reg-pass-confirm" required>
                 </div>
               </div>
               <div class="col-sm-10">
@@ -91,7 +103,6 @@
      <script type="text/javascript">
 		  /**************** 회원가입 **********************/
 function isNoValidName(name) {
-    // 간단한 이메일 유효성 검사를 수행합니다.
     const nameRegex =  /^[가-힣]{2,5}$/;
     if(nameRegex.test(name)) {
 		return false;
@@ -99,7 +110,6 @@ function isNoValidName(name) {
     return true;
 }
 function isNoValidUserName(userName) {
-    // 간단한 이메일 유효성 검사를 수행합니다.
     const userNameRegex = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
     return userNameRegex.test(userName);
 }
@@ -130,9 +140,10 @@ function isNoValidPhoneNo(phoneNo) {
 	}
     return true;
 }
-var member_join_action_rest=function(data){
+let emailCheck = false;
+let member_join_action_rest=function(data){
 		console.log('33333');
-		
+		if(emailCheck) {
 		$.ajax({
 				url:'/member/join_rest',
 				method:'POST',
@@ -165,6 +176,13 @@ var member_join_action_rest=function(data){
 					location.href="/404";
 				}
 			});
+		} else {
+        			$('#reg-email').tooltip({'trigger':'hover', 'title':'이메일 인증을 진행해주세요.'});
+        			$('#reg-email').tooltip('show');
+				    setTimeout(function () {
+				    $('#reg-email').tooltip('hide');
+				    }, 2000);
+        		}
 			
 };
 $(function(){
@@ -176,9 +194,33 @@ $(function(){
         			$('#reg-username').tooltip({'trigger':'hover', 'title':'아이디는 한글 미포함 8 ~ 20자 이내여야 합니다'});
         			$('#reg-username').tooltip('show');
         		} else {
-        			$('#reg-username').css('border','');
+        			$('#reg-username').css('border','0.5px solid green');
         			$('#reg-username').tooltip('hide');
         			$('#reg-username').tooltip('dispose');
+        		}
+        	});
+        	//이름
+    		$('#reg-nickname').on('change',function(e){
+				if($('#reg-nickname').val().length < 1 || $('#reg-nickname').val().length > 10){
+        			$('#reg-nickname').css('border','0.5px dotted orange');
+        			$('#reg-nickname').tooltip({'trigger':'hover', 'title':'닉네임은 1 ~ 10자 이내여야 합니다'});
+        			$('#reg-nickname').tooltip('show');
+        		} else {
+        			$('#reg-nickname').css('border','0.5px solid green');
+        			$('#reg-nickname').tooltip('hide');
+        			$('#reg-nickname').tooltip('dispose');
+        		}
+        	});
+        	//닉네임
+    		$('#reg-name').on('change',function(e){
+				if(isNoValidName($('#reg-name').val())){
+        			$('#reg-name').css('border','0.5px dotted orange');
+        			$('#reg-name').tooltip({'trigger':'hover', 'title':'이름은 완성된 한글 2~5자 이내여야 합니다'});
+        			$('#reg-name').tooltip('show');
+        		} else {
+        			$('#reg-name').css('border','0.5px solid green');
+        			$('#reg-name').tooltip('hide');
+        			$('#reg-name').tooltip('dispose');
         		}
         	});
         	//비밀번호
@@ -188,7 +230,7 @@ $(function(){
         			$('#reg-pass').tooltip({'trigger':'hover', 'title':'비밀번호는 8 ~ 20자 이내이고 최소한 하나의 문자, 숫자, 특수 문자가 포함되어야 합니다.'});
         			$('#reg-pass').tooltip('show');
         		} else {
-					$('#reg-pass,#reg-pass-confirm').css('border','');
+					$('#reg-pass,#reg-pass-confirm').css('border','0.5px solid green');
         			$('#reg-pass-confirm').tooltip('hide');
         			$('#reg-pass-confirm').tooltip('dispose');
 				}
@@ -200,7 +242,7 @@ $(function(){
         			$('#reg-pass-confirm').tooltip('show');
         			$('#join-action-btn').attr('disabled', 'disabled');
         		} else {
-        			$('#reg-pass,#reg-pass-confirm').css('border','');
+        			$('#reg-pass,#reg-pass-confirm').css('border','0.5px solid green');
         			$('#reg-pass-confirm').tooltip('hide');
         			$('#reg-pass-confirm').tooltip('dispose');
         			$('#join-action-btn').removeAttr('disabled');
@@ -213,7 +255,7 @@ $(function(){
         			$('#reg-email').tooltip({'trigger':'hover', 'title':'올바른 이메일 형식이 아닙니다.'});
         			$('#reg-email').tooltip('show');
         		} else {
-        			$('#reg-email').css('border','');
+        			$('#reg-email').css('border','0.5px solid green');
         			$('#reg-email').tooltip('hide');
         			$('#reg-email').tooltip('dispose');
         		}
@@ -225,7 +267,7 @@ $(function(){
         			$('#reg-phone').tooltip({'trigger':'hover', 'title':'올바른 번호 형식이 아닙니다.'});
         			$('#reg-phone').tooltip('show');
         		} else {
-        			$('#reg-phone').css('border','');
+        			$('#reg-phone').css('border','0.5px solid green');
         			$('#reg-phone').tooltip('hide');
         			$('#reg-phone').tooltip('dispose');
         		}
@@ -237,7 +279,7 @@ $(function(){
         			$('#reg-birthday').tooltip({'trigger':'hover', 'title':'선택할 수 없는 날짜 입니다.'});
         			$('#reg-birthday').tooltip('show');
         		} else {
-        			$('#reg-birthday').css('border','');
+        			$('#reg-birthday').css('border','0.5px solid green');
         			$('#reg-birthday').tooltip('hide');
         			$('#reg-birthday').tooltip('dispose');
         		}
@@ -268,7 +310,7 @@ $(function(){
 				"address" : regAddress,
 				"detailAddress" : regDetailAddress
 			}
-    			$('#reg-username').css('border','');
+    			$('#reg-username').css('border','0.5px solid green');
     			$('#reg-username').tooltip('dispose');
     			$('#form-account-regist').tooltip('dispose');
         		member_join_action_rest(data);
@@ -319,7 +361,53 @@ function execDaumPostcode() {
             }
         }).open();
     }
+function sendNumber(){
+	if(isNoValidEmail($('#reg-email').val())) {
+        			$('#reg-email').css('border','0.5px dotted orange');
+        			$('#reg-email').tooltip({'trigger':'hover', 'title':'올바른 이메일 형식이 아닙니다.'});
+        			$('#reg-email').tooltip('show');
+	} else {
+    	$("#mail_number").css("display","block");
+		$('#reg-email').css('border','0.5px solid green');
+		$('#reg-email').tooltip('hide');
+		$('#reg-email').tooltip('dispose');
+		$.ajax({
+        url:"/emailAuthentication",
+        type:"post",
+        dataType:"json",
+        data:{"mail" : $("#reg-email").val()},
+        success: function(data){
+            alert("인증번호 발송");
+            $("#Confirm").attr("value",data);
+        },
+        error: function(){
+			alert("인증번호 발송 실패");
+		}
+    });
+	}
+}
 
+function confirmNumber(){
+    let number1 = $("#number").val();
+    let number2 = $("#Confirm").val();
+
+    if(number1 == number2){
+		$('#number').css('border','0.5px solid green');
+		$('#number').tooltip({'trigger':'hover', 'title':'인증되었습니다.'});
+		$('#number').tooltip('show');
+		setTimeout(function() {
+	    $('#number').tooltip('hide');
+	    }, 2000);
+        emailCheck = true;
+    }else{
+        $('#number').css('border','0.5px dotted orange');
+		$('#number').tooltip({'trigger':'hover', 'title':'인증번호가 다릅니다.'});
+		$('#number').tooltip('show');
+		setTimeout(function() {
+	    $('#number').tooltip('hide');
+	    }, 2000);
+    }
+}
 	
 </script>
 </th:block>
