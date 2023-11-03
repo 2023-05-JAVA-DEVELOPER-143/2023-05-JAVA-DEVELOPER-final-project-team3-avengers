@@ -3,10 +3,11 @@ package com.danaga.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import com.danaga.entity.Board;
 
-public interface BoardRepository extends JpaRepository<Board, Long>{
+public interface BoardRepository extends JpaRepository<Board, Long>,JpaSpecificationExecutor<Board>{
 
 	/*
 	 
