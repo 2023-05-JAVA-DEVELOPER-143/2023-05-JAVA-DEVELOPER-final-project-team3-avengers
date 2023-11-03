@@ -176,7 +176,7 @@ public class OrderController {
 		} else {
 			Integer realTotalPrice = 0;
 			for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
-				realTotalPrice += sUserCartOrderDtoList.get(i).getTotalPrice();
+				realTotalPrice += sUserCartOrderDtoList.get(i).getTotalPrice()*sUserCartOrderDtoList.get(i).getQty();
 				System.out.println(realTotalPrice);
 			}
 			model.addAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
