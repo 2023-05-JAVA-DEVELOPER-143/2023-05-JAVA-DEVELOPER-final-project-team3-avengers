@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="layout/layout(title='myOrders')">
+<html xmlns:th="http://www.thymeleaf.org"
+   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   layout:decorate="layout/layout(title='주문이 완료됐습니다!!')">
 <!-- Body-->
 <!-- Header -->
 
@@ -13,19 +14,52 @@
 
 <body>
 
+   <th:block layout:fragment="content">
+
+      <!-- Page Content-->
+      <div class="container padding-bottom-3x mb-2">
+         <div class="card text-center">
+            <div class="card-body padding-top-2x">
+               <h3 class="card-title">Thank you for your order!</h3>
+
+               <p class="card-text">
+                  Make sure you make note of your order number, which is <span
+                     class="text-medium" th:text="${orderId}"></span>
+               </p>
+
+               <div class="padding-top-1x padding-bottom-1x">
+                  <a class="btn btn-outline-secondary"
+                     onclick="orderCompleteToIndex()">Go Back Main</a>
+               </div>
+            </div>
+         </div>
+      </div>
 
 
-	<!-- Page Content-->
-	
-	
-	<!-- Main Slider-->
+   </th:block>
+
+   <!-- Page Content-->
 
 
-	<th:block layout:fragment="recommendation"></th:block>
+   <!-- Main Slider-->
 
-	<th:block layout:fragment="script">
-	
-	</th:block>
+
+   <th:block layout:fragment="recommendation"></th:block>
+
+   <th:block layout:fragment="script">
+
+      <script th:inline="javascript">
+         function orderCompleteToIndex() {
+            let form = document.createElement('form');
+            form.method = 'GET';
+            form.action = '/order_complete_to_index';
+            document.body.appendChild(form);
+            form.submit();
+         }
+      </script>
+
+
+   </th:block>
 
 
 
