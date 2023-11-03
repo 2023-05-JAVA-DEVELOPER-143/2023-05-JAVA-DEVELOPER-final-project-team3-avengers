@@ -74,7 +74,7 @@
 									<input type="hidden" checked="checked" class="checkbox" name="checkboxqty" th:value="${cart.qty}">
 									<input type="hidden" checked="checked" class="checkbox" name="checkboxproductName" th:value="${cart.productName}"> 
 									<input type="hidden" checked="checked" class="checkbox" name="checkboxtotalPrice" th:value="${cart.totalPrice}">
-									<input type="hidden" checked="checked" class="checkbox" name="checkboxtotalsalePrice" th:value="${cart.totalPrice} * ${cart.qty} * ${cart.grade} / 10 ">
+									<input type="hidden" checked="checked" class="checkbox" name="checkboxtotalsalePrice" th:if="${session.sUserId != null}" th:value="${cart.totalPrice} * ${cart.qty} * ${cart.grade} / 10 ">
 								</div>
 							</td>
 							<td>
@@ -112,17 +112,17 @@
 							</td>
 							<td th:if="${session.sUserId == null}">
 								<div class="td_price_wrap">
-									<span class="text-center text-lg text-medium" th:text="${cart.totalPrice} * ${cart.qty}">0원</span>
+									<span class="text-center text-lg text-medium" th:text="${#numbers.formatInteger(cart.totalPrice * cart.qty , 3, 'COMMA')} ">0원</span>
 								</div>
 							</td>
 							<td th:if="${session.sUserId != null}">
 								<div class="td_price_wrap" >
-									<span class="text-center text-lg text-medium" id="beforetotalPrice" th:text="${cart.totalPrice} * ${cart.qty}">0원</span><br>
-									<span class="text-center text-lg" name="aftertotalPrice" th:text="${cart.totalPrice} * ${cart.qty} - ${cart.totalPrice} * ${cart.qty} * ${cart.grade} / 10">0원</span>
+									<span class="text-center text-lg text-medium" id="beforetotalPrice" th:text="${#numbers.formatInteger(cart.totalPrice * cart.qty , 3 , 'COMMA' )} ">0원</span><br>
+									<span class="text-center text-lg " name="aftertotalPrice" th:text="${#numbers.formatInteger(cart.totalPrice * cart.qty - cart.totalPrice * cart.qty * cart.grade / 10 , 3 , 'COMMA' )}">0원</span>
 								</div>
 							</td>
 							<td class="text-center text-lg text-medium" th:if="${session.sUserId == null}">로그인 필요 </td>
-							<td class="text-center text-lg text-medium"  th:if="${session.sUserId != null}" th:text="${cart.totalPrice} * ${cart.qty} * ${cart.grade} / 10 ">0</td>
+							<td class="text-center text-lg text-medium"  th:if="${session.sUserId != null}" th:text="${#numbers.formatInteger(cart.totalPrice * cart.qty * cart.grade / 10 , 3, 'COMMA')}">0</td>
 							<td class="text-center">
 								<a class="plain-btn" id="modalvalue" data-toggle="modal"
 									data-target="#exampleModal" th:onclick="selectOption([[${cart.elseOptionSets}]] ,[[${cart.osId}]] );">옵션변경</a> 
@@ -328,7 +328,6 @@ $(document).ready(function() {
     let checkboxesqty = document.querySelectorAll('input[name="checkboxqty"]');
     let salePrice = document.querySelectorAll('input[name="checkboxtotalsalePrice"]');
     
-    
     // 초기 제품 총 결제 금액 계산 함수
     function calculateTotalPrice() {
         let qtyprice = 0;
@@ -348,13 +347,13 @@ $(document).ready(function() {
 		let totalsalePrice = 0;
 		let qtyprice =0;
 		for (let i = 0; i < checkboxes.length; i++) {
-			if (checkboxes[i].checked) {
+			if (checkboxes[i] && checkboxesqty[i] && checkboxtotalPrice[i] && salePrice[i] && checkboxes[i].checked) {
 				let qty = parseInt(checkboxesqty[i].value);
-                let totalPrice = parseInt(checkboxtotalPrice[i].value);
+	            let totalPrice = parseInt(checkboxtotalPrice[i].value);
 				let sumsalePrice = parseInt(salePrice[i].value);
 				qtyprice += qty * totalPrice;
-			    totalsalePrice += sumsalePrice;
-			    finaltotalsalePrice = qtyprice - totalsalePrice;
+			 	totalsalePrice += sumsalePrice;
+				finaltotalsalePrice = qtyprice - totalsalePrice;
 			}
 		}
 		return finaltotalsalePrice;
@@ -366,18 +365,18 @@ $(document).ready(function() {
 
     // 초기 제품 총 결제 금액 설정
     let finaltotalPrice = calculateTotalPrice();
-    $("#finalTotalPrice").text(finaltotalPrice + '원');
+    $("#finalTotalPrice").text(finaltotalPrice.toLocaleString('ko-KR') + '원');
     
      // 초기 제품 총 결제 금액 - 총 할인가 = 최종결제금액 
     let finalsaletotalPrice = calculateSalePrice();
-    $("#finalsaleTotalPrice").text(finalsaletotalPrice + '원');
+    $("#finalsaleTotalPrice").text(finalsaletotalPrice.toLocaleString('ko-KR') + '원');
 
     // 체크박스 상태 변경 시 이벤트 처리
     $('input[name="checkboxid"]').on('change', function () {
         let qtyprice = calculateTotalPrice();
         let totalsalePrice = calculateSalePrice();
         $("#finalTotalPrice").text(qtyprice + '원');
-        $("#finalsaleTotalPrice").text(calculateSalePrice() + '원');
+        $("#finalsaleTotalPrice").text(calculateSalePrice().toLocaleString('ko-KR') + '원');
     });
 
     // 전체 체크 해제 버튼 클릭 시 값 초기화
@@ -387,7 +386,7 @@ $(document).ready(function() {
 			let qtyprice = calculateTotalPrice();
 			let totalsalePrice = calculateSalePrice();
         	$("#finalTotalPrice").text(qtyprice + '원');
-			$("#finalsaleTotalPrice").text(calculateSalePrice() + '원');
+			$("#finalsaleTotalPrice").text(  calculateSalePrice() + '원');
 		} else {
 	        $('input[name="checkboxid"]').prop('checked', false);
 	        $("#finalTotalPrice").text('0원');
@@ -429,19 +428,6 @@ function checkValue() {
 		contentType : 'application/json',
 		data : JSON.stringify(checkedData),
 		success : function(response) {
-<<<<<<< HEAD
-           console.log("Ajax 요청 성공");
-           // 서버로부터의 응답이 response 변수에 들어온다.
-           
-           // 서버에서 처리된 결과를 기반으로 페이지 이동
-           window.location.href = "/order_save_form"; // 이동할 페이지 URL
-       },
-       error : function(xhr, status, error) {
-           console.error("Ajax 요청 실패");
-           console.log("Status: " + status);
-           console.log("Error: " + error);
-       }
-=======
            window.location.href = "/order_save_form"; // 이동할 페이지 URL
        },
        error : function(xhr, status, error) {
@@ -450,7 +436,6 @@ function checkValue() {
            console.log("Error: " + error);
        }
 
->>>>>>> refs/heads/feature/bj18
 
 	});
 }
