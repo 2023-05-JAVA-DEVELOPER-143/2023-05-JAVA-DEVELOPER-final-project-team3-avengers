@@ -43,6 +43,19 @@ public class MemberDaoImpl implements MemberDao {
 		return memberRepository.save(member);
 	}
 
+	public Member updatePoint(Member updateMember) throws Exception {
+		Optional<Member> findOptionalMember = memberRepository.findById(updateMember.getId());
+		Member updatedMember = null;
+		if (findOptionalMember.isPresent()) {
+			Member member = findOptionalMember.get();
+			member.setGrade(updateMember.getGrade());
+			member.setGradePoint(updateMember.getGradePoint());
+			updatedMember = memberRepository.save(member);
+		} else {
+			throw new MemberNotFoundException("존재하지 않는 회원입니다");
+		}
+		return updatedMember;
+	}
 	public Member update(Member updateMember) throws Exception {
 		Optional<Member> findOptionalMember = memberRepository.findById(updateMember.getId());
 		Member updatedMember = null;
