@@ -63,8 +63,12 @@ public class MemberRestController {
 	public Map member_login_action_rest(@RequestBody MemberLoginDto memberLoginDto, HttpSession session)
 			throws Exception {
 		HashMap map = new HashMap<>();
+<<<<<<< HEAD
 		// MemberResponseDto memberResponseDto =
 		// MemberResponseDto.builder().userName(userName).password(password).build();
+=======
+		//MemberResponseDto memberResponseDto = MemberResponseDto.builder().userName(userName).password(password).build();
+>>>>>>> refs/heads/feature/ldh51
 		int result = 2;
 
 		try {
@@ -198,33 +202,31 @@ public class MemberRestController {
 		return map;
 	}
 
-	@GetMapping("/list")
-	public ResponseEntity<MemberResponse> member_list() {
-		List<MemberResponseDto> memberList = memberService.getMembers();
-		MemberResponse response = new MemberResponse();
-		response.setStatus(MemberResponseStatusCode.READ_USER);
-		response.setMessage(MemberResponseMessage.READ_USER);
-		response.setData(memberList);
-
-		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
-	}
-
-	@LoginCheck
-	@GetMapping("/{id}")
-	public ResponseEntity<MemberResponse> member_info(@PathVariable(name = "id") String id) throws Exception {
-		MemberResponseDto loginUser = memberService.getMemberBy(id);
-		MemberResponse response = new MemberResponse();
-		response.setStatus(MemberResponseStatusCode.READ_USER);
-		response.setMessage(MemberResponseMessage.READ_USER);
-		response.setData(loginUser);
-
-		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
-	}
-
+//	@GetMapping("/list")
+//	public ResponseEntity<MemberResponse> member_list() {
+//		List<MemberResponseDto> memberList = memberService.getMembers();
+//		MemberResponse response = new MemberResponse();
+//		response.setStatus(MemberResponseStatusCode.READ_USER);
+//		response.setMessage(MemberResponseMessage.READ_USER);
+//		response.setData(memberList);
+//
+//		HttpHeaders httpHeaders = new HttpHeaders();
+//		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+//		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
+//	}
+//	@LoginCheck
+//	@GetMapping("/{id}")
+//	public ResponseEntity<MemberResponse> member_info(@PathVariable(name = "id") String id) throws Exception {
+//		MemberResponseDto loginUser = memberService.getMemberBy(id);
+//		MemberResponse response = new MemberResponse();
+//		response.setStatus(MemberResponseStatusCode.READ_USER);
+//		response.setMessage(MemberResponseMessage.READ_USER);
+//		response.setData(loginUser);
+//		
+//		HttpHeaders httpHeaders = new HttpHeaders();
+//		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+//		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
+//	}
 	@LoginCheck
 	@DeleteMapping(value = "/delete_action_rest", produces = "application/json;charset=UTF-8")
 	public Map delete_action_rest(@RequestBody MemberLoginDto memberLoginDto, HttpSession session) throws Exception {
