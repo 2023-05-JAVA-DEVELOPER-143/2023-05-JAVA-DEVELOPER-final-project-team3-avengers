@@ -109,7 +109,7 @@ public class ProductRestController {
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> searchResult(@RequestBody QueryStringDataDto filterDto,HttpSession session){
 		try {//emptySTring 걸러주고 search>>query에서 걸르
-			System.out.println(filterDto);
+			System.out.println("restcontroller의 filterdto 검색조건>>>>>>>>>>>"+filterDto);
 			if(session.getAttribute("sUserId")==null) {
 			ResponseDto<?> response =service.searchProducts(filterDto);
 			return ResponseEntity.status(HttpStatus.OK).body(response);

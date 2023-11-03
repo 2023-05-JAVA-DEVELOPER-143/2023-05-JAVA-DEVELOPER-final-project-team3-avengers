@@ -64,6 +64,7 @@ function registEvent() {
 				// product-heart-yet 속성의 값을 product-heart로 옮기기
 				button.attr('product-heart-yet', button.attr('product-heart'));
 				button.removeAttr('product-heart');
+				button.removeClass('active');
 			});
 		} else if ($(e.target).attr('product-heart-yet')) {
 			let optionSetId = $(e.target).attr('product-heart-yet');
@@ -72,6 +73,7 @@ function registEvent() {
 				// product-heart-yet 속성의 값을 product-heart로 옮기기
 				button.attr('product-heart', button.attr('product-heart-yet'));
 				button.removeAttr('product-heart-yet');
+				button.addClass('active');
 			});//비회원 로그인경고처리
 		} else if ($(e.target).attr('data-wishlist-remove')) {
 			let optionSetId = $(e.target).attr('data-wishlist-remove');
@@ -113,6 +115,7 @@ function registEvent() {
 					// product-heart-yet 속성의 값을 product-heart로 옮기기
 					parentButton.attr('product-heart-yet', parentButton.attr('product-heart'));
 					parentButton.removeAttr('product-heart');
+					parentButton.removeClass('active');
 				});
 			} else if ($(e.target).parent().attr('product-heart-yet')) {
 				parentButton = $(e.target).parent();
@@ -121,6 +124,7 @@ function registEvent() {
 					// product-heart-yet 속성의 값을 product-heart로 옮기기
 					parentButton.attr('product-heart', parentButton.attr('product-heart-yet'));
 					parentButton.removeAttr('product-heart-yet');
+					parentButton.addClass('active');
 				});
 			}
 		} else if ($(e.target).attr('toOrder')) {
