@@ -89,7 +89,9 @@ function registEvent() {
 			let optionName = $(e.target).closest('tr').find('th').text();
 			let optionValue = $(e.target).attr('data-optionValue');
 			let checked = $(e.target).is(":checked");
+			console.log(optionName,optionValue,checked);
 			updateQueryDataDto(optionName, optionValue, checked);
+			console.log(filterDto);
 			api.searchResult(filterDto);
 		} else if ($(e.target).attr('id') == 'main-search-btn') {
 			api.searchResult(filterDto);
