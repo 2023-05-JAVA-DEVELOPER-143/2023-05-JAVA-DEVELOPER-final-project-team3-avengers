@@ -187,9 +187,10 @@ let member_join_action_rest=function(data){
 };
 $(function(){
     		/**************회원가입폼 유효성체크*********************/
+    		$('#join-action-btn').attr('disabled', 'disabled');
     		//아이디
     		$('#reg-username').on('change',function(e){
-				if(isNoValidUserName($('#reg-username').val())){
+				if(($('#reg-username').val().length < 8 || $('#reg-username').val().length > 20) && isNoValidUserName($('#reg-username').val())){
         			$('#reg-username').css('border','0.5px dotted orange');
         			$('#reg-username').tooltip({'trigger':'hover', 'title':'아이디는 한글 미포함 8 ~ 20자 이내여야 합니다'});
         			$('#reg-username').tooltip('show');
@@ -199,7 +200,7 @@ $(function(){
         			$('#reg-username').tooltip('dispose');
         		}
         	});
-        	//이름
+        	//닉네임
     		$('#reg-nickname').on('change',function(e){
 				if($('#reg-nickname').val().length < 1 || $('#reg-nickname').val().length > 10){
         			$('#reg-nickname').css('border','0.5px dotted orange');
@@ -211,7 +212,7 @@ $(function(){
         			$('#reg-nickname').tooltip('dispose');
         		}
         	});
-        	//닉네임
+        	//이름
     		$('#reg-name').on('change',function(e){
 				if(isNoValidName($('#reg-name').val())){
         			$('#reg-name').css('border','0.5px dotted orange');
@@ -224,28 +225,33 @@ $(function(){
         		}
         	});
         	//비밀번호
-        	$('#reg-pass').on('keyup',function(e){
+        	$('#reg-pass').on('change',function(e){
         		if(($('#reg-pass').val().length < 8 || $('#reg-pass').val().length > 20) || isNoValidPassword($('#reg-pass').val())){
         			$('#reg-pass').css('border','0.5px dotted orange');
         			$('#reg-pass').tooltip({'trigger':'hover', 'title':'비밀번호는 8 ~ 20자 이내이고 최소한 하나의 문자, 숫자, 특수 문자가 포함되어야 합니다.'});
         			$('#reg-pass').tooltip('show');
-        		} else {
-					$('#reg-pass,#reg-pass-confirm').css('border','0.5px solid green');
+        			$('#join-action-btn').attr('disabled', 'disabled');
+        		} else if(!($('#reg-pass').val().length < 8 || $('#reg-pass').val().length > 20) || isNoValidPassword($('#reg-pass').val()) && ($('#reg-pass').val()==$('#reg-pass-confirm').val())){
+					$('#reg-pass-confirm').css('border','0.5px solid green');
         			$('#reg-pass-confirm').tooltip('hide');
         			$('#reg-pass-confirm').tooltip('dispose');
-				}
+        			$('#join-action-btn').removeAttr('disabled');
+				} else if($('#reg-pass').val()!=$('#reg-pass-confirm').val()){
+					$('#reg-pass,#reg-pass-confirm').css('border','0.5px dotted orange');
+        			$('#reg-pass-confirm').tooltip({'trigger':'hover', 'title':'비밀번호와 비밀번호확인이 일치하여야합니다.'});
+        			$('#reg-pass-confirm').tooltip('show');
+        			$('#join-action-btn').attr('disabled', 'disabled');
+				} 
 			});
-			$('#reg-pass-confirm').on('keyup',function(e){
+			$('#reg-pass-confirm').on('change',function(e){
         		if($('#reg-pass').val()!=$('#reg-pass-confirm').val()){
         			$('#reg-pass,#reg-pass-confirm').css('border','0.5px dotted orange');
         			$('#reg-pass-confirm').tooltip({'trigger':'hover', 'title':'비밀번호와 비밀번호확인이 일치하여야합니다.'});
         			$('#reg-pass-confirm').tooltip('show');
-        			$('#join-action-btn').attr('disabled', 'disabled');
         		} else {
-        			$('#reg-pass,#reg-pass-confirm').css('border','0.5px solid green');
+        			$('#reg-pass-confirm').css('border','0.5px solid green');
         			$('#reg-pass-confirm').tooltip('hide');
         			$('#reg-pass-confirm').tooltip('dispose');
-        			$('#join-action-btn').removeAttr('disabled');
         		}
         	});
         	//이메일
@@ -394,15 +400,17 @@ function confirmNumber(){
     if(number1 == number2){
 		$('#number').css('border','0.5px solid green');
 		$('#number').tooltip('show');
+		$('#number').tooltip({'trigger':'hover', 'title':'인증번호가 일치합니다.'});
 		setTimeout(function() {
-	    $('#number').tooltip('hide');
+	    $('#number').tooltip('dispose');
 	    }, 2000);
         emailCheck = true;
     }else{
         $('#number').css('border','0.5px dotted orange');
 		$('#number').tooltip('show');
+		$('#number').tooltip({'trigger':'hover', 'title':'인증번호가 일치하지 않습니다.'});
 		setTimeout(function() {
-	    $('#number').tooltip('hide');
+	    $('#number').tooltip('dispose');
 	    emailCheck = false;
 	    }, 2000);
     }
