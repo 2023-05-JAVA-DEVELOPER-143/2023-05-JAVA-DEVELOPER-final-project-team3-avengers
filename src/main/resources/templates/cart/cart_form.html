@@ -74,7 +74,7 @@
 									<input type="hidden" checked="checked" class="checkbox" name="checkboxqty" th:value="${cart.qty}">
 									<input type="hidden" checked="checked" class="checkbox" name="checkboxproductName" th:value="${cart.productName}"> 
 									<input type="hidden" checked="checked" class="checkbox" name="checkboxtotalPrice" th:value="${cart.totalPrice}">
-									<input type="hidden" checked="checked" class="checkbox" name="checkboxtotalsalePrice" th:if="${session.sUserId != null}" th:value="${cart.totalPrice} * ${cart.qty} * ${cart.grade} / 10 ">
+									<input type="hidden" checked="checked" class="checkbox" name="checkboxtotalsalePrice" th:if="${session.sUserId != null}" th:value="${cart.totalPrice} * ${cart.qty} * ${cart.grade} / 100 ">
 								</div>
 							</td>
 							<td>
@@ -99,7 +99,6 @@
 							<td class="text-center">
 								<div class="count-input">
 									<select id="selectbox" class="form-control" name="checkboxvalue" th:data-id="${cart.osId}" onchange="getSelectValue(this);">
-										<option disabled hidden th:selected="${cart.qty}"></option>
 										<option th:selected="${cart.qty} == '1'">1</option>
 										<option th:selected="${cart.qty} == '2'">2</option>
 										<option th:selected="${cart.qty} == '3'">3</option>
@@ -118,11 +117,11 @@
 							<td th:if="${session.sUserId != null}">
 								<div class="td_price_wrap" >
 									<span class="text-center text-lg text-medium" id="beforetotalPrice" th:text="${#numbers.formatInteger(cart.totalPrice * cart.qty , 3 , 'COMMA' )} ">0원</span><br>
-									<span class="text-center text-lg " name="aftertotalPrice" th:text="${#numbers.formatInteger(cart.totalPrice * cart.qty - cart.totalPrice * cart.qty * cart.grade / 10 , 3 , 'COMMA' )}">0원</span>
+									<span class="text-center text-lg " name="aftertotalPrice" th:text="${#numbers.formatInteger(cart.totalPrice * cart.qty - cart.totalPrice * cart.qty * cart.grade / 100 , 3 , 'COMMA' )}">0원</span>
 								</div>
 							</td>
-							<td class="text-center text-lg text-medium" th:if="${session.sUserId == null}">로그인 필요 </td>
-							<td class="text-center text-lg text-medium"  th:if="${session.sUserId != null}" th:text="${#numbers.formatInteger(cart.totalPrice * cart.qty * cart.grade / 10 , 3, 'COMMA')}">0</td>
+							<td class="text-center text-lg text-medium" th:if="${session.sUserId == null}">로그인<br>필요 </td>
+							<td class="text-center text-lg text-medium"  th:if="${session.sUserId != null}" th:text="${#numbers.formatInteger(cart.totalPrice * cart.qty * cart.grade / 100 , 3, 'COMMA')}">0</td>
 							<td class="text-center">
 								<a class="plain-btn" id="modalvalue" data-toggle="modal"
 									data-target="#exampleModal" th:onclick="selectOption([[${cart.elseOptionSets}]] ,[[${cart.osId}]] );">옵션변경</a> 
@@ -161,155 +160,40 @@
 
 
 			<!-- Related Products Carousel-->
-			<h3 class="text-center padding-top-2x mt-2 padding-bottom-1x">이런
-				상품은 어떠세요?</h3>
+			<h3 class="text-center padding-top-2x mt-2 padding-bottom-1x" th:if="${hits != null}" ) >You May Also Like</h3>
 			<!-- Carousel-->
-			<div class="owl-carousel"
+			<div class="owl-carousel" th:if="${hits != null}"
 				data-owl-carousel="{ &quot;nav&quot;: false, &quot;dots&quot;: true, &quot;margin&quot;: 30, &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;576&quot;:{&quot;items&quot;:2},&quot;768&quot;:{&quot;items&quot;:3},&quot;991&quot;:{&quot;items&quot;:4},&quot;1200&quot;:{&quot;items&quot;:4}} }">
 				<!-- Product-->
-				<div class="grid-item">
+				<div class="grid-item" th:each="productDto:${hits}" >
 					<div class="product-card">
-						<div class="product-badge text-danger">22% Off</div>
-						<a class="product-thumb" href="shop-single.html"><img src="img/shop/products/09.jpg"
-								alt="Product"></a>
-						<h3 class="product-title">
-							<a href="shop-single.html">Rocket Dog</a>
-						</h3>
-						<h4 class="product-price">
-							<del>$44.95</del>
-							$34.99
-						</h4>
+						<a class="product-thumb" href="product-detail.html" th:href="product-detail.html"><img
+								src="img/shop/products/09.jpg" alt="Product"
+								th:attr="src=@{${productDto.pImage}}"></a>
+						<h3 class="product-title" th:text="${productDto.name}"><a href="product-detail.html">상품명</a></h3>
+						<h4 class="product-price" th:text="${#numbers.formatInteger(productDto.totalPrice ,3,'COMMA')} + '원'">$34.99</h4>
 						<div class="product-buttons">
-							<button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip"
-								title="Whishlist">
-								<i class="icon-heart"></i>
-							</button>
+							<button th:if="${productDto.isInterested}"
+									class="btn btn-outline-secondary btn-sm btn-wishlist active"
+									data-toggle="tooltip" th:product-heart="|${productDto.osId}|"
+									title="Whishlist">
+									<i class="icon-heart" th:heart="|${productDto.osId}|"></i>
+								</button>
+								<button th:unless="${productDto.isInterested}"
+									class="btn btn-outline-secondary btn-sm btn-wishlist"
+									 data-toggle="tooltip"
+									title="Whishlist" th:product-heart-yet="|${productDto.osId}|">
+									<i class="icon-heart" th:heart="|${productDto.osId}|"></i>
+								</button>
 							<button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success"
 								data-toast-position="topRight" data-toast-icon="icon-circle-check"
-								data-toast-title="Product" data-toast-message="successfuly added to cart!">장바구니
-								담기</button>
-						</div>
-					</div>
-				</div>
-				<!-- Product-->
-				<div class="grid-item">
-					<div class="product-card">
-						<div class="rating-stars">
-							<i class="icon-star filled"></i><i class="icon-star filled"></i><i
-								class="icon-star filled"></i><i class="icon-star filled"></i><i class="icon-star"></i>
-						</div>
-						<a class="product-thumb" href="shop-single.html"><img src="img/shop/products/03.jpg"
-								alt="Product"></a>
-						<h3 class="product-title">
-							<a href="shop-single.html">Oakley Kickback</a>
-						</h3>
-						<h4 class="product-price">$155.00</h4>
-						<div class="product-buttons">
-							<button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip"
-								title="Whishlist">
-								<i class="icon-heart"></i>
-							</button>
-							<button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success"
-								data-toast-position="topRight" data-toast-icon="icon-circle-check"
-								data-toast-title="Product" data-toast-message="successfuly added to cart!">장바구니
-								담기</button>
-						</div>
-					</div>
-				</div>
-				<!-- Product-->
-				<div class="grid-item">
-					<div class="product-card">
-						<a class="product-thumb" href="shop-single.html"><img src="img/shop/products/12.jpg"
-								alt="Product"></a>
-						<h3 class="product-title">
-							<a href="shop-single.html">Vented Straw Fedora</a>
-						</h3>
-						<h4 class="product-price">$49.50</h4>
-						<div class="product-buttons">
-							<button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip"
-								title="Whishlist">
-								<i class="icon-heart"></i>
-							</button>
-							<button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success"
-								data-toast-position="topRight" data-toast-icon="icon-circle-check"
-								data-toast-title="Product" data-toast-message="successfuly added to cart!">장바구니
-								담기</button>
-						</div>
-					</div>
-				</div>
-				<!-- Product-->
-				<div class="grid-item">
-					<div class="product-card">
-						<div class="rating-stars">
-							<i class="icon-star filled"></i><i class="icon-star filled"></i><i
-								class="icon-star filled"></i><i class="icon-star filled"></i><i
-								class="icon-star filled"></i>
-						</div>
-						<a class="product-thumb" href="shop-single.html"><img src="img/shop/products/11.jpg"
-								alt="Product"></a>
-						<h3 class="product-title">
-							<a href="shop-single.html">Top-Sider Fathom</a>
-						</h3>
-						<h4 class="product-price">$90.00</h4>
-						<div class="product-buttons">
-							<button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip"
-								title="Whishlist">
-								<i class="icon-heart"></i>
-							</button>
-							<button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success"
-								data-toast-position="topRight" data-toast-icon="icon-circle-check"
-								data-toast-title="Product" data-toast-message="successfuly added to cart!">장바구니
-								담기</button>
-						</div>
-					</div>
-				</div>
-				<!-- Product-->
-				<div class="grid-item">
-					<div class="product-card">
-						<a class="product-thumb" href="shop-single.html"><img src="img/shop/products/04.jpg"
-								alt="Product"></a>
-						<h3 class="product-title">
-							<a href="shop-single.html">Waist Leather Belt</a>
-						</h3>
-						<h4 class="product-price">$47.00</h4>
-						<div class="product-buttons">
-							<button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip"
-								title="Whishlist">
-								<i class="icon-heart"></i>
-							</button>
-							<button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success"
-								data-toast-position="topRight" data-toast-icon="icon-circle-check"
-								data-toast-title="Product" data-toast-message="successfuly added to cart!">장바구니
-								담기</button>
-						</div>
-					</div>
-				</div>
-				<!-- Product-->
-				<div class="grid-item">
-					<div class="product-card">
-						<div class="product-badge text-danger">50% Off</div>
-						<a class="product-thumb" href="shop-single.html"><img src="img/shop/products/01.jpg"
-								alt="Product"></a>
-						<h3 class="product-title">
-							<a href="shop-single.html">Unionbay Park</a>
-						</h3>
-						<h4 class="product-price">
-							<del>$99.99</del>
-							$49.99
-						</h4>
-						<div class="product-buttons">
-							<button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip"
-								title="Whishlist">
-								<i class="icon-heart"></i>
-							</button>
-							<button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success"
-								data-toast-position="topRight" data-toast-icon="icon-circle-check"
-								data-toast-title="Product" data-toast-message="successfuly added to cart!">장바구니
-								담기</button>
+								data-toast-title="Product" data-toast-message="successfuly added to cart!" th:data-optionSetId="${productDto.osId}" >Add to
+								Cart</button>
 						</div>
 					</div>
 				</div>
 			</div>
+			
 		</div>
 		<!-- content end -->
 
@@ -375,7 +259,7 @@ $(document).ready(function() {
     $('input[name="checkboxid"]').on('change', function () {
         let qtyprice = calculateTotalPrice();
         let totalsalePrice = calculateSalePrice();
-        $("#finalTotalPrice").text(qtyprice + '원');
+        $("#finalTotalPrice").text(qtyprice.toLocaleString('ko-KR') + '원');
         $("#finalsaleTotalPrice").text(calculateSalePrice().toLocaleString('ko-KR') + '원');
     });
 
@@ -385,8 +269,8 @@ $(document).ready(function() {
 	        $('input[name="checkboxid"]').prop('checked', true);
 			let qtyprice = calculateTotalPrice();
 			let totalsalePrice = calculateSalePrice();
-        	$("#finalTotalPrice").text(qtyprice + '원');
-			$("#finalsaleTotalPrice").text(  calculateSalePrice() + '원');
+        	$("#finalTotalPrice").text(qtyprice.toLocaleString('ko-KR') + '원');
+			$("#finalsaleTotalPrice").text(calculateSalePrice().toLocaleString('ko-KR') + '원');
 		} else {
 	        $('input[name="checkboxid"]').prop('checked', false);
 	        $("#finalTotalPrice").text('0원');

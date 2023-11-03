@@ -232,6 +232,7 @@ public class CartRestController {
 			for (int i = 0; i < idList.size(); i++) {
 				cartService.deleteCart(idList.get(i), sUserId);
 			}
+		
 		} else if (fUserCarts != null) { // 비회원일 경우
 			// 선택 optionsetId 와 카트리스트의 optionsetId 동일한 것 찾고 삭제 후 세션에 저장
 			System.out.println(" >>>>>>>>>> 비회원 삭제 전 카트 사이즈 " + fUserCarts.size());
@@ -243,10 +244,14 @@ public class CartRestController {
 					}
 				}
 			}
+			countCarts(session); // 세션에 장바구니수량
+			if(fUserCarts.isEmpty()) {
+				session.setAttribute("fUserCarts", null); // 위치 for문 안에 ? 끝나고 난 후에 ?
+			} else if (fUserCarts != null) {
+				session.setAttribute("fUserCarts", fUserCarts); // 위치 for문 안에 ? 끝나고 난 후에 ?
+			}
 		}
-		session.setAttribute("fUserCarts", fUserCarts); // 위치 for문 안에 ? 끝나고 난 후에 ?
-		countCarts(session); // 세션에 장바구니수량
-		System.out.println(" >>>>>>>>>> 비회원 삭제 후 카트 사이즈 " + fUserCarts.size());
+		
 	}
 
 	// 회원 성공 + 비회원 성공

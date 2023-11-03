@@ -43,12 +43,16 @@ public class CartController {
 						.collect(Collectors.toList()));
 			}
 			session.setAttribute("countCarts", carts.size());
+			if(!carts.isEmpty()) {
+				model.addAttribute("hits", optionSetService.displayHitProductsForMember(carts.get(0).getOsId(), sUserId).getData());
+			}
 			model.addAttribute("cart", carts);
 		} else {// 비회원
 			List<FUserCartResponseDto> responseDto = new ArrayList<>();
 			if (fUserCarts != null) {
 				for (int i = 0; i < fUserCarts.size(); i++) {
 					responseDto.add(cartService.findfUserCartList(fUserCarts.get(i)));
+					optionSetService.displayHitProducts(responseDto.get(i).getOsId());
 				}
 				for (int i = 0; i < responseDto.size(); i++) {
 					ResponseDto<ProductDto> findLists = optionSetService
@@ -57,6 +61,9 @@ public class CartController {
 							.map(t -> new CartElseOptionsetDto(t)).collect(Collectors.toList()));
 				}
 				session.setAttribute("countCarts", responseDto.size());
+				if(!responseDto.isEmpty()) {
+					model.addAttribute("hits",optionSetService.displayHitProducts(responseDto.get(0).getOsId()).getData());
+				}
 				model.addAttribute("cart", responseDto);
 			}
 		}
