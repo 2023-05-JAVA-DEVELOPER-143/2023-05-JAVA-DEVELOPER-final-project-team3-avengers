@@ -238,7 +238,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 
 	// 옵션셋 아이디로 옵션셋 찾기 디테일 들어갈때사용
 	@Override
-	public ResponseDto<?> findById(Long optionSetId) {
+	public ResponseDto<ProductDto> findById(Long optionSetId) {
 		OptionSet optionSet = optionSetDao.findById(optionSetId);
 		List<ProductDto> data = new ArrayList<>();
 		data.add(new ProductDto(optionSet));

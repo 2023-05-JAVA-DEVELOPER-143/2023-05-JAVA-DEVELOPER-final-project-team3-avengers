@@ -42,7 +42,13 @@ public class CartController {
 				carts.get(i).setElseOptionSets(findLists.getData().stream().map(t -> new CartElseOptionsetDto(t))
 						.collect(Collectors.toList()));
 			}
+
+			int a = (int) (Math.random() * carts.size());
 			session.setAttribute("countCarts", carts.size());
+			if (carts==null) {
+				model.addAttribute("hits",
+						optionSetService.displayHitProductsForMember(carts.get(a).getId(), sUserId).getData());
+			}
 			model.addAttribute("cart", carts);
 		} else {// 비회원
 			List<FUserCartResponseDto> responseDto = new ArrayList<>();
@@ -56,7 +62,12 @@ public class CartController {
 					responseDto.get(i).setElseOptionSets(findLists.getData().stream()
 							.map(t -> new CartElseOptionsetDto(t)).collect(Collectors.toList()));
 				}
+				int a = (int) (Math.random() * responseDto.size());
 				session.setAttribute("countCarts", responseDto.size());
+				if (!responseDto.isEmpty()) {
+					model.addAttribute("hits",
+							optionSetService.displayHitProducts(responseDto.get(a).getOsId()).getData());
+				}
 				model.addAttribute("cart", responseDto);
 			}
 		}

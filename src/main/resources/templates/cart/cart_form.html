@@ -1,40 +1,41 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="layout/layout(title='장바구니')">
 <!-- Body-->
 <!-- Header -->
 
 <head>
-	<link rel="stylesheet" media="screen" href="bootstrap/css/cart.css">
+<link rel="stylesheet" media="screen" href="bootstrap/css/cart.css">
 </head>
 
 <body>
 	<th:block layout:fragment="modal">
-      <div class="modal fade" id="exampleModal" tabindex="-5"
-         aria-labelledby="exampleModalLabel" aria-hidden="true">
-         <div class="modal-dialog">
-            <div class="modal-content">
-               <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">옵션변경</h5>
-                  <button type="button" class="close" data-dismiss="modal"
-                     aria-label="Close">
-                     <span aria-hidden="true">&times;</span>
-                  </button>
-               </div>
-               <div class="modal-body" >
-                  <select id="modalSelectbox" class="form-control">
-                  </select>
-               </div>
-               <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary"
-                     data-dismiss="modal">취소</button>
-                  <button type="button" class="btn btn-primary" id="modalsave">변경</button>
-               </div>
-            </div>
-         </div>
-      </div>
-      <!-- Modal 끝-->
-   </th:block>
+		<div class="modal fade" id="exampleModal" tabindex="-5"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">옵션변경</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<select id="modalSelectbox" class="form-control">
+						</select>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">취소</button>
+						<button type="button" class="btn btn-primary" id="modalsave">변경</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Modal 끝-->
+	</th:block>
 
 
 	<!-- Page Content-->
@@ -52,8 +53,9 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th class="cartAllCheck"><label><input type="checkbox" checked="checked" id="chkBasketAll"
-										name="chkBasketAll" class="basket_CheckBox"></label></th>
+							<th class="cartAllCheck"><label><input
+									type="checkbox" checked="checked" id="chkBasketAll"
+									name="chkBasketAll" class="basket_CheckBox"></label></th>
 							<th class="product-title-name">상품명</th>
 							<th class="text-center">수량</th>
 							<th class="text-center">결제액</th>
@@ -64,23 +66,34 @@
 					</thead>
 					<tbody>
 						<tr th:if="${cart == null}">
-							<td colspan="9" class="empty-cart-message">장바구니에 담긴 상품이 없습니다.</td>
+							<td colspan="9" class="empty-cart-message">장바구니에 담긴 상품이
+								없습니다.</td>
 						</tr>
 						<!-- 반복문 가즈아 -->
-						<tr class="cart_info" th:each="cart:${cart}" th:if="${cart != null}">
+						<tr class="cart_info" th:each="cart:${cart}"
+							th:if="${cart != null}">
 							<td class="prd-check-td">
 								<div class="prd-check">
-									<input type="checkbox" checked="checked" class="checkbox" name="checkboxid" th:value="${cart.osId}" th:data-selectid="${cart.osId}"> 
-									<input type="hidden" checked="checked" class="checkbox" name="checkboxqty" th:value="${cart.qty}">
-									<input type="hidden" checked="checked" class="checkbox" name="checkboxproductName" th:value="${cart.productName}"> 
-									<input type="hidden" checked="checked" class="checkbox" name="checkboxtotalPrice" th:value="${cart.totalPrice}">
-									<input type="hidden" checked="checked" class="checkbox" name="checkboxtotalsalePrice" th:if="${session.sUserId != null}" th:value="${cart.totalPrice} * ${cart.qty} * ${cart.grade} / 10 ">
+									<input type="checkbox" checked="checked" class="checkbox"
+										name="checkboxid" th:value="${cart.osId}"
+										th:data-selectid="${cart.osId}"> <input type="hidden"
+										checked="checked" class="checkbox" name="checkboxqty"
+										th:value="${cart.qty}"> <input type="hidden"
+										checked="checked" class="checkbox" name="checkboxproductName"
+										th:value="${cart.productName}"> <input type="hidden"
+										checked="checked" class="checkbox" name="checkboxtotalPrice"
+										th:value="${cart.totalPrice}"> <input type="hidden"
+										checked="checked" class="checkbox"
+										name="checkboxtotalsalePrice"
+										th:if="${session.sUserId != null}"
+										th:value="${cart.totalPrice} * ${cart.qty} * ${cart.grade} / 10 ">
 								</div>
 							</td>
 							<td>
 								<div class="product-item">
-									<a class="product-thumb" href="shop-single.html"><img src="img/shop/cart/01.jpg"
-											alt="Product" th:src="${cart.pImage}"></a>
+									<a class="product-thumb" href="shop-single.html"><img
+										src="img/shop/cart/01.jpg" alt="Product"
+										th:src="${cart.pImage}"></a>
 									<div class="product-info">
 										<h4 class="product-title">
 											<a href="shop-single.html" th:text="${cart.productName}">Unionbay
@@ -98,7 +111,9 @@
 							</td>
 							<td class="text-center">
 								<div class="count-input">
-									<select id="selectbox" class="form-control" name="checkboxvalue" th:data-id="${cart.osId}" onchange="getSelectValue(this);">
+									<select id="selectbox" class="form-control"
+										name="checkboxvalue" th:data-id="${cart.osId}"
+										onchange="getSelectValue(this);">
 										<option disabled hidden th:selected="${cart.qty}"></option>
 										<option th:selected="${cart.qty} == '1'">1</option>
 										<option th:selected="${cart.qty} == '2'">2</option>
@@ -112,22 +127,29 @@
 							</td>
 							<td th:if="${session.sUserId == null}">
 								<div class="td_price_wrap">
-									<span class="text-center text-lg text-medium" th:text="${#numbers.formatInteger(cart.totalPrice * cart.qty , 3, 'COMMA')} ">0원</span>
+									<span class="text-center text-lg text-medium"
+										th:text="${#numbers.formatInteger(cart.totalPrice * cart.qty , 3, 'COMMA')} ">0원</span>
 								</div>
 							</td>
 							<td th:if="${session.sUserId != null}">
-								<div class="td_price_wrap" >
-									<span class="text-center text-lg text-medium" id="beforetotalPrice" th:text="${#numbers.formatInteger(cart.totalPrice * cart.qty , 3 , 'COMMA' )} ">0원</span><br>
-									<span class="text-center text-lg " name="aftertotalPrice" th:text="${#numbers.formatInteger(cart.totalPrice * cart.qty - cart.totalPrice * cart.qty * cart.grade / 10 , 3 , 'COMMA' )}">0원</span>
+								<div class="td_price_wrap">
+									<span class="text-center text-lg text-medium"
+										id="beforetotalPrice"
+										th:text="${#numbers.formatInteger(cart.totalPrice * cart.qty , 3 , 'COMMA' )} ">0원</span><br>
+									<span class="text-center text-lg " name="aftertotalPrice"
+										th:text="${#numbers.formatInteger(cart.totalPrice * cart.qty - cart.totalPrice * cart.qty * cart.grade / 10 , 3 , 'COMMA' )}">0원</span>
 								</div>
 							</td>
-							<td class="text-center text-lg text-medium" th:if="${session.sUserId == null}">로그인 필요 </td>
-							<td class="text-center text-lg text-medium"  th:if="${session.sUserId != null}" th:text="${#numbers.formatInteger(cart.totalPrice * cart.qty * cart.grade / 10 , 3, 'COMMA')}">0</td>
-							<td class="text-center">
-								<a class="plain-btn" id="modalvalue" data-toggle="modal"
-									data-target="#exampleModal" th:onclick="selectOption([[${cart.elseOptionSets}]] ,[[${cart.osId}]] );">옵션변경</a> 
-								<a href="javascript:void(0)" class="plain-btn"
-									id="deletebtn" th:data-osId="${cart.osId}" onclick="deleteCart(this)">삭제하기</a>
+							<td class="text-center text-lg text-medium"
+								th:if="${session.sUserId == null}">로그인 필요</td>
+							<td class="text-center text-lg text-medium"
+								th:if="${session.sUserId != null}"
+								th:text="${#numbers.formatInteger(cart.totalPrice * cart.qty * cart.grade / 10 , 3, 'COMMA')}">0</td>
+							<td class="text-center"><a class="plain-btn" id="modalvalue"
+								data-toggle="modal" data-target="#exampleModal"
+								th:onclick="selectOption([[${cart.elseOptionSets}]] ,[[${cart.osId}]] );">옵션변경</a>
+								<a href="javascript:void(0)" class="plain-btn" id="deletebtn"
+								th:data-osId="${cart.osId}" onclick="deleteCart(this)">삭제하기</a>
 
 							</td>
 						</tr>
@@ -151,9 +173,9 @@
 				</div>
 				<div class="column"></div>
 				<div class="column">
-					<a href="javascript:void(0)" class="btn btn-selectdelete" id="selectAllcheck"
-						onclick="selectAlldelete()">선택삭제</a> <a class="btn btn-success" href="#"
-						onclick="checkValue();">주문하기</a>
+					<a href="javascript:void(0)" class="btn btn-selectdelete"
+						id="selectAllcheck" onclick="selectAlldelete()">선택삭제</a> <a
+						class="btn btn-success" href="#" onclick="checkValue();">주문하기</a>
 				</div>
 			</div>
 
@@ -161,151 +183,42 @@
 
 
 			<!-- Related Products Carousel-->
-			<h3 class="text-center padding-top-2x mt-2 padding-bottom-1x">이런
-				상품은 어떠세요?</h3>
-			<!-- Carousel-->
-			<div class="owl-carousel"
-				data-owl-carousel="{ &quot;nav&quot;: false, &quot;dots&quot;: true, &quot;margin&quot;: 30, &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;576&quot;:{&quot;items&quot;:2},&quot;768&quot;:{&quot;items&quot;:3},&quot;991&quot;:{&quot;items&quot;:4},&quot;1200&quot;:{&quot;items&quot;:4}} }">
-				<!-- Product-->
-				<div class="grid-item">
-					<div class="product-card">
-						<div class="product-badge text-danger">22% Off</div>
-						<a class="product-thumb" href="shop-single.html"><img src="img/shop/products/09.jpg"
-								alt="Product"></a>
-						<h3 class="product-title">
-							<a href="shop-single.html">Rocket Dog</a>
-						</h3>
-						<h4 class="product-price">
-							<del>$44.95</del>
-							$34.99
-						</h4>
-						<div class="product-buttons">
-							<button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip"
-								title="Whishlist">
-								<i class="icon-heart"></i>
-							</button>
-							<button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success"
-								data-toast-position="topRight" data-toast-icon="icon-circle-check"
-								data-toast-title="Product" data-toast-message="successfuly added to cart!">장바구니
-								담기</button>
-						</div>
-					</div>
-				</div>
-				<!-- Product-->
-				<div class="grid-item">
-					<div class="product-card">
-						<div class="rating-stars">
-							<i class="icon-star filled"></i><i class="icon-star filled"></i><i
-								class="icon-star filled"></i><i class="icon-star filled"></i><i class="icon-star"></i>
-						</div>
-						<a class="product-thumb" href="shop-single.html"><img src="img/shop/products/03.jpg"
-								alt="Product"></a>
-						<h3 class="product-title">
-							<a href="shop-single.html">Oakley Kickback</a>
-						</h3>
-						<h4 class="product-price">$155.00</h4>
-						<div class="product-buttons">
-							<button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip"
-								title="Whishlist">
-								<i class="icon-heart"></i>
-							</button>
-							<button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success"
-								data-toast-position="topRight" data-toast-icon="icon-circle-check"
-								data-toast-title="Product" data-toast-message="successfuly added to cart!">장바구니
-								담기</button>
-						</div>
-					</div>
-				</div>
-				<!-- Product-->
-				<div class="grid-item">
-					<div class="product-card">
-						<a class="product-thumb" href="shop-single.html"><img src="img/shop/products/12.jpg"
-								alt="Product"></a>
-						<h3 class="product-title">
-							<a href="shop-single.html">Vented Straw Fedora</a>
-						</h3>
-						<h4 class="product-price">$49.50</h4>
-						<div class="product-buttons">
-							<button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip"
-								title="Whishlist">
-								<i class="icon-heart"></i>
-							</button>
-							<button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success"
-								data-toast-position="topRight" data-toast-icon="icon-circle-check"
-								data-toast-title="Product" data-toast-message="successfuly added to cart!">장바구니
-								담기</button>
-						</div>
-					</div>
-				</div>
-				<!-- Product-->
-				<div class="grid-item">
-					<div class="product-card">
-						<div class="rating-stars">
-							<i class="icon-star filled"></i><i class="icon-star filled"></i><i
-								class="icon-star filled"></i><i class="icon-star filled"></i><i
-								class="icon-star filled"></i>
-						</div>
-						<a class="product-thumb" href="shop-single.html"><img src="img/shop/products/11.jpg"
-								alt="Product"></a>
-						<h3 class="product-title">
-							<a href="shop-single.html">Top-Sider Fathom</a>
-						</h3>
-						<h4 class="product-price">$90.00</h4>
-						<div class="product-buttons">
-							<button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip"
-								title="Whishlist">
-								<i class="icon-heart"></i>
-							</button>
-							<button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success"
-								data-toast-position="topRight" data-toast-icon="icon-circle-check"
-								data-toast-title="Product" data-toast-message="successfuly added to cart!">장바구니
-								담기</button>
-						</div>
-					</div>
-				</div>
-				<!-- Product-->
-				<div class="grid-item">
-					<div class="product-card">
-						<a class="product-thumb" href="shop-single.html"><img src="img/shop/products/04.jpg"
-								alt="Product"></a>
-						<h3 class="product-title">
-							<a href="shop-single.html">Waist Leather Belt</a>
-						</h3>
-						<h4 class="product-price">$47.00</h4>
-						<div class="product-buttons">
-							<button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip"
-								title="Whishlist">
-								<i class="icon-heart"></i>
-							</button>
-							<button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success"
-								data-toast-position="topRight" data-toast-icon="icon-circle-check"
-								data-toast-title="Product" data-toast-message="successfuly added to cart!">장바구니
-								담기</button>
-						</div>
-					</div>
-				</div>
-				<!-- Product-->
-				<div class="grid-item">
-					<div class="product-card">
-						<div class="product-badge text-danger">50% Off</div>
-						<a class="product-thumb" href="shop-single.html"><img src="img/shop/products/01.jpg"
-								alt="Product"></a>
-						<h3 class="product-title">
-							<a href="shop-single.html">Unionbay Park</a>
-						</h3>
-						<h4 class="product-price">
-							<del>$99.99</del>
-							$49.99
-						</h4>
-						<div class="product-buttons">
-							<button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip"
-								title="Whishlist">
-								<i class="icon-heart"></i>
-							</button>
-							<button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success"
-								data-toast-position="topRight" data-toast-icon="icon-circle-check"
-								data-toast-title="Product" data-toast-message="successfuly added to cart!">장바구니
-								담기</button>
+			<div th:if="${cart!=null}">
+				<h3 class="text-center padding-top-2x mt-2 padding-bottom-1x"><span th:if="${hits!=null}">You
+					May Also Like</span></h3>
+				<!-- Carousel-->
+				<div class="owl-carousel"
+					data-owl-carousel="{ &quot;nav&quot;: false, &quot;dots&quot;: true, &quot;margin&quot;: 30, &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;576&quot;:{&quot;items&quot;:2},&quot;768&quot;:{&quot;items&quot;:3},&quot;991&quot;:{&quot;items&quot;:4},&quot;1200&quot;:{&quot;items&quot;:4}} }">
+					<!-- Product-->
+					<div class="grid-item" th:each="productDto:${hits}">
+						<div class="product-card">
+							<a class="product-thumb" href="product-detail.html"
+								th:href="product-detail.html"><img
+								src="img/shop/products/09.jpg" alt="Product"
+								th:attr="src=@{${productDto.pImage}}"></a>
+							<h3 class="product-title" th:text="${productDto.name}">
+								<a href="product-detail.html">상품명</a>
+							</h3>
+							<h4 class="product-price" th:text="${productDto.totalPrice}">$34.99</h4>
+							<div class="product-buttons">
+								<button th:if="${productDto.isInterested}"
+									class="btn btn-outline-secondary btn-sm btn-wishlist active"
+									data-toggle="tooltip" th:product-heart="|${productDto.osId}|"
+									title="Whishlist">
+									<i class="icon-heart" th:heart="|${productDto.osId}|"></i>
+								</button>
+								<button th:unless="${productDto.isInterested}"
+									class="btn btn-outline-secondary btn-sm btn-wishlist"
+									data-toggle="tooltip" title="Whishlist"
+									th:product-heart-yet="|${productDto.osId}|">
+									<i class="icon-heart" th:heart="|${productDto.osId}|"></i>
+								</button>
+								<button class="btn btn-outline-primary btn-sm" data-toast
+									data-toast-type="success" data-toast-position="topRight"
+									data-toast-icon="icon-circle-check" data-toast-title="Product"
+									data-toast-message="successfuly added to cart!"
+									th:data-optionSetId="${productDto.osId}">Add to Cart</button>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -314,12 +227,12 @@
 		<!-- content end -->
 
 
-</th:block>
-<th:block layout:fragment="recommendation">
-</th:block>
-<th:block layout:fragment="script">
-		
-<script th:inline="javascript">
+	</th:block>
+	<th:block layout:fragment="recommendation">
+	</th:block>
+	<th:block layout:fragment="script">
+
+		<script th:inline="javascript">
 	
 /* 총결제금액 계산 */
 $(document).ready(function() {
@@ -587,6 +500,6 @@ function selectOption(elseOptionSets, osId) {
 
 
 </script>
-</th:block>
+	</th:block>
 </body>
 </html>

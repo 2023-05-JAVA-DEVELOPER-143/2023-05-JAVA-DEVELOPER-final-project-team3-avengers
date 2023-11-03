@@ -51,23 +51,23 @@ public class SUserCartResponseDto {
 			break;
 		}
 		case "Bronze": {
-			gradePoint = 2;
-			break;
-		}
-		case "Silver": {
-			gradePoint = 3;
-			break;
-		}
-		case "Gold": {
 			gradePoint = 4;
 			break;
 		}
+		case "Silver": {
+			gradePoint = 7;
+			break;
+		}
+		case "Gold": {
+			gradePoint = 10;
+			break;
+		}
 		case "Platinum": {
-			gradePoint = 5;
+			gradePoint = 13;
 			break;
 		}
 		case "Diamond": {
-			gradePoint = 6;
+			gradePoint = 16;
 			break;
 		}
 		}
