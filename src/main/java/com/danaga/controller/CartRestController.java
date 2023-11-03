@@ -45,17 +45,7 @@ public class CartRestController {
 		if (sUserId != null && fUserCarts == null) {
 			cartService.addCart(dto, sUserId);
 			countCarts(session);
-		} else if (sUserId != null && fUserCarts != null) {
-			// 2번 경우 = 회원 + 세션 장바구니 존재
-			System.out.println(" >>>>>>>>>>>>>>>> 실행돼야함");
-			cartService.addCart(dto, sUserId);
-			for (int i = 0; i < fUserCarts.size(); i++) {
-				cartService.addCart(fUserCarts.get(i), sUserId);
-				// 세션 -> db 로 데이타 인서트 후 세션 데이타 초기화 후 세션카트 카운트
-			}
-			fUserCarts.clear();
-			session.setAttribute("fUserCarts", fUserCarts);
-			countCarts(session);
+		 
 		} else {// 3번 경우 = 비회원 + 세션 장바구니 X
 			if (sUserId == null && fUserCarts == null) {
 				System.out.println(" >>>>>>>>>> 처음 인서트 실행 로직 "+ dto);
