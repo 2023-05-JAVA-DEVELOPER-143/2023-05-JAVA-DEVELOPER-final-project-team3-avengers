@@ -10,7 +10,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.danaga.dto.*;
+import com.danaga.dto.product.OptionSetUpdateDto;
+import com.danaga.dto.product.ProductDto;
+import com.danaga.entity.OptionSet;
 import com.danaga.service.OrderService;
+import com.danaga.service.product.OptionSetService;
+import com.mysql.cj.x.protobuf.MysqlxCrud.Order;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.servlet.http.HttpSession;
@@ -22,15 +27,13 @@ import lombok.RequiredArgsConstructor;
 public class OrderRestController {
 
 	private final OrderService orderService;
+	private final OptionSetService optionSetService;
 
 	/*
 	 * 주문validation
 	 */
 //	public Map order_save_action(@RequestBody OrderTotalDto orderTotalDto)
-	
-	
-	
-	
+
 	/*
 	 * 주문상세보기(회원)
 	 */
@@ -70,8 +73,15 @@ public class OrderRestController {
 	@PutMapping("/updateCancel{orderId}")
 	public ResponseEntity<?> updateStatementByCancleOrder(@PathVariable(value = "orderId") Long orderId) {
 		try {
-
 			OrdersDto ordersDto = orderService.updateStatementByCancleOrder(orderId);
+			List<OrderItemDto> orderitemDtoList = ordersDto.getOrderItemDtoList();
+			for (OrderItemDto orderItemDto : orderitemDtoList) {
+				ResponseDto<?> responseDto = optionSetService.findById(orderItemDto.getOsId());
+				List<ProductDto> productDtoList = (List<ProductDto>) responseDto.getData();
+				OptionSetUpdateDto optionSetUpdateDto = OptionSetUpdateDto.builder().id(productDtoList.get(0).getOsId())
+						.stock(productDtoList.get(0).getStock() + orderItemDto.getQty()).build();
+				optionSetService.updateStock(optionSetUpdateDto);
+			}
 			return ResponseEntity.ok(ordersDto);
 
 		} catch (Exception e) {
@@ -79,6 +89,7 @@ public class OrderRestController {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
+
 	/*
 	 * 3.환불주문(환불대기중)
 	 */
@@ -95,6 +106,7 @@ public class OrderRestController {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
+
 	/*
 	 * 4.환불주문(완료)
 	 */
@@ -111,6 +123,7 @@ public class OrderRestController {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
+
 	/*
 	 * 4.상태리셋( 배송중→입금대기중 완료)
 	 */

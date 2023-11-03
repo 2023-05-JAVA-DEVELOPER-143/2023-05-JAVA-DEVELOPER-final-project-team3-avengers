@@ -457,7 +457,8 @@ public class OrderServiceImpl implements OrderService {
 		      memberService.updateGrade(member,(int)((orders.getPrice())*0.001));
 		     
 		      orders.setMember(Member.toResponseEntity(memberResponseDto));
-	      
+		      
+		      System.out.println("5555555555555555555555555555555"+member);
 		return OrdersDto.orderDto(orders);
 	}
 
