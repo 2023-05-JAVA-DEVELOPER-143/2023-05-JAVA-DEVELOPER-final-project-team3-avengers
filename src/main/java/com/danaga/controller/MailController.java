@@ -33,6 +33,7 @@ public class MailController {
     public String findPassMailSend(String mail){
     	
     	String randomPass = mailService.findPassSendMail(mail);
+    	System.out.println("##################"+randomPass);
     	
     	return randomPass;
     }
