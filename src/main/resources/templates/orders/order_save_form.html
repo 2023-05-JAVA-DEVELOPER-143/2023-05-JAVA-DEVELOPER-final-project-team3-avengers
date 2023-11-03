@@ -97,11 +97,11 @@
 								<div class="form-group">
 									<label for="reg-address">주소</label><br>
 									<input name="receiverPostCode" type="text" class="form-control"
-										id="receiverPostCode" placeholder="우편번호" disabled required>
+										id="receiverPostCode" placeholder="우편번호" required>
 									<input name="findaddr" type="button" class="form-control"
 										onclick="execDaumPostcode()" value="우편번호 찾기"><br>
 									<input name="receiverAddress" type="text" class="form-control" id="receiverAddress"
-										placeholder="주소" disabled required>
+										placeholder="주소" required>
 									<input name="receiverDetailAddress" type="text" class="form-control"
 										id="receiverDetailAddress" placeholder="상세주소" required>
 
@@ -248,36 +248,14 @@
 				form.submit();
 
 			}
-			function isHpFormat(hp) {
-				if (hp == "") {
-					return true;
+			function isNoValidPhoneNo(phoneNo) {
+				// 010-1234-1234 형식의 휴대폰 번호 유효성 검사를 수행합니다.
+				const phoneRegex = /^(01[016789]{1})-?[0-9]{3,4}-?[0-9]{4}$/;
+				if (phoneRegex.test(phoneNo)) {
+					return false;
 				}
-				var phoneRule = /^(01[016789]{1})[0-9]{3,4}[0-9]{4}$/;
-				return phoneRule.test(hp);
+				return true;
 			}
-
-
-$(function(){
-    		/**************회원가입폼 유효성체크*********************/
-        	//번호
-        	$('#reg-phone').on('change',function(e){
-        		if(isNoValidPhoneNo($('#reg-phone').val())) {
-        			$('#reg-phone').css('border','0.5px dotted orange');
-        			$('#reg-phone').tooltip({'trigger':'hover', 'title':'올바른 번호 형식이 아닙니다.'});
-        			$('#reg-phone').tooltip('show');
-        		} else {
-        			$('#reg-phone').css('border','');
-        			$('#reg-phone').tooltip('hide');
-        			$('#reg-phone').tooltip('dispose');
-        		}
-        	});
-        	
-    		/**********회원가입submit버튼[ajax]************/
-        	$('').on('submit',function(e){
-				let 
-			});
-        	
-});
 		</script>
 	</th:block>
 </body>

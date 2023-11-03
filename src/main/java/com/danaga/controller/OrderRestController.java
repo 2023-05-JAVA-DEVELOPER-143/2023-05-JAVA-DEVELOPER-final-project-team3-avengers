@@ -24,6 +24,14 @@ public class OrderRestController {
 	private final OrderService orderService;
 
 	/*
+	 * 주문validation
+	 */
+//	public Map order_save_action(@RequestBody OrderTotalDto orderTotalDto)
+	
+	
+	
+	
+	/*
 	 * 주문상세보기(회원)
 	 */
 	@GetMapping("/member_order_detail/{orderNo}")

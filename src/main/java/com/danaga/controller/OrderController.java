@@ -228,7 +228,6 @@ public class OrderController {
 				OrdersDto ordersDto = orderService.guestCartSelectOrderSave(deliveryDto, fUserCarts, orderGuestDto);
 
 				model.addAttribute("orderId", ordersDto.getId());
-
 //				List<CartDto> cartDtos = (List<CartDto>) session.getAttribute("fUserCarts");
 //				for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
 //					for (int j = 0; j < cartDtos.size(); j++) {
@@ -266,7 +265,7 @@ public class OrderController {
 				deliveryDto.setAddress(orderTotalDto.getReceiverAddress());
 				deliveryDto.setDetailAddress(orderTotalDto.getReceiverDetailAddress());
 				deliveryDto.setPostCode(orderTotalDto.getReceiverPostCode());
-				orderService.memberCartSelectOrderSave(sUserId, deliveryDto, fUserCarts);
+				OrdersDto ordersDto= orderService.memberCartSelectOrderSave(sUserId, deliveryDto, fUserCarts);
 //				for (CartDto cartDto : fUserCarts) {
 //					cartService.deleteCart(cartDto.getOptionSetId(), sUserId);
 //				}
@@ -275,6 +274,7 @@ public class OrderController {
 //				session.setAttribute("sUserCartOrderDtoList", sUserCartOrderDtoList);
 //				session.setAttribute("realTotalPrice", 0);
 //				session.setAttribute("countCarts", cartService.countCarts(sUserId));
+				model.addAttribute("orderId",ordersDto.getId());
 				return "orders/order_complete";
 			} catch (Exception e) {
 				model.addAttribute("msg", e.getMessage());
