@@ -149,7 +149,7 @@ function updateQueryDataDto(optionName, optionValue, checked) {
 		} else {
 			filterDto.optionset.push({
 				"optionName": optionName,
-				"optionValue": optionValue
+				"optionValue": [optionValue]
 			});
 		}
 	} else if (!checked && existingOption) {
