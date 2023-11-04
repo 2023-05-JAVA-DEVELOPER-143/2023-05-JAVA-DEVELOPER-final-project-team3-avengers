@@ -41,8 +41,9 @@ public class Board extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
 
+	@Column(nullable=false)
 	private String title;
-	@Column(length = 2000)
+	@Column(length = 2000,nullable=false)
 	private String content;
 	private String img1;
 	private String img2;
