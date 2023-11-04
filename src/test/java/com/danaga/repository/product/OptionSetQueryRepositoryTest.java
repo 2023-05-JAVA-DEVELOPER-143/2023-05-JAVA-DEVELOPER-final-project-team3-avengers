@@ -28,7 +28,7 @@ class OptionSetQueryRepositoryTest {
 		values.add("windows11");
 		values.add("windows10");
 		
-		list.add(OptionNameValueMapDto.builder().name("os").value(values).build());
+		list.add(OptionNameValueMapDto.builder().optionName("os").optionValue(values).build());
 		System.out.println(repository.findByFilter(
 				QueryStringDataDto.builder()
 				.orderType(OptionSetQueryData.BY_TOTAL_PRICE)

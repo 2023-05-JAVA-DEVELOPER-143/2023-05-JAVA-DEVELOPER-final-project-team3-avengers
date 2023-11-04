@@ -31,20 +31,25 @@ public class OptionSetDaoImpl implements OptionSetDao{
 	private EntityManager em;
 	
 	@Override
-	public List<OptionSet> findByFilter(QueryStringDataDto dataDto){
+	public List<OptionSet> findByFilter(QueryStringDataDto dataDto,Integer firstResult){
 		String jpql = new OptionSetSearchQuery(dataDto).build();
 		TypedQuery<OptionSet> query = em.createQuery(jpql,OptionSet.class);
+		query.setFirstResult(firstResult);
+		query.setMaxResults(20);
 		return query.getResultList();
 	}
 	@Override
-	public List<ProductDto> findForMemberByFilter(QueryStringDataDto dataDto, String username){
+	public List<ProductDto> findForMemberByFilter(QueryStringDataDto dataDto, String username,Integer firstResult ){
 		String mainJpql = new OptionSetSearchQuery(dataDto).build();
 		TypedQuery<OptionSet> query = em.createQuery(mainJpql,OptionSet.class);
 		String findHeartJpql = "SELECT i.optionSet.id FROM Interest i WHERE i.member.userName= :username";
+		query.setFirstResult(firstResult);
+		query.setMaxResults(20);
 		TypedQuery<Long> heart = em.createQuery(findHeartJpql,Long.class);
 		heart.setParameter("username", username);
 		List<Long> heartOptionSetId = heart.getResultList();
 		List<OptionSet> searchResult = query.getResultList();
+		
 		List<ProductDto> finalResult = searchResult.stream().map(t -> {
 			ProductDto productDto = new ProductDto(t);
 			productDto.setIsInterested(heartOptionSetId.contains(t.getId()));

@@ -3,9 +3,10 @@ import * as api from "./p_apiService.js"
 let hash = window.location.hash
 let path = hash.substring(1);
 let html = '';
-
+let firstResult=0;
 let filterDto = {};
 filterDto["orderType"] = "판매순";
+filterDto["firstResult"] = firstResult;
 
 /*
 초기실행메쏘드
@@ -54,6 +55,7 @@ function registEvent() {
 			filterDto["category"]["id"] = categoryId;
 			filterDto["category"]["name"] = subCategoryName;
 			api.searchResult(filterDto);
+			firstResult=0;
 			filterDto.optionset = [];
 			console.log(filterDto);
 
@@ -94,8 +96,10 @@ function registEvent() {
 			console.log(optionName,optionValue,checked);
 			updateQueryDataDto(optionName, optionValue, checked);
 			console.log(filterDto);
+			firstResult=0;
 			api.searchResult(filterDto);
 		} else if ($(e.target).attr('id') == 'main-search-btn') {
+			firstResult=0;
 			api.searchResult(filterDto);
 		} else if ($(e.target).attr('data-toast-message') == "successfuly added to cart!") {
 			let optionSetId = $(e.target).attr('data-optionSetId');
@@ -181,5 +185,25 @@ function navigate() {
 		$('#page_list_content').html(html);
 	}
 }
+const $result = document.querySelector("#toObserve");
+const $end = document.createElement("div");
+$end.id='product-list-observed';
+$result.append($end);
 
+const callback = (entries, observer) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+	  firstResult+=20;
+	  filterDto.firstResult=firstResult;
+      api.continueSearchResult(filterDto,observer);
+    }
+  });
+}
+const options = {
+    root: null, // 뷰포트를 기준으로 타켓의 가시성 검사
+    rootMargin: '0px 0px 0px 0px', // 확장 또는 축소 X
+    threshold: 1 // 타켓의 가시성 0%일 때 옵저버 실행
+};
+const observer = new IntersectionObserver(callback, options);
+observer.observe($end);
 //init();

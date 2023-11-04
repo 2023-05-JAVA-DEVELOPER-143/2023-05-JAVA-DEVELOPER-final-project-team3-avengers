@@ -20,12 +20,12 @@ public interface OptionSetDao {
 	OptionSet findByOptionId(Long optionId);
 	List<OptionSet> findAllByRecentView_MemberId(Long memberId);
 	List<OptionSet> findAllByInterest_MemberId(Long memberId);
-	List<OptionSet> findByFilter(QueryStringDataDto dataDto);
+	List<OptionSet> findByFilter(QueryStringDataDto dataDto,Integer firstResult);
 	OptionSet updateStock(OptionSetUpdateDto dto);
 	OptionSet updateOrderCount(Long id,Integer orderCount);
 	OptionSet updateViewCount(Long id);
 	OptionSet calculateTotalPrice(OptionSetUpdateDto dto);
-	List<ProductDto> findForMemberByFilter(QueryStringDataDto dataDto, String username);
+	List<ProductDto> findForMemberByFilter(QueryStringDataDto dataDto, String username,Integer firstResult);
 	
 	
 }

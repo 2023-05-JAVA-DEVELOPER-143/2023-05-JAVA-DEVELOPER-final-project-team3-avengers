@@ -59,6 +59,7 @@
 					</div>
 
 					<!-- Product 반복-->
+					<div id="toObserve">
 					<div id="main-product-item-template-position">
 						<div class="product-card product-list"
 							th:each="productDto : ${productList}">
@@ -105,8 +106,9 @@
 								</div>
 							</div>
 						</div>
+<!--						<div id="product-list-observed"></div>
+-->					</div>
 					</div>
-
 					<!-- 클라이언트 요청 -->
 					<script id="main-product-item-template"
 						type="text/x-handlebars-template">
@@ -155,25 +157,6 @@
 
 					<!-- Product 반복 끝 -->
 				</div>
-			</div>
-			<div class="pt-2">
-				<!-- Pagination-->
-				<nav class="pagination">
-					<div class="column">
-						<ul class="pages">
-							<li class="active"><a href="#">1</a></li>
-							<li><a href="#">2</a></li>
-							<li><a href="#">3</a></li>
-							<li><a href="#">4</a></li>
-							<li>...</li>
-							<li><a href="#">12</a></li>
-						</ul>
-					</div>
-					<div class="column text-right hidden-xs-down">
-						<a class="btn btn-outline-secondary btn-sm" href="#">Next&nbsp;<i
-							class="icon-arrow-right"></i></a>
-					</div>
-				</nav>
 			</div>
 		</div>
 

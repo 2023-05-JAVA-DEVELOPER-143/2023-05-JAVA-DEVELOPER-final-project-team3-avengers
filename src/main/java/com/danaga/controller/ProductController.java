@@ -76,7 +76,7 @@ public class ProductController {
 					QueryStringDataDto.builder()
 					.nameKeyword(nameKeyword)
 					.orderType(OptionSetQueryData.BY_ORDER_COUNT)
-					.build());
+					.build(),0);
 			List<ProductDto> productList = responseDto.getData();
 			model.addAttribute("productList",productList);
 			}else {
@@ -84,7 +84,7 @@ public class ProductController {
 						QueryStringDataDto.builder()
 						.nameKeyword(nameKeyword)
 						.orderType(OptionSetQueryData.BY_ORDER_COUNT)
-						.build(),(String)session.getAttribute("sUserId"));
+						.build(),(String)session.getAttribute("sUserId"),0);
 				List<ProductDto> productList = responseDto.getData();
 				model.addAttribute("productList",productList);
 				
@@ -108,7 +108,7 @@ public class ProductController {
 				ResponseDto<ProductDto> responseDto = service.searchProductsForMember(//주문수로 전체상품 정렬하여 조회
 						QueryStringDataDto.builder()
 						.orderType(OptionSetQueryData.BY_ORDER_COUNT)
-						.build(),(String)session.getAttribute("sUserId"));
+						.build(),(String)session.getAttribute("sUserId"),0);
 				List<ProductDto> productList = responseDto.getData();
 				model.addAttribute("productList",productList);
 			}else {
@@ -116,7 +116,7 @@ public class ProductController {
 			ResponseDto<ProductDto> responseDto = service.searchProducts(//주문수로 전체상품 정렬하여 조회
 					QueryStringDataDto.builder()
 					.orderType(OptionSetQueryData.BY_ORDER_COUNT)
-					.build());
+					.build(),0);
 			List<ProductDto> productList = responseDto.getData();
 			model.addAttribute("productList",productList);
 			}
@@ -152,10 +152,10 @@ public class ProductController {
 			List<Boolean> isInterested=(List<Boolean>) interestService.isMyInterest(optionSetId, username).getData();
 			model.addAttribute("isInterested",isInterested.get(0));
 			
-			List<ProductDto>hits=service.displayHitProductsForMember(optionSetId, username).getData();
+			List<ProductDto>hits=service.displayHitProductsForMember(optionSetId, username,0).getData();
 			model.addAttribute("hits",hits);
 			}else{
-			List<ProductDto> hits = service.displayHitProducts(optionSetId).getData();
+			List<ProductDto> hits = service.displayHitProducts(optionSetId,0).getData();
 			model.addAttribute("hits",hits);
 			List<Boolean> isInterested=new ArrayList<>();
 			isInterested.add(false);

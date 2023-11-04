@@ -26,5 +26,7 @@ public class QueryStringDataDto {
 	private Integer maxPrice;
 	private String nameKeyword;
 	private CategoryDto category;
+	@Builder.Default
+	private Integer firstResult=0;
 	
 }

@@ -106,7 +106,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 	// 같은 카테고리 인기상품
 	@Override
 	@Transactional
-	public ResponseDto<ProductDto> displayHitProducts(Long optionSetId) {
+	public ResponseDto<ProductDto> displayHitProducts(Long optionSetId,Integer firstResult) {
 		List<Category> findCategory = categoryDao.findByOptionSetId(optionSetId);
 		String orderType = OptionSetQueryData.BY_VIEW_COUNT;
 
@@ -114,23 +114,23 @@ public class OptionSetServiceImpl implements OptionSetService {
 				.findByFilter(QueryStringDataDto.builder().orderType(orderType)
 						.category(CategoryDto.builder().name(findCategory.get(findCategory.size() - 1).getName())
 								.id(findCategory.get(findCategory.size() - 1).getId()).build())
-						.build())
-				.stream().limit(20).map(t -> new ProductDto(t)).collect(Collectors.toList());
+						.build(),firstResult)
+				.stream().map(t -> new ProductDto(t)).collect(Collectors.toList());
 		;
 		return ResponseDto.<ProductDto>builder().data(searchResult).build();
 	}
 
 	@Override
 	@Transactional
-	public ResponseDto<ProductDto> displayHitProductsForMember(Long optionSetId, String username) {
+	public ResponseDto<ProductDto> displayHitProductsForMember(Long optionSetId, String username,Integer firstResult) {
 		List<Category> findCategory = categoryDao.findByOptionSetId(optionSetId);
 		String orderType = OptionSetQueryData.BY_VIEW_COUNT;
 		List<ProductDto> searchResult = optionSetDao
 				.findForMemberByFilter(QueryStringDataDto.builder().orderType(orderType)
 						.category(CategoryDto.builder().name(findCategory.get(findCategory.size() - 1).getName())
 								.id(findCategory.get(findCategory.size() - 1).getId()).build())
-						.build(), username)
-				.stream().filter(t -> t.getOsId()!=optionSetId).limit(20).collect(Collectors.toList());
+						.build(), username,firstResult)
+				.stream().filter(t -> t.getOsId()!=optionSetId).collect(Collectors.toList());
 		;
 		return ResponseDto.<ProductDto>builder().data(searchResult).build();
 	}
@@ -138,17 +138,17 @@ public class OptionSetServiceImpl implements OptionSetService {
 	// 카테고리에 해당하는 리스트 전체 조회
 	// 조건에 해당하는 리스트 전체 조회
 	@Override
-	public ResponseDto<ProductDto> searchProducts(QueryStringDataDto dto) {
+	public ResponseDto<ProductDto> searchProducts(QueryStringDataDto dto,Integer firstResult) {
 		System.out.println("검색조건>>>>>>>>>>>>>>>"+dto);
-		List<ProductDto> data = optionSetDao.findByFilter(dto).stream().map(t -> new ProductDto(t))
+		List<ProductDto> data = optionSetDao.findByFilter(dto,firstResult).stream().map(t -> new ProductDto(t))
 				.collect(Collectors.toList());
 		;
 		return ResponseDto.<ProductDto>builder().data(data).build();
 	}
 
 	@Override
-	public ResponseDto<ProductDto> searchProductsForMember(QueryStringDataDto dto, String username) {
-		List<ProductDto> data = optionSetDao.findForMemberByFilter(dto, username);
+	public ResponseDto<ProductDto> searchProductsForMember(QueryStringDataDto dto, String username,Integer firstResult) {
+		List<ProductDto> data = optionSetDao.findForMemberByFilter(dto, username,firstResult);
 		;
 		return ResponseDto.<ProductDto>builder().data(data).build();
 	}

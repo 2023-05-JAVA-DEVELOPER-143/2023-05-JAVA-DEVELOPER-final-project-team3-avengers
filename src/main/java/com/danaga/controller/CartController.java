@@ -47,7 +47,7 @@ public class CartController {
 			session.setAttribute("countCarts", carts.size());
 			if (carts==null) {
 				model.addAttribute("hits",
-						optionSetService.displayHitProductsForMember(carts.get(a).getId(), sUserId).getData());
+						optionSetService.displayHitProductsForMember(carts.get(a).getId(), sUserId,0).getData());
 			}
 			model.addAttribute("cart", carts);
 		} else {// 비회원
@@ -66,7 +66,7 @@ public class CartController {
 				session.setAttribute("countCarts", responseDto.size());
 				if (!responseDto.isEmpty()) {
 					model.addAttribute("hits",
-							optionSetService.displayHitProducts(responseDto.get(a).getOsId()).getData());
+							optionSetService.displayHitProducts(responseDto.get(a).getOsId(),0).getData());
 				}
 				model.addAttribute("cart", responseDto);
 			}

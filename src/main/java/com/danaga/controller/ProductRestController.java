@@ -111,10 +111,10 @@ public class ProductRestController {
 		try {//emptySTring 걸러주고 search>>query에서 걸르
 			System.out.println("restcontroller의 filterdto 검색조건>>>>>>>>>>>"+filterDto);
 			if(session.getAttribute("sUserId")==null) {
-			ResponseDto<?> response =service.searchProducts(filterDto);
+			ResponseDto<?> response =service.searchProducts(filterDto,filterDto.getFirstResult());
 			return ResponseEntity.status(HttpStatus.OK).body(response);
 			}else {
-				ResponseDto<?> response =service.searchProductsForMember(filterDto,(String)session.getAttribute("sUserId"));
+				ResponseDto<?> response =service.searchProductsForMember(filterDto,(String)session.getAttribute("sUserId"),filterDto.getFirstResult());
 				return ResponseEntity.status(HttpStatus.OK).body(response);
 			}
 		}catch(Exception e) {

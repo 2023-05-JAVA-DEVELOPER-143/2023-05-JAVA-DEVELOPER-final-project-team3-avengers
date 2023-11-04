@@ -29,13 +29,13 @@ public interface OptionSetService {
 		ResponseDto<ProductDto> findById(Long optionSetId);
 		ResponseDto<?> showOptionNameValues(Long categoryId);
 		
-		ResponseDto<ProductDto> displayHitProducts(Long optionSetId);
+		ResponseDto<ProductDto> displayHitProducts(Long optionSetId,Integer firstResult);
 		
-		ResponseDto<ProductDto> searchProducts(QueryStringDataDto dto);
+		ResponseDto<ProductDto> searchProducts(QueryStringDataDto dto,Integer firstResult);
 		
 		ResponseDto<ProductDto> showOtherOptionSets(Long optionSetId);
 		ResponseDto<?> showAllOptionNameValues(Long categoryId);
-		ResponseDto<ProductDto> searchProductsForMember(QueryStringDataDto dto, String username);
-		ResponseDto<ProductDto> displayHitProductsForMember(Long optionSetId, String username);
+		ResponseDto<ProductDto> searchProductsForMember(QueryStringDataDto dto, String username,Integer firstResult);
+		ResponseDto<ProductDto> displayHitProductsForMember(Long optionSetId, String username,Integer firstResult);
 		
 }

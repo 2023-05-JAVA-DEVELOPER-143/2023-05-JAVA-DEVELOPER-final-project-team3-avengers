@@ -92,6 +92,7 @@ export function showOptions(categoryId) {
 		});
 }
 export function searchResult(filterDto) {//검색결과 보여주기
+filterDto.firstResult=0;
 			console.log(filterDto);
 	return call(SEARCH.url, SEARCH.method, filterDto)
 		.then((response) => {
@@ -99,6 +100,19 @@ export function searchResult(filterDto) {//검색결과 보여주기
 			let template = Handlebars.compile($('#main-product-item-template').html());
 			let mixedTemplate = template(response);
 			$('#main-product-item-template-position').html(mixedTemplate);
+		});
+}
+export function continueSearchResult(filterDto,observer) {//검색결과 보여주기
+			console.log(filterDto);
+	return call(SEARCH.url, SEARCH.method, filterDto)
+		.then((response) => {
+			console.log(response);
+			if(response.error=='end'){
+				observer.unobserve($('#product-list-observed'));
+			}
+			let template = Handlebars.compile($('#main-product-item-template').html());
+			let mixedTemplate = template(response);
+			$('#product-list-observed').before(mixedTemplate);
 		});
 }
 export function addToCart(optionSetId, qty){
@@ -111,13 +125,3 @@ export function addToCart(optionSetId, qty){
 		
 	});
 }
-/*export function productOrder(optionSetId,qty){
-	let cartDto={
-		"optionSetId": optionSetId,
-		"qty":qty
-	}
-	return call(PRODUCT_ORDER.url,PRODUCT_ORDER.method,cartDto)
-	.then((response)=>{
-		
-	});
-}*/

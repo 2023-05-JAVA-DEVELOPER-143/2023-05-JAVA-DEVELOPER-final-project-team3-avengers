@@ -85,7 +85,7 @@ class OptionSetServiceImplTest {
 	@Test
 	@Disabled
 	void testDisplayHitProducts() {
-		System.out.println(service.displayHitProducts(11L));
+		System.out.println(service.displayHitProducts(11L,0));
 	}
 
 	@Test
@@ -93,7 +93,7 @@ class OptionSetServiceImplTest {
 	void testSearchProducts() {
 		System.out.println(service.searchProducts(QueryStringDataDto.builder()
 				.orderType(OptionSetQueryData.BY_ORDER_COUNT)
-				.build()));
+				.build(),0));
 	}
 
 	@Test
