@@ -50,8 +50,27 @@ public class MemberRestController {
 //		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 //		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
 //	}
+	@PostMapping(value = "/findid_rest", produces = "application/json;charset=UTF-8")
+	public Map member_findid_action_rest(@RequestBody MemberFindDto memberFindDto, HttpSession session)
+			throws Exception {
+		HashMap map = new HashMap<>();
+		//MemberResponseDto memberResponseDto = MemberResponseDto.builder().userName(userName).password(password).build();
+		int result = 1;
+		
+		try {
+			memberService.getMemberBy(memberFindDto.getEmail());
+		} catch (MemberNotFoundException e) {
+			result = 0;
+			map.put("result", result);
+			map.put("msg", memberFindDto.getEmail() + "는 등록되지 않은 이메일입니다.");
+			return map;
+		}
+		
+		map.put("result", result);
+		return map;
+	}
 	@PostMapping(value = "/findpass_rest", produces = "application/json;charset=UTF-8")
-	public Map member_findPass_action_rest(@RequestBody MemberFindDto memberFindDto, HttpSession session)
+	public Map member_findpass_action_rest(@RequestBody MemberFindDto memberFindDto, HttpSession session)
 			throws Exception {
 		HashMap map = new HashMap<>();
 		//MemberResponseDto memberResponseDto = MemberResponseDto.builder().userName(userName).password(password).build();

@@ -77,6 +77,7 @@
                   <input class="form-control"  name="birthday" type="date" id="reg-birthday" required>
                 </div>
               </div>
+              <!--주소 -->
               <div class="col-sm-10">
 				<div class="form-group">
 					<label for="reg-address">주소</label><br>
@@ -88,8 +89,9 @@
 					type="text" class="form-control" id="reg-address" placeholder="주소" disabled required>
 					<input name="detailaddress"
 					type="text" class="form-control" id="reg-detailaddress" placeholder="상세주소" required>
-				</div>	
+				</div>
 			  </div>
+			   <!--주소 -->
               <div class="col-12 text-center text-sm-right">
                 <button class="btn-account-register btn btn-primary margin-bottom-none" id="join-action-btn" type="submit">회원가입</button>
                 <button class="btn-account-reset btn btn-primary margin-bottom-none" type="reset">초기화</button>
@@ -142,7 +144,6 @@ function isNoValidPhoneNo(phoneNo) {
 }
 let emailCheck = false;
 let member_join_action_rest=function(data){
-		console.log('33333');
 		if(emailCheck) {
 		$.ajax({
 				url:'/member/join_rest',
@@ -155,18 +156,30 @@ let member_join_action_rest=function(data){
 						$('#reg-username').css('border','0.5px solid orange');
 						$('#reg-username').tooltip({'trigger':'hover', 'title': resultJson.msg});
 			    		$('#reg-username').tooltip('show');
+			    		setTimeout(function () {
+					    $('#reg-username').tooltip('dispose');
+					    }, 2000);
 					} else if(resultJson.result==2) {
 						$('#reg-email').css('border','0.5px solid orange');
 						$('#reg-email').tooltip({'trigger':'hover', 'title': resultJson.msg});
 			    		$('#reg-email').tooltip('show');
+			    		setTimeout(function () {
+					    $('#reg-email').tooltip('dispose');
+					    }, 2000);
 					} else if(resultJson.result==3) {
 						$('#reg-phone').css('border','0.5px solid orange');
 						$('#reg-phone').tooltip({'trigger':'hover', 'title': resultJson.msg});
 			    		$('#reg-phone').tooltip('show');
+			    		setTimeout(function () {
+					    $('#reg-phone').tooltip('dispose');
+					    }, 2000);
 					} else if(resultJson.result==4) {
 						$('#reg-nickname').css('border','0.5px solid orange');
 						$('#reg-nickname').tooltip({'trigger':'hover', 'title': resultJson.msg});
 			    		$('#reg-nickname').tooltip('show');
+			    		setTimeout(function () {
+					    $('#reg-nickname').tooltip('dispose');
+					    }, 2000);
 					} else {
 						alert("회원가입을 환영합니다!!");
 						location.href="/member_login_form";
@@ -180,7 +193,7 @@ let member_join_action_rest=function(data){
         			$('#reg-email').tooltip({'trigger':'hover', 'title':'이메일 인증을 진행해주세요.'});
         			$('#reg-email').tooltip('show');
 				    setTimeout(function () {
-				    $('#reg-email').tooltip('hide');
+				    $('#reg-email').tooltip('dispose');
 				    }, 2000);
         		}
 			
@@ -190,7 +203,7 @@ $(function(){
     		$('#join-action-btn').attr('disabled', 'disabled');
     		//아이디
     		$('#reg-username').on('change',function(e){
-				if(($('#reg-username').val().length < 8 || $('#reg-username').val().length > 20) && isNoValidUserName($('#reg-username').val())){
+				if(($('#reg-username').val().length < 8 || $('#reg-username').val().length > 20) || isNoValidUserName($('#reg-username').val())){
         			$('#reg-username').css('border','0.5px dotted orange');
         			$('#reg-username').tooltip({'trigger':'hover', 'title':'아이디는 한글 미포함 8 ~ 20자 이내여야 합니다'});
         			$('#reg-username').tooltip('show');
@@ -231,28 +244,30 @@ $(function(){
         			$('#reg-pass').tooltip({'trigger':'hover', 'title':'비밀번호는 8 ~ 20자 이내이고 최소한 하나의 문자, 숫자, 특수 문자가 포함되어야 합니다.'});
         			$('#reg-pass').tooltip('show');
         			$('#join-action-btn').attr('disabled', 'disabled');
-        		} else if(!($('#reg-pass').val().length < 8 || $('#reg-pass').val().length > 20) || isNoValidPassword($('#reg-pass').val()) && ($('#reg-pass').val()==$('#reg-pass-confirm').val())){
-					$('#reg-pass-confirm').css('border','0.5px solid green');
-        			$('#reg-pass-confirm').tooltip('hide');
-        			$('#reg-pass-confirm').tooltip('dispose');
-        			$('#join-action-btn').removeAttr('disabled');
-				} else if($('#reg-pass').val()!=$('#reg-pass-confirm').val()){
-					$('#reg-pass,#reg-pass-confirm').css('border','0.5px dotted orange');
-        			$('#reg-pass-confirm').tooltip({'trigger':'hover', 'title':'비밀번호와 비밀번호확인이 일치하여야합니다.'});
-        			$('#reg-pass-confirm').tooltip('show');
+        		} else if($('#reg-pass').val()!=$('#reg-pass-confirm').val()) {
+					$('#reg-pass').css('border','0.5px dotted orange');
+        			$('#reg-pass').tooltip({'trigger':'hover', 'title':'비밀번호와 비밀번호확인이 일치하여야 합니다.'});
+        			$('#reg-pass').tooltip('show');
         			$('#join-action-btn').attr('disabled', 'disabled');
-				} 
+				} else if($('#reg-pass').val()==$('#reg-pass-confirm').val()) {
+					$('#reg-pass').css('border','0.5px solid green');
+        			$('#reg-pass').tooltip('hide');
+        			$('#reg-pass').tooltip('dispose');
+        			$('#join-action-btn').removeAttr('disabled');
+				}
 			});
 			$('#reg-pass-confirm').on('change',function(e){
         		if($('#reg-pass').val()!=$('#reg-pass-confirm').val()){
-        			$('#reg-pass,#reg-pass-confirm').css('border','0.5px dotted orange');
-        			$('#reg-pass-confirm').tooltip({'trigger':'hover', 'title':'비밀번호와 비밀번호확인이 일치하여야합니다.'});
+        			$('#reg-pass-confirm,#reg-pass').css('border','0.5px dotted orange');
+        			$('#reg-pass-confirm').tooltip({'trigger':'hover', 'title':'비밀번호와 비밀번호확인이 일치하여야 합니다.'});
         			$('#reg-pass-confirm').tooltip('show');
-        		} else {
-        			$('#reg-pass-confirm').css('border','0.5px solid green');
-        			$('#reg-pass-confirm').tooltip('hide');
-        			$('#reg-pass-confirm').tooltip('dispose');
-        		}
+        			$('#join-action-btn').attr('disabled', 'disabled');
+        		} else if($('#reg-pass').val()==$('#reg-pass-confirm').val()) {
+					$('#reg-pass,#reg-pass-confirm').css('border','0.5px solid green');
+        			$('#reg-pass').tooltip('hide');
+        			$('#reg-pass').tooltip('dispose');
+        			$('#join-action-btn').removeAttr('disabled');
+				}
         	});
         	//이메일
         	$('#reg-email').on('change',function(e){
@@ -305,7 +320,7 @@ $(function(){
 				let regAddress = $('#reg-address').val();
 				let regDetailAddress = $('#reg-detailaddress').val();
     			let data = {
-				"userName" : regUserName, //안되면 ' ' 붙이기
+				"userName" : regUserName, // 안되면 ' ' 붙이기
 				"name" : regName,
 				"birthday" : regBirthday,
 				"email" : regEmail,
@@ -323,7 +338,7 @@ $(function(){
     			e.preventDefault();
     		});
 });
-//지도
+//지도 api
 function execDaumPostcode() {
         new daum.Postcode({
             oncomplete: function(data) {
@@ -367,6 +382,7 @@ function execDaumPostcode() {
             }
         }).open();
     }
+//
 function sendNumber(){
 	if(isNoValidEmail($('#reg-email').val())) {
         			$('#reg-email').css('border','0.5px dotted orange');
@@ -411,8 +427,8 @@ function confirmNumber(){
 		$('#number').tooltip({'trigger':'hover', 'title':'인증번호가 일치하지 않습니다.'});
 		setTimeout(function() {
 	    $('#number').tooltip('dispose');
-	    emailCheck = false;
 	    }, 2000);
+	    emailCheck = false;
     }
 }
 	

@@ -1,5 +1,6 @@
 package com.danaga.controller;
 
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,12 +31,27 @@ public class MailController {
     }
     @ResponseBody
     @PostMapping("/findEmailAuthentication")
-    public String findPassMailSend(String mail){
+    public String findPassMailSend(String mail) throws Exception{
     	
-    	String randomPass = mailService.findPassSendMail(mail);
+    	String randomPass = null;
+		try {
+			randomPass = mailService.findPassSendMail(mail);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	System.out.println("##################"+randomPass);
     	
     	return randomPass;
+    }
+    @ResponseBody
+    @PostMapping("/findidEmailAuthentication")
+    public String findidMailSend(String mail) throws Exception{
+    	
+    	String id = null;
+		id = mailService.findIdSendMail(mail);
+    	
+    	return id;
     }
 
 }

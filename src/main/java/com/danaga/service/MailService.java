@@ -5,6 +5,9 @@ import java.security.NoSuchAlgorithmException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import com.danaga.dto.MemberResponseDto;
+import com.danaga.dto.MemberUpdateDto;
+import com.danaga.entity.Member;
 import com.danaga.generator.RandomStringGenerator;
 
 import jakarta.mail.MessagingException;
@@ -17,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class MailService {
 
     private final JavaMailSender javaMailSender;
+    private final MemberService memberService;
     //private static final String senderEmail= "danaga@gmail.com";
     private static int number;
     private static String randomString;
@@ -54,11 +58,14 @@ public class MailService {
 
         return number;
     }
-    public MimeMessage findPassCreateMail(String mail){
-    	createNumber();
+    public MimeMessage findPassCreateMail(String mail) throws Exception{
+    	createRandomPass();
     	MimeMessage message = javaMailSender.createMimeMessage();
     	
     	try {
+    		MemberResponseDto dto = memberService.getMemberBy(mail);
+    		dto.setPassword(randomString);
+    		memberService.updateMember(MemberUpdateDto.toDto(Member.toResponseEntity(dto)));
     		//message.setFrom(new InternetAddress(senderEmail));
     		message.setRecipients(MimeMessage.RecipientType.TO, mail);
     		message.setSubject("다나가 임시 비밀번호 발급");
@@ -74,12 +81,39 @@ public class MailService {
     }
 
     
-    public String findPassSendMail(String mail){
+    public String findPassSendMail(String mail) throws Exception{
     	
     	MimeMessage message = findPassCreateMail(mail);
     	
     	javaMailSender.send(message);
     	
     	return randomString;
+    }
+    public MimeMessage findIdCreateMail(String mail) throws Exception{
+    	createNumber();
+    	MimeMessage message = javaMailSender.createMimeMessage();
+    	
+    	try {
+    		//message.setFrom(new InternetAddress(senderEmail));
+    		message.setRecipients(MimeMessage.RecipientType.TO, mail);
+    		message.setSubject("다나가 아이디 찾기");
+    		String body = "";
+    		body += "<h3>" + "요청하신 아이디 입니다." + "</h3>";
+    		body += "<h1>" + memberService.getMemberBy(mail).getUserName() + "</h1>";
+    		body += "<h3>" + "감사합니다." + "</h3>";
+    		message.setText(body,"UTF-8", "html");
+    	} catch (MessagingException e) {
+    		e.printStackTrace();
+    	}
+    	return message;
+    }
+    
+    public String findIdSendMail(String mail) throws Exception{
+    	
+    	MimeMessage message = findIdCreateMail(mail);
+    	
+    	javaMailSender.send(message);
+    	
+    	return memberService.getMemberBy(mail).getUserName();
     }
 }
