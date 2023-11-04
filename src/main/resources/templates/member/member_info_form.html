@@ -125,8 +125,8 @@
     			$('#pass-confirm').tooltip({'trigger':'hover', 'title':'비밀번호와 비밀번호확인이 일치하여야합니다.'});
     			$('#pass-confirm').tooltip('show');
     		}else{
-    			$('#pass').css('border','');
-    			$('#pass-confirm').css('border','');
+    			$('#pass').css('border','0.5px solid green');
+    			$('#pass-confirm').css('border','0.5px solid green');
     			//var params = $('#form-account-update').serialize();
 				let nickname = $('#nickname').val();
 				let password = $('#pass').val();
@@ -150,7 +150,7 @@
         			$('#pass').tooltip({'trigger':'hover', 'title':'비밀번호는 8 ~ 20자 이내이고 최소한 하나의 문자, 숫자, 특수 문자가 포함되어야 합니다.'});
         			$('#pass').tooltip('show');
         		} else {
-					$('#pass,#pass-confirm').css('border','');
+					$('#pass,#pass-confirm').css('border','0.5px solid green');
         			$('#pass-confirm').tooltip('hide');
         			$('#pass-confirm').tooltip('dispose');
 				}
@@ -162,7 +162,7 @@
         			$('#pass-confirm').tooltip('show');
         			$('#modify_action_btn').attr('disabled', 'disabled');
         		} else {
-        			$('#pass,#pass-confirm').css('border','');
+        			$('#pass,#pass-confirm').css('border','0.5px solid green');
         			$('#pass-confirm').tooltip('hide');
         			$('#pass-confirm').tooltip('dispose');
         			$('#modify_action_btn').removeAttr('disabled');

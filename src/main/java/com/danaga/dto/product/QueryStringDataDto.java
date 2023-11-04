@@ -20,9 +20,8 @@ import lombok.NoArgsConstructor;
 public class QueryStringDataDto {
 	
 	private String orderType;
-//	private String brand;
 	@Builder.Default
-	private List<OptionNameValueMapDto> optionset=new ArrayList();
+	private List<OptionNameValueMapDto> optionset=new ArrayList<OptionNameValueMapDto>();
 	private Integer minPrice;
 	private Integer maxPrice;
 	private String nameKeyword;

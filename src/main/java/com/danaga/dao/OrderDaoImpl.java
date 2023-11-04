@@ -55,7 +55,7 @@ public class OrderDaoImpl implements OrderDao {
 				findOrder.setStatement(OrderStateMsg.배송완료);
 			}
 			return findOrder;
-		} else {
+		} else {//주문번호가 null이면
 			throw new Exception("일치하는 주문번호가 없습니다.");
 		}
 	}
@@ -143,11 +143,18 @@ public class OrderDaoImpl implements OrderDao {
 	// 비회원(주문번호,회원이름,회원전화번호) 로 주문1개보기
 	@Override
 	public Orders findOrdersByIdAndNameAndPhoneNo(Long orderNo, String name, String phoneNo) throws Exception {
-
+		if((orderNo != null)&&(name !=null)&&(phoneNo != null)) {
 		Orders guestFindOrder = orderRepository.findOrdersByIdAndMember_NameAndMember_PhoneNo(orderNo, name,
 				phoneNo);
-
 		return guestFindOrder;
+		} else if(orderNo == null) {
+			throw new Exception("주문번호가 없습니다.");
+		} else if(name == null) {
+			throw new Exception("이름이 없습니다.");
+		} else {
+			throw new Exception("전화번호가 없습니다.");
+		}
+		
 	}
 
 }

@@ -1,14 +1,17 @@
 package com.danaga.service;
 
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.danaga.dto.BoardDto;
-import com.danaga.dto.LikeConfigDto;
 import com.danaga.entity.Board;
 import com.danaga.entity.BoardGroup;
 import com.danaga.entity.LikeConfig;
@@ -26,6 +29,7 @@ public class BoardServiceImpl implements BoardService{
 
 	@Autowired
 	private BoardRepository bRepository;
+	
 	@Autowired
 	private MemberRepository mRepository;
 	@Autowired
@@ -58,6 +62,45 @@ public class BoardServiceImpl implements BoardService{
 		}
 		return top10List;
 	}
+	//페이징작업
+	/*
+	 * @Override public Page<BoardGroup> boards111(Pageable pageable,String
+	 * searchKeyword,String searchType,Long boardGroupId){
+	 * 
+	 * Specification<BoardGroup>
+	 * specification1=BoardGroupSpecification.findBoardGroupWithBooks(boardGroupId);
+	 * Page<BoardGroup> pageBoardGroup= bgRepository.findAll(specification1,
+	 * pageable);
+	 * 
+	 * return pageBoardGroup; }
+	 */
+	@Override
+	public Page<BoardDto> boards(Pageable pageable,String searchKeyword,String searchType,Long boardGroupId){
+		
+		Specification<Board> specification=null;
+		if(searchType !=null) {
+			switch (searchType) {
+			case "title": 
+				specification=BoardSpecification.findBoardsWithBoardGroup(boardGroupId).and(BoardSpecification.containingTitle(searchKeyword));
+				break;
+			case "userName": 
+				specification=BoardSpecification.findBoardsWithBoardGroup(boardGroupId).and(BoardSpecification.containingUserName(searchKeyword));
+				break;
+			case "content": 
+				specification=BoardSpecification.findBoardsWithBoardGroup(boardGroupId).and(BoardSpecification.containingContent(searchKeyword));
+				break;
+			
+			default:
+				specification=BoardSpecification.findBoardsWithBoardGroup(boardGroupId);
+			}
+		}
+		Page<BoardDto> boardList = bRepository.findAll(specification, pageable).map(BoardDto::responseDto);
+		log.info("리스트 내용 : {}",boardList.get());
+		return boardList;
+		
+		
+	}
+	
 	
 	// 게시물별 출력
 	@Override
@@ -251,4 +294,5 @@ public class BoardServiceImpl implements BoardService{
 		// 삭제된 댓글을 dto로 반환
 		return BoardDto.responseDto(target);
 	}
+	
 }

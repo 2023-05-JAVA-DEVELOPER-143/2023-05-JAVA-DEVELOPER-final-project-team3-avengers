@@ -26,7 +26,7 @@ import jakarta.servlet.http.HttpSession;
 
 public class AdminAnnotationInterceptor implements HandlerInterceptor {
 	public AdminAnnotationInterceptor() {
-		System.out.println("### AdminAnnotationInterceptor()생성자");
+		//System.out.println("### AdminAnnotationInterceptor()생성자");
 	}
 
 	// preHandle() : 컨트롤러보다 먼저 수행되는 메서드
@@ -35,7 +35,7 @@ public class AdminAnnotationInterceptor implements HandlerInterceptor {
 			HttpServletResponse response, 
 			Object handler)
 			throws Exception {
-		System.out.println("### AdminAnnotationInterceptor.preHandle()메써드");
+		//System.out.println("### AdminAnnotationInterceptor.preHandle()메써드");
 		/*
 		[ 핸들러 메소드(HandlerMethod)란? ]
 			HandlerMethod는 @RequestMapping이 붙은 메소드의 정보를 추상화한 객체이다. 
@@ -79,7 +79,7 @@ public class AdminAnnotationInterceptor implements HandlerInterceptor {
 		   즉 인증이 필요 없는 요청
 		***************************/
 		if (adminCheck == null) {
-			System.out.println("### AdminAnnotationInterceptor.preHandle()메써드 @AdminCheck 없는경우");
+			//System.out.println("### AdminAnnotationInterceptor.preHandle()메써드 @AdminCheck 없는경우");
 			return true;
 		}
 		/***************************

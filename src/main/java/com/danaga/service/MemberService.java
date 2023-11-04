@@ -7,6 +7,7 @@ import com.danaga.dto.MemberResponseDto;
 import com.danaga.dto.MemberUpdateDto;
 import com.danaga.entity.Member;
 
+import groovyjarjarantlr4.v4.parse.ANTLRParser.exceptionGroup_return;
 import jakarta.transaction.Transactional;
 
 @Transactional
@@ -23,5 +24,7 @@ public interface MemberService {
 	public boolean isDuplicateByNickname(String nickname) throws Exception;
 	public boolean login(String userName, String password) throws Exception;
 	public void updateGrade(Member member, int gradePoint) throws Exception;
-	Long findIdByUsername(String username) throws Exception;
+	Long findIdByUsername(String userName) throws Exception;
+	public boolean isMatchEmailByUserName(String userName, String email) throws Exception;
+	
 }

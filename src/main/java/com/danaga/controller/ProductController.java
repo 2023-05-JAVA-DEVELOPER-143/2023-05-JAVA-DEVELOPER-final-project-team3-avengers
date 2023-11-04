@@ -149,10 +149,10 @@ public class ProductController {
 					.optionSetId(optionSetId)
 					.build());
 			//최근본상품에 추가
-			List<Boolean> isInterested=(List<Boolean>) interestService.isMyInterest(optionSetId, (String)session.getAttribute("sUserId")).getData();
+			List<Boolean> isInterested=(List<Boolean>) interestService.isMyInterest(optionSetId, username).getData();
 			model.addAttribute("isInterested",isInterested.get(0));
 			
-			List<ProductDto>hits=service.displayHitProductsForMember(optionSetId, (String)session.getAttribute("sUserId")).getData();
+			List<ProductDto>hits=service.displayHitProductsForMember(optionSetId, username).getData();
 			model.addAttribute("hits",hits);
 			}else{
 			List<ProductDto> hits = service.displayHitProducts(optionSetId).getData();

@@ -9,6 +9,8 @@ import org.hibernate.annotations.ColumnDefault;
 
 import com.danaga.dto.BoardDto;
 import com.danaga.dto.LikeConfigDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -65,7 +67,6 @@ public class Board extends BaseEntity {
 
 	@ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id", nullable = false)
-
 	@Builder.Default
 	private Member member = new Member();
 

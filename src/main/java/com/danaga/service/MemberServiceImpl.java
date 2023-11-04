@@ -13,6 +13,7 @@ import com.danaga.dto.MemberResponseDto;
 import com.danaga.dto.MemberUpdateDto;
 import com.danaga.entity.Member;
 import com.danaga.exception.PasswordMismatchException;
+import com.danaga.exception.EmailMismatchException;
 import com.danaga.exception.ExistedMemberByEmailException;
 import com.danaga.exception.ExistedMemberByNicknameException;
 import com.danaga.exception.ExistedMemberByUserNameException;
@@ -144,11 +145,26 @@ public class MemberServiceImpl implements MemberService {
 		} else if (member.getGradePoint() > 35000) {
 			member.setGrade("Diamond");
 		}
-		memberDao.update(member);
+		memberDao.updatePoint(member);
+		System.out.println("멤버가 안찾아짐"+member);
 
 	}
 	@Override
 	public Long findIdByUsername(String username) throws Exception {
 		return memberDao.findMember(username).getId();
+	}
+
+	@Override
+	public boolean isMatchEmailByUserName(String userName, String email) throws Exception {
+		Optional<Member> findOptionalMember = memberRepository.findByUserName(userName);
+		if (findOptionalMember.isEmpty()) {
+			throw new MemberNotFoundException(userName + " 는 존재하지않는 아이디입니다.");
+		} else if (findOptionalMember.isPresent()) {
+			if (email.equals(findOptionalMember.get().getEmail())) {
+			} else {
+				throw new EmailMismatchException("해당 아이디에 등록된 이메일과 다릅니다.");
+			}
+		}
+		return true;
 	}
 }
