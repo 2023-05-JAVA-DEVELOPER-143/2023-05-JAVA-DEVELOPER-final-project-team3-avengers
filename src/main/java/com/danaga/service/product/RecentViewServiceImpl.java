@@ -14,11 +14,17 @@ import com.danaga.dao.product.ProductDao;
 import com.danaga.dao.product.RecentViewDao;
 import com.danaga.dto.ResponseDto;
 import com.danaga.dto.product.ProductDto;
+import com.danaga.dto.product.ProductListOutputDto;
 import com.danaga.dto.product.RecentViewDto;
 import com.danaga.entity.OptionSet;
 import com.danaga.entity.Options;
 import com.danaga.entity.Product;
 import com.danaga.entity.RecentView;
+import com.danaga.exception.product.AlreadyExistsException.ExistsRecentViewException;
+import com.danaga.exception.product.FoundNoObjectException;
+import com.danaga.exception.product.FoundNoObjectException.FoundNoMemberException;
+import com.danaga.exception.product.FoundNoObjectException.FoundNoOptionSetException;
+import com.danaga.exception.product.ProductSuccessMsg;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -32,41 +38,61 @@ public class RecentViewServiceImpl implements RecentViewService{
 	
 	//product detail 조회시 recentView 추가 
 	public ResponseDto<?> addRecentView(RecentViewDto dto){
-		RecentView savedEntity = recentViewDao.save(dto.toEntity(dto));
-		List<RecentViewDto> data = new ArrayList<RecentViewDto>();
-		data.add(new RecentViewDto(savedEntity));
-		return ResponseDto.<RecentViewDto>builder().data(data).build();
+		try {
+			recentViewDao.save(dto.toEntity(dto));
+		} catch (FoundNoMemberException e) {
+			e.printStackTrace();
+			return ResponseDto.builder().error(e.getMsg()).build();
+		} catch (FoundNoOptionSetException e) {
+			e.printStackTrace();
+			return ResponseDto.builder().error(e.getMsg()).build();
+		} catch (ExistsRecentViewException e) {
+			e.printStackTrace();
+			return ResponseDto.builder().error(e.getMsg()).build();
+		}
+		return ResponseDto.builder().msg(ProductSuccessMsg.ADD_RECENTVIEW).build();
 	}
 	
 	//나의 최근본 상품 전체 삭제 
-	@Transactional
+	@Transactional()
 	public ResponseDto<?> removeMyRecentViews(Long memberId){
-		recentViewDao.deleteAll(memberId);
-		List<ProductDto> data = optionSetDao.findAllByRecentView_MemberId(memberId).stream().map(t -> new ProductDto(t)).collect(Collectors.toList());
-		return ResponseDto.<ProductDto>builder().data(data).build();
+		try {
+			recentViewDao.deleteAll(memberId);
+		} catch (FoundNoObjectException e) {
+			e.printStackTrace();
+			return ResponseDto.builder().error(e.getMsg()).build();
+		}
+		return ResponseDto.<ProductDto>builder().msg(ProductSuccessMsg.REMOVE_MY_RECENTVIEWS).build();
 	}
 	
 	//최근본상품 하나 삭제 
 	@Transactional
 	public ResponseDto<?> removeRecentView(RecentViewDto dto){
-		recentViewDao.delete(dto.toEntity(dto));
-		List<ProductDto> data = optionSetDao.findAllByRecentView_MemberId(dto.getMemberId()).stream().map(t -> new ProductDto(t)).collect(Collectors.toList());;
-		return ResponseDto.<ProductDto>builder().data(data).build();
+		try {
+			recentViewDao.delete(dto.toEntity(dto));
+		} catch (FoundNoObjectException e) {
+			e.printStackTrace();
+			return ResponseDto.builder().error(e.getMsg()).build();
+		}
+		return ResponseDto.builder().msg(ProductSuccessMsg.REMOVE_RECENTVIEW).build();
 	}
 	
 	//나의 최근 본 상품 전체 조회 
 	public ResponseDto<?> myAllRecentViews(Long memberId){
-		List<ProductDto> myRecentViews = optionSetDao.findAllByRecentView_MemberId(memberId).stream().map(t -> new ProductDto(t)).collect(Collectors.toList());;
-		return ResponseDto.<ProductDto>builder().data(myRecentViews).build();
+		List<ProductListOutputDto> myRecentViews=new ArrayList<>();
+		try {
+			myRecentViews = optionSetDao.findAllByRecentView_MemberId(memberId).stream().map(t -> new ProductListOutputDto(t)).collect(Collectors.toList());
+		} catch (FoundNoMemberException e) {
+			e.printStackTrace();
+			return ResponseDto.builder().error(e.getMsg()).build();
+		};
+		return ResponseDto.<ProductListOutputDto>builder().data(myRecentViews).msg(ProductSuccessMsg.FIND_MY_RECENTVIEWS).build();
 	}
 	
 	//30일 지난 상품 삭제 
 	public ResponseDto<?> removeOldRecents(){
 		recentViewDao.removeOldRecents();
-		
-		List<String> data = new ArrayList<>();
-		data.add("30일이 지난 상품은 삭제됩니다.");
-		return ResponseDto.<String>builder().data(data).build();
+		return ResponseDto.<String>builder().msg(ProductSuccessMsg.REMOVE_OLD_RECENTVIEWS).build();
 	}
 	
 }

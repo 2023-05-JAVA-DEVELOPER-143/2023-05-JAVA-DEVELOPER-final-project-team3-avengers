@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.danaga.dto.ResponseDto;
 import com.danaga.dto.product.CategoryDto;
+import com.danaga.dto.product.CategorySaveDto;
 import com.danaga.entity.Category;
 
 public interface CategoryService {
@@ -14,7 +15,7 @@ public interface CategoryService {
 	ResponseDto<?> categoryFamily(Long id);
 	
 	//카테고리 추가
-	ResponseDto<?> create(CategoryDto dto);
+	ResponseDto<?> create(CategorySaveDto dto);
 	
 	//카테고리 수정
 	ResponseDto<?> update(CategoryDto dto);
@@ -24,5 +25,6 @@ public interface CategoryService {
 
 	//자식 카테고리가 있는지 확인 있다면 false, 가장 어린 자식이면 true
 	Boolean isYoungest(Long id);
+
 	
 }

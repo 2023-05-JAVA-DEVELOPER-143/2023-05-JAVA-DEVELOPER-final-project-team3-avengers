@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.danaga.dto.product.OptionSaveDto;
+import com.danaga.dto.product.OptionUpdateDto;
 import com.danaga.entity.OptionSet;
 import com.danaga.entity.Options;
+import com.danaga.exception.product.FoundNoObjectException.FoundNoOptionsException;
 import com.danaga.repository.product.OptionNamesValues;
 import com.danaga.repository.product.OptionsRepository;
 
@@ -23,8 +25,8 @@ public class OptionsDaoImpl implements OptionsDao{
 	}
 
 	@Override
-	public Options findById(Long id) {
-		return optionsRepository.findById(id).get();
+	public Options findById(Long id) throws FoundNoOptionsException {
+		return optionsRepository.findById(id).orElseThrow(FoundNoOptionsException::new);
 	}
 
 	@Override
@@ -38,17 +40,22 @@ public class OptionsDaoImpl implements OptionsDao{
 	}
 
 	@Override
-	public void deleteAllByOptionSetId(Long optionSetId) {
+	public void deleteAllByOptionSetId(Long optionSetId) throws FoundNoOptionsException {
+		List<Options> findOptions=optionsRepository.findAllByOptionSetId(optionSetId);
+		if(findOptions==null) {
+			throw new FoundNoOptionsException();
+		}
 		optionsRepository.deleteAllByOptionSetId(optionSetId);
 	}
 
 	@Override
-	public void deleteById(Long id) {
+	public void deleteById(Long id) throws FoundNoOptionsException {
+		optionsRepository.findById(id).orElseThrow(FoundNoOptionsException::new);
 		optionsRepository.deleteById(id);
 	}
 	@Override
-	public Options update(OptionSaveDto dto) {
-		Options origin = optionsRepository.findById(dto.getId()).get();
+	public Options update(OptionUpdateDto dto) throws FoundNoOptionsException {
+		Options origin = optionsRepository.findById(dto.getId()).orElseThrow(FoundNoOptionsException::new);
 		origin.setExtraPrice(dto.getExtraPrice());
 		origin.setName(dto.getName());
 		origin.setValue(dto.getValue());

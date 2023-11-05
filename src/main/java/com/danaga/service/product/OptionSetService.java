@@ -2,9 +2,11 @@ package com.danaga.service.product;
 
 import com.danaga.dto.ResponseDto;
 import com.danaga.dto.product.OptionNameValueDto;
-import com.danaga.dto.product.OptionSaveDto;
+import com.danaga.dto.product.OptionUpdateDto;
 import com.danaga.dto.product.OptionSetUpdateDto;
+import com.danaga.dto.product.OtherOptionSetDto;
 import com.danaga.dto.product.ProductDto;
+import com.danaga.dto.product.ProductListOutputDto;
 import com.danaga.dto.product.ProductSaveDto;
 import com.danaga.dto.product.ProductUpdateDto;
 import com.danaga.dto.product.QueryStringDataDto;
@@ -22,20 +24,20 @@ public interface OptionSetService {
 		ResponseDto<?> updateViewCount(Long optionSetId);
 		ResponseDto<?> update(ProductUpdateDto dto);
 		ResponseDto<?> updateRating(ProductSaveDto dto);
-		ResponseDto<?> update(OptionSaveDto dto);
+		ResponseDto<?> update(OptionUpdateDto dto);
 
 		ResponseDto<?> uploadProduct(UploadProductDto dto);
 		
 		ResponseDto<ProductDto> findById(Long optionSetId);
 		ResponseDto<?> showOptionNameValues(Long categoryId);
 		
-		ResponseDto<ProductDto> displayHitProducts(Long optionSetId,Integer firstResult);
+		ResponseDto<ProductListOutputDto> displayHitProducts(Long optionSetId,Integer firstResult);
 		
-		ResponseDto<ProductDto> searchProducts(QueryStringDataDto dto,Integer firstResult);
+		ResponseDto<ProductListOutputDto> searchProducts(QueryStringDataDto dto,Integer firstResult);
 		
-		ResponseDto<ProductDto> showOtherOptionSets(Long optionSetId);
+		ResponseDto<OtherOptionSetDto> showOtherOptionSets(Long optionSetId);
 		ResponseDto<?> showAllOptionNameValues(Long categoryId);
-		ResponseDto<ProductDto> searchProductsForMember(QueryStringDataDto dto, String username,Integer firstResult);
-		ResponseDto<ProductDto> displayHitProductsForMember(Long optionSetId, String username,Integer firstResult);
+		ResponseDto<ProductListOutputDto> searchProductsForMember(QueryStringDataDto dto, String username,Integer firstResult);
+		ResponseDto<ProductListOutputDto> displayHitProductsForMember(Long optionSetId, String username,Integer firstResult);
 		
 }

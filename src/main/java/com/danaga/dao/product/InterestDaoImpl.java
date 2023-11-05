@@ -6,6 +6,8 @@ import com.danaga.dto.product.InterestDto;
 import com.danaga.entity.Interest;
 import com.danaga.entity.Member;
 import com.danaga.entity.OptionSet;
+import com.danaga.exception.product.AlreadyExistsException;
+import com.danaga.exception.product.AlreadyExistsException.ExistsInterestException;
 import com.danaga.exception.product.FoundNoObjectException.FoundNoInterestException;
 import com.danaga.exception.product.FoundNoObjectException.FoundNoMemberException;
 import com.danaga.exception.product.FoundNoObjectException.FoundNoOptionSetException;
@@ -31,9 +33,12 @@ public class InterestDaoImpl implements InterestDao{
 	}
 
 	@Override
-	public InterestDto save(InterestDto dto) throws FoundNoMemberException, FoundNoOptionSetException {
+	public InterestDto save(InterestDto dto) throws FoundNoMemberException, FoundNoOptionSetException, ExistsInterestException {
 		memberRepository.findById(dto.getMemberId()).orElseThrow(() -> new FoundNoMemberException());
 		optionSetRepository.findById(dto.getOptionSetId()).orElseThrow(() -> new FoundNoOptionSetException());
+		if(isInterested(dto)) {
+			throw new ExistsInterestException();
+		}
 		Interest savedEntity = repository.save(dto.toEntity(dto));
 		return new InterestDto(savedEntity);
 	}

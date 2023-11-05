@@ -3,27 +3,25 @@ package com.danaga.dao.product;
 import java.util.List;
 
 import com.danaga.dto.product.OptionSaveDto;
+import com.danaga.dto.product.OptionUpdateDto;
 import com.danaga.entity.OptionSet;
 import com.danaga.entity.Options;
+import com.danaga.exception.product.FoundNoObjectException.FoundNoOptionsException;
 import com.danaga.repository.product.OptionNamesValues;
 
 public interface OptionsDao {
-	//List<Options> findOptionsByOptionSet(OptionSet optionSet);
 	
-//	List<OptionNamesOnly> findOptionNamesByCategoryId(Long id); 
-//	List<OptionValuesOnly> findOptionValuesByCategoryId(Long id);
-	
-	Options findById(Long id);
+	Options findById(Long id) throws FoundNoOptionsException;
 	
 	List<Options> findOptionsByOptionSetId(Long optionSetId);
 	
-	Options save(OptionSaveDto dto);
+	void deleteAllByOptionSetId(Long optionSetId) throws FoundNoOptionsException;
 	
-	void deleteAllByOptionSetId(Long optionSetId);
-	
-	void deleteById(Long id);
-	Options update(OptionSaveDto dto);
+	void deleteById(Long id) throws FoundNoOptionsException;
+	Options update(OptionUpdateDto dto) throws FoundNoOptionsException;
 	List<OptionNamesValues> findOptionNameValueMapByCategoryId(Long id);
+
+	Options save(OptionSaveDto dto);
 	
 	
 }

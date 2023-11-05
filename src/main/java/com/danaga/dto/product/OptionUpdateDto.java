@@ -12,7 +12,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OptionSaveDto {
+public class OptionUpdateDto {
+	private Long id;
 	private String name;
 	private String value;
 	private Integer extraPrice;
@@ -20,10 +21,26 @@ public class OptionSaveDto {
 	
 	public Options toEntity() {
 		return Options.builder()
+				.id(id)
 				.name(name)
 				.value(value)
-				.optionSet(OptionSet.builder().id(optionSetId).build())
 				.extraPrice(extraPrice)
+				.optionSet(OptionSet.builder().id(optionSetId).build())
+				.build();
+	}
+	public OptionUpdateDto(Options entity){
+		this.id=entity.getId();
+		this.name=entity.getName();
+		this.value=entity.getValue();
+		this.extraPrice=entity.getExtraPrice();
+		this.optionSetId=entity.getOptionSet().getId();
+	}
+	public OptionSaveDto toSaveDto() {
+		return OptionSaveDto.builder()
+				.name(name)
+				.value(value)
+				.extraPrice(extraPrice)
+				.optionSetId(optionSetId)
 				.build();
 	}
 }
