@@ -15,4 +15,8 @@ public interface RecentViewRepository extends JpaRepository<RecentView, Long>{
 	
 	RecentView save(RecentView entity);
 	
+	RecentView findByMemberIdAndOptionSetId(Long memberId,Long optionSetId);
+
+	List<RecentView> findByMemberId(Long memberId);
+	
 }

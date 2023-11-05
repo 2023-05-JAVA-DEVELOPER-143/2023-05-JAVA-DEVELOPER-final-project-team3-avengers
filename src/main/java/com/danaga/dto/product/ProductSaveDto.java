@@ -13,24 +13,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProductSaveDto {
 	
-	private Long id;
 	private String name;
 	private String brand;
 	private Integer price;
 	private String descImage;
 	private String prevImage;
 	private String img;
-	private Double rating;
 	
 	public Product toEntity() {
 		return Product.builder()
-				.id(id)
 				.name(name)
 				.brand(brand)
 				.descImage(descImage)
 				.prevImage(prevImage)
 				.img(img)
-				.rating(rating)
 				.price(price)
 				.build();
 	}
