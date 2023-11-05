@@ -135,11 +135,11 @@
 								<tr>
 									<td align="center">
 										<!--  이전그룹 페이지로 이동 --> 
-										<a th:if="${prevGroupStartPage > 0}" th:href="@{/board{boardGroupId}(page=${prevGroupStartPage},size=${pageSize})}">◀◀</a>
+										<a th:if="${prevGroupStartPage > 0}" th:href="|@{/board{boardGroupId}(boardGroupId=${boardGroupId}),page=${prevGroupStartPage},size=${pageSize})|}">◀◀</a>
 										<a th:unless="${prevGroupStartPage > 0}" th:href="@{#}" style="opacity: 0.5;pointer-events: none;">◀◀</a>
 										<!--  이전 페이지로 이동 --> 
 										<a th:if="${boardList.first}" th:href="@{#}" style="opacity: 0.5;pointer-events: none;">◀</a> 
-										<a th:unless="${boardList.first}" th:href="@{/board_list1(page=${pageNumber})}">◀</a> 
+										<a th:unless="${boardList.first}" th:href="@{/board{boardGroupId}(boardGroupId=${boardGroupId}),(page=${pageNumber})}">◀</a> 
 										<th:block th:each="page: ${#numbers.sequence(blockBeginPage, blockEndPage)}">
 											
 											<a th:if="${page==pageNumber+1}"
@@ -148,17 +148,17 @@
 											</a>
 											
 											<a  th:unless="${page==pageNumber+1}"
-												th:href="@{/board_list1(page=${page},size=${pageSize})}"
+												th:href="@{/board{boardGroupId}(boardGroupId=${boardGroupId}),(page=${page},size=${pageSize})}"
 												th:text="${page}" style="font-weight: bold;padding:5px 7px">2
 											</a>
 											
 										</th:block>
 										<!-- 다음 페이지로 이동 --> 
 										<a th:if="${boardList.last}" th:href="@{#}" style="opacity: 0.5;pointer-events: none;">▶</a> 
-										<a th:unless="${boardList.last}" th:href="@{/board_list1(page=${pageNumber+2})}">▶</a> 
+										<a th:unless="${boardList.last}" th:href="@{/board{boardGroupId}(boardGroupId=${boardGroupId}),(page=${pageNumber+2})}">▶</a> 
 										<!-- 다음그룹 페이지로 이동 -->
 										<a th:if="${nextGroupStartPage > totalPages}" th:href="@{#}" style="opacity: 0.5;pointer-events: none;">▶▶</a>
-										<a th:unless="${nextGroupStartPage > totalPages}" th:href="@{/board_list1(page=${nextGroupStartPage},size=${pageSize})}">▶▶</a>
+										<a th:unless="${nextGroupStartPage > totalPages}" th:href="@{/board{boardGroupId}(boardGroupId=${boardList.get(0).boardGroupId}),(page=${nextGroupStartPage},size=${pageSize})}">▶▶</a>
 									</td>
 								</tr>
 							</table>
