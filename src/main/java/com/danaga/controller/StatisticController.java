@@ -41,11 +41,15 @@ public class StatisticController {
 	
 	@GetMapping
 	public String main(Model model) {
+		try {
 		model.addAttribute("thisMonthList", statisticService.thisMonthStatistic());
 		model.addAttribute("todayStat", statisticService.todayStatistic());
 		model.addAttribute("delivery", statisticService.deliveryRate());
 		model.addAttribute("latest7List", changeDateFormat(statisticService.latest7DaysStatistic()));
 		return "admin/admin";
+		} catch (Exception e) {
+			return "redirect:admin/rescue";
+		}
 	}
 	@GetMapping("/m")
 	public String main_sub(Model model) {
@@ -65,10 +69,6 @@ public class StatisticController {
 	}
 	@GetMapping("/admin_product_insert")
 	public String adminProductInsert(Model model) {
-//		ResponseDto<ProductDto> productDto = optionSetService.searchProducts(QueryStringDataDto.builder()
-//				.orderType(OptionSetQueryData.BY_ORDER_COUNT)
-//				.build());
-//		List<ProductDto> productList = productDto.getData();
 		List<Product> productList = productRepository.findAll();
 		model.addAttribute("productList", productList);
 		return "admin/admin_product_insert";
