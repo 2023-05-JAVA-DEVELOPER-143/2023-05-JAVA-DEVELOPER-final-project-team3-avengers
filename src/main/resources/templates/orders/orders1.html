@@ -45,11 +45,10 @@
 
 		<!-- Open Ticket Modal-->
 		<div class="modal" id="orderDetails" tabindex="-1">
-			<div class="modal-dialog  modal-lg">
+			<div class="modal-dialog  modal-xl">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h4 class="modal-title" th:if="${orderNo != null}" th:text="'Order No - ' + ${orderNo}">Order No
-							- 34VB5540K83</h4>
+
 					</div>
 
 					<div class="modal-body"></div>
@@ -169,10 +168,8 @@
 						});
 
 						function requestOrderDetails(orderId) {
-							$
-								.ajax({
-									url: 'order/member_order_detail/'
-										+ orderId,
+							$.ajax({
+									url: 'order/member_order_detail/' + orderId,
 									type: 'GET',
 									success: function (data) {
 										// 주문 상세 정보로 모달을 채웁니다.
@@ -186,18 +183,19 @@
 
 										for (var i = 0; i < data.orderItemDtoList.length; i++) {
 											var orderItem = data.orderItemDtoList[i];
+											console.log('#########'+orderItem.pimage);
+											console.log('#########'+orderItem.productName);
+											console.log('#########'+orderItem.qty);
+											console.log('#########'+orderItem.totalPrice);
+
+											console.log('#########'+orderItem.orderId);
+											console.log('#########'+orderItem.osId);
+											console.log('#########'+orderItem.optionSet);
 											content += '<tr>';
-											content += '<td style="height: 100px;"><img src="' + orderItem.pImage + '" alt="Product Image" class="img-fluid"></td>';
-											content += '<td style="height: 100px;"><span class="text-medium">'
-												+ orderItem.productName
-												+ '</span></td>';
-											content += '<td style="height: 100px;"><span class="text-medium">'
-												+ orderItem.qty
-												+ '개</span></td>';
-											content += '<td style="height: 100px;"><span class="text-medium">'
-												+ orderItem.qty
-												* orderItem.totalPrice
-												+ '원</span></td>';
+											content += '<td style="height: 100px;"><img src= ' + orderItem.pimage + ' alt="Product Image" class="img-fluid" style="max-height: 100px; max-width: 100px;"></td>';
+											content += '<td style="height: 100px;"><span class="text-medium">'+ orderItem.productName + '</span></td>';
+											content += '<td style="height: 100px;"><span class="text-medium">' + orderItem.qty + '개</span></td>';
+											content += '<td style="height: 100px;"><span class="text-medium">' + orderItem.qty * orderItem.totalPrice + '원</span></td>';
 											content += '</tr>';
 										}
 
