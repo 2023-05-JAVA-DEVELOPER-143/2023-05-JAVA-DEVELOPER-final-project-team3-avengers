@@ -73,29 +73,57 @@ public class OrderController {
 	 */
 	@GetMapping("/product_order_form")
 	public String memberProductOrderAddForm(@ModelAttribute("cartDto") CartDto cartDto, Model model,
-			HttpSession session) {
+			HttpSession session)throws Exception {
+		String sUserId = (String) session.getAttribute("sUserId");
+		if(sUserId==null) {//비회원
 
-		ResponseDto<?> responseDto = optionSetService.findById(cartDto.getOptionSetId());
-		List<ProductDto> productDtoList = (List<ProductDto>) responseDto.getData();
-		ProductDto productDto = productDtoList.get(0);
+			ResponseDto<?> responseDto = optionSetService.findById(cartDto.getOptionSetId());
+			List<ProductDto> productDtoList = (List<ProductDto>) responseDto.getData();
+			ProductDto productDto = productDtoList.get(0);
 
-		List<SUserCartOrderDto> sUserCartOrderDtoList = new ArrayList<>();
-		SUserCartOrderDto sUserCartOrderDto = SUserCartOrderDto.builder().id(cartDto.getOptionSetId())
-				.qty(cartDto.getQty()).productName(productDto.getName()).totalPrice(productDto.getTotalPrice()).build();
-		sUserCartOrderDtoList.add(sUserCartOrderDto);
+			List<SUserCartOrderDto> sUserCartOrderDtoList = new ArrayList<>();
+			SUserCartOrderDto sUserCartOrderDto = SUserCartOrderDto.builder().id(cartDto.getOptionSetId())
+					.qty(cartDto.getQty()).productName(productDto.getName()).totalPrice(productDto.getTotalPrice()).build();
+			sUserCartOrderDtoList.add(sUserCartOrderDto);
 
-		Integer realTotalPrice = 0;
-		for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
-			realTotalPrice += sUserCartOrderDtoList.get(i).getTotalPrice();
-			System.out.println(realTotalPrice);
+			Integer realTotalPrice = 0;
+			for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
+				realTotalPrice += sUserCartOrderDtoList.get(i).getTotalPrice();
+				System.out.println(realTotalPrice);
+			}
+			OrderMemberBasicDto orderMemberBasicDto = new OrderMemberBasicDto("","ex) 010-1111-1111");
+			model.addAttribute("orderMemberBasicDto",orderMemberBasicDto);
+			model.addAttribute("realTotalPrice", realTotalPrice);
+			model.addAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
+			session.setAttribute("orderMemberBasicDto",orderMemberBasicDto);
+			session.setAttribute("realTotalPrice", realTotalPrice);
+			session.setAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
+			return "orders/order_save_form";
+		}else { //회원
+			MemberResponseDto memberResponseDto = memberService.getMemberBy(sUserId);
+			ResponseDto<?> responseDto = optionSetService.findById(cartDto.getOptionSetId());
+			List<ProductDto> productDtoList = (List<ProductDto>) responseDto.getData();
+			ProductDto productDto = productDtoList.get(0);
+
+			List<SUserCartOrderDto> sUserCartOrderDtoList = new ArrayList<>();
+			SUserCartOrderDto sUserCartOrderDto = SUserCartOrderDto.builder().id(cartDto.getOptionSetId())
+					.qty(cartDto.getQty()).productName(productDto.getName()).totalPrice(productDto.getTotalPrice()).build();
+			sUserCartOrderDtoList.add(sUserCartOrderDto);
+
+			Integer realTotalPrice = 0;
+			for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
+				realTotalPrice += sUserCartOrderDtoList.get(i).getTotalPrice();
+				System.out.println(realTotalPrice);
+			}
+			OrderMemberBasicDto orderMemberBasicDto = new OrderMemberBasicDto(memberResponseDto.getName(), memberResponseDto.getPhoneNo());
+			model.addAttribute("orderMemberBasicDto",orderMemberBasicDto);
+			model.addAttribute("realTotalPrice", realTotalPrice);
+			model.addAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
+			session.setAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
+			session.setAttribute("realTotalPrice", realTotalPrice);
+			session.setAttribute("orderMemberBasicDto",orderMemberBasicDto);
+			return "orders/order_save_form";
 		}
-
-		model.addAttribute("realTotalPrice", realTotalPrice);
-		model.addAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
-		session.setAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
-		session.setAttribute("realTotalPrice", realTotalPrice);
-		return "orders/order_save_form";
-
 	}
 
 	/*
@@ -140,6 +168,10 @@ public class OrderController {
 				session.setAttribute("sUserCartOrderDtoList", sUserCartOrderDtoList);
 				session.setAttribute("realTotalPrice", 0);
 				model.addAttribute("orderId", ordersDto.getId());
+				OrderMemberBasicDto orderMemberBasicDto=(OrderMemberBasicDto) session.getAttribute("orderMemberBasicDto");
+				orderMemberBasicDto.setUserName("");
+				orderMemberBasicDto.setPhoneNo("");
+				session.setAttribute("orderMemberBasicDto", orderMemberBasicDto);
 				return "orders/order_complete";
 			} catch (Exception e) {
 				model.addAttribute("msg", e.getMessage());
@@ -166,6 +198,10 @@ public class OrderController {
 				session.setAttribute("sUserCartOrderDtoList", sUserCartOrderDtoList);
 				session.setAttribute("realTotalPrice", 0);
 				model.addAttribute("orderId", ordersDto.getId());
+				OrderMemberBasicDto orderMemberBasicDto=(OrderMemberBasicDto) session.getAttribute("orderMemberBasicDto");
+				orderMemberBasicDto.setUserName("");
+				orderMemberBasicDto.setPhoneNo("");
+				session.setAttribute("orderMemberBasicDto", orderMemberBasicDto);
 				return "orders/order_complete";
 			} catch (Exception e) {
 				model.addAttribute("msg", e.getMessage());
@@ -197,9 +233,12 @@ public class OrderController {
 				realTotalPrice += sUserCartOrderDtoList.get(i).getTotalPrice();
 				System.out.println(realTotalPrice);
 			}
+			OrderMemberBasicDto orderMemberBasicDto = new OrderMemberBasicDto(memberResponseDto.getName(), memberResponseDto.getPhoneNo());
 			System.out.println("333333333" + realTotalPrice);
+			model.addAttribute("orderMemberBasicDto",orderMemberBasicDto);
 			model.addAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
 			model.addAttribute("realTotalPrice", realTotalPrice);
+			session.setAttribute("orderMemberBasicDto",orderMemberBasicDto);
 			session.setAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
 			session.setAttribute("realTotalPrice", realTotalPrice);
 			return "orders/order_save_form";
@@ -209,8 +248,12 @@ public class OrderController {
 				realTotalPrice += sUserCartOrderDtoList.get(i).getTotalPrice() * sUserCartOrderDtoList.get(i).getQty();
 				System.out.println(realTotalPrice);
 			}
+			
+			OrderMemberBasicDto orderMemberBasicDto = new OrderMemberBasicDto("","ex) 010-1111-1111");
+			model.addAttribute("orderMemberBasicDto",orderMemberBasicDto);
 			model.addAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
 			model.addAttribute("realTotalPrice", realTotalPrice);
+			session.setAttribute("orderMemberBasicDto",orderMemberBasicDto);
 			session.setAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
 			session.setAttribute("realTotalPrice", realTotalPrice);
 			return "orders/order_save_form";
@@ -220,7 +263,7 @@ public class OrderController {
 
 	@GetMapping("/order_save_form")
 	public String orderSaveForm(Model model, HttpSession session) {
-
+		model.addAttribute("orderMemberBasicDto",session.getAttribute("orderMemberBasicDto"));
 		model.addAttribute("sUserCartOrderDto", session.getAttribute("sUserCartOrderDto"));
 		model.addAttribute("realTotalPrice", session.getAttribute("realTotalPrice"));
 		return "orders/order_save_form";
@@ -267,21 +310,25 @@ public class OrderController {
 				OrdersDto ordersDto = orderService.guestCartSelectOrderSave(deliveryDto, fUserCarts, orderGuestDto);
 
 				model.addAttribute("orderId", ordersDto.getId());
-//				List<CartDto> cartDtos = (List<CartDto>) session.getAttribute("fUserCarts");
-//				for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
-//					for (int j = 0; j < cartDtos.size(); j++) {
-//						cartDtos.remove(cartDtos.get(j));
-//					}
-//				}
-//				System.out.println("$$$$" + sUserCartOrderDtoList.size());
-//				sUserCartOrderDtoList.clear();
-//				System.out.println("$$$$" + sUserCartOrderDtoList.size());
-//				session.setAttribute("sUserCartOrderDtoList", sUserCartOrderDtoList);
-//				System.out.println(cartDtos);
-//				System.out.println("$$$$$" + cartDtos);
-//				session.setAttribute("fUserCarts", cartDtos);
-//				session.setAttribute("realTotalPrice", 0);
-//				session.setAttribute("countCarts", cartDtos.size());
+				List<CartDto> cartDtos = (List<CartDto>) session.getAttribute("fUserCarts");
+				for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
+					for (int j = 0; j < cartDtos.size(); j++) {
+						cartDtos.remove(cartDtos.get(j));
+					}
+				}
+				System.out.println("$$$$" + sUserCartOrderDtoList.size());
+				sUserCartOrderDtoList.clear();
+				System.out.println("$$$$" + sUserCartOrderDtoList.size());
+				session.setAttribute("sUserCartOrderDtoList", sUserCartOrderDtoList);
+				System.out.println(cartDtos);
+				System.out.println("$$$$$" + cartDtos);
+				session.setAttribute("fUserCarts", cartDtos);
+				session.setAttribute("realTotalPrice", 0);
+				session.setAttribute("countCarts", cartDtos.size());
+				OrderMemberBasicDto orderMemberBasicDto=(OrderMemberBasicDto) session.getAttribute("orderMemberBasicDto");
+				orderMemberBasicDto.setUserName("");
+				orderMemberBasicDto.setPhoneNo("");
+				session.setAttribute("orderMemberBasicDto", orderMemberBasicDto);
 				return "orders/order_complete";
 			} catch (Exception e) {
 				model.addAttribute("msg", e.getMessage());
@@ -314,14 +361,18 @@ public class OrderController {
 				deliveryDto.setDetailAddress(orderTotalDto.getReceiverDetailAddress());
 				deliveryDto.setPostCode(orderTotalDto.getReceiverPostCode());
 				OrdersDto ordersDto = orderService.memberCartSelectOrderSave(sUserId, deliveryDto, fUserCarts);
-//				for (CartDto cartDto : fUserCarts) {
-//					cartService.deleteCart(cartDto.getOptionSetId(), sUserId);
-//				}
-//				sUserCartOrderDtoList.clear();
-//				System.out.println("$$$$" + sUserCartOrderDtoList.size());
-//				session.setAttribute("sUserCartOrderDtoList", sUserCartOrderDtoList);
-//				session.setAttribute("realTotalPrice", 0);
-//				session.setAttribute("countCarts", cartService.countCarts(sUserId));
+				for (CartDto cartDto : fUserCarts) {
+					cartService.deleteCart(cartDto.getOptionSetId(), sUserId);
+				}
+				sUserCartOrderDtoList.clear();
+				System.out.println("$$$$" + sUserCartOrderDtoList.size());
+				session.setAttribute("sUserCartOrderDtoList", sUserCartOrderDtoList);
+				session.setAttribute("realTotalPrice", 0);
+				session.setAttribute("countCarts", cartService.countCarts(sUserId));
+				OrderMemberBasicDto orderMemberBasicDto=(OrderMemberBasicDto) session.getAttribute("orderMemberBasicDto");
+				orderMemberBasicDto.setUserName("");
+				orderMemberBasicDto.setPhoneNo("");
+				session.setAttribute("orderMemberBasicDto", orderMemberBasicDto);
 				model.addAttribute("orderId", ordersDto.getId());
 				return "orders/order_complete";
 			} catch (Exception e) {
