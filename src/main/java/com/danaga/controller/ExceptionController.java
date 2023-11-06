@@ -33,8 +33,7 @@ public class ExceptionController {
 		}
 	
 	@ResponseBody
-	@ExceptionHandler(value = {NeedLoginException.class,FoundNoObjectException.FoundNoOptionSetException.class
-			,FoundNoObjectException.FoundNoMemberException.class,MethodArgumentNotValidException.class})
+	@ExceptionHandler(value = {MethodArgumentNotValidException.class})
 	protected ResponseEntity<?> defaultException(Exception e) {
 		 ProductExceptionMsg errorMsg=null;
 		    if (e instanceof NeedLoginException) {
