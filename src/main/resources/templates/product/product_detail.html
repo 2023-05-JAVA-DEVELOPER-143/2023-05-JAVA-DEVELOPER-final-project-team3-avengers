@@ -39,7 +39,7 @@
 							<div class="form-group">
 								<label for="otherOptions" >다른 옵션 보기</label>
 								<select class="form-control" id="otherOptions">
-									<option th:each="options:${otherOptions}" th:text="${options.optionSet}" th:value="${options.osId}" th:selected="${options.osId==productList.osId}">11.5</option>
+									<option th:each="options:${otherOptions}" th:text="${options.optionSetDesc}" th:value="${options.osId}" th:selected="${options.osId==productList.osId}" th:data-tooltip="${options.optionSetDesc}">11.5</option>
 								</select>
 							</div>
 						</div>

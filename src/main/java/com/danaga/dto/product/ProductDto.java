@@ -1,6 +1,7 @@
 package com.danaga.dto.product;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +25,7 @@ public class ProductDto {//상세페이지
 	private String brand;
 	private String name;
 	private Double rating;
-	private LocalDateTime updateTime;
+	private String updateTime;
 	private String descImage;
 	private String prevImage;
 	private String pImage;
@@ -44,7 +45,8 @@ public class ProductDto {//상세페이지
 		this.brand=entity.getProduct().getBrand();
 		this.name=entity.getProduct().getName();
 		this.rating=entity.getProduct().getRating();
-		this.updateTime=entity.getUpdateTime();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        this.updateTime = entity.getUpdateTime().format(formatter);
 		this.descImage=entity.getProduct().getDescImage();
 		this.prevImage=entity.getProduct().getPrevImage();
 		this.pImage=entity.getProduct().getImg();
@@ -58,7 +60,8 @@ public class ProductDto {//상세페이지
 		this.brand=entity.getProduct().getBrand();
 		this.name=entity.getProduct().getName();
 		this.rating=entity.getProduct().getRating();
-		this.updateTime=entity.getUpdateTime();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        this.updateTime = entity.getUpdateTime().format(formatter);
 		this.descImage=entity.getProduct().getDescImage();
 		this.prevImage=entity.getProduct().getPrevImage();
 		this.pImage=entity.getProduct().getImg();
