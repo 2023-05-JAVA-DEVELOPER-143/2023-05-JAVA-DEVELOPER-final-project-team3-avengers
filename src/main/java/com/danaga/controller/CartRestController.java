@@ -42,6 +42,7 @@ public class CartRestController {
 		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
 		// 1번 경우 = 회원 + 세션 장바구니 비어있음
 		if (sUserId != null && fUserCarts == null) {
+			List<SUserCartResponseDto> findCarts = cartService.findsUserCartList(sUserId);
 			cartService.addCart(dto, sUserId);
 			countCarts(session);
 		 
