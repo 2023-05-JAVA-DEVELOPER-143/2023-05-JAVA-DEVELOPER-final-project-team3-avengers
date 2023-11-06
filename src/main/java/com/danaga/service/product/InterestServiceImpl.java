@@ -32,7 +32,7 @@ public class InterestServiceImpl implements InterestService {
 	
 	//상품이 내 관심상품인지 확인
 	@Override
-	public ResponseDto<?> isMyInterest(Long optionSetId, String username) {
+	public ResponseDto<?> isMyInterest(Long optionSetId, String username) throws FoundNoMemberException,FoundNoOptionSetException {
 		try {
 			Long memberId = memberDao.findMember(username).getId();
 			boolean isInterested = interestDao.isInterested(InterestDto.builder()
@@ -46,30 +46,17 @@ public class InterestServiceImpl implements InterestService {
 				answer.add(false);
 				return ResponseDto.<Boolean>builder().data(answer).msg(ProductSuccessMsg.IS_MY_INTEREST).build();
 			}
-		} catch (FoundNoMemberException e) {
-			e.printStackTrace();
-			return ResponseDto.builder().msg(e.getMsg()).build();
-		} catch (FoundNoOptionSetException e) {
-			e.printStackTrace();
-			return ResponseDto.builder().msg(e.getMsg()).build();
 		} catch (Exception e) {
-			e.printStackTrace();
-			return ResponseDto.builder().msg(ProductExceptionMsg.FOUND_NO_MEMBER).build();
+			throw new FoundNoMemberException();
 		}
 	}
 	
 	//제품에서 하트 누르면 관심제품 추가
 	@Override
 	@Transactional
-	public ResponseDto<?> clickHeart(@Valid InterestDto dto) {
+	public ResponseDto<?> clickHeart(@Valid InterestDto dto) throws FoundNoMemberException, FoundNoOptionSetException {
 			try {
 				interestDao.save(dto);
-			} catch (FoundNoMemberException e) {
-				e.printStackTrace();
-				return ResponseDto.builder().msg(e.getMsg()).build();
-			} catch (FoundNoOptionSetException e) {
-				e.printStackTrace();
-				return ResponseDto.builder().msg(e.getMsg()).build();
 			} catch (ExistsInterestException e) {
 				e.printStackTrace();
 				return ResponseDto.builder().msg(e.getMsg()).build();
@@ -79,19 +66,13 @@ public class InterestServiceImpl implements InterestService {
 	//제품에서 하트 누르면 관심제품 삭제
 	@Override
 	@Transactional
-	public ResponseDto<?> deleteHeart(@Valid InterestDto dto) {
+	public ResponseDto<?> deleteHeart(@Valid InterestDto dto) throws FoundNoMemberException, FoundNoOptionSetException {
 			try {
 				if(interestDao.isInterested(dto)) {
 					interestDao.delete(dto);
 				}else {
 					return ResponseDto.builder().msg(ProductExceptionMsg.IS_NOT_INTERESTEDD).build();
 				}
-			} catch (FoundNoMemberException e) {
-				e.printStackTrace();
-				return ResponseDto.builder().msg(e.getMsg()).build();
-			} catch (FoundNoOptionSetException e) {
-				e.printStackTrace();
-				return ResponseDto.builder().msg(e.getMsg()).build();
 			} catch (FoundNoInterestException e) {
 				e.printStackTrace();
 				return ResponseDto.builder().msg(e.getMsg()).build();
@@ -100,26 +81,16 @@ public class InterestServiceImpl implements InterestService {
 	}
 	//나의 관심상품 리스트 전체 조회
 	@Override
-	public ResponseDto<?> myInterestingList(Long memberId) {
+	public ResponseDto<?> myInterestingList(Long memberId) throws FoundNoMemberException {
 		List<ProductListOutputDto> data=new ArrayList<>();
-		try {
 			data = optionSetDao.findAllByInterest_MemberId(memberId).stream().map(t -> new ProductListOutputDto(t)).collect(Collectors.toList());
-		} catch (FoundNoMemberException e) {
-			e.printStackTrace();
-			return ResponseDto.builder().msg(e.getMsg()).build();
-		}
 		return ResponseDto.<ProductListOutputDto>builder().data(data).msg(ProductSuccessMsg.MY_INTERESTS).build();
 	}
 	//나의 관심상품 리스트 전체 삭제
 	@Override
 	@Transactional
-	public ResponseDto<?> emptyMyInterestingList(Long memberId) {
-		try {
+	public ResponseDto<?> emptyMyInterestingList(Long memberId) throws FoundNoMemberException {
 			interestDao.deleteAll(memberId);
-		} catch (FoundNoMemberException e) {
-			e.printStackTrace();
-			return ResponseDto.builder().msg(e.getMsg()).build();
-		}
 		return ResponseDto.builder().msg(ProductSuccessMsg.REMOVE_MY_INTERESTS).build();
 	}
 	

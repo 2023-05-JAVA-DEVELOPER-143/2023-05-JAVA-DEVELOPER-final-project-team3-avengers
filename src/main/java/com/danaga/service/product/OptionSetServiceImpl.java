@@ -55,53 +55,33 @@ public class OptionSetServiceImpl implements OptionSetService {
 	// 프로덕트 삭제해서 옵션셋도 같이 삭제되게
 	@Override
 	@Transactional
-	public ResponseDto<?> deleteProduct(Long productId) {
-		try {
+	public ResponseDto<?> deleteProduct(Long productId) throws FoundNoProductException {
 			productDao.deleteById(productId);
-		} catch (FoundNoProductException e) {
-			e.printStackTrace();
-			return ResponseDto.builder().msg(e.getMsg()).build();
-		}
 		return ResponseDto.builder().msg(ProductSuccessMsg.REMOVE_PRODUCT).build();
 	}
 
 	// 옵션셋 삭제시 옵션들도 삭제
 	@Override
 	@Transactional
-	public ResponseDto<?> deleteOptionSet(Long optionSetId) {
-		try {
+	public ResponseDto<?> deleteOptionSet(Long optionSetId) throws FoundNoOptionSetException {
 			optionSetDao.deleteById(optionSetId);
-		} catch (FoundNoOptionSetException e) {
-			e.printStackTrace();
-			return ResponseDto.builder().msg(e.getMsg()).build();
-		}
 		return ResponseDto.builder().msg(ProductSuccessMsg.REMOVE_OPTIONSET).build();
 	}
 
 	// 옵션 삭제하고 옵션이 붙어있던 오리진 옵션셋 반환
 	@Override
 	@Transactional
-	public ResponseDto<?> deleteOption(Long optionId) {
-		try {
+	public ResponseDto<?> deleteOption(Long optionId) throws FoundNoOptionsException {
 			optionDao.deleteById(optionId);
-		} catch (FoundNoOptionsException e) {
-			e.printStackTrace();
-			return ResponseDto.builder().msg(e.getMsg()).build();
-		}
 		return ResponseDto.builder().msg(ProductSuccessMsg.REMOVE_OPTION).build();
 	}
 
 	// 오더하면 옵션셋 재고 -1, 환불하거나 취소하면 +1
 	// +1, -1은 컨트롤러에서 get+1로 하고 여기서는 그냥 지정한 숫자로 변경
 	@Override
-	public ResponseDto<?> updateStock(@Valid OptionSetUpdateDto dto) {
+	public ResponseDto<?> updateStock(@Valid OptionSetUpdateDto dto) throws FoundNoOptionSetException {
 		OptionSet optionset;
-		try {
 			optionset = optionSetDao.updateStock(dto);
-		} catch (FoundNoOptionSetException e) {
-			e.printStackTrace();
-			return ResponseDto.builder().msg(e.getMsg()).build();
-		}
 		List<ProductDto> data = new ArrayList<>();
 		data.add(new ProductDto(optionset));
 		return ResponseDto.<ProductDto>builder().data(data).msg(ProductSuccessMsg.UPDATE_OPTIONSET).build();
@@ -109,14 +89,8 @@ public class OptionSetServiceImpl implements OptionSetService {
 
 	// 주문했을때 주문수 업뎃, +,-는 컨트롤러에서 get+1
 	@Override
-	public ResponseDto<?> updateOrderCount(Long optionSetId, Integer orderCount) {
-		OptionSet optionset;
-		try {
-			optionset = optionSetDao.updateOrderCount(optionSetId, orderCount);
-		} catch (FoundNoOptionSetException e) {
-			e.printStackTrace();
-			return ResponseDto.builder().msg(e.getMsg()).build();
-		}
+	public ResponseDto<?> updateOrderCount(Long optionSetId, Integer orderCount) throws FoundNoOptionSetException {
+		OptionSet optionset = optionSetDao.updateOrderCount(optionSetId, orderCount);
 		List<ProductDto> data = new ArrayList<>();
 		data.add(new ProductDto(optionset));
 		return ResponseDto.<ProductDto>builder().data(data).msg(ProductSuccessMsg.UPDATE_OPTIONSET).build();
@@ -124,14 +98,8 @@ public class OptionSetServiceImpl implements OptionSetService {
 
 	// 클릭했을때 조회수 업뎃
 	@Override
-	public ResponseDto<?> updateViewCount(Long optionSetId) {
-		OptionSet optionset=null;
-		try {
-			optionset = optionSetDao.updateViewCount(optionSetId);
-		} catch (FoundNoOptionSetException e) {
-			e.printStackTrace();
-			return ResponseDto.builder().msg(e.getMsg()).build();
-		}
+	public ResponseDto<?> updateViewCount(Long optionSetId) throws FoundNoOptionSetException {
+		OptionSet optionset = optionSetDao.updateViewCount(optionSetId);
 		List<ProductDto> data = new ArrayList<>();
 		data.add(new ProductDto(optionset));
 		return ResponseDto.<ProductDto>builder().data(data).msg(ProductSuccessMsg.UPDATE_OPTIONSET).build();
@@ -264,14 +232,8 @@ public class OptionSetServiceImpl implements OptionSetService {
 	// option update
 	@Override
 	@Transactional
-	public ResponseDto<?> update(@Valid OptionDto dto) {
-		Options created;
-		try {
-			created = optionDao.update(dto);
-		} catch (FoundNoOptionsException e) {
-			e.printStackTrace();
-			return ResponseDto.builder().msg(e.getMsg()).build();
-		}
+	public ResponseDto<?> update(@Valid OptionDto dto) throws FoundNoOptionsException {
+		Options created = optionDao.update(dto);
 		List<Options> data = new ArrayList<>();
 		data.add(created);
 		return ResponseDto.<Options>builder().data(data).msg(ProductSuccessMsg.UPDATE_OPTION).build();

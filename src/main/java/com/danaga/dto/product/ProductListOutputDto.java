@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class ProductListOutputDto {
+public class ProductListOutputDto {//리스트,히트상품,관심,최근상품리스트
 	private String brand;
 	private String name;
 	private Double rating;

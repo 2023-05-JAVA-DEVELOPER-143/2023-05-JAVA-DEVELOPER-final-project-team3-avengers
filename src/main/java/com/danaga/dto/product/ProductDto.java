@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class ProductDto {
+public class ProductDto {//상세페이지
 	private String brand;
 	private String name;
 	private Double rating;

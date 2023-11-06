@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OtherOptionSetDto {
+public class OtherOptionSetDto {//상세페이지 다른옵션 보여줄때
 	private Long osId;
 	@Builder.Default
 	private List<OptionDto> optionSet = new ArrayList<>();

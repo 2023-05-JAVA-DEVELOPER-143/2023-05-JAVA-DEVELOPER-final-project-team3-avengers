@@ -10,19 +10,22 @@ import com.danaga.dto.product.ProductSaveDto;
 import com.danaga.dto.product.ProductUpdateDto;
 import com.danaga.dto.product.QueryStringDataDto;
 import com.danaga.dto.product.UploadProductDto;
+import com.danaga.exception.product.FoundNoObjectException.FoundNoOptionSetException;
+import com.danaga.exception.product.FoundNoObjectException.FoundNoOptionsException;
+import com.danaga.exception.product.FoundNoObjectException.FoundNoProductException;
 
 public interface OptionSetService {
 
-		ResponseDto<?> deleteProduct(Long productId);
-		ResponseDto<?> deleteOptionSet(Long optionSetId);
-		ResponseDto<?> deleteOption(Long optionId);
+		ResponseDto<?> deleteProduct(Long productId) throws FoundNoProductException;
+		ResponseDto<?> deleteOptionSet(Long optionSetId) throws FoundNoOptionSetException;
+		ResponseDto<?> deleteOption(Long optionId) throws FoundNoOptionsException;
  		
-		ResponseDto<?> updateStock(OptionSetUpdateDto dto);
-		ResponseDto<?> updateOrderCount(Long optionSetId, Integer orderCount);
-		ResponseDto<?> updateViewCount(Long optionSetId);
+		ResponseDto<?> updateStock(OptionSetUpdateDto dto) throws FoundNoOptionSetException;
+		ResponseDto<?> updateOrderCount(Long optionSetId, Integer orderCount) throws FoundNoOptionSetException;
+		ResponseDto<?> updateViewCount(Long optionSetId) throws FoundNoOptionSetException;
 		ResponseDto<?> update(ProductUpdateDto dto);
 		ResponseDto<?> updateRating(ProductSaveDto dto);
-		ResponseDto<?> update(OptionDto dto);
+		ResponseDto<?> update(OptionDto dto) throws FoundNoOptionsException;
 
 		ResponseDto<?> uploadProduct(UploadProductDto dto);
 		
