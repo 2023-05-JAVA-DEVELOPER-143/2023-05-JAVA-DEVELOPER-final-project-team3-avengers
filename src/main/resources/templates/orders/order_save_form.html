@@ -57,97 +57,98 @@
 							</tbody>
 						</table>
 					</div>
-					<form  id="orderAction" name="orderAction" method="post" action="/cart_order_action">
-					<div class="custom-section">
-						<div class="col-sm-8">
-							<div class="form-group" style="display: flex; align-items: center;">
-								<label for="checkout-ordererName"
-									style="flex: 1; text-align: right; margin-right: 1rem; pointer-events: none;">주문자</label>
-								<input class="form-control" type="text" id="ordererName" name="ordererName"
-									style="flex: 2; width: 80%;" value="">
+					<form id="orderAction" name="orderAction" method="post" action="/cart_order_action">
+						<div class="custom-section">
+							<div class="col-sm-8">
+								<div class="form-group" style="display: flex; align-items: center;">
+									<label for="checkout-ordererName"
+										style="flex: 1; text-align: right; margin-right: 1rem; pointer-events: none;">주문자</label>
+									<input class="form-control" type="text" id="ordererName" name="ordererName"
+										style="flex: 2; width: 80%;" value="" th:value="${orderMemberBasicDto.userName}">
+								</div>
+								<div class="error-message" id="ordererNameError"></div>
 							</div>
-							<div class="error-message" id="ordererNameError"></div>
 						</div>
-					</div>
 
-					<div class="custom-section">
-						<div id="ordererError" class="error-message"></div>
-						<div class="col-sm-8">
-							<div class="form-group" style="display: flex; align-items: center;">
-								<label for="checkout-ordererPhoneNo"
-									style="flex: 1; text-align: right; margin-right: 1rem; pointer-events: none;">주문자전화번호</label>
-								<input class="form-control" type="text" id="ordererPhoneNo" name="ordererPhoneNo"
-									style="flex: 2; width: 80%;" value="ex) 010-1111-1111">
+						<div class="custom-section">
+							<div id="ordererError" class="error-message"></div>
+							<div class="col-sm-8">
+								<div class="form-group" style="display: flex; align-items: center;">
+									<label for="checkout-ordererPhoneNo"
+										style="flex: 1; text-align: right; margin-right: 1rem; pointer-events: none;">주문자전화번호</label>
+									<input class="form-control" type="text" id="ordererPhoneNo" name="ordererPhoneNo"
+										style="flex: 2; width: 80%;" value="ex) 010-1111-1111" th:value="${orderMemberBasicDto.phoneNo}">
+								</div>
 							</div>
 						</div>
-					</div>
 
-					<div class="custom-section">
-						<div class="col-sm-8">
-							<div class="form-group" style="display: flex; align-items: center;">
-								<label for="checkout-receiverName"
-									style="flex: 1; text-align: right; margin-right: 1rem; pointer-events: none;">수령인</label>
-								<input class="form-control" type="text" id="receiverName" name="receiverName"
-									style="flex: 2; width: 80%;" value="">
+						<div class="custom-section">
+							<div class="col-sm-8">
+								<div class="form-group" style="display: flex; align-items: center;">
+									<label for="checkout-receiverName"
+										style="flex: 1; text-align: right; margin-right: 1rem; pointer-events: none;">수령인</label>
+									<input class="form-control" type="text" id="receiverName" name="receiverName"
+										style="flex: 2; width: 80%;" value="">
+								</div>
 							</div>
 						</div>
-					</div>
 
-					<div class="custom-section">
-						<div id="receiverError" class="error-message"></div>
-						<div class="col-sm-8">
-							<div class="form-group" style="display: flex; align-items: center;">
-								<label for="checkout-receiverPhoneNo"
-									style="flex: 1; text-align: right; margin-right: 1rem; pointer-events: none;">수령인전화번호</label>
-								<input class="form-control" type="text" id="receiverPhoneNo" name="receiverPhoneNo"
-									style="flex: 2; width: 80%;" value="ex) 010-1111-1111">
+						<div class="custom-section">
+							<div id="receiverError" class="error-message"></div>
+							<div class="col-sm-8">
+								<div class="form-group" style="display: flex; align-items: center;">
+									<label for="checkout-receiverPhoneNo"
+										style="flex: 1; text-align: right; margin-right: 1rem; pointer-events: none;">수령인전화번호</label>
+									<input class="form-control" type="text" id="receiverPhoneNo" name="receiverPhoneNo"
+										style="flex: 2; width: 80%;" value="ex) 010-1111-1111">
+								</div>
 							</div>
 						</div>
-					</div>
 
-					<div class="custom-section">
-						<div class="col-sm-10">
-							<div class="form-group">
-								<label for="reg-address">주소</label><br>
-								<input name="receiverPostCode" type="text" class="form-control" id="receiverPostCode"
-									placeholder="우편번호" required>
-								<input name="findaddr" type="button" class="form-control" onclick="execDaumPostcode()"
-									value="우편번호 찾기"><br>
-								<input name="receiverAddress" type="text" class="form-control" id="receiverAddress"
-									placeholder="주소" required>
-								<input name="receiverDetailAddress" type="text" class="form-control"
-									id="receiverDetailAddress" placeholder="상세주소" required>
+						<div class="custom-section">
+							<div class="col-sm-10">
+								<div class="form-group">
+									<label for="reg-address">주소</label><br>
+									<input name="receiverPostCode" type="text" class="form-control"
+										id="receiverPostCode" placeholder="우편번호" required>
+									<input name="findaddr" type="button" class="form-control"
+										onclick="execDaumPostcode()" value="우편번호 찾기"><br>
+									<input name="receiverAddress" type="text" class="form-control" id="receiverAddress"
+										placeholder="주소" required>
+									<input name="receiverDetailAddress" type="text" class="form-control"
+										id="receiverDetailAddress" placeholder="상세주소" required>
 
+								</div>
 							</div>
 						</div>
-					</div>
 
-					<div class="custom-section">
-						<div class="col-sm-8">
-							<div class="form-group" style="display: flex; align-items: center;">
-								<label for="account-number"
-									style="flex: 1; text-align: right; margin-right: 1rem; display: none; font-weight: bold; font-size: 16px;">계좌번호</label>
-								<span class="account-number"
-									style="font-size: 18px; color: #0073e6; font-weight: bold;">무통장입금안내
-									<br> 신한: 110-333-4545654 아이언맨
-								</span>
+						<div class="custom-section">
+							<div class="col-sm-8">
+								<div class="form-group" style="display: flex; align-items: center;">
+									<label for="account-number"
+										style="flex: 1; text-align: right; margin-right: 1rem; display: none; font-weight: bold; font-size: 16px;">계좌번호</label>
+									<span class="account-number"
+										style="font-size: 18px; color: #0073e6; font-weight: bold;">무통장입금안내
+										<br> 신한: 110-333-4545654 아이언맨
+									</span>
+								</div>
 							</div>
 						</div>
-					</div>
-					<div style="border: 1px solid #ccc; padding: 10px;">
-						<div class="row">
-							<div class="col">
-								<a class="btn btn-outline-secondary" href="cart.html"> <i
-										class="icon-arrow-left"></i><span class="hidden-xs-down">&nbsp;Back
-										To Cart</span></a>
-							</div>
-							<div class="col text-right">
-								<button type="button" id="submitButton" onclick="submitForm()" class="btn btn-primary">
-									<span class="hidden-xs-down">주문하기&nbsp;</span> <i class="icon-arrow-right"></i>
-								</button>
+						<div style="border: 1px solid #ccc; padding: 10px;">
+							<div class="row">
+								<div class="col">
+									<a class="btn btn-outline-secondary" href="cart.html"> <i
+											class="icon-arrow-left"></i><span class="hidden-xs-down">&nbsp;Back
+											To Cart</span></a>
+								</div>
+								<div class="col text-right">
+									<button type="button" id="submitButton" onclick="submitForm()"
+										class="btn btn-primary">
+										<span class="hidden-xs-down">주문하기&nbsp;</span> <i class="icon-arrow-right"></i>
+									</button>
+								</div>
 							</div>
 						</div>
-					</div>
 					</form>
 				</div>
 
@@ -248,26 +249,42 @@
 					document.getElementById('ordererName').value = '주문자 이름을 입력하세요.';
 					return;
 				}
+				
 				if (ordererPhoneNo.trim() === '') {
 					document.getElementById('ordererPhoneNo').value = '주문자 전화번호를 입력하세요.';
 					return;
 				}
+				
+				if (isNoValidPhoneNo(ordererPhoneNo)) {
+					ordererErrorElement.textContent = '유효하지 않은 전화번호 형식입니다.';
+					return;
+				}
+
 				if (receiverName.trim() === '') {
 					document.getElementById('receiverName').value = '수령자 이름을 입력하세요.';
 					return;
 				}
+
 				if (receiverPhoneNo.trim() === '') {
 					document.getElementById('receiverPhoneNo').value = '수령자 전화번호를 입력하세요.';
 					return;
 				}
+				
+				if (isNoValidPhoneNo(receiverPhoneNo)) {
+					receiverErrorElement.textContent = '유효하지 않은 전화번호 형식입니다.';
+					return;
+				}
+
 				if (receiverPostCode.trim() === '') {
 					document.getElementById('receiverPostCode').value = '우편번호을 입력하세요.';
 					return;
 				}
+				
 				if (receiverAddress.trim() === '') {
 					document.getElementById('receiverAddress').value = '주소을 입력하세요.';
 					return;
 				}
+				
 				if (receiverDetailAddress.trim() === '') {
 					document.getElementById('receiverDetailAddress').value = '상세주소을 입력하세요.';
 					return;
