@@ -1,11 +1,7 @@
 package com.danaga.service.product;
 
-import java.util.List;
-
 import com.danaga.dto.ResponseDto;
 import com.danaga.dto.product.CategoryDto;
-import com.danaga.dto.product.CategorySaveDto;
-import com.danaga.entity.Category;
 
 public interface CategoryService {
 	//최상위 카테고리들만 조회
@@ -15,7 +11,7 @@ public interface CategoryService {
 	ResponseDto<?> categoryFamily(Long id);
 	
 	//카테고리 추가
-	ResponseDto<?> create(CategorySaveDto dto);
+	ResponseDto<?> create(CategoryDto.CategorySaveDto dto);
 	
 	//카테고리 수정
 	ResponseDto<?> update(CategoryDto dto);

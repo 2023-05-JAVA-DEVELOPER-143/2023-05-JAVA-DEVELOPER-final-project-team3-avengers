@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.danaga.dto.product.CategoryDto;
-import com.danaga.dto.product.CategorySaveDto;
 import com.danaga.entity.Category;
 import com.danaga.exception.product.FoundNoObjectException.FoundNoCategoryException;
 import com.danaga.repository.product.CategoryRepository;
@@ -20,7 +19,7 @@ public class CategoryDaoImpl implements CategoryDao{
 		return repository.findChildTypesByParent_Id(id);
 	}
 	@Override
-	public CategoryDto create(CategorySaveDto dto) {
+	public CategoryDto create(CategoryDto.CategorySaveDto dto) {
 		Category entity = dto.toEntity();
 		Category saved = repository.save(entity);
 		return new CategoryDto(repository.findById(saved.getId()).get());

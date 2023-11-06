@@ -1,15 +1,10 @@
 package com.danaga.repository.product;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import com.danaga.dto.product.CategoryDto;
-import com.danaga.dto.product.OptionDto;
 import com.danaga.dto.product.OptionNameValueMapDto;
 import com.danaga.dto.product.QueryStringDataDto;
-import com.danaga.entity.Category;
-import com.danaga.entity.Options;
 
 public class OptionSetSearchQuery {
 

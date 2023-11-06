@@ -11,9 +11,7 @@ import com.danaga.dao.product.InterestDao;
 import com.danaga.dao.product.OptionSetDao;
 import com.danaga.dto.ResponseDto;
 import com.danaga.dto.product.InterestDto;
-import com.danaga.dto.product.ProductDto;
 import com.danaga.dto.product.ProductListOutputDto;
-import com.danaga.entity.OptionSet;
 import com.danaga.exception.product.AlreadyExistsException.ExistsInterestException;
 import com.danaga.exception.product.FoundNoObjectException.FoundNoInterestException;
 import com.danaga.exception.product.FoundNoObjectException.FoundNoMemberException;
@@ -33,18 +31,29 @@ public class InterestServiceImpl implements InterestService {
 	
 	//상품이 내 관심상품인지 확인
 	@Override
-	public ResponseDto<?> isMyInterest(Long optionSetId, String username) throws Exception{
-		Long memberId = memberDao.findMember(username).getId();
-		boolean isInterested=interestDao.isInterested(InterestDto.builder()
-				.memberId(memberId).optionSetId(optionSetId).build());
-		if(isInterested) {
-			List<Boolean> answer=new ArrayList<Boolean>();
-			answer.add(true);
-			return ResponseDto.<Boolean>builder().data(answer).build();
-		}else {
-			List<Boolean> answer=new ArrayList<Boolean>();
-			answer.add(false);
-			return ResponseDto.<Boolean>builder().data(answer).build();
+	public ResponseDto<?> isMyInterest(Long optionSetId, String username) {
+		try {
+			Long memberId = memberDao.findMember(username).getId();
+			boolean isInterested = interestDao.isInterested(InterestDto.builder()
+					.memberId(memberId).optionSetId(optionSetId).build());
+			if(isInterested) {
+				List<Boolean> answer=new ArrayList<Boolean>();
+				answer.add(true);
+				return ResponseDto.<Boolean>builder().data(answer).msg(ProductSuccessMsg.IS_MY_INTEREST).build();
+			}else {
+				List<Boolean> answer=new ArrayList<Boolean>();
+				answer.add(false);
+				return ResponseDto.<Boolean>builder().data(answer).msg(ProductSuccessMsg.IS_MY_INTEREST).build();
+			}
+		} catch (FoundNoMemberException e) {
+			e.printStackTrace();
+			return ResponseDto.builder().msg(e.getMsg()).build();
+		} catch (FoundNoOptionSetException e) {
+			e.printStackTrace();
+			return ResponseDto.builder().msg(e.getMsg()).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseDto.builder().msg(ProductExceptionMsg.FOUND_NO_MEMBER).build();
 		}
 	}
 	
@@ -56,13 +65,13 @@ public class InterestServiceImpl implements InterestService {
 				interestDao.save(dto);
 			} catch (FoundNoMemberException e) {
 				e.printStackTrace();
-				return ResponseDto.builder().error(e.getMsg()).build();
+				return ResponseDto.builder().msg(e.getMsg()).build();
 			} catch (FoundNoOptionSetException e) {
 				e.printStackTrace();
-				return ResponseDto.builder().error(e.getMsg()).build();
+				return ResponseDto.builder().msg(e.getMsg()).build();
 			} catch (ExistsInterestException e) {
 				e.printStackTrace();
-				return ResponseDto.builder().error(e.getMsg()).build();
+				return ResponseDto.builder().msg(e.getMsg()).build();
 			}
 		return ResponseDto.builder().msg(ProductSuccessMsg.TAP_HEART).build();
 	}
@@ -74,17 +83,17 @@ public class InterestServiceImpl implements InterestService {
 				if(interestDao.isInterested(dto)) {
 					interestDao.delete(dto);
 				}else {
-					return ResponseDto.builder().error(ProductExceptionMsg.IS_NOT_INTERESTEDD).build();
+					return ResponseDto.builder().msg(ProductExceptionMsg.IS_NOT_INTERESTEDD).build();
 				}
 			} catch (FoundNoMemberException e) {
 				e.printStackTrace();
-				return ResponseDto.builder().error(e.getMsg()).build();
+				return ResponseDto.builder().msg(e.getMsg()).build();
 			} catch (FoundNoOptionSetException e) {
 				e.printStackTrace();
-				return ResponseDto.builder().error(e.getMsg()).build();
+				return ResponseDto.builder().msg(e.getMsg()).build();
 			} catch (FoundNoInterestException e) {
 				e.printStackTrace();
-				return ResponseDto.builder().error(e.getMsg()).build();
+				return ResponseDto.builder().msg(e.getMsg()).build();
 			}
 		return ResponseDto.builder().msg(ProductSuccessMsg.UNTAP_HEART).build();
 	}
@@ -96,9 +105,9 @@ public class InterestServiceImpl implements InterestService {
 			data = optionSetDao.findAllByInterest_MemberId(memberId).stream().map(t -> new ProductListOutputDto(t)).collect(Collectors.toList());
 		} catch (FoundNoMemberException e) {
 			e.printStackTrace();
-			return ResponseDto.builder().error(e.getMsg()).build();
+			return ResponseDto.builder().msg(e.getMsg()).build();
 		}
-		return ResponseDto.<ProductListOutputDto>builder().data(data).build();
+		return ResponseDto.<ProductListOutputDto>builder().data(data).msg(ProductSuccessMsg.MY_INTERESTS).build();
 	}
 	//나의 관심상품 리스트 전체 삭제
 	@Override
@@ -108,7 +117,7 @@ public class InterestServiceImpl implements InterestService {
 			interestDao.deleteAll(memberId);
 		} catch (FoundNoMemberException e) {
 			e.printStackTrace();
-			return ResponseDto.builder().error(e.getMsg()).build();
+			return ResponseDto.builder().msg(e.getMsg()).build();
 		}
 		return ResponseDto.builder().msg(ProductSuccessMsg.REMOVE_MY_INTERESTS).build();
 	}

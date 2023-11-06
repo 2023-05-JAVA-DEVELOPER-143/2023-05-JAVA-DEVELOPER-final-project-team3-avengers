@@ -1,9 +1,5 @@
 package com.danaga.dao.product;
 
-import java.util.List;
-
-import com.danaga.dto.product.RecentViewDto;
-import com.danaga.entity.OptionSet;
 import com.danaga.entity.RecentView;
 import com.danaga.exception.product.AlreadyExistsException.ExistsRecentViewException;
 import com.danaga.exception.product.FoundNoObjectException;

@@ -1,9 +1,6 @@
 package com.danaga.dao.product;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.danaga.dto.product.InterestDto;
-import com.danaga.entity.Interest;
 import com.danaga.exception.product.AlreadyExistsException.ExistsInterestException;
 import com.danaga.exception.product.FoundNoObjectException.FoundNoInterestException;
 import com.danaga.exception.product.FoundNoObjectException.FoundNoMemberException;

@@ -2,12 +2,10 @@ package com.danaga.dao.product;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.danaga.dto.product.OptionSaveDto;
 import com.danaga.dto.product.OptionUpdateDto;
-import com.danaga.entity.OptionSet;
 import com.danaga.entity.Options;
 import com.danaga.exception.product.FoundNoObjectException.FoundNoOptionsException;
 import com.danaga.repository.product.OptionNamesValues;

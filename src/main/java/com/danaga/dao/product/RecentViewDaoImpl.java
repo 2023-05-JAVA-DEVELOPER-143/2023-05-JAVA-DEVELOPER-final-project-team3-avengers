@@ -3,16 +3,10 @@ package com.danaga.dao.product;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.danaga.dto.product.RecentViewDto;
-import com.danaga.entity.Member;
-import com.danaga.entity.OptionSet;
 import com.danaga.entity.RecentView;
-import com.danaga.exception.product.AlreadyExistsException;
 import com.danaga.exception.product.AlreadyExistsException.ExistsRecentViewException;
-import com.danaga.exception.product.FoundNoObjectException;
 import com.danaga.exception.product.FoundNoObjectException.FoundNoMemberException;
 import com.danaga.exception.product.FoundNoObjectException.FoundNoOptionSetException;
 import com.danaga.exception.product.FoundNoObjectException.FoundNoRecentViewException;
@@ -57,8 +51,8 @@ public class RecentViewDaoImpl implements RecentViewDao{
 	//recentView 추가
 	@Override
 	public RecentView save(RecentView entity) throws FoundNoMemberException, FoundNoOptionSetException, ExistsRecentViewException {
-		Member findMember = memberRepository.findById(entity.getMember().getId()).orElseThrow(() -> new FoundNoMemberException());
-		OptionSet findOptionSet = optionSetRepository.findById(entity.getOptionSet().getId()).orElseThrow(()-> new FoundNoOptionSetException());
+		memberRepository.findById(entity.getMember().getId()).orElseThrow(() -> new FoundNoMemberException());
+		optionSetRepository.findById(entity.getOptionSet().getId()).orElseThrow(()-> new FoundNoOptionSetException());
 		RecentView find=repository.findByMemberIdAndOptionSetId(entity.getMember().getId(), entity.getOptionSet().getId());
 		if(find!=null) {
 			throw new ExistsRecentViewException();

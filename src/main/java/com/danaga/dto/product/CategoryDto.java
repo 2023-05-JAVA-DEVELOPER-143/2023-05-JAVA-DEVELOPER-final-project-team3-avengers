@@ -32,4 +32,23 @@ public class CategoryDto {
 			this.parentId=entity.getParent().getId();
 		}
 	}
+	@AllArgsConstructor
+	@NoArgsConstructor
+	@Data
+	@Builder
+	public static class CategorySaveDto {
+		private String name;
+		private Long parentId;
+		
+		public Category toEntity() {
+			return Category.builder()
+					.name(name)
+					.parent(Category.builder().id(parentId).build())
+					.build();
+		}
+		CategorySaveDto(Category entity){
+			this.name=entity.getName();
+			this.parentId=entity.getParent().getId();
+		}
+	}
 }

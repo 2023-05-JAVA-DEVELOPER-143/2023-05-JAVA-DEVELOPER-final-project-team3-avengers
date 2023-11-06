@@ -1,9 +1,8 @@
 package com.danaga.service.product;
 
 import com.danaga.dto.ResponseDto;
-import com.danaga.dto.product.OptionNameValueDto;
-import com.danaga.dto.product.OptionUpdateDto;
 import com.danaga.dto.product.OptionSetUpdateDto;
+import com.danaga.dto.product.OptionUpdateDto;
 import com.danaga.dto.product.OtherOptionSetDto;
 import com.danaga.dto.product.ProductDto;
 import com.danaga.dto.product.ProductListOutputDto;
@@ -11,7 +10,6 @@ import com.danaga.dto.product.ProductSaveDto;
 import com.danaga.dto.product.ProductUpdateDto;
 import com.danaga.dto.product.QueryStringDataDto;
 import com.danaga.dto.product.UploadProductDto;
-import com.danaga.entity.OptionSet;
 
 public interface OptionSetService {
 

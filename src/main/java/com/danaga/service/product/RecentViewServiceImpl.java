@@ -4,22 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.danaga.dao.product.InterestDao;
 import com.danaga.dao.product.OptionSetDao;
-import com.danaga.dao.product.OptionsDao;
-import com.danaga.dao.product.ProductDao;
 import com.danaga.dao.product.RecentViewDao;
 import com.danaga.dto.ResponseDto;
 import com.danaga.dto.product.ProductDto;
 import com.danaga.dto.product.ProductListOutputDto;
 import com.danaga.dto.product.RecentViewDto;
-import com.danaga.entity.OptionSet;
-import com.danaga.entity.Options;
-import com.danaga.entity.Product;
-import com.danaga.entity.RecentView;
 import com.danaga.exception.product.AlreadyExistsException.ExistsRecentViewException;
 import com.danaga.exception.product.FoundNoObjectException;
 import com.danaga.exception.product.FoundNoObjectException.FoundNoMemberException;
@@ -42,13 +34,13 @@ public class RecentViewServiceImpl implements RecentViewService{
 			recentViewDao.save(dto.toEntity(dto));
 		} catch (FoundNoMemberException e) {
 			e.printStackTrace();
-			return ResponseDto.builder().error(e.getMsg()).build();
+			return ResponseDto.builder().msg(e.getMsg()).build();
 		} catch (FoundNoOptionSetException e) {
 			e.printStackTrace();
-			return ResponseDto.builder().error(e.getMsg()).build();
+			return ResponseDto.builder().msg(e.getMsg()).build();
 		} catch (ExistsRecentViewException e) {
 			e.printStackTrace();
-			return ResponseDto.builder().error(e.getMsg()).build();
+			return ResponseDto.builder().msg(e.getMsg()).build();
 		}
 		return ResponseDto.builder().msg(ProductSuccessMsg.ADD_RECENTVIEW).build();
 	}
@@ -60,7 +52,7 @@ public class RecentViewServiceImpl implements RecentViewService{
 			recentViewDao.deleteAll(memberId);
 		} catch (FoundNoObjectException e) {
 			e.printStackTrace();
-			return ResponseDto.builder().error(e.getMsg()).build();
+			return ResponseDto.builder().msg(e.getMsg()).build();
 		}
 		return ResponseDto.<ProductDto>builder().msg(ProductSuccessMsg.REMOVE_MY_RECENTVIEWS).build();
 	}
@@ -72,7 +64,7 @@ public class RecentViewServiceImpl implements RecentViewService{
 			recentViewDao.delete(dto.toEntity(dto));
 		} catch (FoundNoObjectException e) {
 			e.printStackTrace();
-			return ResponseDto.builder().error(e.getMsg()).build();
+			return ResponseDto.builder().msg(e.getMsg()).build();
 		}
 		return ResponseDto.builder().msg(ProductSuccessMsg.REMOVE_RECENTVIEW).build();
 	}
@@ -84,7 +76,7 @@ public class RecentViewServiceImpl implements RecentViewService{
 			myRecentViews = optionSetDao.findAllByRecentView_MemberId(memberId).stream().map(t -> new ProductListOutputDto(t)).collect(Collectors.toList());
 		} catch (FoundNoMemberException e) {
 			e.printStackTrace();
-			return ResponseDto.builder().error(e.getMsg()).build();
+			return ResponseDto.builder().msg(e.getMsg()).build();
 		};
 		return ResponseDto.<ProductListOutputDto>builder().data(myRecentViews).msg(ProductSuccessMsg.FIND_MY_RECENTVIEWS).build();
 	}

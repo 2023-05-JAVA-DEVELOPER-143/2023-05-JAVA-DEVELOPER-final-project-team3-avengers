@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.danaga.dao.product.CategoryDao;
 import com.danaga.dto.ResponseDto;
 import com.danaga.dto.product.CategoryDto;
-import com.danaga.dto.product.CategorySaveDto;
 import com.danaga.entity.Category;
 import com.danaga.exception.product.FoundNoObjectException.FoundNoCategoryException;
 import com.danaga.exception.product.ProductSuccessMsg;
@@ -38,7 +37,7 @@ public class CategoryServiceImpl implements CategoryService{
 
 	//카테고리 생성
 	@Override
-	public ResponseDto<?> create(CategorySaveDto dto) {
+	public ResponseDto<?> create(CategoryDto.CategorySaveDto dto) {
 		List<CategoryDto> data = new ArrayList<>();
 		data.add(categoryDao.create(dto));
 		return ResponseDto.<CategoryDto>builder().data(data).msg(ProductSuccessMsg.ADD_CATEGORY).build();
@@ -53,7 +52,7 @@ public class CategoryServiceImpl implements CategoryService{
 			data.add(updateDto); 
 		} catch (FoundNoCategoryException e) {
 			e.printStackTrace();
-			return ResponseDto.builder().error(e.getMsg()).build();
+			return ResponseDto.builder().msg(e.getMsg()).build();
 		}
 		return ResponseDto.<CategoryDto>builder().data(data).msg(ProductSuccessMsg.UPDATE_CATEGORY).build();
 	}
@@ -64,7 +63,7 @@ public class CategoryServiceImpl implements CategoryService{
 			categoryDao.delete(id);
 		} catch (FoundNoCategoryException e) {
 			e.printStackTrace();
-			return ResponseDto.<CategoryDto>builder().error(e.getMsg()).build();
+			return ResponseDto.<CategoryDto>builder().msg(e.getMsg()).build();
 		}
 		return ResponseDto.builder().msg(ProductSuccessMsg.REMOVE_CATEGORY).build();
 	}

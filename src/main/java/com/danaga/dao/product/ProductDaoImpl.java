@@ -1,9 +1,5 @@
 package com.danaga.dao.product;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.danaga.dto.product.ProductSaveDto;
@@ -12,9 +8,7 @@ import com.danaga.exception.product.FoundNoObjectException.FoundNoProductExcepti
 import com.danaga.repository.product.ProductRepository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class ProductDaoImpl implements ProductDao{

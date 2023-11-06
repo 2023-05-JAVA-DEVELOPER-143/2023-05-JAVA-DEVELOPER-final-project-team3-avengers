@@ -1,11 +1,9 @@
 package com.danaga.dao.product;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.danaga.dto.product.OptionSetCreateDto;
 import com.danaga.dto.product.OptionSetUpdateDto;
-import com.danaga.dto.product.ProductDto;
 import com.danaga.dto.product.ProductListOutputDto;
 import com.danaga.dto.product.QueryStringDataDto;
 import com.danaga.entity.OptionSet;

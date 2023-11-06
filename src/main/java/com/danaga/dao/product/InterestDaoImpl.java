@@ -6,7 +6,6 @@ import com.danaga.dto.product.InterestDto;
 import com.danaga.entity.Interest;
 import com.danaga.entity.Member;
 import com.danaga.entity.OptionSet;
-import com.danaga.exception.product.AlreadyExistsException;
 import com.danaga.exception.product.AlreadyExistsException.ExistsInterestException;
 import com.danaga.exception.product.FoundNoObjectException.FoundNoInterestException;
 import com.danaga.exception.product.FoundNoObjectException.FoundNoMemberException;

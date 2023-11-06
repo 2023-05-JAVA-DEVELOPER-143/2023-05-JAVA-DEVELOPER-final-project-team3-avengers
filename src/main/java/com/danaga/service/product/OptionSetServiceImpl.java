@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -16,10 +15,8 @@ import com.danaga.dao.product.OptionsDao;
 import com.danaga.dao.product.ProductDao;
 import com.danaga.dto.ResponseDto;
 import com.danaga.dto.product.CategoryDto;
-import com.danaga.dto.product.OptionNameValueDto;
-import com.danaga.dto.product.OptionUpdateDto;
-import com.danaga.dto.product.OptionSetCreateDto;
 import com.danaga.dto.product.OptionSetUpdateDto;
+import com.danaga.dto.product.OptionUpdateDto;
 import com.danaga.dto.product.OtherOptionSetDto;
 import com.danaga.dto.product.ProductDto;
 import com.danaga.dto.product.ProductListOutputDto;
@@ -39,7 +36,6 @@ import com.danaga.exception.product.ProductExceptionMsg;
 import com.danaga.exception.product.ProductSuccessMsg;
 import com.danaga.repository.product.OptionNamesValues;
 import com.danaga.repository.product.OptionSetQueryData;
-import com.danaga.repository.product.OptionSetSearchQuery;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +50,6 @@ public class OptionSetServiceImpl implements OptionSetService {
 	private final OptionsDao optionDao;
 	private final ProductDao productDao;
 	private final CategoryDao categoryDao;
-	private final CategoryService categoryService;
 
 	// 프로덕트 삭제해서 옵션셋도 같이 삭제되게
 	@Override
@@ -64,7 +59,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 			productDao.deleteById(productId);
 		} catch (FoundNoProductException e) {
 			e.printStackTrace();
-			return ResponseDto.builder().error(e.getMsg()).build();
+			return ResponseDto.builder().msg(e.getMsg()).build();
 		}
 		return ResponseDto.builder().msg(ProductSuccessMsg.REMOVE_PRODUCT).build();
 	}
@@ -77,7 +72,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 			optionSetDao.deleteById(optionSetId);
 		} catch (FoundNoOptionSetException e) {
 			e.printStackTrace();
-			return ResponseDto.builder().error(e.getMsg()).build();
+			return ResponseDto.builder().msg(e.getMsg()).build();
 		}
 		return ResponseDto.builder().msg(ProductSuccessMsg.REMOVE_OPTIONSET).build();
 	}
@@ -90,7 +85,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 			optionDao.deleteById(optionId);
 		} catch (FoundNoOptionsException e) {
 			e.printStackTrace();
-			return ResponseDto.builder().error(e.getMsg()).build();
+			return ResponseDto.builder().msg(e.getMsg()).build();
 		}
 		return ResponseDto.builder().msg(ProductSuccessMsg.REMOVE_OPTION).build();
 	}
@@ -104,7 +99,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 			optionset = optionSetDao.updateStock(dto);
 		} catch (FoundNoOptionSetException e) {
 			e.printStackTrace();
-			return ResponseDto.builder().error(e.getMsg()).build();
+			return ResponseDto.builder().msg(e.getMsg()).build();
 		}
 		List<ProductDto> data = new ArrayList<>();
 		data.add(new ProductDto(optionset));
@@ -119,7 +114,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 			optionset = optionSetDao.updateOrderCount(optionSetId, orderCount);
 		} catch (FoundNoOptionSetException e) {
 			e.printStackTrace();
-			return ResponseDto.builder().error(e.getMsg()).build();
+			return ResponseDto.builder().msg(e.getMsg()).build();
 		}
 		List<ProductDto> data = new ArrayList<>();
 		data.add(new ProductDto(optionset));
@@ -134,7 +129,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 			optionset = optionSetDao.updateViewCount(optionSetId);
 		} catch (FoundNoOptionSetException e) {
 			e.printStackTrace();
-			return ResponseDto.builder().error(e.getMsg()).build();
+			return ResponseDto.builder().msg(e.getMsg()).build();
 		}
 		List<ProductDto> data = new ArrayList<>();
 		data.add(new ProductDto(optionset));
@@ -147,7 +142,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 	public ResponseDto<ProductListOutputDto> displayHitProducts(Long optionSetId,Integer firstResult) {
 		List<Category> findCategory = categoryDao.findByOptionSetId(optionSetId);
 		if(findCategory==null) {
-			return ResponseDto.<ProductListOutputDto>builder().error(ProductExceptionMsg.FOUND_NO_CATEGORY).build();
+			return ResponseDto.<ProductListOutputDto>builder().msg(ProductExceptionMsg.FOUND_NO_CATEGORY).build();
 		}
 		String orderType = OptionSetQueryData.BY_VIEW_COUNT;
 
@@ -164,7 +159,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 	public ResponseDto<ProductListOutputDto> displayHitProductsForMember(Long optionSetId, String username,Integer firstResult) {
 		List<Category> findCategory = categoryDao.findByOptionSetId(optionSetId);
 		if(findCategory==null) {
-			return ResponseDto.<ProductListOutputDto>builder().error(ProductExceptionMsg.FOUND_NO_CATEGORY).build();
+			return ResponseDto.<ProductListOutputDto>builder().msg(ProductExceptionMsg.FOUND_NO_CATEGORY).build();
 		}
 		String orderType = OptionSetQueryData.BY_VIEW_COUNT;
 		List<ProductListOutputDto> searchResult= new ArrayList<>();
@@ -177,7 +172,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 				.stream().filter(t -> t.getOsId()!=optionSetId).collect(Collectors.toList());
 		}catch(FoundNoMemberException e) {
 			e.printStackTrace();
-			return ResponseDto.<ProductListOutputDto>builder().error(e.getMsg()).build();
+			return ResponseDto.<ProductListOutputDto>builder().msg(e.getMsg()).build();
 		}
 		return ResponseDto.<ProductListOutputDto>builder().data(searchResult).msg(ProductSuccessMsg.SEARCH_PRODUCTS).build();
 	}
@@ -197,7 +192,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 		data = optionSetDao.findForMemberByFilter(dto, username,firstResult);
 		}catch(FoundNoMemberException e) {
 			e.printStackTrace();
-			return ResponseDto.<ProductListOutputDto>builder().error(e.getMsg()).build();
+			return ResponseDto.<ProductListOutputDto>builder().msg(e.getMsg()).build();
 		}
 		return ResponseDto.<ProductListOutputDto>builder().data(data).msg(ProductSuccessMsg.SEARCH_PRODUCTS).build();
 	}
@@ -211,16 +206,11 @@ public class OptionSetServiceImpl implements OptionSetService {
 			product = productDao.findByOptionSetId(optionSetId);
 		} catch (FoundNoProductException e) {
 			e.printStackTrace();
-			return ResponseDto.<OtherOptionSetDto>builder().error(e.getMsg()).build();
+			return ResponseDto.<OtherOptionSetDto>builder().msg(e.getMsg()).build();
 		}
 		List<OptionSet> findOptionSets = optionSetDao.findAllByProductId(product.getId());
-		if(findOptionSets.size()==1) {
-			log.warn("no other optionSets found");
-			return ResponseDto.<OtherOptionSetDto>builder().msg(ProductSuccessMsg.FOUND_NO_OTHER_OPTIONSETS).build();
-		}
 		List<OtherOptionSetDto> productDtos = findOptionSets.stream()
 				.map(t -> new OtherOptionSetDto(t)).collect(Collectors.toList());
-		;
 		return ResponseDto.<OtherOptionSetDto>builder().data(productDtos).msg(ProductSuccessMsg.FIND_OTHER_OPTIONSETS).build();
 	}
 
@@ -231,7 +221,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 		List<OptionNamesValues> optionNameValue = optionDao.findOptionNameValueMapByCategoryId(categoryId);
 		if(optionNameValue==null||optionNameValue.isEmpty()) {
 			log.warn("no children categories found");
-			return ResponseDto.builder().error(ProductExceptionMsg.FOUND_NO_OPTIONS).build();
+			return ResponseDto.builder().msg(ProductExceptionMsg.FOUND_NO_OPTIONS).build();
 		}
 		Map<String, Set<String>> dto = optionNameValue.stream().collect(Collectors.groupingBy(
 				OptionNamesValues::getName, Collectors.mapping(OptionNamesValues::getValue, Collectors.toSet())));
@@ -249,14 +239,14 @@ public class OptionSetServiceImpl implements OptionSetService {
 				.collect(Collectors.toList());
 		if(childrenIds.isEmpty()) {
 			log.warn("no children categories found");
-			return ResponseDto.builder().error(ProductExceptionMsg.FOUND_NO_CATEGORY).build();
+			return ResponseDto.builder().msg(ProductExceptionMsg.FOUND_NO_CATEGORY).build();
 		}
 		Map<String, Set<String>> dto = new HashMap<String, Set<String>>();
 		for (int i = 0; i < childrenIds.size(); i++) {
 			List<OptionNamesValues> optionNameValue = optionDao.findOptionNameValueMapByCategoryId(childrenIds.get(i));
 			if(optionNameValue==null||optionNameValue.isEmpty()) {
 				log.warn("no children categories found");
-				return ResponseDto.builder().error(ProductExceptionMsg.FOUND_NO_OPTIONS).build();
+				return ResponseDto.builder().msg(ProductExceptionMsg.FOUND_NO_OPTIONS).build();
 			}
 			Map<String, Set<String>> result = optionNameValue.stream().collect(Collectors.groupingBy(
 					OptionNamesValues::getName, Collectors.mapping(OptionNamesValues::getValue, Collectors.toSet())));
@@ -279,11 +269,11 @@ public class OptionSetServiceImpl implements OptionSetService {
 			created = optionDao.update(dto);
 		} catch (FoundNoOptionsException e) {
 			e.printStackTrace();
-			return ResponseDto.builder().error(e.getMsg()).build();
+			return ResponseDto.builder().msg(e.getMsg()).build();
 		}
 		List<Options> data = new ArrayList<>();
 		data.add(created);
-		return ResponseDto.<Options>builder().data(data).build();
+		return ResponseDto.<Options>builder().data(data).msg(ProductSuccessMsg.UPDATE_OPTION).build();
 	}
 
 	// 토탈프라이스도 계산
