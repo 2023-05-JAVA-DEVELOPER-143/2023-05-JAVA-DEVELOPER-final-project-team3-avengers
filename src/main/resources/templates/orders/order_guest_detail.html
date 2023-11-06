@@ -86,7 +86,7 @@ button.btn:hover {
 										class="text-medium">$760.50</span></td>
 									<td>
 										<button class="refund-button"
-											th:onclick="requestRefund([[${ordersDto.getId()}]])">환불</button>
+											th:onclick="requestRefund([[${ordersDto.getId()}]], [[${ordersDto.getStateMsg()}]])">환불</button>
 										<button class="cancel-button"
 											th:onclick="cancelOrder([[${ordersDto.getId()}]])">취소</button>
 									</td>
@@ -125,14 +125,18 @@ button.btn:hover {
 
 	<th:block layout:fragment="script">
 		<script th:inline="javascript">
-			function requestRefund(orderId) {
-				console.log('orderId=  ' + orderId);
-				let form = document.createElement('form');
-				form.method = 'GET';
-				form.action = '/refund_main_form/' + orderId;
-				document.body.appendChild(form);
-				form.submit();
-			}
+		function requestRefund(orderId,orderStatus) {
+			console.log('orderId=  ' + orderId);
+			if (orderStatus === '배송완료') {
+		        let form = document.createElement('form');
+		        form.method = 'GET';
+		        form.action = '/refund_main_form/' + orderId;
+		        document.body.appendChild(form);
+		        form.submit();
+		    } else {
+		        alert('주문상태가 배송완료 상태일때만 환불가능합니다.');
+		    }
+		}
 		</script>
 
 		<script th:inline="javascript">
