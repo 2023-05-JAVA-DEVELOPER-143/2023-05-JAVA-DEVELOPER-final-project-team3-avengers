@@ -134,82 +134,33 @@
 					return;
 					
 				}
-				
-				
-				$.ajax({
-    				url:'/order_guest_detail',
-    				method:'GET',
-    				data:JSON.stringify(data),
-    				dataType: "json",
-    				contentType: 'application/json;chrset=UTF-8',
-    				success:function(resultJson){
-						console.log('post 요청')
-    					$('#loginUserId').tooltip('dispose');
-    					$('#loginPassword').tooltip('dispose');
-    					/*
-    		    		 * 0 아이디존재안함
-    		    		 * 1 패쓰워드불일치
-    		    		 * 2 패쓰워드일치(로그인성공)
-    		    		 */
-    		    		 if(resultJson.result==0){
-    		    			 $('#loginUserId').css('border','0.5px solid orange');
-    		    			 $('#loginUserId').tooltip({'trigger':'hover', 'title': resultJson.member.userName+' 는 존재하지않는 아이디입니다.'});
-    		    			 $('#loginUserId').tooltip('show');
-    		    		 }else if(resultJson.result==1){
-    		    			 $('#loginPassword').css('border','0.5px solid orange');
-    		    			 $('#loginPassword').tooltip({'trigger':'hover', 'title': '비밀번호가 일치하지않습니다.'});
-    		    			 $('#loginPassword').tooltip('show');
-    		    		 }else if(resultJson.result==2){
-    		    			 $('#form-account-login input').css('border','');
-    	    				 $('#loginUserId').tooltip('dispose');
-    	    				 $('#loginPassword').tooltip('dispose');
-    		    			 location.href='/index';
-    		    		 }
-    				},
-    				error:function(){
-    					location.href="/404";
-    				}
-    			});
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				var form = document.createElement('form');
 
-				var orderNoInput = document.createElement('input');
-				orderNoInput.type = 'hidden';
-				orderNoInput.name = 'orderNo';
-				orderNoInput.value = $('#orderNo').val();
-				console.log('@@@@@@@@orderNoInput' + orderNoInput.value);
+				    var form = document.createElement('form');
+				    form.method = 'GET';
+				    form.action = '/order_guest_detail';
 
-				form.appendChild(orderNoInput);
+				    var orderNoInput = document.createElement('input');
+				    orderNoInput.type = 'hidden';
+				    orderNoInput.name = 'orderNo';
+				    orderNoInput.value = $('#orderNo').val();
 
-				var phoneNumberInput = document.createElement('input');
-				phoneNumberInput.type = 'hidden';
-				phoneNumberInput.name = 'phoneNumber';
-				phoneNumberInput.value = $('#phoneNumber').val();
-				console
-						.log('@@@@@@@@phoneNumberInput'
-								+ phoneNumberInput.value);
-				form.appendChild(phoneNumberInput);
+				    var phoneNumberInput = document.createElement('input');
+				    phoneNumberInput.type = 'hidden';
+				    phoneNumberInput.name = 'phoneNumber';
+				    phoneNumberInput.value = $('#phoneNumber').val();
 
-				var nameInput = document.createElement('input');
-				nameInput.type = 'hidden';
-				nameInput.name = 'name';
-				nameInput.value = $('#name').val();
-				console.log('@@@@@@@@nameInput' + nameInput.value);
-				form.appendChild(nameInput);
-				document.body.appendChild(form);
+				    var nameInput = document.createElement('input');
+				    nameInput.type = 'hidden';
+				    nameInput.name = 'name';
+				    nameInput.value = $('#name').val();
 
-				form.submit();
+				    form.appendChild(orderNoInput);
+				    form.appendChild(phoneNumberInput);
+				    form.appendChild(nameInput);
+
+				    document.body.appendChild(form);
+				    form.submit();
+				
 
 			}
 		</script>

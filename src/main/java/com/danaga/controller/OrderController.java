@@ -343,7 +343,7 @@ public class OrderController {
 	 */
 
 	@GetMapping("/find_order_guest")
-	public String guestOrderList(Model model) {
+	public String findOrderGuest(Model model) {
 		OrdersGuestDetailDto ordersGuestDetailDto = new OrdersGuestDetailDto();
 		model.addAttribute("ordersGuestDetailDto", ordersGuestDetailDto);
 		return "orders/find_order_guest";
