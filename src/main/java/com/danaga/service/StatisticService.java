@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.danaga.dto.AdminOrderDataDto;
+import com.danaga.dto.AdminProductInsertDto;
 import com.danaga.entity.Statistic;
 
 @Transactional
@@ -43,6 +44,10 @@ public interface StatisticService {
 	/****************** Others ***************/
 	//주문 상태 변경
 	void updateOrderStatement(Long id, String stmt);
+	
+	/****************** InsertProduct ***************/
+	//신규 제품 추가
+	void createProduct(AdminProductInsertDto dto);
 	
 
 

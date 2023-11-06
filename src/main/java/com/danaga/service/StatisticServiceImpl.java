@@ -9,11 +9,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.danaga.config.OrderStateMsg;
+import com.danaga.dao.product.OptionSetDao;
+import com.danaga.dto.AdminOptionDto;
 import com.danaga.dto.AdminOrderDataDto;
+import com.danaga.dto.AdminProductDto;
+import com.danaga.dto.AdminProductInsertDto;
+import com.danaga.dto.product.CategoryDto;
+import com.danaga.dto.product.OptionSetCreateDto;
+import com.danaga.entity.Category;
+import com.danaga.entity.CategorySet;
+import com.danaga.entity.OptionSet;
+import com.danaga.entity.Options;
 import com.danaga.entity.Orders;
+import com.danaga.entity.Product;
 import com.danaga.entity.Statistic;
+import com.danaga.repository.CategorySetRepository;
 import com.danaga.repository.OrderRepository;
 import com.danaga.repository.StatisticRepository;
+import com.danaga.repository.product.CategoryRepository;
+import com.danaga.repository.product.OptionSetRepository;
+import com.danaga.repository.product.OptionsRepository;
+import com.danaga.repository.product.ProductRepository;
 
 @Service
 public class StatisticServiceImpl implements StatisticService {
@@ -21,6 +37,16 @@ public class StatisticServiceImpl implements StatisticService {
 	private StatisticRepository statisticRepository;
 	@Autowired
 	private OrderRepository orderRepository;
+	@Autowired
+	private CategoryRepository categoryRepository;
+	@Autowired
+	private ProductRepository productRepository;
+	@Autowired
+	private OptionSetDao optionSetDao;
+	@Autowired
+	private CategorySetRepository categorySetRepository;
+	@Autowired
+	private OptionsRepository optionsRepository;
 
 	// 오늘날짜 단순 반환
 	@Override
@@ -67,7 +93,8 @@ public class StatisticServiceImpl implements StatisticService {
 				.countToSalesThisMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMM")));
 		Long failSales = statisticRepository
 				.countFailSalesThisMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMM")));
-		AdminOrderDataDto dto = AdminOrderDataDto.builder().totSales(totSales).toSales(toSales).failSales(failSales).build();
+		AdminOrderDataDto dto = AdminOrderDataDto.builder().totSales(totSales).toSales(toSales).failSales(failSales)
+				.build();
 		return dto;
 	}
 
@@ -141,4 +168,42 @@ public class StatisticServiceImpl implements StatisticService {
 		return;
 	}
 
+	// 신규 카테고리 추가
+	@Override
+	public void createProduct(AdminProductInsertDto dto) {
+		List<CategoryDto> categoryDto = dto.getCategoryDto();
+		AdminProductDto adminProductDto = dto.getAdminProductDto();
+		List<AdminOptionDto> adminOptionDto = dto.getAdminOptionDto();
+		//가격계산
+		Integer totPrice = 0;
+		for (AdminOptionDto option : adminOptionDto) {
+			totPrice += option.getExtraPrice();
+		}
+		//Product 추가
+		Product product = productRepository.save(adminProductDto.toEntity());
+		//Category & CategorySet 추가
+		for (CategoryDto category : categoryDto) {
+			Category createdCategory = categoryRepository.save(category.toEntity());
+			categorySetRepository.save(CategorySet.builder().category(createdCategory).product(product).build());
+		}
+		//OptionSet 추가
+		OptionSet optionSet = optionSetDao.create(OptionSetCreateDto.builder()
+				.stock(adminProductDto.getStock())
+				.productId(product.getId())
+				.productPrice(adminProductDto.getPrice()+totPrice)
+				.build());
+		//Option 추가
+		for (AdminOptionDto option : adminOptionDto) {
+			optionsRepository.save(Options.builder()
+					.name(option.getName())
+					.value(option.getValue())
+					.extraPrice(option.getExtraPrice())
+					.optionSet(optionSet)
+					.build());
+		}
+
+
+	}
+	
+	
 }

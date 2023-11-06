@@ -1,12 +1,6 @@
 package com.danaga.controller;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,25 +13,17 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.danaga.dto.AdminOrderUpdate;
-import com.danaga.dto.product.ProductDto;
-import com.danaga.entity.Member;
-import com.danaga.entity.OptionSet;
+import com.danaga.dto.AdminProductInsertDto;
 import com.danaga.entity.Options;
 import com.danaga.entity.Statistic;
 import com.danaga.repository.BoardRepository;
 import com.danaga.repository.MemberRepository;
 import com.danaga.repository.product.OptionSetRepository;
-import com.danaga.service.BoardService;
-import com.danaga.service.BoardServiceImpl;
 import com.danaga.service.MemberService;
-import com.danaga.service.OrderService;
 import com.danaga.service.StatisticService;
 import com.danaga.service.product.OptionSetService;
-
-import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("/admin_data")
@@ -74,12 +60,12 @@ public class StatisticRestController {
 	}
 
 	@PostMapping("/product")
-	public ResponseEntity<?> createProduct() {
+	public ResponseEntity<?> createProduct(@RequestBody AdminProductInsertDto adminProductInsertDto) {
 		try {
-			optionSetService.uploadProduct(null);
+			statisticService.createProduct(adminProductInsertDto);
 			return new ResponseEntity<>("Product created successfully", HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<>("Error deleting member", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>("Error creating product", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
