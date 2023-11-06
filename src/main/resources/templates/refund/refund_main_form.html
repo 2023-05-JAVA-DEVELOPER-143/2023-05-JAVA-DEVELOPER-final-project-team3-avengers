@@ -4,7 +4,10 @@
 <!-- Body-->
 <!-- Header -->
 
-<head th:insert="include_common :: head"></head>
+<head th:insert="include_common :: head">
+
+
+</head>
 
 <!-- Off-Canvas Wrapper-->
 <div class="offcanvas-wrapper">
@@ -55,7 +58,7 @@
 							<div class="col-md-6">
 								<form class="form-group" th:object="${refundDto}">
 									<label for="account-fn" style = "pointer-events: none;">은행이름</label>
-									<input class="form-control" type="text" name="bankName" id="bankName" value="은행이름"
+									<input class="form-control" type="text" name="bankName" id="bankName" value=""
 										required th:field="*{bankName}">
 								</form>
 
@@ -124,6 +127,37 @@
 	<script type="text/javascript">
    function insertRefund(orderId) {
     console.log("@@@@@@@@@@orderId= " + orderId);
+    
+    var bankName = $('#bankName').val();
+    var accountName = $('#accountName').val();
+    var acNo = $('#acNo').val();
+    var description = $('#description').val();
+
+    if (bankName.trim() === '') {
+        document.getElementById('bankName').value = ' 은행이름을 입력하세요.';
+        return;
+    }
+    
+    if (accountName.trim() === '') {
+        document.getElementById('accountName').value = ' 계좌주을 입력하세요.';
+        return;
+    }
+    
+    if (acNo.trim() === '') {
+        document.getElementById('acNo').value = ' 환불 계좌번호를 입력하세요.';
+        return;
+    }
+    
+    if (!validateRefundAccount()) {
+        return;
+    }
+
+
+    if (description.trim() === '') {
+        document.getElementById('description').value = ' 환불사유를 입력하세요.';
+        return;
+    }
+    
 
     var form = document.createElement('form');
     form.method = 'POST';
@@ -153,9 +187,24 @@
     descriptionInput.value = $('#description').val();
     form.appendChild(descriptionInput);
 
+    
     document.body.appendChild(form);
+    
+
+    
     form.submit();
 }
+   
+   function validateRefundAccount() {
+	    var acNo = $('#acNo').val();
+
+	    if (!/^[0-9]+$/.test(acNo)) {
+	        document.getElementById('acNo').value = ' 숫자만 입력하세요.';
+	        return false;
+	    }
+
+	    return true;
+	}
 
 	</script>
 </th:block>
