@@ -20,7 +20,7 @@ public class MailController {
 //        return "Mail";
 //    }
     @ResponseBody
-    @PostMapping("/emailAuthentication")
+    @PostMapping("/emailauthentication")
     public String joinMailSend(String mail){
 
        int number = mailService.joinSendMail(mail);
@@ -30,22 +30,17 @@ public class MailController {
        return num;
     }
     @ResponseBody
-    @PostMapping("/findEmailAuthentication")
+    @PostMapping("/findpassemailauthentication")
     public String findPassMailSend(String mail) throws Exception{
     	
     	String randomPass = null;
-		try {
-			randomPass = mailService.findPassSendMail(mail);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		randomPass = mailService.findPassSendMail(mail);
     	System.out.println("##################"+randomPass);
     	
     	return randomPass;
     }
     @ResponseBody
-    @PostMapping("/findidEmailAuthentication")
+    @PostMapping("/findidemailauthentication")
     public String findidMailSend(String mail) throws Exception{
     	
     	String id = null;

@@ -160,6 +160,7 @@ let member_join_action_rest=function(data){
 					    $('#reg-username').tooltip('dispose');
 					    }, 2000);
 					} else if(resultJson.result==2) {
+						$('#reg-username').css('border','0.5px solid green');
 						$('#reg-email').css('border','0.5px solid orange');
 						$('#reg-email').tooltip({'trigger':'hover', 'title': resultJson.msg});
 			    		$('#reg-email').tooltip('show');
@@ -167,6 +168,8 @@ let member_join_action_rest=function(data){
 					    $('#reg-email').tooltip('dispose');
 					    }, 2000);
 					} else if(resultJson.result==3) {
+						$('#reg-username').css('border','0.5px solid green');
+						$('#reg-email').css('border','0.5px solid green');
 						$('#reg-phone').css('border','0.5px solid orange');
 						$('#reg-phone').tooltip({'trigger':'hover', 'title': resultJson.msg});
 			    		$('#reg-phone').tooltip('show');
@@ -174,6 +177,9 @@ let member_join_action_rest=function(data){
 					    $('#reg-phone').tooltip('dispose');
 					    }, 2000);
 					} else if(resultJson.result==4) {
+						$('#reg-username').css('border','0.5px solid green');
+						$('#reg-email').css('border','0.5px solid green');
+						$('#reg-phone').css('border','0.5px solid green');
 						$('#reg-nickname').css('border','0.5px solid orange');
 						$('#reg-nickname').tooltip({'trigger':'hover', 'title': resultJson.msg});
 			    		$('#reg-nickname').tooltip('show');
@@ -186,7 +192,7 @@ let member_join_action_rest=function(data){
 		   			}
 				},
 				error:function(){
-					location.href="/404";
+					alert("회원가입 실패 다시 시도해 주십시요.");
 				}
 			});
 		} else {
@@ -394,7 +400,7 @@ function sendNumber(){
 		$('#reg-email').tooltip('hide');
 		$('#reg-email').tooltip('dispose');
 		$.ajax({
-        url:"/emailAuthentication",
+        url:"/emailauthentication",
         type:"post",
         dataType:"json",
         data:{"mail" : $("#reg-email").val()},
