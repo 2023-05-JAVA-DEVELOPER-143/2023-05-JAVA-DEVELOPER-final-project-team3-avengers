@@ -6,6 +6,9 @@ import java.util.List;
 import com.danaga.entity.OptionSet;
 import com.danaga.entity.Options;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,12 +19,56 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OptionDto {
-	private String name;
-	private String value;
 	
-	public OptionDto(Options t) {
-		this.name=t.getName();
-		this.value=t.getValue();
+	private Long id;
+	@NotBlank
+	private String name;
+	@NotBlank
+	private String value;
+	@Min(0)
+	private Integer extraPrice;
+	@NotNull
+	private Long optionSetId;
+
+	public Options toEntity() {
+		return Options.builder()
+				.extraPrice(extraPrice)
+				.id(id)
+				.name(name)
+				.optionSet(OptionSet.builder().id(optionSetId).build())
+				.value(value)
+				.build();
+	}
+	public OptionSaveDto toSaveDto() {
+		return OptionSaveDto.builder()
+				.extraPrice(extraPrice)
+				.name(name)
+				.optionSetId(optionSetId)
+				.value(value)
+				.build();
+	}
+	public OptionDto(Options entity) {
+		this.id=entity.getId();
+		this.name=entity.getName();
+		this.value=entity.getValue();
+		this.extraPrice=entity.getExtraPrice();
+		this.optionSetId=entity.getOptionSet().getId();
+	}
+	
+	@Data
+	@Builder
+	@AllArgsConstructor
+	@NoArgsConstructor
+	public static class OptionBasicDto {
+		@NotBlank
+		private String name;
+		@NotBlank
+		private String value;
+		
+		public OptionBasicDto(Options t) {
+			this.name=t.getName();
+			this.value=t.getValue();
+		}
 	}
 	
 	@Data
@@ -42,44 +89,27 @@ public class OptionDto {
 		private List<String> optionValue=new ArrayList<String>();
 	}
 	
+	@Builder
 	@Data
 	@AllArgsConstructor
 	@NoArgsConstructor
-	public class OptionSaveDto extends OptionDto{
+	public static class OptionSaveDto {
+		@NotNull
+		@NotBlank
+		private String name;
+		@NotNull
+		@NotBlank
+		private String value;
 		private Integer extraPrice;
+		@NotNull
 		private Long optionSetId;
 		
 		public Options toEntity() {
 			return Options.builder()
-					.name(super.name)
-					.value(super.value)
+					.name(name)
+					.value(value)
 					.optionSet(OptionSet.builder().id(optionSetId).build())
 					.extraPrice(extraPrice)
-					.build();
-		}
-	}
-	@Data
-	@AllArgsConstructor
-	@NoArgsConstructor
-	public class OptionUpdateDto extends OptionSaveDto{
-		private Long id;
-		
-		public Options toEntity() {
-			return Options.builder()
-					.id(id)
-					.name(name)
-					.value(value)
-					.extraPrice(super.extraPrice)
-					.optionSet(OptionSet.builder().id(super.optionSetId).build())
-					.build();
-		}
-		public OptionUpdateDto(Options entity){
-			this.id=entity.getId();
-		}
-		public OptionSaveDto toSaveDto() {
-			return (OptionSaveDto) OptionSaveDto.builder()
-					.name(name)
-					.value(value)
 					.build();
 		}
 	}

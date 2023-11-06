@@ -14,6 +14,7 @@ import com.danaga.exception.product.FoundNoObjectException.FoundNoCategoryExcept
 import com.danaga.exception.product.ProductSuccessMsg;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -37,7 +38,7 @@ public class CategoryServiceImpl implements CategoryService{
 
 	//카테고리 생성
 	@Override
-	public ResponseDto<?> create(CategoryDto.CategorySaveDto dto) {
+	public ResponseDto<?> create(@Valid CategoryDto.CategorySaveDto dto) {
 		List<CategoryDto> data = new ArrayList<>();
 		data.add(categoryDao.create(dto));
 		return ResponseDto.<CategoryDto>builder().data(data).msg(ProductSuccessMsg.ADD_CATEGORY).build();
@@ -45,7 +46,7 @@ public class CategoryServiceImpl implements CategoryService{
 	//카테고리 수정
 	@Override
 	@Transactional
-	public ResponseDto<?> update(CategoryDto dto) {
+	public ResponseDto<?> update(@Valid CategoryDto dto) {
 		List<CategoryDto> data = new ArrayList<>();
 		try {
 			CategoryDto updateDto = categoryDao.update(dto);

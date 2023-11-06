@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UploadProductDto {
 	private ProductSaveDto product;
-	private List<OptionUpdateDto> options;
+	private List<OptionDto> options;
 	private OptionSetCreateDto optionSet;
 }

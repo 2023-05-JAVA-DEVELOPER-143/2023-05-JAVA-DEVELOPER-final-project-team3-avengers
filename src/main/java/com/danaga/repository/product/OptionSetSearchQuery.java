@@ -3,7 +3,7 @@ package com.danaga.repository.product;
 import java.util.List;
 
 import com.danaga.dto.product.CategoryDto;
-import com.danaga.dto.product.OptionNameValueMapDto;
+import com.danaga.dto.product.OptionDto;
 import com.danaga.dto.product.QueryStringDataDto;
 
 public class OptionSetSearchQuery {
@@ -31,7 +31,7 @@ public class OptionSetSearchQuery {
 			this.searchQuery = "SELECT os " + "FROM OptionSet os " + " join fetch os.product p" + " WHERE os.stock >0 ";
 		}
 		if (searchDto.getOptionset() != null) {
-			List<OptionNameValueMapDto> optionset = searchDto.getOptionset();
+			List<OptionDto.OptionNameValueMapDto> optionset = searchDto.getOptionset();
 
 			for (int i = 0; i < optionset.size(); i++) {
 				String key = optionset.get(i).getOptionName();

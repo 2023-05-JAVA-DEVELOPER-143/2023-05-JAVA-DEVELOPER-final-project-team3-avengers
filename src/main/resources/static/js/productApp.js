@@ -185,7 +185,7 @@ function navigate() {
 		$('#page_list_content').html(html);
 	}
 }
-const $result = document.querySelector("#toObserve");
+const $result = $("#toObserve");
 const $end = document.createElement("div");
 $end.id='product-list-observed';
 $result.append($end);

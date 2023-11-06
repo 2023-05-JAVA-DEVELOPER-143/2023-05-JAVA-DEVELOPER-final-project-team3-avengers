@@ -1,8 +1,8 @@
 package com.danaga.service.product;
 
 import com.danaga.dto.ResponseDto;
+import com.danaga.dto.product.OptionDto;
 import com.danaga.dto.product.OptionSetUpdateDto;
-import com.danaga.dto.product.OptionUpdateDto;
 import com.danaga.dto.product.OtherOptionSetDto;
 import com.danaga.dto.product.ProductDto;
 import com.danaga.dto.product.ProductListOutputDto;
@@ -22,7 +22,7 @@ public interface OptionSetService {
 		ResponseDto<?> updateViewCount(Long optionSetId);
 		ResponseDto<?> update(ProductUpdateDto dto);
 		ResponseDto<?> updateRating(ProductSaveDto dto);
-		ResponseDto<?> update(OptionUpdateDto dto);
+		ResponseDto<?> update(OptionDto dto);
 
 		ResponseDto<?> uploadProduct(UploadProductDto dto);
 		

@@ -2,6 +2,8 @@ package com.danaga.dto.product;
 
 import com.danaga.entity.Category;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +15,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CategoryDto {
 	
+	@NotNull
 	private Long id;
+	@NotBlank
 	private String name;
 	private Long parentId;
 	
@@ -37,6 +41,7 @@ public class CategoryDto {
 	@Data
 	@Builder
 	public static class CategorySaveDto {
+		@NotBlank
 		private String name;
 		private Long parentId;
 		

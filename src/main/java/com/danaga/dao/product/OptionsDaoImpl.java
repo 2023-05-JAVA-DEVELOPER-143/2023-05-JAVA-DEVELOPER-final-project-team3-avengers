@@ -4,8 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.danaga.dto.product.OptionSaveDto;
-import com.danaga.dto.product.OptionUpdateDto;
+import com.danaga.dto.product.OptionDto;
 import com.danaga.entity.Options;
 import com.danaga.exception.product.FoundNoObjectException.FoundNoOptionsException;
 import com.danaga.repository.product.OptionNamesValues;
@@ -33,7 +32,7 @@ public class OptionsDaoImpl implements OptionsDao{
 	}
 	
 	@Override
-	public Options save(OptionSaveDto dto) {
+	public Options save(OptionDto.OptionSaveDto dto) {
 		return optionsRepository.save(dto.toEntity());
 	}
 
@@ -52,7 +51,7 @@ public class OptionsDaoImpl implements OptionsDao{
 		optionsRepository.deleteById(id);
 	}
 	@Override
-	public Options update(OptionUpdateDto dto) throws FoundNoOptionsException {
+	public Options update(OptionDto dto) throws FoundNoOptionsException {
 		Options origin = optionsRepository.findById(dto.getId()).orElseThrow(FoundNoOptionsException::new);
 		origin.setExtraPrice(dto.getExtraPrice());
 		origin.setName(dto.getName());

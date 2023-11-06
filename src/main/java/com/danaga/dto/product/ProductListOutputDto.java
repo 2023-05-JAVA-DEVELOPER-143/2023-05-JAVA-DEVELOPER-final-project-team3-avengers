@@ -29,7 +29,7 @@ public class ProductListOutputDto {
 	private Integer totalPrice;
 	private Long osId;
 	@Builder.Default
-	private List<OptionBasicDto> optionSet = new ArrayList<>();
+	private List<OptionDto.OptionBasicDto> optionSet = new ArrayList<>();
 	private Boolean isInterested;
 	
 	
@@ -41,7 +41,7 @@ public class ProductListOutputDto {
 		this.pImage=entity.getProduct().getImg();
 		this.totalPrice=entity.getTotalPrice();
 		this.osId=entity.getId();
-		this.optionSet = entity.getOptions().stream().map(t -> new OptionBasicDto(t)).collect(Collectors.toList());
+		this.optionSet = entity.getOptions().stream().map(t -> new OptionDto.OptionBasicDto(t)).collect(Collectors.toList());
 		this.isInterested=false;
 	}
 	public ProductListOutputDto(OptionSet entity, String username) {
@@ -52,7 +52,7 @@ public class ProductListOutputDto {
 		this.pImage=entity.getProduct().getImg();
 		this.totalPrice=entity.getTotalPrice();
 		this.osId=entity.getId();
-		this.optionSet = entity.getOptions().stream().map(t -> new OptionBasicDto(t)).collect(Collectors.toList());
+		this.optionSet = entity.getOptions().stream().map(t -> new OptionDto.OptionBasicDto(t)).collect(Collectors.toList());
 		this.isInterested=entity.getInterests().stream().anyMatch(t -> t.getMember().getUserName().equals(username));
 	}
 }

@@ -19,6 +19,7 @@ import com.danaga.exception.product.FoundNoObjectException.FoundNoOptionSetExcep
 import com.danaga.exception.product.ProductSuccessMsg;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 
@@ -29,7 +30,7 @@ public class RecentViewServiceImpl implements RecentViewService{
 	private final OptionSetDao optionSetDao;
 	
 	//product detail 조회시 recentView 추가 
-	public ResponseDto<?> addRecentView(RecentViewDto dto){
+	public ResponseDto<?> addRecentView(@Valid RecentViewDto dto){
 		try {
 			recentViewDao.save(dto.toEntity(dto));
 		} catch (FoundNoMemberException e) {
@@ -59,7 +60,7 @@ public class RecentViewServiceImpl implements RecentViewService{
 	
 	//최근본상품 하나 삭제 
 	@Transactional
-	public ResponseDto<?> removeRecentView(RecentViewDto dto){
+	public ResponseDto<?> removeRecentView(@Valid RecentViewDto dto){
 		try {
 			recentViewDao.delete(dto.toEntity(dto));
 		} catch (FoundNoObjectException e) {

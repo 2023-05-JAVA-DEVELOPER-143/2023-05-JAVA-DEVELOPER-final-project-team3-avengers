@@ -20,6 +20,7 @@ import com.danaga.exception.product.ProductExceptionMsg;
 import com.danaga.exception.product.ProductSuccessMsg;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
@@ -60,7 +61,7 @@ public class InterestServiceImpl implements InterestService {
 	//제품에서 하트 누르면 관심제품 추가
 	@Override
 	@Transactional
-	public ResponseDto<?> clickHeart(InterestDto dto) {
+	public ResponseDto<?> clickHeart(@Valid InterestDto dto) {
 			try {
 				interestDao.save(dto);
 			} catch (FoundNoMemberException e) {
@@ -78,7 +79,7 @@ public class InterestServiceImpl implements InterestService {
 	//제품에서 하트 누르면 관심제품 삭제
 	@Override
 	@Transactional
-	public ResponseDto<?> deleteHeart(InterestDto dto) {
+	public ResponseDto<?> deleteHeart(@Valid InterestDto dto) {
 			try {
 				if(interestDao.isInterested(dto)) {
 					interestDao.delete(dto);

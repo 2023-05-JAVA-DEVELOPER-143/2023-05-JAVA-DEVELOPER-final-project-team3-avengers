@@ -15,8 +15,8 @@ import com.danaga.dao.product.OptionsDao;
 import com.danaga.dao.product.ProductDao;
 import com.danaga.dto.ResponseDto;
 import com.danaga.dto.product.CategoryDto;
+import com.danaga.dto.product.OptionDto;
 import com.danaga.dto.product.OptionSetUpdateDto;
-import com.danaga.dto.product.OptionUpdateDto;
 import com.danaga.dto.product.OtherOptionSetDto;
 import com.danaga.dto.product.ProductDto;
 import com.danaga.dto.product.ProductListOutputDto;
@@ -38,6 +38,7 @@ import com.danaga.repository.product.OptionNamesValues;
 import com.danaga.repository.product.OptionSetQueryData;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -93,7 +94,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 	// 오더하면 옵션셋 재고 -1, 환불하거나 취소하면 +1
 	// +1, -1은 컨트롤러에서 get+1로 하고 여기서는 그냥 지정한 숫자로 변경
 	@Override
-	public ResponseDto<?> updateStock(OptionSetUpdateDto dto) {
+	public ResponseDto<?> updateStock(@Valid OptionSetUpdateDto dto) {
 		OptionSet optionset;
 		try {
 			optionset = optionSetDao.updateStock(dto);
@@ -180,13 +181,13 @@ public class OptionSetServiceImpl implements OptionSetService {
 	// 카테고리에 해당하는 리스트 전체 조회
 	// 조건에 해당하는 리스트 전체 조회
 	@Override
-	public ResponseDto<ProductListOutputDto> searchProducts(QueryStringDataDto dto,Integer firstResult) {
+	public ResponseDto<ProductListOutputDto> searchProducts(@Valid QueryStringDataDto dto,Integer firstResult) {
 		List<ProductListOutputDto> data = optionSetDao.findByFilter(dto,firstResult);
 		return ResponseDto.<ProductListOutputDto>builder().data(data).msg(ProductSuccessMsg.SEARCH_PRODUCTS).build();
 	}
 
 	@Override
-	public ResponseDto<ProductListOutputDto> searchProductsForMember(QueryStringDataDto dto, String username,Integer firstResult) {
+	public ResponseDto<ProductListOutputDto> searchProductsForMember(@Valid QueryStringDataDto dto, String username,Integer firstResult) {
 		List<ProductListOutputDto> data = new ArrayList<>();
 		try {
 		data = optionSetDao.findForMemberByFilter(dto, username,firstResult);
@@ -263,7 +264,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 	// option update
 	@Override
 	@Transactional
-	public ResponseDto<?> update(OptionUpdateDto dto) {
+	public ResponseDto<?> update(@Valid OptionDto dto) {
 		Options created;
 		try {
 			created = optionDao.update(dto);
@@ -280,12 +281,12 @@ public class OptionSetServiceImpl implements OptionSetService {
 	// 프로덕트, 옵션, 옵션셋, 추가
 	@Override
 	@Transactional
-	public ResponseDto<?> uploadProduct(UploadProductDto dto) {
+	public ResponseDto<?> uploadProduct(@Valid UploadProductDto dto) {
 		Product createdProduct = productDao.create(dto.getProduct());
 		OptionSet createdOptionSet = optionSetDao.create(dto.getOptionSet());
 		createdOptionSet.setProduct(createdProduct);
 		int productPrice = createdProduct.getPrice();
-		for (OptionUpdateDto option : dto.getOptions()) {
+		for (OptionDto option : dto.getOptions()) {
 			Options createdOption = optionDao.save(option.toSaveDto());
 			productPrice += option.getExtraPrice();
 			createdOption.setOptionSet(createdOptionSet);
@@ -308,7 +309,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 	/////////////////////////////////////////////////////////
 	// 카테고리도 바꿀수 있게
 	@Override
-	public ResponseDto<?> update(ProductUpdateDto dto) {
+	public ResponseDto<?> update(@Valid ProductUpdateDto dto) {
 //		Product origin = productDao.findById(dto.getId());
 //		dto.getName().ifPresent(t->origin.setName(t));
 //		dto.getBrand().ifPresent(t->origin.setBrand(t));
@@ -328,7 +329,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 	// 프로덕트 별점 업뎃
 	// 리뷰가 등록될때마다 갱신
 	@Override
-	public ResponseDto<?> updateRating(ProductSaveDto dto) {
+	public ResponseDto<?> updateRating(@Valid ProductSaveDto dto) {
 		// 기존 프로덕트의 리뷰들을
 		return null;
 	}
