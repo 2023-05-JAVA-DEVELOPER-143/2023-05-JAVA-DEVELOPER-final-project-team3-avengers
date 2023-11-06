@@ -1,33 +1,31 @@
 package com.danaga.dao.product;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.danaga.dto.product.ProductSaveDto;
 import com.danaga.entity.Product;
+import com.danaga.exception.product.FoundNoObjectException.FoundNoProductException;
 import com.danaga.repository.product.ProductRepository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class ProductDaoImpl implements ProductDao{
 	private final ProductRepository repository;
 
 	@Override
-	public Product findById(Long id) {
-		return repository.findById(id).get();
+	public Product findById(Long id) throws FoundNoProductException {
+		return repository.findById(id).orElseThrow(() -> new FoundNoProductException());
 	}
 
 	@Override
-	public Product findByOptionSetId(Long optionSetId) {
-		
-		return repository.findByOptionSets_Id(optionSetId);
+	public Product findByOptionSetId(Long optionSetId) throws FoundNoProductException {
+		Product find=repository.findByOptionSets_Id(optionSetId);
+		if(find==null) {
+			throw new FoundNoProductException();
+		}
+		return find;
 	}
 
 	@Override
@@ -36,8 +34,9 @@ public class ProductDaoImpl implements ProductDao{
 	}
 
 	@Override
-	public void deleteById(Long id) {
-		repository.deleteById(id);
+	public void deleteById(Long id) throws FoundNoProductException {
+		Product find = repository.findById(id).orElseThrow(() -> new FoundNoProductException());
+		repository.deleteById(find.getId());
 	}
 
 //	private void validate(final Product entity) {// entity의 조작(재할당)을 막기 위해 final

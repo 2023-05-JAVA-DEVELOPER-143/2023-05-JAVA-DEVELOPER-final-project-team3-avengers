@@ -3,10 +3,8 @@ package com.danaga.repository.product;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.danaga.dto.product.ProductDto;
 import com.danaga.dto.product.ProductListOutputDto;
 import com.danaga.dto.product.QueryStringDataDto;
 import com.danaga.entity.OptionSet;

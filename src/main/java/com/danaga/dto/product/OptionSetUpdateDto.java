@@ -6,6 +6,8 @@ import java.util.List;
 import com.danaga.entity.OptionSet;
 import com.danaga.entity.Options;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +18,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class OptionSetUpdateDto {
+	@NotNull
 	private Long id;
+	@Min(0)
 	private Integer stock;
 	@Builder.Default
 	private List<OptionDto> options=new ArrayList<>();

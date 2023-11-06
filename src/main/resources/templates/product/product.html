@@ -76,11 +76,8 @@
 										th:text="${productDto.name}">{{name}}</a>
 								</h3>
 								<h4 class="product-price" th:text="${productDto.totalPrice}+'원'">{{totalPrice}}원</h4>
-								<div th:each="option : ${productDto.optionSet}">
 									<div class="product-price"
-										th:text="${option.name + ':' + option.value}">{{name}},
-										{{value}}</div>
-								</div>
+										th:text="${productDto.optionSetDesc}">{{optionSetDesc}}</div>
 								<div class="d-inline text-success"
 									th:text="'등록일 : '+${productDto.updateTime}">{{updateTime}}</div>
 								<div class="d-inline text-success">리뷰수</div>
@@ -123,9 +120,7 @@
 								<a href="http://localhost/product{{osId}}">{{name}}</a>
 							</h3>
 							<h4 class="product-price">{{totalPrice}}원</h4>
-							{{#each optionSet}}
-							<div class="product-price">{{name}} : {{value}}</div>
-							{{/each}}
+							<div class="product-price">{{optionSetDesc}}</div>
 						<div class="d-inline text-success">등록일 : {{updateTime}}</div>
 						<div class="d-inline text-success">리뷰수</div>
 						<div class="product-buttons">

@@ -13,7 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
 import com.danaga.dto.product.OptionDto;
-import com.danaga.dto.product.OptionSaveDto;
+import com.danaga.dto.product.OptionUpdateDto;
 import com.danaga.dto.product.OptionSetCreateDto;
 import com.danaga.dto.product.OptionSetUpdateDto;
 import com.danaga.dto.product.ProductSaveDto;
@@ -125,8 +125,8 @@ class OptionSetServiceImplTest {
 	@Rollback(false)
 	@Disabled
 	void testUploadProduct() {
-		List<OptionSaveDto> list =new ArrayList<OptionSaveDto>();
-		list.add(OptionSaveDto.builder()
+		List<OptionUpdateDto> list =new ArrayList<OptionUpdateDto>();
+		list.add(OptionUpdateDto.builder()
 				.extraPrice(10000000)
 				.name("내가만든")
 				.value("내가만든")

@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
 import com.danaga.dto.product.CategoryDto;
+import com.danaga.dto.product.CategorySaveDto;
 
 import jakarta.transaction.Transactional;
 @SpringBootTest
@@ -30,7 +31,7 @@ private CategoryService service;
 	@Test
 	@Disabled
 	void testCreate() {
-		service.create(CategoryDto.builder()
+		service.create(CategorySaveDto.builder()
 				.name("custom")
 				.parentId(3L)
 				.build());
