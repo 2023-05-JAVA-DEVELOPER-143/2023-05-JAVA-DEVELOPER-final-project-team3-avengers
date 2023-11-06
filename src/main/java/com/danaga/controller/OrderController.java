@@ -8,6 +8,7 @@ import org.springframework.ui.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.danaga.dao.OrderDao;
 import com.danaga.dto.*;
 import com.danaga.dto.product.OptionSetUpdateDto;
 import com.danaga.dto.product.ProductDto;
@@ -31,6 +32,7 @@ public class OrderController {
 	private final OptionSetService optionSetService;
 	private final MemberService memberService;
 	private final MemberRepository memberRepository;
+	private final OrderDao orderDao;
 
 	/*
 	 * 주문완료알림페이지에서 index.html로 돌아가기 session으로 회원일 떄 비회원일 때
@@ -72,10 +74,7 @@ public class OrderController {
 	@GetMapping("/product_order_form")
 	public String memberProductOrderAddForm(@ModelAttribute("cartDto") CartDto cartDto, Model model,
 			HttpSession session) {
-		
-		
-		
-		
+
 		ResponseDto<?> responseDto = optionSetService.findById(cartDto.getOptionSetId());
 		List<ProductDto> productDtoList = (List<ProductDto>) responseDto.getData();
 		ProductDto productDto = productDtoList.get(0);
@@ -126,14 +125,13 @@ public class OrderController {
 
 				for (SUserCartOrderDto sUserCartOrderDto : sUserCartOrderDtoList) {
 
-					List<ProductDto> productDtoList=(List<ProductDto>) optionSetService.findById(sUserCartOrderDto.getId());
-					
-					OptionSetUpdateDto optionSetUpdateDto = OptionSetUpdateDto.builder()
-																			  .id(sUserCartOrderDto.getId())
-																			  .stock(productDtoList.get(0).getStock()-sUserCartOrderDto.getQty())
-																			  .build();
+					List<ProductDto> productDtoList = (List<ProductDto>) optionSetService
+							.findById(sUserCartOrderDto.getId());
+
+					OptionSetUpdateDto optionSetUpdateDto = OptionSetUpdateDto.builder().id(sUserCartOrderDto.getId())
+							.stock(productDtoList.get(0).getStock() - sUserCartOrderDto.getQty()).build();
 					optionSetService.updateStock(optionSetUpdateDto);
-					
+
 				}
 
 				System.out.println("$$$$" + sUserCartOrderDtoList.size());
@@ -151,20 +149,18 @@ public class OrderController {
 		} else { // 회원
 			try {
 				OrdersDto ordersDto = orderService.memberProductOrderSave(sUserId, ordersProductDto);
-				
+
 				for (SUserCartOrderDto sUserCartOrderDto : sUserCartOrderDtoList) {
 
-					List<ProductDto> productDtoList=(List<ProductDto>) optionSetService.findById(sUserCartOrderDto.getId());
-					
-					OptionSetUpdateDto optionSetUpdateDto = OptionSetUpdateDto.builder()
-																			  .id(sUserCartOrderDto.getId())
-																			  .stock(productDtoList.get(0).getStock()-sUserCartOrderDto.getQty())
-																			  .build();
+					List<ProductDto> productDtoList = (List<ProductDto>) optionSetService
+							.findById(sUserCartOrderDto.getId());
+
+					OptionSetUpdateDto optionSetUpdateDto = OptionSetUpdateDto.builder().id(sUserCartOrderDto.getId())
+							.stock(productDtoList.get(0).getStock() - sUserCartOrderDto.getQty()).build();
 					optionSetService.updateStock(optionSetUpdateDto);
-					
+
 				}
-				
-				
+
 				sUserCartOrderDtoList.clear();
 				System.out.println("$$$$" + sUserCartOrderDtoList.size());
 				session.setAttribute("sUserCartOrderDtoList", sUserCartOrderDtoList);
@@ -187,7 +183,7 @@ public class OrderController {
 			HttpSession session) throws Exception {
 		System.out.println("###########" + sUserCartOrderDtoList.size());
 		System.out.println(sUserCartOrderDtoList);
-		
+
 		String sUserId = (String) session.getAttribute("sUserId");
 		if (sUserId != null) {
 			MemberResponseDto memberResponseDto = memberService.getMemberBy(sUserId);
@@ -360,16 +356,26 @@ public class OrderController {
 					ordersGuestDetailDto.getName(), ordersGuestDetailDto.getPhoneNumber());
 			log.info("ordersGuestDetailDto={}", ordersGuestDetailDto);
 			System.out.println("@@@@@@getOrderNo: " + ordersGuestDetailDto.getOrderNo());
+			if (ordersGuestDetailDto.getName()
+					.equals(orderDao.findById(ordersGuestDetailDto.getOrderNo()).getMember().getName())) {
 
-			List<OrdersDto> ordersDtoList = orderService.guestOrderList(ordersGuestDetailDto.getOrderNo(),
-					ordersGuestDetailDto.getPhoneNumber(), ordersGuestDetailDto.getName());
-		
-			System.out.println("@@@@@@@@@@@@@@@@ordersDtoList: " + ordersDtoList);
-			System.out.println("@@@@@@@@@@@@@@@@ordersItemDtoList: " + ordersDtoList.get(0).getOrderItemDtoList());
-			List<OrderItemDto> orderItemDtoList = ordersDtoList.get(0).getOrderItemDtoList();
-			model.addAttribute("ordersDtoList", ordersDtoList);
-			model.addAttribute("orderItemDtoList", orderItemDtoList);
-			return "orders/order_guest_detail";
+				if (ordersGuestDetailDto.getPhoneNumber().equals(orderDao.findById(ordersGuestDetailDto.getOrderNo())
+						.getMember().getPhoneNo()) ) {
+
+					List<OrdersDto> ordersDtoList = orderService.guestOrderList(ordersGuestDetailDto.getOrderNo(),
+							ordersGuestDetailDto.getPhoneNumber(), ordersGuestDetailDto.getName());
+
+					System.out.println("@@@@@@@@@@@@@@@@ordersDtoList: " + ordersDtoList);
+					System.out.println(
+							"@@@@@@@@@@@@@@@@ordersItemDtoList: " + ordersDtoList.get(0).getOrderItemDtoList());
+					List<OrderItemDto> orderItemDtoList = ordersDtoList.get(0).getOrderItemDtoList();
+					model.addAttribute("ordersDtoList", ordersDtoList);
+					model.addAttribute("orderItemDtoList", orderItemDtoList);
+					return "orders/order_guest_detail";
+				} else {
+					return "orders/find_order_guest";
+				}
+			} return "orders/find_order_guest"; 
 
 		} catch (Exception e) {
 			e.printStackTrace();

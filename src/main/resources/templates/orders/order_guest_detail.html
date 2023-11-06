@@ -81,7 +81,7 @@ button.btn:hover {
 									th:each-sort="${ordersDto.id}">
 									<td th:text="${ordersDto.getId()}">주문 내역</td>
 									<td th:text="${ordersDto.getDescription()}">주문 내역</td>
-									<td th:text="${ordersDto.getStateMsg()}">주문 상태</td>
+									<td name="orderState" id="orderState" th:text="${ordersDto.getStateMsg()}">주문 상태</td>
 									<td th:text="${ordersDto.getPrice()}"><span
 										class="text-medium">$760.50</span></td>
 									<td>
@@ -137,6 +137,27 @@ button.btn:hover {
 		        alert('주문상태가 배송완료 상태일때만 환불가능합니다.');
 		    }
 		}
+		$(document).ready(function () {
+				$('tr').each(function () {
+					var orderStatus = $(this).find('#orderState').text().trim(); // 'orderState' ID를 사용합니다.
+					var cancelButton = $(this).find('.cancel-button');
+					var refundButton = $(this).find('.refund-button');
+
+					if (orderStatus === '입금대기중') {
+						// 주문 상태가 '배송준비중'인 경우 취소 버튼 활성화
+						cancelButton.prop('disabled', false);
+						refundButton.prop('disabled', true);
+					} else if (orderStatus === '배송완료') {
+						// 주문 상태가 '배송완료'인 경우 환불 버튼 활성화, 취소 버튼 비활성화
+						refundButton.prop('disabled', false);
+						cancelButton.prop('disabled', true);
+					} else {
+						// 나머지 상태인 경우 모두 비활성화
+						cancelButton.prop('disabled', true);
+						refundButton.prop('disabled', true);
+					}
+				});
+			});
 		</script>
 
 		<script th:inline="javascript">
