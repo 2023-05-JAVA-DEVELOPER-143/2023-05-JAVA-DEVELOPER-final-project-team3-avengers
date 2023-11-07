@@ -174,7 +174,20 @@ function updateQueryDataDto(optionName, optionValue, checked) {
 	}
 }
 
-const $result = $("#toObserve");
+
+function navigate() {
+	if (path == '/api/shop-list-ns') {
+		/**************** /shop-list-ns******************/
+		//let resultJsonObject=ajaxRequest("GET","");
+		html = product_list_list_view();
+		$('#page_list_content').html(html);
+	} else if (path == '/api/shop-grid-ns') {
+		/**************** /shop-grid-ns******************/
+		html = product_list_grid_view();
+		$('#page_list_content').html(html);
+	}
+}
+const $result =$("#toObserve");
 const $end = document.createElement("div");
 $end.id = 'product-list-observed';
 $result.append($end);

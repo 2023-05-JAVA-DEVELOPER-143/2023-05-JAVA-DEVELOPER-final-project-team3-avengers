@@ -74,4 +74,7 @@ public interface OrderService {
 	OrdersDto updateStatementByAdminRefundOrder(Long orderNo)throws Exception;
 	// 5.상태리셋
 	OrdersDto updateStatementByResetOrder(Long orderNo)throws Exception;
+	
+	//오더에 있는 멤버삭제(회원탈퇴시 필요)
+	void ordersMemberIdNull(String userName) throws Exception;
 }

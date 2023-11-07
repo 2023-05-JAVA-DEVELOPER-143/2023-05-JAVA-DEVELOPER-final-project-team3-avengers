@@ -3,7 +3,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 public class RandomStringGenerator {
-    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%^&*()_+";
 
     public static String generateRandomString() throws NoSuchAlgorithmException {
         SecureRandom random = new SecureRandom();

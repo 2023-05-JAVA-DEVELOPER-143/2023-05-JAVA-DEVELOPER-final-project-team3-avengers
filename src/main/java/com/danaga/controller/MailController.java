@@ -1,6 +1,9 @@
 package com.danaga.controller;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -31,22 +34,24 @@ public class MailController {
     }
     @ResponseBody
     @PostMapping("/findpassemailauthentication")
-    public String findPassMailSend(String mail) throws Exception{
+    public Map findPassMailSend(String mail) throws Exception{
     	
     	String randomPass = null;
 		randomPass = mailService.findPassSendMail(mail);
-    	System.out.println("##################"+randomPass);
+		HashMap map=new HashMap<>();
+    	map.put("newPass", randomPass);
     	
-    	return randomPass;
+    	return map;
     }
     @ResponseBody
     @PostMapping("/findidemailauthentication")
-    public String findidMailSend(String mail) throws Exception{
+    public Map findidMailSend(String mail) throws Exception{
     	
     	String id = null;
 		id = mailService.findIdSendMail(mail);
-    	
-    	return id;
+    	HashMap map=new HashMap<>();
+    	map.put("sendId", id);
+    	return map;
     }
 
 }

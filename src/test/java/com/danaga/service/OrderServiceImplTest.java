@@ -185,7 +185,7 @@ class OrderServiceImplTest {
 	@Transactional
 	@Rollback(false)
 	@Test
-	//@Disabled
+	@Disabled
 	void testMemberOrderList()throws Exception {
 		
 		System.out.println("-----------------------------"+orderService.memberOrderList("User1"));
@@ -251,6 +251,18 @@ class OrderServiceImplTest {
 		orderService.updateStatementByCancleOrder(6L);
 		orderService.updateStatementByCancleOrder(19L);
 	}
+	
+	@Test
+	//@Disabled
+	@Transactional
+	void testOrdersMemberIdNull()throws Exception {
+		
+		String userName = "Kakao3152284904";
+		orderService.ordersMemberIdNull(userName);
+	}
+	
+	
+	
 }
 //	@Test
 //	@Disabled
