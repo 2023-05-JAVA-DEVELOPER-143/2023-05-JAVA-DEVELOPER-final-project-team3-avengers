@@ -63,8 +63,8 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:if="${cart == null}">
-							<td colspan="9" class="empty-cart-message">장바구니에 담긴 상품이 없습니다.</td>
+						<tr th:if="${cart == null} or ${cart.isEmpty()} " >
+							<td colspan="8" class="empty-cart-message">장바구니에 담긴 상품이 없습니다.</td>
 						</tr>
 						<!-- 반복문 가즈아 -->
 						<tr class="cart_info" th:each="cart:${cart}" th:if="${cart != null}">
@@ -79,11 +79,11 @@
 							</td>
 							<td>
 								<div class="product-item">
-									<a class="product-thumb" href="shop-single.html"><img src="img/shop/cart/01.jpg"
+									<a class="product-thumb" href="shop-single.html" ><img src="img/shop/cart/01.jpg"
 											alt="Product" th:src="${cart.pImage}"></a>
 									<div class="product-info">
 										<h4 class="product-title">
-											<a href="shop-single.html" th:text="${cart.productName}">Unionbay
+											<a href="shop-single.html" th:href="@{'http://localhost/product'+${cart.osId}}" th:text="${cart.productName}">Unionbay
 												Park</a>
 										</h4>
 										<div th:each="option: ${cart.options}">
@@ -99,6 +99,7 @@
 							<td class="text-center">
 								<div class="count-input">
 									<select id="selectbox" class="form-control" name="checkboxvalue" th:data-id="${cart.osId}" onchange="getSelectValue(this);">
+										<option hidden th:if="${cart.qty} > 5" th:selected="${cart.qty}">[[${cart.qty}]]</option>
 										<option th:selected="${cart.qty} == '1'">1</option>
 										<option th:selected="${cart.qty} == '2'">2</option>
 										<option th:selected="${cart.qty} == '3'">3</option>
@@ -160,16 +161,16 @@
 
 
 			<!-- Related Products Carousel-->
-			<h3 class="text-center padding-top-2x mt-2 padding-bottom-1x" th:if="${hits != null}" ) >You May Also Like</h3>
+			<h3 class="text-center padding-top-2x mt-2 padding-bottom-1x" th:if="${hits != null}" >You May Also Like</h3>
 			<!-- Carousel-->
 			<div class="owl-carousel" th:if="${hits != null}"
 				data-owl-carousel="{ &quot;nav&quot;: false, &quot;dots&quot;: true, &quot;margin&quot;: 30, &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;576&quot;:{&quot;items&quot;:2},&quot;768&quot;:{&quot;items&quot;:3},&quot;991&quot;:{&quot;items&quot;:4},&quot;1200&quot;:{&quot;items&quot;:4}} }">
 				<!-- Product-->
 				<div class="grid-item" th:each="productDto:${hits}" >
 					<div class="product-card">
-						<a class="product-thumb" href="product-detail.html" th:href="product-detail.html"><img
+						<a class="product-thumb" href="product-detail.html" th:href="@{'http://localhost/product'+${productDto.osId}}"><img
 								src="img/shop/products/09.jpg" alt="Product"
-								th:attr="src=@{${productDto.pImage}}"></a>
+								th:attr="src=@{${productDto.pImage}}"></a> <!-- th:href="product-detail.html" -->
 						<h3 class="product-title" th:text="${productDto.name}"><a href="product-detail.html">상품명</a></h3>
 						<h4 class="product-price" th:text="${#numbers.formatInteger(productDto.totalPrice ,3,'COMMA')} + '원'">$34.99</h4>
 						<div class="product-buttons">
@@ -178,22 +179,25 @@
 									data-toggle="tooltip" th:product-heart="|${productDto.osId}|"
 									title="Whishlist">
 									<i class="icon-heart" th:heart="|${productDto.osId}|"></i>
-								</button>
+				 				</button>
 								<button th:unless="${productDto.isInterested}"
 									class="btn btn-outline-secondary btn-sm btn-wishlist"
 									 data-toggle="tooltip"
 									title="Whishlist" th:product-heart-yet="|${productDto.osId}|">
 									<i class="icon-heart" th:heart="|${productDto.osId}|"></i>
 								</button>
-							<button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success"
+							<button class="btn btn-outline-primary btn-sm1"  
+								th:data-optionSetId="${productDto.osId}" th:onclick="addCart([[${productDto.osId}]])">
+								Add to Cart</button>
+								<!-- 
+								data-toast data-toast-type="success"
 								data-toast-position="topRight" data-toast-icon="icon-circle-check"
-								data-toast-title="Product" data-toast-message="successfuly added to cart!" th:data-optionSetId="${productDto.osId}" >Add to
-								Cart</button>
+								data-toast-title="Product" 
+								data-toast-message="successfuly added to cart!!!"  -->
 						</div>
 					</div>
 				</div>
 			</div>
-			
 		</div>
 		<!-- content end -->
 
@@ -205,6 +209,11 @@
 		
 <script th:inline="javascript">
 	
+
+
+
+
+
 /* 총결제금액 계산 */
 $(document).ready(function() {
     let checkboxes = document.querySelectorAll('input[name="checkboxid"]');
@@ -313,6 +322,7 @@ function checkValue() {
 		data : JSON.stringify(checkedData),
 		success : function(response) {
            window.location.href = "/order_save_form"; // 이동할 페이지 URL
+           console.log(checkedData);
        },
        error : function(xhr, status, error) {
            console.error("Ajax 요청 실패");
@@ -363,8 +373,11 @@ function getSelectValue(obj) {
 				console.log(data);
 				location.href = "http://localhost:80/cart_list";
 			}
+			
 		});
 }
+
+
 
 
 
@@ -406,7 +419,7 @@ function selectAlldelete() {
 			success : function() {
 				alert('삭제완료');
 				location.href = "http://localhost:80/cart_list";
-			} 
+			}
 		 });
 	 } 
 }
@@ -463,12 +476,33 @@ function selectOption(elseOptionSets, osId) {
 		 console.log(data);
 	   });
 }
-
-
-
-
-
-
+ function addCart(osId){
+	
+	let optionSetId=osId;
+	let addData={
+		optionSetId:optionSetId,
+		qty:1
+	}
+	$.ajax({
+		url:"/cart",
+		type:"post",
+		contentType:'application/json',
+		data:JSON.stringify(addData),
+		success:function(response){
+			if(response=='INTERNAL_SERVER_ERROR'){
+			alert('이미 장바구니에 5개  이상 담겨있습니다.');
+				
+			}else{
+			alert('장바구니에 담겼습니다.')
+			location.href= "http://localhost:80/cart_list";
+				
+			}
+		},
+		error:function(){
+		}
+		
+	});
+} 
 
 </script>
 </th:block>

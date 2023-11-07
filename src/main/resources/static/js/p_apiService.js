@@ -122,6 +122,11 @@ export function addToCart(optionSetId, qty){
 	}
 	return call(ADD_TO_CART.url,ADD_TO_CART.method,cartDto)
 	.then((response)=>{
+		//location.href="http://localhost:80/cart_list"
+		if(response.status==500){
+			alert('장바구니에는 5개이상 못담아요');
+		}
+	}).catch((error)=>{
 		
-	});
+	})
 }

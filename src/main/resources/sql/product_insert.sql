@@ -106,8 +106,7 @@ insert into option_set (id,product_id,stock,total_price,order_count,view_count,c
 insert into option_set (id,product_id,stock,total_price,order_count,view_count,create_time,update_time) values(24,24,1000,5999000,0,0,sysdate,sysdate);
 insert into option_set (id,product_id,stock,total_price,order_count,view_count,create_time,update_time) values(25,25,1000,1870000,0,0,sysdate,sysdate);
 insert into option_set (id,product_id,stock,total_price,order_count,view_count,create_time,update_time) values(26,26,1000,343000,0,0,sysdate,sysdate);
-insert into option_set (id,product_id,stock,total_price,order_count,view_count,create_time,update_time) values(27,24,1000,1870000x,0,0,sysdate,sysdate);
-
+insert into option_set (id,product_id,stock,total_price,order_count,view_count,create_time,update_time) values(27,24,1000,1870000,0,0,sysdate,sysdate);
 
 insert into options (EXTRA_PRICE, ID, OPTION_SET_ID, NAME, VALUE) values (0, 1, 1, '운영체제', '미포함');
 insert into options (EXTRA_PRICE, ID, OPTION_SET_ID, NAME, VALUE) values (0, 2, 1, '화면비율', '16:9');

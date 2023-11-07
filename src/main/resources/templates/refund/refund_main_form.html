@@ -24,10 +24,10 @@
 					<div class="col-lg-6">
 						<div class="padding-top-2x mt-2 hidden-lg-up"></div>
 
-						<h6 class="text-muted text-normal text-uppercase padding-top-2x" style="margin-left: 150px;">환불
-							하기</h6>
-						<hr class="margin-bottom-1x">
-						<div class="table-responsive" style="margin-left: -150px; width: 120%;">
+						<h5 class="text-muted text-normal text-uppercase padding-top-2x" style="margin-left: 150px; color: #000;">환불
+							하기</h5>
+						
+						<div class="row" style="margin-left: -150px; margin-right: -150px;">
 							<table class="table">
 								<thead class="thead-inverse">
 									<tr>
@@ -43,8 +43,8 @@
 										<th th:text="${ordersDto.Id}" scope="row" style="width: 500px;">112</th>
 										<td  th:text="${ordersDto.getDescription()}" style="width: 500px; white-space: nowrap;">좋은 컴퓨터 외
 											5개</td>
-										<td th:text="${ordersDto.getCreateDate()}" style="width: 500px; white-space: nowrap;">2023.10.15</td>
-										<td th:text="${ordersDto.getPrice()}" style="width: 500px; white-space: nowrap;">13,000,000원</td>
+										<td th:text="${#temporals.format(ordersDto.getCreateDate(), 'yyyy.MM.dd')}" style="width: 500px; white-space: nowrap;"></td>
+										<td th:text="${ordersDto.getPrice()} + '원'" style="width: 500px; white-space: nowrap;">13,000,000원</td>
 										<td th:text="${ordersDto.getStateMsg()}" style="width: 500px; white-space: nowrap;">배송완료</td>
 									</tr>
 
@@ -60,12 +60,14 @@
 									<label for="account-fn" style = "pointer-events: none;">은행이름</label>
 									<input class="form-control" type="text" name="bankName" id="bankName" value=""
 										required th:field="*{bankName}">
+									<div id="bankNameError" class="error-message" style="color: red;"></div>
 								</form>
 
 								<form class="form-group" th:object="${refundDto}">
 									<label for="account-ln" style = "pointer-events: none;">계좌주</label>
 									<input class="form-control" type="text" name="accountName" id="accountName"
 										value="계좌주" required th:field="*{accountName}">
+									 <div id="accountNameError" class="error-message" style="color: red;"></div>	
 								</form>
 							</div>
 
@@ -74,12 +76,14 @@
 									<label for="refund-account" style = "pointer-events: none;">환불 계좌번호</label>
 									<input class="form-control" type="text" name="acNo" id="acNo" value="환불 계좌번호"
 										required th:field="*{acNo}">
+									<div id="acNoError" class="error-message" style="color: red;"></div>	
 								</form>
 
 								<form class="form-group" th:object="${refundDto}">
 									<label for="refund-reason" style = "pointer-events: none;">환불 사유</label>
 									<input class="form-control" type="text" name="description" id="description"
 										value="환불 사유" required th:field="*{description}">
+									<div id="descriptionError" class="error-message" style="color: red;"></div>	
 								</form>
 							</div>
 						</div>
@@ -133,28 +137,38 @@
     var acNo = $('#acNo').val();
     var description = $('#description').val();
 
+    var bankNameError = $('#bankNameError');
+    var accountNameError = $('#accountNameError');
+    var acNoError = $('#acNoError');
+    var descriptionError = $('#descriptionError');
+
+    bankNameError.text('');
+    accountNameError.text('');
+    acNoError.text('');
+    descriptionError.text('');
+    
+    
     if (bankName.trim() === '') {
-        document.getElementById('bankName').value = ' 은행이름을 입력하세요.';
+        bankNameError.text('은행이름을 입력하세요.');
         return;
     }
-    
+
     if (accountName.trim() === '') {
-        document.getElementById('accountName').value = ' 계좌주을 입력하세요.';
+        accountNameError.text('계좌주를 입력하세요.');
         return;
     }
-    
+
     if (acNo.trim() === '') {
-        document.getElementById('acNo').value = ' 환불 계좌번호를 입력하세요.';
+        acNoError.text('환불 계좌번호를 입력하세요.');
         return;
     }
-    
+
     if (!validateRefundAccount()) {
         return;
     }
 
-
     if (description.trim() === '') {
-        document.getElementById('description').value = ' 환불사유를 입력하세요.';
+        descriptionError.text('환불사유를 입력하세요.');
         return;
     }
     
@@ -197,9 +211,12 @@
    
    function validateRefundAccount() {
 	    var acNo = $('#acNo').val();
+	    var acNoError = $('#acNoError');
+
+	    acNoError.text('');
 
 	    if (!/^[0-9]+$/.test(acNo)) {
-	        document.getElementById('acNo').value = ' 숫자만 입력하세요.';
+	        acNoError.text('숫자만 입력하세요.');
 	        return false;
 	    }
 

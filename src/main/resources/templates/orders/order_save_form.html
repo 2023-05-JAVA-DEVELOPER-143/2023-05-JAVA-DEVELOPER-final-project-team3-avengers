@@ -59,12 +59,14 @@
 					</div>
 					<form id="orderAction" name="orderAction" method="post" action="/cart_order_action">
 						<div class="custom-section">
+							<div id="ordererNameError" class="error-message"></div>
 							<div class="col-sm-8">
 								<div class="form-group" style="display: flex; align-items: center;">
 									<label for="checkout-ordererName"
 										style="flex: 1; text-align: right; margin-right: 1rem; pointer-events: none;">주문자</label>
 									<input class="form-control" type="text" id="ordererName" name="ordererName"
-										style="flex: 2; width: 80%;" value="" th:value="${orderMemberBasicDto.userName}">
+										style="flex: 2; width: 80%;" value=""
+										th:value="${orderMemberBasicDto.userName}">
 								</div>
 								<div class="error-message" id="ordererNameError"></div>
 							</div>
@@ -77,12 +79,14 @@
 									<label for="checkout-ordererPhoneNo"
 										style="flex: 1; text-align: right; margin-right: 1rem; pointer-events: none;">주문자전화번호</label>
 									<input class="form-control" type="text" id="ordererPhoneNo" name="ordererPhoneNo"
-										style="flex: 2; width: 80%;" value="ex) 010-1111-1111" th:value="${orderMemberBasicDto.phoneNo}">
+										style="flex: 2; width: 80%;" value="ex) 010-1111-1111"
+										th:value="${orderMemberBasicDto.phoneNo}">
 								</div>
 							</div>
 						</div>
 
 						<div class="custom-section">
+							<div id="receiverNameError" class="error-message"></div>
 							<div class="col-sm-8">
 								<div class="form-group" style="display: flex; align-items: center;">
 									<label for="checkout-receiverName"
@@ -249,14 +253,18 @@
 					document.getElementById('ordererName').value = '주문자 이름을 입력하세요.';
 					return;
 				}
-				
+
+				if (!isNoValidName(ordererName)) {
+					return;
+				}
+
+
 				if (ordererPhoneNo.trim() === '') {
 					document.getElementById('ordererPhoneNo').value = '주문자 전화번호를 입력하세요.';
 					return;
 				}
-				
+
 				if (isNoValidPhoneNo(ordererPhoneNo)) {
-					ordererErrorElement.textContent = '유효하지 않은 전화번호 형식입니다.';
 					return;
 				}
 
@@ -264,14 +272,17 @@
 					document.getElementById('receiverName').value = '수령자 이름을 입력하세요.';
 					return;
 				}
+				if (!isNoValidName(receiverName)) {
+					return;
+				}
+
 
 				if (receiverPhoneNo.trim() === '') {
 					document.getElementById('receiverPhoneNo').value = '수령자 전화번호를 입력하세요.';
 					return;
 				}
-				
+
 				if (isNoValidPhoneNo(receiverPhoneNo)) {
-					receiverErrorElement.textContent = '유효하지 않은 전화번호 형식입니다.';
 					return;
 				}
 
@@ -279,12 +290,12 @@
 					document.getElementById('receiverPostCode').value = '우편번호을 입력하세요.';
 					return;
 				}
-				
+
 				if (receiverAddress.trim() === '') {
 					document.getElementById('receiverAddress').value = '주소을 입력하세요.';
 					return;
 				}
-				
+
 				if (receiverDetailAddress.trim() === '') {
 					document.getElementById('receiverDetailAddress').value = '상세주소을 입력하세요.';
 					return;
@@ -295,15 +306,27 @@
 
 			}
 			function isNoValidPhoneNo(phoneNo) {
-				const phoneRegex = /^(01[016789]{1})-?[0-9]{3,4}-?[0-9]{4}$/;
+				const phoneRegex = /^(01[016789]{1})-(\d{3,4})-(\d{4})$/;
 				return !phoneRegex.test(phoneNo);
 			}
 
+			function isNoValidName(name) {
+				return name.length >= 0 && name.length <= 20;
+			}
+			function validateName(inputElement, errorElement) {
+				const name = inputElement.value;
+
+				if (isNoValidName(name)) {
+					errorElement.textContent = "";
+				} else {
+					errorElement.textContent = "20글자 이하로 작성하세요";
+				}
+			}
 			function validatePhoneNo(inputElement, errorElement) {
 				const phoneNo = inputElement.value;
 
 				if (isNoValidPhoneNo(phoneNo)) {
-					errorElement.textContent = "유효하지 않은 전화번호 형식입니다.";
+					errorElement.textContent = "유효하지 않은 전화번호 형식입니다. ex) 010-1111-1111";
 				} else {
 					errorElement.textContent = "";
 				}
@@ -312,9 +335,15 @@
 			window.addEventListener("DOMContentLoaded", () => {
 				const receiverPhoneNoInput = document.getElementById("receiverPhoneNo");
 				const ordererPhoneNoInput = document.getElementById("ordererPhoneNo");
+				const ordererNameInput = document.getElementById("ordererName");
+				const receiverNameInput = document.getElementById("receiverName");
 
 				const receiverErrorElement = document.getElementById("receiverError");
 				const ordererErrorElement = document.getElementById("ordererError");
+				const receiverNameErrorElement = document.getElementById("receiverNameError");
+				const ordererNameErrorElement = document.getElementById("ordererNameError");
+
+
 
 				receiverPhoneNoInput.addEventListener("input", () => {
 					validatePhoneNo(receiverPhoneNoInput, receiverErrorElement);
@@ -322,6 +351,14 @@
 
 				ordererPhoneNoInput.addEventListener("input", () => {
 					validatePhoneNo(ordererPhoneNoInput, ordererErrorElement);
+				});
+
+				receiverNameInput.addEventListener("input", () => {
+					validateName(receiverNameInput, receiverNameErrorElement);
+				});
+
+				ordererNameInput.addEventListener("input", () => {
+					validateName(ordererNameInput, ordererNameErrorElement);
 				});
 			});
 

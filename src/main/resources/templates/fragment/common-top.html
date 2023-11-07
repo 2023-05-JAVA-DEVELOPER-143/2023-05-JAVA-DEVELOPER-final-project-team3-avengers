@@ -34,6 +34,8 @@
 					</li>
 					<li><a href="http://localhost/product"><span>제품</span></a></li>
 					<li><a href="http://localhost/cart_list"><span>장바구니</span></a></li>
+					<li th:if="${session.sUserId == null}"><a th:href="@{/find_order_guest}"><span>주문확인</span></a></li>
+					
 					<li><a href="/board1"><span>게시판</span></a>
 						<ul class="sub-menu">
 							<li><a href="/board1">자유게시판</a></li>
@@ -91,7 +93,7 @@
 							</ul>
 						</div>
 						<div class="cart">
-							<a href="http://localhost/cart_list"></a><i class="icon-bag"></i><span class="count"
+							<a href="/cart_list"></a><i class="icon-bag"></i><span class="count"
 								th:text="${session.countCarts}">3</span>
 						</div>
 					</div>
