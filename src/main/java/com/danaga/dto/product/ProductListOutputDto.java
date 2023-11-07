@@ -48,15 +48,9 @@ public class ProductListOutputDto {//리스트,히트상품,관심,최근상품�
 		this.optionSet = entity.getOptions().stream().map(t -> new OptionDto.OptionBasicDto(t)).collect(Collectors.toList());
 		this.isInterested=false;
 		StringBuilder sb = new StringBuilder();
-		int count = 1;
 		for (OptionBasicDto option : this.optionSet) {
 		    sb.append(option.getName()+":"+option.getValue());
-		    if (count % 3 == 0) {
-		        sb.append("\n"); // 세번째 값은 줄바꿈
-		    } else {
 		        sb.append("/"); // 나머지 값은 '/'
-		    }
-		    count++;
 		}
 		String result = sb.toString();
 		if (result.endsWith("/")) {
@@ -76,15 +70,9 @@ public class ProductListOutputDto {//리스트,히트상품,관심,최근상품�
 		this.optionSet = entity.getOptions().stream().map(t -> new OptionDto.OptionBasicDto(t)).collect(Collectors.toList());
 		this.isInterested=entity.getInterests().stream().anyMatch(t -> t.getMember().getUserName().equals(username));
 		StringBuilder sb = new StringBuilder();
-		int count = 1;
 		for (OptionBasicDto option : this.optionSet) {
 		    sb.append(option.getName()+":"+option.getValue());
-		    if (count % 3 == 0) {
-		        sb.append("\n"); // 세번째 값은 줄바꿈
-		    } else {
 		        sb.append("/"); // 나머지 값은 '/'
-		    }
-		    count++;
 		}
 		String result = sb.toString();
 		if (result.endsWith("/")) {

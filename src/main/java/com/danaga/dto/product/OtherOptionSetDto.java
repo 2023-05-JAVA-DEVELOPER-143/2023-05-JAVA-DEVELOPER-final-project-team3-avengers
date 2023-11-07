@@ -26,7 +26,7 @@ public class OtherOptionSetDto {//상세페이지 다른옵션 보여줄때
 		this.optionSet = entity.getOptions().stream().map(t -> new OptionBasicDto(t)).collect(Collectors.toList());
 		this.isInStock = true;
 		this.osId = entity.getId();
-		if(entity.getStock()==0) {
+		if(entity.getStock()<=0) {
 			this.isInStock=false;
 		}
 		StringBuilder sb = new StringBuilder();

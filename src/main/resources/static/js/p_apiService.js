@@ -19,7 +19,7 @@ function call(api, method,request){
         options.body = JSON.stringify(request);
     }
     return fetch(options.url, options).then((response) => {
-        if(response.status === 200){
+        if(response.status === 200||response.status ===201){
             return response.json();
         }else if(response.status===403){
             window.location.href="/member/login";// redirect

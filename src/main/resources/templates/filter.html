@@ -18,7 +18,7 @@
 <body>
 	<th:block th:fragment="filter" th:remove="tag">
 		<div class="list-group col-lg-2">
-			<div th:each="category : ${categoryList}">
+			<div th:each="category : ${categoryList}" style="max-height: 400px; overflow: auto;" >
 				<button type="button" class="list-group-item list-group-item-action border border-secondary"
 					th:attr="categoryId=${category.id}" th:text="${category.name}">
 					노트북
@@ -37,6 +37,7 @@
 
 		<!--script1-->
 		<script id="subcategory-template" type="text/x-handlebars-template">
+<div style="max-height: 400px; overflow: auto;"> 
             <div data-spy="scroll" data-target="#sub-category-item list-group border border-secondary" data-offset="0">
 				<button type="button" class="list-group-item list-group-item-action border border-secondary"
 					sub-categoryId="{{data.[0].parentId}}" sub-categoryName="전체">
@@ -49,10 +50,12 @@
 			</button>
                 {{/each}}
 			</div>
+</div>
   			</script>
   				<!--script2-->
   				<script id="option-choice-template-unique" type="text/x-handlebars-template">
-                <table id="search-option-table" class="search-option table table-striped">
+<div style="max-height: 400px; overflow: auto;">                
+<table id="search-option-table" class="search-option table table-striped">
                     <tbody>
                         {{#each data}}
                         {{#each this}}
@@ -73,6 +76,7 @@
                       {{/each}}
                     </tbody>
                   </table>
+</div>
                 </script>
                 <!---->
   				
