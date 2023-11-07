@@ -59,6 +59,7 @@ public class CategoryServiceImpl implements CategoryService{
 	}
 	//카테고리 삭제
 	@Override
+	@Transactional
 	public ResponseDto<?> delete(Long id) {
 		try {
 			categoryDao.delete(id);

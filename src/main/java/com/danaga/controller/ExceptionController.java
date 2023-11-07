@@ -2,6 +2,7 @@ package com.danaga.controller;
 
 import java.util.NoSuchElementException;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -36,20 +37,4 @@ public class ExceptionController {
 		    return "redirect:/404.html"; //없는 상품 조회
 		}
 	
-	@ResponseBody
-	@ExceptionHandler(value = {MethodArgumentNotValidException.class})
-	protected ResponseEntity<?> defaultException(Exception e) {
-		 ProductExceptionMsg errorMsg=null;
-		    if (e instanceof NeedLoginException) {
-		        errorMsg = ((NeedLoginException) e).getMsg();
-		    } else if (e instanceof FoundNoObjectException.FoundNoOptionSetException) {
-		        errorMsg = ((FoundNoObjectException.FoundNoOptionSetException) e).getMsg();
-		    } else if (e instanceof FoundNoObjectException.FoundNoMemberException) {
-		        errorMsg = ((FoundNoObjectException.FoundNoMemberException) e).getMsg();
-		    } else if (e instanceof MethodArgumentNotValidException) {
-		        errorMsg = ProductExceptionMsg.WRONG_PARAMETER;
-		    } 
-		    return ResponseEntity.badRequest().body(ResponseDto.builder().msg(errorMsg).build());
-		}
-
 }

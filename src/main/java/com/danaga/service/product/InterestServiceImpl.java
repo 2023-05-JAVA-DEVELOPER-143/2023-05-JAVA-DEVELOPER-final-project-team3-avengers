@@ -32,20 +32,15 @@ public class InterestServiceImpl implements InterestService {
 	
 	//상품이 내 관심상품인지 확인
 	@Override
+	@Transactional
 	public ResponseDto<?> isMyInterest(Long optionSetId, String username) throws FoundNoMemberException,FoundNoOptionSetException {
 		try {
 			Long memberId = memberDao.findMember(username).getId();
 			boolean isInterested = interestDao.isInterested(InterestDto.builder()
 					.memberId(memberId).optionSetId(optionSetId).build());
-			if(isInterested) {
 				List<Boolean> answer=new ArrayList<Boolean>();
-				answer.add(true);
+				answer.add(isInterested);
 				return ResponseDto.<Boolean>builder().data(answer).msg(ProductSuccessMsg.IS_MY_INTEREST).build();
-			}else {
-				List<Boolean> answer=new ArrayList<Boolean>();
-				answer.add(false);
-				return ResponseDto.<Boolean>builder().data(answer).msg(ProductSuccessMsg.IS_MY_INTEREST).build();
-			}
 		} catch (Exception e) {
 			throw new FoundNoMemberException();
 		}

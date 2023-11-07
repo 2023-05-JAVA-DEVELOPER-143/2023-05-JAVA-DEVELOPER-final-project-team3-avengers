@@ -3,7 +3,7 @@ import * as api from "./p_apiService.js"
 let hash = window.location.hash
 let path = hash.substring(1);
 let html = '';
-let firstResult=0;
+let firstResult = 0;
 let filterDto = {};
 filterDto["orderType"] = "판매순";
 filterDto["firstResult"] = firstResult;
@@ -17,7 +17,7 @@ export function init() {
 
 function registEvent() {
 
-	$('#otherOptions option').each(function(){
+	$('#otherOptions option').each(function() {
 		let $this = $(this);
 		$this.attr('title', $this.data('tooltip'));
 	});
@@ -58,12 +58,12 @@ function registEvent() {
 			filterDto["category"]["id"] = categoryId;
 			filterDto["category"]["name"] = subCategoryName;
 			api.searchResult(filterDto);
-			firstResult=0;
+			firstResult = 0;
 			filterDto.optionset = [];
 			console.log(filterDto);
 
 		} else if ($(e.target).attr('product-heart')) {
-				e.preventDefault();
+			e.preventDefault();
 			let optionSetId = $(e.target).attr('product-heart');
 			api.untapHeart(optionSetId, function callback() {
 				let button = $(e.target);
@@ -73,7 +73,7 @@ function registEvent() {
 				button.removeClass('active');
 			});
 		} else if ($(e.target).attr('product-heart-yet')) {
-			e.preventDefault();		
+			e.preventDefault();
 			let optionSetId = $(e.target).attr('product-heart-yet');
 			api.tapHeart(optionSetId, function callback() {
 				let button = $(e.target);
@@ -98,13 +98,13 @@ function registEvent() {
 			let optionName = $(e.target).closest('tr').find('th').text();
 			let optionValue = $(e.target).attr('data-optionValue');
 			let checked = $(e.target).is(":checked");
-			console.log(optionName,optionValue,checked);
+			console.log(optionName, optionValue, checked);
 			updateQueryDataDto(optionName, optionValue, checked);
 			console.log(filterDto);
-			firstResult=0;
+			firstResult = 0;
 			api.searchResult(filterDto);
 		} else if ($(e.target).attr('id') == 'main-search-btn') {
-			firstResult=0;
+			firstResult = 0;
 			api.searchResult(filterDto);
 		} else if ($(e.target).attr('data-toast-message') == "successfuly added to cart!") {
 			e.preventDefault();
@@ -116,7 +116,7 @@ function registEvent() {
 			}
 			api.addToCart(optionSetId, qty);
 		} else if ($(e.target).attr('heart')) {
-				e.preventDefault();
+			e.preventDefault();
 			let parentButton = undefined;
 			if ($(e.target).parent().attr('product-heart')) {
 				parentButton = $(e.target).parent();
@@ -134,11 +134,11 @@ function registEvent() {
 					parentButton.removeAttr('product-heart-yet');
 					parentButton.addClass('active');
 				});
-			} 
-			
-		}else if ($(e.target).attr('toOrder')) {
-				e.stopPropagation();
-				$('#productOrderForm').submit();
+			}
+
+		} else if ($(e.target).attr('toOrder')) {
+			e.stopPropagation();
+			$('#productOrderForm').submit();
 		}
 	});
 
@@ -176,23 +176,23 @@ function updateQueryDataDto(optionName, optionValue, checked) {
 
 const $result = $("#toObserve");
 const $end = document.createElement("div");
-$end.id='product-list-observed';
+$end.id = 'product-list-observed';
 $result.append($end);
 
 const callback = (entries, observer) => {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-	  firstResult+=20;
-	  filterDto.firstResult=firstResult;
-      api.continueSearchResult(filterDto,observer);
-    }
-  });
+	entries.forEach((entry) => {
+		if (entry.isIntersecting) {
+			firstResult += 20;
+			filterDto.firstResult = firstResult;
+			api.continueSearchResult(filterDto, observer);
+		}
+	});
 }
 const options = {
-    root: null, // 뷰포트를 기준으로 타켓의 가시성 검사
-    rootMargin: '0px 0px 0px 0px', // 확장 또는 축소 X
-    threshold: 1 // 타켓의 가시성 0%일 때 옵저버 실행
+	root: null, // 뷰포트를 기준으로 타켓의 가시성 검사
+	rootMargin: '0px 0px 0px 0px', // 확장 또는 축소 X
+	threshold: 1 // 타켓의 가시성 0%일 때 옵저버 실행
 };
 const observer = new IntersectionObserver(callback, options);
 observer.observe($end);
-//init();
+

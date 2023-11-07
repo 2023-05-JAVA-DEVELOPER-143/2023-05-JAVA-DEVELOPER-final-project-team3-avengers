@@ -31,6 +31,7 @@ public class RecentViewServiceImpl implements RecentViewService{
 	private final OptionSetDao optionSetDao;
 	
 	//product detail 조회시 recentView 추가 
+	@Transactional
 	public ResponseDto<?> addRecentView(@Valid RecentViewDto dto) throws FoundNoMemberException, FoundNoOptionSetException{
 		try {
 			recentViewDao.save(dto.toEntity(dto));
@@ -73,6 +74,7 @@ public class RecentViewServiceImpl implements RecentViewService{
 	}
 	
 	//30일 지난 상품 삭제 
+	@Transactional
 	public ResponseDto<?> removeOldRecents(){
 		recentViewDao.removeOldRecents();
 		return ResponseDto.<String>builder().msg(ProductSuccessMsg.REMOVE_OLD_RECENTVIEWS).build();

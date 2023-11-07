@@ -79,6 +79,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 	// 오더하면 옵션셋 재고 -1, 환불하거나 취소하면 +1
 	// +1, -1은 컨트롤러에서 get+1로 하고 여기서는 그냥 지정한 숫자로 변경
 	@Override
+	@Transactional
 	public ResponseDto<?> updateStock(@Valid OptionSetUpdateDto dto) throws FoundNoOptionSetException {
 		OptionSet optionset;
 			optionset = optionSetDao.updateStock(dto);
@@ -89,6 +90,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 
 	// 주문했을때 주문수 업뎃, +,-는 컨트롤러에서 get+1
 	@Override
+	@Transactional
 	public ResponseDto<?> updateOrderCount(Long optionSetId, Integer orderCount) throws FoundNoOptionSetException {
 		OptionSet optionset = optionSetDao.updateOrderCount(optionSetId, orderCount);
 		List<ProductDto> data = new ArrayList<>();
@@ -98,6 +100,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 
 	// 클릭했을때 조회수 업뎃
 	@Override
+	@Transactional
 	public ResponseDto<?> updateViewCount(Long optionSetId) throws FoundNoOptionSetException {
 		OptionSet optionset = optionSetDao.updateViewCount(optionSetId);
 		List<ProductDto> data = new ArrayList<>();
@@ -149,12 +152,14 @@ public class OptionSetServiceImpl implements OptionSetService {
 	// 카테고리에 해당하는 리스트 전체 조회
 	// 조건에 해당하는 리스트 전체 조회
 	@Override
+	@Transactional
 	public ResponseDto<ProductListOutputDto> searchProducts(@Valid QueryStringDataDto dto,Integer firstResult) {
 		List<ProductListOutputDto> data = optionSetDao.findByFilter(dto,firstResult);
 		return ResponseDto.<ProductListOutputDto>builder().data(data).msg(ProductSuccessMsg.SEARCH_PRODUCTS).build();
 	}
 
 	@Override
+	@Transactional
 	public ResponseDto<ProductListOutputDto> searchProductsForMember(@Valid QueryStringDataDto dto, String username,Integer firstResult) {
 		List<ProductListOutputDto> data = new ArrayList<>();
 		try {
@@ -271,6 +276,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 	/////////////////////////////////////////////////////////
 	// 카테고리도 바꿀수 있게
 	@Override
+	@Transactional
 	public ResponseDto<?> update(@Valid ProductUpdateDto dto) {
 //		Product origin = productDao.findById(dto.getId());
 //		dto.getName().ifPresent(t->origin.setName(t));
@@ -291,6 +297,7 @@ public class OptionSetServiceImpl implements OptionSetService {
 	// 프로덕트 별점 업뎃
 	// 리뷰가 등록될때마다 갱신
 	@Override
+	@Transactional
 	public ResponseDto<?> updateRating(@Valid ProductSaveDto dto) {
 		// 기존 프로덕트의 리뷰들을
 		return null;

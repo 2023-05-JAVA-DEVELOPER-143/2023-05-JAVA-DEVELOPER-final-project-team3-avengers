@@ -22,7 +22,7 @@ function call(api, method,request){
         if(response.status === 200||response.status ===201){
             return response.json();
         }else if(response.status===403){
-            window.location.href="/member/login";// redirect
+            window.location.href="/member/login/form";// redirect
         }else{
             Promise.reject(response);
             throw Error(response);
