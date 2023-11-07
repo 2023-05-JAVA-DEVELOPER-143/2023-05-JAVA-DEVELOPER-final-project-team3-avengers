@@ -64,7 +64,7 @@ public class OrderController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("주문목록이 없습니다?", e.getMessage());
-			return null;
+			return "/index";
 		}
 	}
 
