@@ -117,12 +117,12 @@ public class OptionSetSearchQuery {
 
 	private void onlyMaxConstraint(int maxPrice) {
 		String maxConstraint = "AND os.totalPrice <= :maxPrice ";
-		maxConstraint = maxConstraint.replace(":minPrice", String.valueOf(maxPrice));
+		maxConstraint = maxConstraint.replace(":maxPrice", String.valueOf(maxPrice));
 		this.searchQuery += maxConstraint;
 	}
 
 	public void nameKeyword(String nameKeyword) {
-		String name_keyword = "AND os.product.name like :nameKeyword ";
+		String name_keyword = "AND LOWER(os.product.name) like LOWER(:nameKeyword) ";
 		name_keyword = name_keyword.replace(":nameKeyword", "'%" + nameKeyword + "%'");
 		this.searchQuery += name_keyword;
 	}

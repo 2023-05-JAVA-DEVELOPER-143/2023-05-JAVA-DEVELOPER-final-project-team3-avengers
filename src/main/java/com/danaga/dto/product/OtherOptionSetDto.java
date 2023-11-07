@@ -28,7 +28,7 @@ public class OtherOptionSetDto {//상세페이지 다른옵션 보여줄때
 		this.isInStock = true;
 		this.osId = entity.getId();
 		this.totalPrice=entity.getTotalPrice();
-		if(entity.getStock()==0) {
+		if(entity.getStock()<=0) {
 			this.isInStock=false;
 		}
 		StringBuilder sb = new StringBuilder();
