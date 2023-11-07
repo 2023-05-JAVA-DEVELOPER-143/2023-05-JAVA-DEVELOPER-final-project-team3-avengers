@@ -78,9 +78,7 @@ public class Orders {
 	
 	public static Orders toResponseEntity(OrdersDto ordersDto) {
 		return Orders.builder()
-					 .id(ordersDto.getId())
 					 .description(ordersDto.getDescription())
-					 .createDate(ordersDto.getCreateDate())
 					 .price(ordersDto.getPrice())
 					 .statement(ordersDto.getStateMsg())
 					 .build();
