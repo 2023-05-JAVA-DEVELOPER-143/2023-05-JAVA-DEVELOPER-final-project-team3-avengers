@@ -3,8 +3,6 @@ package com.danaga.kakao;
 import java.io.IOException;
 import java.net.URI;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
