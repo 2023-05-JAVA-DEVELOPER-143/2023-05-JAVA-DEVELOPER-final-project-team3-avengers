@@ -83,7 +83,7 @@
 								th:attr="src=@{${productDto.pImage}}"></a>
 						<h3 class="product-title" th:text="${productDto.name}" th:href="${'/product'+productDto.osId}">
 							<a th:href="${'/product'+productDto.osId}">상품명</a></h3>
-						<h4 class="product-price" th:text="${productDto.totalPrice}" th:href="${'/product'+productDto.osId}">$34.99</h4>
+						<h4 class="product-price" th:text="${#numbers.formatDecimal(productDto.totalPrice,1,'COMMA',0,'POINT')}+'원'" th:href="${'/product'+productDto.osId}">$34.99</h4>
 						<div class="product-buttons">
 							<button th:if="${productDto.isInterested}"
 									class="btn btn-outline-secondary btn-sm btn-wishlist active"
