@@ -73,15 +73,12 @@ public class OrderController {
 	public String memberProductOrderAddForm(@ModelAttribute("cartDto") CartDto cartDto, Model model,
 			HttpSession session) {
 		
-		
-		
-		
 		ResponseDto<?> responseDto = optionSetService.findById(cartDto.getOptionSetId());
 		List<ProductDto> productDtoList = (List<ProductDto>) responseDto.getData();
 		ProductDto productDto = productDtoList.get(0);
 
-		List<SUserCartOrderDto> sUserCartOrderDtoList = new ArrayList<>();
-		SUserCartOrderDto sUserCartOrderDto = SUserCartOrderDto.builder().id(cartDto.getOptionSetId())
+		List<CartOrderDto> sUserCartOrderDtoList = new ArrayList<>();
+		CartOrderDto sUserCartOrderDto = CartOrderDto.builder().id(cartDto.getOptionSetId())
 				.qty(cartDto.getQty()).productName(productDto.getName()).totalPrice(productDto.getTotalPrice()).build();
 		sUserCartOrderDtoList.add(sUserCartOrderDto);
 
@@ -108,7 +105,7 @@ public class OrderController {
 
 		String sUserId = (String) session.getAttribute("sUserId");
 
-		List<SUserCartOrderDto> sUserCartOrderDtoList = (List<SUserCartOrderDto>) session
+		List<CartOrderDto> sUserCartOrderDtoList = (List<CartOrderDto>) session
 				.getAttribute("sUserCartOrderDto");
 		sUserCartOrderDtoList.get(0).getId();
 
@@ -124,7 +121,7 @@ public class OrderController {
 			try {
 				OrdersDto ordersDto = orderService.guestProductOrderSave(ordersProductDto, orderGuestDto);
 
-				for (SUserCartOrderDto sUserCartOrderDto : sUserCartOrderDtoList) {
+				for (CartOrderDto sUserCartOrderDto : sUserCartOrderDtoList) {
 
 					List<ProductDto> productDtoList=(List<ProductDto>) optionSetService.findById(sUserCartOrderDto.getId());
 					
@@ -152,7 +149,7 @@ public class OrderController {
 			try {
 				OrdersDto ordersDto = orderService.memberProductOrderSave(sUserId, ordersProductDto);
 				
-				for (SUserCartOrderDto sUserCartOrderDto : sUserCartOrderDtoList) {
+				for (CartOrderDto sUserCartOrderDto : sUserCartOrderDtoList) {
 
 					List<ProductDto> productDtoList=(List<ProductDto>) optionSetService.findById(sUserCartOrderDto.getId());
 					
@@ -183,12 +180,13 @@ public class OrderController {
 	 * 카트에서 보내온 데이터로 주문(form)(공통)
 	 */
 	@PostMapping("/cart_order_form")
-	public String memberCartOrderAddForm(@RequestBody List<SUserCartOrderDto> sUserCartOrderDtoList, Model model,
+	public String memberCartOrderAddForm(@RequestBody List<CartOrderDto> sUserCartOrderDtoList, Model model,
 			HttpSession session) throws Exception {
 		System.out.println("###########" + sUserCartOrderDtoList.size());
 		System.out.println(sUserCartOrderDtoList);
-		
 		String sUserId = (String) session.getAttribute("sUserId");
+		
+		
 		if (sUserId != null) {
 			MemberResponseDto memberResponseDto = memberService.getMemberBy(sUserId);
 			Integer discountRate = gradePoint(memberResponseDto.getGrade());
@@ -240,7 +238,7 @@ public class OrderController {
 		String sUserId = (String) session.getAttribute("sUserId");
 		if (sUserId == null) { // 비회원주문
 			try {
-				List<SUserCartOrderDto> sUserCartOrderDtoList = (List<SUserCartOrderDto>) session
+				List<CartOrderDto> sUserCartOrderDtoList = (List<CartOrderDto>) session
 						.getAttribute("sUserCartOrderDto");
 				List<CartDto> fUserCarts = new ArrayList<>();
 				List<OptionSetUpdateDto> optionSetUpdateDtoList = new ArrayList<>();
@@ -294,7 +292,7 @@ public class OrderController {
 			}
 		} else { // 회원주문
 			try {
-				List<SUserCartOrderDto> sUserCartOrderDtoList = (List<SUserCartOrderDto>) session
+				List<CartOrderDto> sUserCartOrderDtoList = (List<CartOrderDto>) session
 						.getAttribute("sUserCartOrderDto");
 				List<CartDto> fUserCarts = new ArrayList<>();
 				List<OptionSetUpdateDto> optionSetUpdateDtoList = new ArrayList<>();

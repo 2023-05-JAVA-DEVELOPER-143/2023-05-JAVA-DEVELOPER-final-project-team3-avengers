@@ -37,17 +37,18 @@ public class CartController {
 		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
 		if (sUserId != null) { // 회원
 			List<SUserCartResponseDto> carts = cartService.findsUserCartList(sUserId);
+			if(carts!=null) {
 			for (int i = 0; i < carts.size(); i++) {
 				ResponseDto<ProductDto> findLists = optionSetService.showOtherOptionSets(carts.get(i).getOsId());
 				carts.get(i).setElseOptionSets(findLists.getData().stream().map(t -> new CartElseOptionsetDto(t))
 						.collect(Collectors.toList()));
 			}
-
+			
 			int a = (int) (Math.random() * carts.size());
 			session.setAttribute("countCarts", carts.size());
-			if (carts==null) {
+				System.out.println("carts.get(a).getId() >>>> "+carts.get(a).getId());
 				model.addAttribute("hits",
-						optionSetService.displayHitProductsForMember(carts.get(a).getId(), sUserId,0).getData());
+						optionSetService.displayHitProductsForMember(carts.get(a).getOsId(), sUserId,0).getData()); 
 			}
 			model.addAttribute("cart", carts);
 		} else {// 비회원

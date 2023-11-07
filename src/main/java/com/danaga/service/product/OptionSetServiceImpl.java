@@ -107,9 +107,11 @@ public class OptionSetServiceImpl implements OptionSetService {
 	@Override
 	@Transactional
 	public ResponseDto<ProductDto> displayHitProducts(Long optionSetId,Integer firstResult) {
+		System.out.println("####### oss" + optionSetId);
+		
 		List<Category> findCategory = categoryDao.findByOptionSetId(optionSetId);
 		String orderType = OptionSetQueryData.BY_VIEW_COUNT;
-
+		
 		List<ProductDto> searchResult = optionSetDao
 				.findByFilter(QueryStringDataDto.builder().orderType(orderType)
 						.category(CategoryDto.builder().name(findCategory.get(findCategory.size() - 1).getName())
