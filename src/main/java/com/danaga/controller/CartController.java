@@ -48,8 +48,10 @@ public class CartController {
 
 				int a = (int) (Math.random() * carts.size());
 				session.setAttribute("countCarts", carts.size());
+				if(!carts.isEmpty()) {
 					model.addAttribute("hits",
 							optionSetService.displayHitProductsForMember(carts.get(a).getOsId(), sUserId, 0).getData());
+				}
 				
 			}
 			model.addAttribute("cart", carts);
