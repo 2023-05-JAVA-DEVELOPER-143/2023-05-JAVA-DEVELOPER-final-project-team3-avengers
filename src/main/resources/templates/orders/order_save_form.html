@@ -46,12 +46,15 @@
 										th:text="${item.productName}">좋은 컴퓨터 외 5개</td>
 									<td style="width: 500px; white-space: nowrap; text-align: center;"
 										th:text="${item.qty}">2023.10.15</td>
-									<td style="width: 500px; white-space: nowrap; text-align: center;"
-										th:text="${item.totalPrice}">15개</td>
+									<td style="width: 500px; white-space: nowrap; text-align: center;">
+										<span class="price" th:text="${item.totalPrice}"></span> 원
+									</td>
 								</tr>
 								<tr>
-									<td colspan="4" style="text-align: center;"><strong>총가격:
-										</strong> <strong class="text-medium" th:text="${realTotalPrice}"></strong>
+									<td colspan="4" style="text-align: center;">
+										<strong>총가격:</strong>
+										<strong class="text-medium" th:text="${realTotalPrice}"></strong>
+										<strong>원</strong>
 									</td>
 								</tr>
 							</tbody>
@@ -377,6 +380,7 @@
 			addClickEventToInput('receiverPostCode');
 			addClickEventToInput('receiverAddress');
 			addClickEventToInput('receiverDetailAddress');
+			
 		</script>
 	</th:block>
 </body>
