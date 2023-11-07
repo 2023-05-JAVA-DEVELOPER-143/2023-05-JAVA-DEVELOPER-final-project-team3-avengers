@@ -24,10 +24,10 @@
 					<div class="col-lg-6">
 						<div class="padding-top-2x mt-2 hidden-lg-up"></div>
 
-						<h6 class="text-muted text-normal text-uppercase padding-top-2x" style="margin-left: 150px;">환불
-							하기</h6>
-						<hr class="margin-bottom-1x">
-						<div class="table-responsive" style="margin-left: -150px; width: 120%;">
+						<h5 class="text-muted text-normal text-uppercase padding-top-2x" style="margin-left: 150px; color: #000;">환불
+							하기</h5>
+						
+						<div class="row" style="margin-left: -150px; margin-right: -150px;">
 							<table class="table">
 								<thead class="thead-inverse">
 									<tr>
@@ -43,8 +43,8 @@
 										<th th:text="${ordersDto.Id}" scope="row" style="width: 500px;">112</th>
 										<td  th:text="${ordersDto.getDescription()}" style="width: 500px; white-space: nowrap;">좋은 컴퓨터 외
 											5개</td>
-										<td th:text="${ordersDto.getCreateDate()}" style="width: 500px; white-space: nowrap;">2023.10.15</td>
-										<td th:text="${ordersDto.getPrice()}" style="width: 500px; white-space: nowrap;">13,000,000원</td>
+										<td th:text="${#temporals.format(ordersDto.getCreateDate(), 'yyyy.MM.dd')}" style="width: 500px; white-space: nowrap;"></td>
+										<td th:text="${ordersDto.getPrice()} + '원'" style="width: 500px; white-space: nowrap;">13,000,000원</td>
 										<td th:text="${ordersDto.getStateMsg()}" style="width: 500px; white-space: nowrap;">배송완료</td>
 									</tr>
 
