@@ -63,7 +63,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:if="${cart == null}" >
+						<tr th:if="${cart == null} or ${cart.isEmpty()} " >
 							<td colspan="8" class="empty-cart-message">장바구니에 담긴 상품이 없습니다.</td>
 						</tr>
 						<!-- 반복문 가즈아 -->
@@ -79,11 +79,11 @@
 							</td>
 							<td>
 								<div class="product-item">
-									<a class="product-thumb" href="shop-single.html"><img src="img/shop/cart/01.jpg"
+									<a class="product-thumb" href="shop-single.html" ><img src="img/shop/cart/01.jpg"
 											alt="Product" th:src="${cart.pImage}"></a>
 									<div class="product-info">
 										<h4 class="product-title">
-											<a href="shop-single.html" th:text="${cart.productName}">Unionbay
+											<a href="shop-single.html" th:href="@{'http://localhost/product'+${cart.osId}}" th:text="${cart.productName}">Unionbay
 												Park</a>
 										</h4>
 										<div th:each="option: ${cart.options}">
@@ -168,9 +168,9 @@
 				<!-- Product-->
 				<div class="grid-item" th:each="productDto:${hits}" >
 					<div class="product-card">
-						<a class="product-thumb" href="product-detail.html" th:href="product-detail.html"><img
+						<a class="product-thumb" href="product-detail.html" th:href="@{'http://localhost/product'+${productDto.osId}}"><img
 								src="img/shop/products/09.jpg" alt="Product"
-								th:attr="src=@{${productDto.pImage}}"></a>
+								th:attr="src=@{${productDto.pImage}}"></a> <!-- th:href="product-detail.html" -->
 						<h3 class="product-title" th:text="${productDto.name}"><a href="product-detail.html">상품명</a></h3>
 						<h4 class="product-price" th:text="${#numbers.formatInteger(productDto.totalPrice ,3,'COMMA')} + '원'">$34.99</h4>
 						<div class="product-buttons">
@@ -186,11 +186,14 @@
 									title="Whishlist" th:product-heart-yet="|${productDto.osId}|">
 									<i class="icon-heart" th:heart="|${productDto.osId}|"></i>
 								</button>
-							<button class="btn btn-outline-primary btn-sm" id ="elseOptionsetId" data-toast data-toast-type="success"
-								data-toast-position="topRight" data-toast-icon="icon-circle-check"
-								data-toast-title="Product" data-toast-message="successfuly added to cart!" 
+							<button class="btn btn-outline-primary btn-sm1"  
 								th:data-optionSetId="${productDto.osId}" th:onclick="addCart([[${productDto.osId}]])">
 								Add to Cart</button>
+								<!-- 
+								data-toast data-toast-type="success"
+								data-toast-position="topRight" data-toast-icon="icon-circle-check"
+								data-toast-title="Product" 
+								data-toast-message="successfuly added to cart!!!"  -->
 						</div>
 					</div>
 				</div>
@@ -206,6 +209,11 @@
 		
 <script th:inline="javascript">
 	
+
+
+
+
+
 /* 총결제금액 계산 */
 $(document).ready(function() {
     let checkboxes = document.querySelectorAll('input[name="checkboxid"]');
@@ -468,7 +476,7 @@ function selectOption(elseOptionSets, osId) {
 		 console.log(data);
 	   });
 }
-function addCart(osId){
+ function addCart(osId){
 	
 	let optionSetId=osId;
 	let addData={
@@ -481,12 +489,12 @@ function addCart(osId){
 		contentType:'application/json',
 		data:JSON.stringify(addData),
 		success:function(response){
-			console.log(response);
 			if(response=='INTERNAL_SERVER_ERROR'){
 			alert('이미 장바구니에 5개  이상 담겨있습니다.');
 				
 			}else{
-			location.href="http://localhost:80/cart_list";
+			alert('장바구니에 담겼습니다.')
+			location.href= "http://localhost:80/cart_list";
 				
 			}
 		},
@@ -494,7 +502,7 @@ function addCart(osId){
 		}
 		
 	});
-}
+} 
 
 </script>
 </th:block>

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.boot.autoconfigure.cassandra.CassandraProperties.Request;
 import org.springframework.http.HttpStatus;import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -45,7 +46,6 @@ public class CartRestController {
 		HttpStatus code = HttpStatus.OK ;
 		// 1번 경우 = 회원 + 세션 장바구니 비어있음
 		if (sUserId != null && fUserCarts == null) {
-			//List<SUserCartResponseDto> findCarts = cartService.findsUserCartList(sUserId);
 			int qty = cartService.isDuplicateProduct(sUserId, dto.getOptionSetId());
 			// 장바구니에 담을 수량 제한
 			if(qty+dto.getQty()>5) {
@@ -81,6 +81,8 @@ public class CartRestController {
 					}
 				}
 			}
+	
+		
 		return ResponseEntity.status(HttpStatus.OK).body(code);
 	}
 
@@ -147,17 +149,17 @@ public class CartRestController {
 		} else {
 			System.out.println("이거 보이면 나도모름 말도안되는 에러");
 		}
+		
 	}
 
-	// 회원, 비회원 테스트 성공
 	@PutMapping("/qty")
-	public ResponseEntity<?> updateQty(@RequestBody CartDto dto, HttpSession session) throws Exception {
+	public void updateQty(@RequestBody CartDto dto, HttpSession session) throws Exception {
 		// 로그인 유저 체크
 		sUserId = (String) session.getAttribute("sUserId");
 		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
 		if (sUserId != null) {
 			// 회원이면 cartService 로직 호출
-			return ResponseEntity.status(HttpStatus.OK).body(cartService.updateCartQty(dto, sUserId));
+			//return ResponseEntity.status(HttpStatus.OK).body(cartService.updateCartQty(dto, sUserId));
 		} else {
 			for (int i = 0; i < fUserCarts.size(); i++) {
 				// 비회원일 경우 카트리스트를 돌리면서 dto의 optionsetId 와 동일한 옵션셋 아이디 체크
@@ -168,10 +170,14 @@ public class CartRestController {
 					break;
 				}
 			}
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(CartDto.builder().optionSetId(dto.getOptionSetId()).qty(dto.getQty()).build());
+			/*
+			 * return ResponseEntity.status(HttpStatus.OK)
+			 * .body(CartDto.builder().optionSetId(dto.getOptionSetId()).qty(dto.getQty()).
+			 * build());
+			 */
 			// 비회원일경우 body에 업데이트된 세션카트를 CartUpdateQtyDto 타입으로 변환 후 리턴
 		}
+		
 	}
 
 	@DeleteMapping(value = "/deletecart")
@@ -200,6 +206,7 @@ public class CartRestController {
 				session.setAttribute("fUserCarts", fUserCarts);
 			}
 		}
+		
 	}
 
 
@@ -210,7 +217,6 @@ public class CartRestController {
 			session.setAttribute("countCarts", cartService.countCarts(sUserId));
 		} else if (fUserCarts != null) { // 비회원 일시 장바구니 리스트의 사이즈
 			fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
-			// System.out.println(">>>>>>>>>"+fUserCarts.size());
 			session.setAttribute("countCarts", fUserCarts.size());
 		}
 	};

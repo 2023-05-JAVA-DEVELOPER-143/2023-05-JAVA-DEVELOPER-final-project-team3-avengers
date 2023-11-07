@@ -292,6 +292,7 @@ public class OrderController {
 	public String memberCartSelectOrderAddAction(@ModelAttribute("orderTotalDto") OrderTotalDto orderTotalDto,
 			Model model, HttpSession session) {
 		String sUserId = (String) session.getAttribute("sUserId");
+		int countCarts = 0 ;
 		if (sUserId == null) { // 비회원주문
 			try {
 				List<CartOrderDto> sUserCartOrderDtoList = (List<CartOrderDto>) session
@@ -323,23 +324,30 @@ public class OrderController {
 				orderGuestDto.setPhoneNo(orderTotalDto.getOrdererPhoneNo());
 
 				OrdersDto ordersDto = orderService.guestCartSelectOrderSave(deliveryDto, fUserCarts, orderGuestDto);
-
+				
 				model.addAttribute("orderId", ordersDto.getId());
 				List<CartDto> cartDtos = (List<CartDto>) session.getAttribute("fUserCarts");
 				for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
 					for (int j = 0; j < cartDtos.size(); j++) {
-						cartDtos.remove(cartDtos.get(j));
+						if(cartDtos.get(j).getOptionSetId()==sUserCartOrderDtoList.get(i).getId()) {
+							cartDtos.remove(cartDtos.get(j));
+						}
 					}
 				}
-				System.out.println("$$$$" + sUserCartOrderDtoList.size());
-				sUserCartOrderDtoList.clear();
+				// size=0 이면 전체주문 null 세션에 넣기 or size !=0 이면 선택주문 삭제된 cartDtos
+				if(cartDtos.size()==0) {
+					cartDtos=null;
+				}else {
+				countCarts=cartDtos.size();
+				}
+				System.out.println(">>>>> order cart 조건문 끝 "+cartDtos+countCarts);
 				System.out.println("$$$$" + sUserCartOrderDtoList.size());
 				session.setAttribute("sUserCartOrderDtoList", sUserCartOrderDtoList);
 				System.out.println(cartDtos);
 				System.out.println("$$$$$" + cartDtos);
 				session.setAttribute("fUserCarts", cartDtos);
 				session.setAttribute("realTotalPrice", 0);
-				session.setAttribute("countCarts", cartDtos.size());
+				session.setAttribute("countCarts", countCarts);
 				OrderMemberBasicDto orderMemberBasicDto=(OrderMemberBasicDto) session.getAttribute("orderMemberBasicDto");
 				orderMemberBasicDto.setUserName("");
 				orderMemberBasicDto.setPhoneNo("");

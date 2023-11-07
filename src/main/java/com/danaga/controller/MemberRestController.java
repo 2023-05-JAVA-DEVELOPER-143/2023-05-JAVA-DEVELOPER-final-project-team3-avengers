@@ -113,6 +113,7 @@ public class MemberRestController {
 			return map;
 		}
 		MemberResponseDto loginUser = memberService.getMemberBy(memberLoginDto.getUserName());
+		/********* 비회원으로 카트 담고 로그인시 회원 카트 DB insert **********/
 		List<CartDto> fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
 		session.setAttribute("sUserId", loginUser.getUserName());
 		if (fUserCarts != null) {
@@ -122,10 +123,10 @@ public class MemberRestController {
 				cartService.addCart(fUserCarts.get(i), loginUser.getUserName());
 				// 세션 -> db 로 데이타 인서트 후 세션 데이타 초기화 후 세션카트 카운트
 			}
-			fUserCarts.clear();
-			session.setAttribute("fUserCarts", fUserCarts);
+			session.setAttribute("fUserCarts", null);
 			session.setAttribute("countCarts", cartService.countCarts(loginUser.getUserName()));
 		}
+		/***************************************************************************************/
 		if (loginUser.getRole().equals("Admin")) {
 			session.setAttribute("role", loginUser.getRole());
 		}
