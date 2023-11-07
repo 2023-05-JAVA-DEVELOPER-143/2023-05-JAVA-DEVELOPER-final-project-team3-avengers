@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head></head>
+
 <body>
 	<div th:fragment="common-top" th:remove="tag">
 
@@ -14,18 +16,15 @@
 		<header class="navbar navbar-sticky navbar-dark bg-dark">
 			<!-- Search-->
 			<form class="site-search" method="get" url="/product/site_search">
-				<input type="text" name="site_search"
-					placeholder="Type to search...">
+				<input type="text" name="site_search" placeholder="Type to search...">
 				<div class="search-tools">
-					<span class="clear-search">Clear</span><span class="close-search"><i
-						class="icon-cross"></i></span>
+					<span class="clear-search">Clear</span><span class="close-search"><i class="icon-cross"></i></span>
 				</div>
 			</form>
 			<div class="site-branding">
 				<div class="inner">
 					<!-- Site Logo-->
-					<a class="site-logo" href="index"><img
-						src="bootstrap/img/logo/logo-light.png" alt="Unishop"></a>
+					<a class="site-logo" href="index"><img src="bootstrap/img/danaga_logo.png" alt="DANAGA.com"></a>
 				</div>
 			</div>
 			<!-- Main Navigation-->
@@ -34,87 +33,24 @@
 					<li class="has-megamenu active"><a href="index"><span>메인</span></a>
 					</li>
 					<li><a href="http://localhost/product"><span>제품</span></a></li>
+					<li><a href="http://localhost/cart_list"><span>장바구니</span></a></li>
+					<li th:if="${session.sUserId == null}"><a th:href="@{/find_order_guest}"><span>주문확인</span></a></li>
+					
 					<li><a href="/board1"><span>게시판</span></a>
 						<ul class="sub-menu">
 							<li><a href="/board1">자유게시판</a></li>
 							<li><a href="/board2">1:1문의</a></li>
-							<li class="has-children"><a href="/board3"><span>공지사항/FAQ</span></a>
-								<ul class="sub-menu">
-									<li><a href="/board3">공지사항</a></li>
-									<li><a href="/board4">FAQ</a></li>
-								</ul></li>
-						</ul></li>
-					<li><a href="#"><span>Pages</span></a>
+						</ul>
+					</li>
+					<li class="has-children"><a href="/board3"><span>공지사항/FAQ</span></a>
 						<ul class="sub-menu">
-							<li><a href="about.html">About Us</a></li>
-							<li><a href="contacts.html">Contacts</a></li>
-							<li><a href="faq.html">Help / FAQ</a></li>
-							<li><a href="order-tracking.html">Order Tracking</a></li>
-							<li><a href="search-results.html">Search Results</a></li>
-							<li><a href="404.html">404 Not Found</a></li>
-							<li><a href="coming-soon.html">Coming Soon</a></li>
-							<li><a class="text-danger" href="docs/dev-setup.html">Documentation</a></li>
-							<li th:if="${session.sUserId == null}"><a
-								href="http://localhost/find_order_guest">FIND ORDER GUEST</a></li>
-
-
-
-
-
-
-
-						</ul></li>
-					<li class="has-megamenu"><a href="components/accordion.html"><span>Components</span></a>
-						<ul class="mega-menu">
-							<li><span class="mega-menu-title">A - F</span>
-								<ul class="sub-menu">
-									<li><a href="components/accordion.html">Accordion</a></li>
-									<li><a href="components/alerts.html">Alerts</a></li>
-									<li><a href="components/buttons.html">Buttons</a></li>
-									<li><a href="components/cards.html">Cards</a></li>
-									<li><a href="components/carousel.html">Carousel</a></li>
-									<li><a href="components/countdown.html">Countdown</a></li>
-									<li><a href="components/forms.html">Forms</a></li>
-								</ul></li>
-							<li><span class="mega-menu-title">G - M</span>
-								<ul class="sub-menu">
-									<li><a href="components/gallery.html">Gallery</a></li>
-									<li><a href="components/google-maps.html">Google Maps</a></li>
-									<li><a href="components/images.html">Images &amp;
-											Figures</a></li>
-									<li><a href="components/list-group.html">List Group</a></li>
-									<li><a href="components/market-social-buttons.html">Market
-											&amp; Social Buttons</a></li>
-									<li><a href="components/media.html">Media Object</a></li>
-									<li><a href="components/modal.html">Modal</a></li>
-								</ul></li>
-							<li><span class="mega-menu-title">P - T</span>
-								<ul class="sub-menu">
-									<li><a href="components/pagination.html">Pagination</a></li>
-									<li><a href="components/pills.html">Pills</a></li>
-									<li><a href="components/progress-bars.html">Progress
-											Bars</a></li>
-									<li><a href="components/shop-items.html">Shop Items</a></li>
-									<li><a href="components/spinners.html">Spinners</a></li>
-									<li><a href="components/steps.html">Steps</a></li>
-									<li><a href="components/tables.html">Tables</a></li>
-								</ul></li>
-							<li><span class="mega-menu-title">T - W</span>
-								<ul class="sub-menu">
-									<li><a href="components/tabs.html">Tabs</a></li>
-									<li><a href="components/team.html">Team</a></li>
-									<li><a href="components/toasts.html">Toast
-											Notifications</a></li>
-									<li><a href="components/tooltips-popovers.html">Tooltips
-											&amp; Popovers</a></li>
-									<li><a href="components/typography.html">Typography</a></li>
-									<li><a href="components/video-player.html">Video
-											Player</a></li>
-									<li><a href="components/widgets.html">Widgets</a></li>
-								</ul></li>
-						</ul></li>
+							<li><a href="/board3">공지사항</a></li>
+							<li><a href="/board4">FAQ</a></li>
+						</ul>
+					</li>
 				</ul>
 			</nav>
+
 			<!-- Toolbar-->
 			<div class="toolbar">
 				<div class="inner">
@@ -126,11 +62,10 @@
 							<i class="icon-search"></i>
 						</div>
 						<div class="account">
-							<a th:if="${session.sUserId != null}"
-								th:href="@{/member_info_form}"></a>
+							<a th:if="${session.sUserId != null}" th:href="@{/member_info_form}"></a>
 							<!-- Thymeleaf 조건문을 사용하여 sUserId가 null인 경우 로그인 페이지로 이동 -->
-							<a th:if="${session.sUserId == null}"
-								th:href="@{/member_login_form}"></a><i class="icon-head"></i>
+							<a th:if="${session.sUserId == null}" th:href="@{/member_login_form}"></a><i
+								class="icon-head"></i>
 							<ul th:if="${session.sUserId != null}" class="toolbar-dropdown">
 								<li class="sub-menu-user">
 									<div class="user-ava"></div>
@@ -141,11 +76,10 @@
 								<li><a href="/member_info_form">내 정보</a></li>
 								<li><a href="/recentview">최근 본 상품</a></li>
 								<li><a href="/wishlist">관심 상품</a></li>
-								<li><a href="account-orders.html">주문 목록</a></li>
+								<li><a href="/member_order_List">주문 목록</a></li>
 								<li class="sub-menu-separator"></li>
-								<li><a href="/member_logout_action"> <i
-										class="icon-unlock"></i>로그아웃
-								</a></li>
+								<li><a href="/member_logout_action"> <i class="icon-unlock"></i>로그아웃
+									</a></li>
 							</ul>
 							<ul th:if="${session.sUserId == null}" class="toolbar-dropdown">
 								<li class="sub-menu-user">
@@ -159,57 +93,8 @@
 							</ul>
 						</div>
 						<div class="cart">
-							<a href="http://localhost/cart_list"></a><i class="icon-bag"></i><span
-								class="count" th:text="${session.countCarts}">3</span><span
-								class="subtotal">$289.68</span>
-							<div class="toolbar-dropdown">
-								<div class="dropdown-product-item">
-									<span class="dropdown-product-remove"><i
-										class="icon-cross"></i></span><a class="dropdown-product-thumb"
-										href="shop-single.html"><img
-										src="bootstrap/img/cart-dropdown/01.jpg" alt="Product"></a>
-									<div class="dropdown-product-info">
-										<a class="dropdown-product-title" href="shop-single.html">Unionbay
-											Park</a><span class="dropdown-product-details">1 x $43.90</span>
-									</div>
-								</div>
-								<div class="dropdown-product-item">
-									<span class="dropdown-product-remove"><i
-										class="icon-cross"></i></span><a class="dropdown-product-thumb"
-										href="shop-single.html"><img
-										src="bootstrap/img/cart-dropdown/02.jpg" alt="Product"></a>
-									<div class="dropdown-product-info">
-										<a class="dropdown-product-title" href="shop-single.html">Daily
-											Fabric Cap</a><span class="dropdown-product-details">2 x
-											$24.89</span>
-									</div>
-								</div>
-								<div class="dropdown-product-item">
-									<span class="dropdown-product-remove"><i
-										class="icon-cross"></i></span><a class="dropdown-product-thumb"
-										href="shop-single.html"><img
-										src="bootstrap/img/cart-dropdown/03.jpg" alt="Product"></a>
-									<div class="dropdown-product-info">
-										<a class="dropdown-product-title" href="shop-single.html">Haan
-											Crossbody</a><span> class="d</span> <a th:if="${sUserId != null}"
-											th:href="@{/member/member_info_form}"></a>
-										<!-- Thymeleaf 조건문을 사용하여 sUserId가 null인 경우 로그인 페이지로 이동 -->
-										<a th:if="${sUserId == null}"
-											th:href="@{/member/member_login_form}"></a><span>s="text-lg
-											text-medium">$289.68&nbsp;</span>
-									</div>
-								</div>
-								<div class="toolbar-dropdown-group">
-									<div class="column">
-										<a class="btn btn-sm btn-block btn-secondary" href="cart.html">View
-											Cart</a>
-									</div>
-									<div class="column">
-										<a class="btn btn-sm btn-block btn-success"
-											href="http://localhost/cart_order_form">주문하기</a>
-									</div>
-								</div>
-							</div>
+							<a href="/cart_list"></a><i class="icon-bag"></i><span class="count"
+								th:text="${session.countCarts}">3</span>
 						</div>
 					</div>
 				</div>
@@ -218,4 +103,5 @@
 
 	</div>
 </body>
+
 </html>

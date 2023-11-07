@@ -160,6 +160,7 @@ let member_join_action_rest=function(data){
 					    $('#reg-username').tooltip('dispose');
 					    }, 2000);
 					} else if(resultJson.result==2) {
+						$('#reg-username').css('border','0.5px solid green');
 						$('#reg-email').css('border','0.5px solid orange');
 						$('#reg-email').tooltip({'trigger':'hover', 'title': resultJson.msg});
 			    		$('#reg-email').tooltip('show');
@@ -167,6 +168,8 @@ let member_join_action_rest=function(data){
 					    $('#reg-email').tooltip('dispose');
 					    }, 2000);
 					} else if(resultJson.result==3) {
+						$('#reg-username').css('border','0.5px solid green');
+						$('#reg-email').css('border','0.5px solid green');
 						$('#reg-phone').css('border','0.5px solid orange');
 						$('#reg-phone').tooltip({'trigger':'hover', 'title': resultJson.msg});
 			    		$('#reg-phone').tooltip('show');
@@ -174,6 +177,9 @@ let member_join_action_rest=function(data){
 					    $('#reg-phone').tooltip('dispose');
 					    }, 2000);
 					} else if(resultJson.result==4) {
+						$('#reg-username').css('border','0.5px solid green');
+						$('#reg-email').css('border','0.5px solid green');
+						$('#reg-phone').css('border','0.5px solid green');
 						$('#reg-nickname').css('border','0.5px solid orange');
 						$('#reg-nickname').tooltip({'trigger':'hover', 'title': resultJson.msg});
 			    		$('#reg-nickname').tooltip('show');
@@ -186,7 +192,7 @@ let member_join_action_rest=function(data){
 		   			}
 				},
 				error:function(){
-					location.href="/404";
+					alert("회원가입 실패 다시 시도해 주십시요.");
 				}
 			});
 		} else {
@@ -239,35 +245,66 @@ $(function(){
         	});
         	//비밀번호
         	$('#reg-pass').on('change',function(e){
-        		if(($('#reg-pass').val().length < 8 || $('#reg-pass').val().length > 20) || isNoValidPassword($('#reg-pass').val())){
+        		if(($('#reg-pass').val().length < 8 || $('#reg-pass').val().length > 20)){
+        		if(isNoValidPassword($('#reg-pass').val())){
         			$('#reg-pass').css('border','0.5px dotted orange');
         			$('#reg-pass').tooltip({'trigger':'hover', 'title':'비밀번호는 8 ~ 20자 이내이고 최소한 하나의 문자, 숫자, 특수 문자가 포함되어야 합니다.'});
         			$('#reg-pass').tooltip('show');
         			$('#join-action-btn').attr('disabled', 'disabled');
-        		} else if($('#reg-pass').val()!=$('#reg-pass-confirm').val()) {
+        		} else {
+        			$('#reg-pass').css('border','0.5px dotted orange');
+        			$('#reg-pass').tooltip({'trigger':'hover', 'title':'비밀번호는 8 ~ 20자 이내이고 최소한 하나의 문자, 숫자, 특수 문자가 포함되어야 합니다.'});
+        			$('#reg-pass').tooltip('show');
+        			$('#join-action-btn').attr('disabled', 'disabled');
+        		}
+			} else {
+				if($('#reg-pass').val()!=$('#reg-pass-confirm').val()) {
 					$('#reg-pass').css('border','0.5px dotted orange');
+					$('#reg-pass').tooltip('hide');
+        			$('#reg-pass').tooltip('dispose');
         			$('#reg-pass').tooltip({'trigger':'hover', 'title':'비밀번호와 비밀번호확인이 일치하여야 합니다.'});
         			$('#reg-pass').tooltip('show');
         			$('#join-action-btn').attr('disabled', 'disabled');
 				} else if($('#reg-pass').val()==$('#reg-pass-confirm').val()) {
-					$('#reg-pass').css('border','0.5px solid green');
-        			$('#reg-pass').tooltip('hide');
-        			$('#reg-pass').tooltip('dispose');
+					$('#reg-pass,#reg-pass-confirm').css('border','0.5px solid green');
+        			$('#reg-pass,#reg-pass-confirm').tooltip('hide');
+        			$('#reg-pass,#reg-pass-confirm').tooltip('dispose');
         			$('#join-action-btn').removeAttr('disabled');
 				}
-			});
+			}
+        	});
 			$('#reg-pass-confirm').on('change',function(e){
+        	if(($('#reg-pass-confirm').val().length < 8 || $('#reg-pass-confirm').val().length > 20)){
+        		if(isNoValidPassword($('#reg-pass-confirm').val())){
+        			$('#reg-pass').css('border','0.5px dotted orange');
+        			$('#reg-pass,#reg-pass-confirm').tooltip('hide');
+        			$('#reg-pass,#reg-pass-confirm').tooltip('dispose');
+        			$('#reg-pass-confirm').tooltip({'trigger':'hover', 'title':'비밀번호는 8 ~ 20자 이내이고 최소한 하나의 문자, 숫자, 특수 문자가 포함되어야 합니다.'});
+        			$('#reg-pass-confirm').tooltip('show');
+        			$('#join-action-btn').attr('disabled', 'disabled');
+        		} else {
+        			$('#reg-pass').css('border','0.5px dotted orange');
+        			$('#reg-pass,#reg-pass-confirm').tooltip('hide');
+        			$('#reg-pass,#reg-pass-confirm').tooltip('dispose');
+        			$('#reg-pass-confirm').tooltip({'trigger':'hover', 'title':'비밀번호는 8 ~ 20자 이내이고 최소한 하나의 문자, 숫자, 특수 문자가 포함되어야 합니다.'});
+        			$('#reg-pass-confirm').tooltip('show');
+        			$('#join-action-btn').attr('disabled', 'disabled');
+        		}
+        	} else {
         		if($('#reg-pass').val()!=$('#reg-pass-confirm').val()){
         			$('#reg-pass-confirm,#reg-pass').css('border','0.5px dotted orange');
+        			$('#reg-pass,#reg-pass-confirm').tooltip('hide');
+        			$('#reg-pass,#reg-pass-confirm').tooltip('dispose');
         			$('#reg-pass-confirm').tooltip({'trigger':'hover', 'title':'비밀번호와 비밀번호확인이 일치하여야 합니다.'});
         			$('#reg-pass-confirm').tooltip('show');
         			$('#join-action-btn').attr('disabled', 'disabled');
         		} else if($('#reg-pass').val()==$('#reg-pass-confirm').val()) {
 					$('#reg-pass,#reg-pass-confirm').css('border','0.5px solid green');
-        			$('#reg-pass').tooltip('hide');
-        			$('#reg-pass').tooltip('dispose');
+        			$('#reg-pass,#reg-pass-confirm').tooltip('hide');
+        			$('#reg-pass,#reg-pass-confirm').tooltip('dispose');
         			$('#join-action-btn').removeAttr('disabled');
 				}
+        	}
         	});
         	//이메일
         	$('#reg-email').on('change',function(e){
@@ -394,7 +431,7 @@ function sendNumber(){
 		$('#reg-email').tooltip('hide');
 		$('#reg-email').tooltip('dispose');
 		$.ajax({
-        url:"/emailAuthentication",
+        url:"/emailauthentication",
         type:"post",
         dataType:"json",
         data:{"mail" : $("#reg-email").val()},

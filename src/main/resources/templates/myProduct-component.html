@@ -10,7 +10,11 @@
     </thead>
     <tbody>
     <th:block th:if="${productList.size()==0}">
-    	<!-- <img src="img/shop/product/01.jpg"> -->
+    <tr style="text-align: center;">
+    <td style="display: inline-block;">
+		<img src="images/out-of-stock.png" style="display: block; margin: 0 auto;">
+		<h1 style="text-align: center;"><a href="http://localhost/product">Go to Shopping</a></h1>
+		</td></tr>
     </th:block>
     <th:block th:unless="${productList.size()==0}">
       <tr th:each="productDto:${productList}">

@@ -77,7 +77,7 @@ public class MemberController {
 
 	@GetMapping("/member_find_password_form")
 	public String member_findpassword_form() {
-		return "member/member_find_password_form";
+		return "member/member_find_id_password_form";
 	}
 
 	@LoginCheck

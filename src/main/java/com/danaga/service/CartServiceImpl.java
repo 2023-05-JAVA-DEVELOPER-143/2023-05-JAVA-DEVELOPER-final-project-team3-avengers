@@ -25,6 +25,18 @@ public class CartServiceImpl implements CartService {
 	private final CartRepository cartRepository;
 	private final OptionSetDao optionSetDao;
 
+	@Override
+	public int isDuplicateProduct(String value, Long optionsetId) throws Exception{
+		Long findId = memberDao.findMember(value).getId();
+		Cart findCart = cartRepository.findByOptionSetIdAndMemberId(optionsetId,findId);
+		if(findCart!=null) {
+			return findCart.getQty();
+		}else {
+			return 0;
+		}
+	}
+	
+	
 	// 유저 카트 리스트
 	@Override
 	public List<SUserCartResponseDto> findsUserCartList(String sUserId) throws Exception {

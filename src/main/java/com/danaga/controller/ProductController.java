@@ -2,35 +2,30 @@ package com.danaga.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.danaga.dto.MemberResponseDto;
 import com.danaga.dto.ResponseDto;
 import com.danaga.dto.product.CategoryDto;
+import com.danaga.dto.product.OtherOptionSetDto;
 import com.danaga.dto.product.ProductDto;
+import com.danaga.dto.product.ProductListOutputDto;
 import com.danaga.dto.product.QueryStringDataDto;
 import com.danaga.dto.product.RecentViewDto;
-import com.danaga.entity.Category;
-import com.danaga.entity.Member;
-import com.danaga.entity.OptionSet;
-import com.danaga.entity.Product;
+import com.danaga.exception.product.FoundNoObjectException;
+import com.danaga.exception.product.FoundNoObjectException.FoundNoMemberException;
+import com.danaga.exception.product.FoundNoObjectException.FoundNoOptionSetException;
+import com.danaga.exception.product.NeedLoginException;
+import com.danaga.exception.product.ProductExceptionMsg;
+import com.danaga.exception.product.ProductSuccessMsg;
 import com.danaga.repository.product.OptionSetQueryData;
-import com.danaga.repository.product.OptionSetSearchQuery;
 import com.danaga.service.MemberService;
 import com.danaga.service.product.CategoryService;
 import com.danaga.service.product.InterestService;
@@ -40,7 +35,6 @@ import com.danaga.service.product.RecentViewService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 
 @Controller
 @Slf4j
@@ -52,126 +46,121 @@ public class ProductController {
 	private final RecentViewService recentViewService;
 	private final MemberService memberService;
 	private final InterestService interestService;
-	// 상품디테일에서 같은 카테고리 인기상품 노출 ㅇㅇ
-	// 상품 클릭해서 디테일 들어갈때 조회수 업뎃 ㅇㅇ
-	// product detail 조회시 recentView 추가 ㅇㅇ
 
-	
-	//옵션명,값 뽑는거 다시  옵션:list<값> 으로 나오게 ㅇㅇ 
+//	// 상단바의 검색 으로 키워드 검색 하는거 만들기
+//	@GetMapping("/site_search")
+//	public String site_search(Model model, HttpSession session) {
+//		String nameKeyword = (String) model.getAttribute("site_search");
+//		if (nameKeyword == null || nameKeyword.equals("")) {
+//			return "redirect:/product";
+//		}
+//		// 검색 메인화면에 최상위 카테고리 선택할수 있게 표시
+//		ResponseDto<CategoryDto> categoryResponseDto = categoryService.AncestorCategories();
+//		List<CategoryDto> categoryList = categoryResponseDto.getData();
+//		if (session.getAttribute("sUserId") == null) {
+//			ResponseDto<ProductListOutputDto> responseDto = service.searchProducts(// 주문수로 전체상품 정렬하여 조회
+//					QueryStringDataDto.builder().nameKeyword(nameKeyword).orderType(OptionSetQueryData.BY_ORDER_COUNT)
+//							.build(),
+//					0);
+//			List<ProductListOutputDto> productList = responseDto.getData();
+//			model.addAttribute("productList", productList);
+//		} else {
+//			ResponseDto<ProductListOutputDto> responseDto = service.searchProductsForMember(// 주문수로 전체상품 정렬하여 조회
+//					QueryStringDataDto.builder().nameKeyword(nameKeyword).orderType(OptionSetQueryData.BY_ORDER_COUNT)
+//							.build(),
+//					(String) session.getAttribute("sUserId"), 0);
+//			if (responseDto.getMsg().equals(ProductExceptionMsg.FOUND_NO_MEMBER)) {
+//				session.removeAttribute("sUserId");
+//			} else if (responseDto.getMsg().equals(ProductSuccessMsg.SEARCH_PRODUCTS)) {
+//				List<ProductListOutputDto> productList = responseDto.getData();
+//				model.addAttribute("productList", productList);
+//			}
+//		}
+//		model.addAttribute("categoryList", categoryList);
+//		return "product/product";
+//	}
 
-	//필터 쿼리 짜기....
-	//th:link들 하고 핸들바{}하고 
-	
-	
-	//상단바의 검색 으로 키워드 검색 하는거 만들기 
-	@GetMapping("/site_search")
-	public String site_search(Model model,HttpSession session) {
-		try {
-			String nameKeyword = (String) model.getAttribute("site_search");
-			//검색 메인화면에 최상위 카테고리 선택할수 있게 표시
-			ResponseDto<CategoryDto> categoryResponseDto = categoryService.AncestorCategories();
-			List<CategoryDto> categoryList = categoryResponseDto.getData();
-			if(session.getAttribute("sUserId")==null) {
-			ResponseDto<ProductDto> responseDto = service.searchProducts(//주문수로 전체상품 정렬하여 조회
-					QueryStringDataDto.builder()
-					.nameKeyword(nameKeyword)
-					.orderType(OptionSetQueryData.BY_ORDER_COUNT)
-					.build());
-			List<ProductDto> productList = responseDto.getData();
-			model.addAttribute("productList",productList);
-			}else {
-				ResponseDto<ProductDto> responseDto = service.searchProductsForMember(//주문수로 전체상품 정렬하여 조회
-						QueryStringDataDto.builder()
-						.nameKeyword(nameKeyword)
-						.orderType(OptionSetQueryData.BY_ORDER_COUNT)
-						.build(),(String)session.getAttribute("sUserId"));
-				List<ProductDto> productList = responseDto.getData();
-				model.addAttribute("productList",productList);
-				
-			}
-			model.addAttribute("categoryList",categoryList);
-			return "product/product";
-		} catch (Exception e) {
-			// error페이지, 페이지내 에러 메세지 넘겨주기
-			e.printStackTrace();
-			model.addAttribute("errorMsg", e.getMessage());
-			return null;
-		}
-	}
-	//전체상품 
+	// 전체상품
 	@GetMapping("/product")
-	public String searchProduct(Model model,HttpSession session) {
-		try {
-			ResponseDto<CategoryDto> categoryResponseDto = categoryService.AncestorCategories();
-			List<CategoryDto> categoryList = categoryResponseDto.getData();
-			if(session.getAttribute("sUserId")!=null) {
-				ResponseDto<ProductDto> responseDto = service.searchProductsForMember(//주문수로 전체상품 정렬하여 조회
-						QueryStringDataDto.builder()
-						.orderType(OptionSetQueryData.BY_ORDER_COUNT)
-						.build(),(String)session.getAttribute("sUserId"));
-				List<ProductDto> productList = responseDto.getData();
-				model.addAttribute("productList",productList);
-			}else {
-			//검색 메인화면에 최상위 카테고리 선택할수 있게 표시
-			ResponseDto<ProductDto> responseDto = service.searchProducts(//주문수로 전체상품 정렬하여 조회
-					QueryStringDataDto.builder()
-					.orderType(OptionSetQueryData.BY_ORDER_COUNT)
-					.build());
-			List<ProductDto> productList = responseDto.getData();
-			model.addAttribute("productList",productList);
+	public String searchProduct(Model model, HttpSession session) {
+		ResponseDto<CategoryDto> categoryResponseDto = categoryService.AncestorCategories();
+		List<CategoryDto> categoryList = categoryResponseDto.getData();
+		if (session.getAttribute("sUserId") != null) {
+			ResponseDto<ProductListOutputDto> responseDto = service.searchProductsForMember(// 주문수로 전체상품 정렬하여 조회
+					QueryStringDataDto.builder().orderType(OptionSetQueryData.BY_ORDER_COUNT).build(),
+					(String) session.getAttribute("sUserId"), 0);
+			if (responseDto.getMsg().equals(ProductExceptionMsg.FOUND_NO_MEMBER)) {
+				session.removeAttribute("sUserId");
+			} else if (responseDto.getMsg().equals(ProductSuccessMsg.SEARCH_PRODUCTS)) {
+				List<ProductListOutputDto> productList = responseDto.getData();
+				model.addAttribute("productList", productList);
 			}
-			model.addAttribute("categoryList",categoryList);
-			return "product/product";
-		} catch (Exception e) {
-			// error페이지, 페이지내 에러 메세지 넘겨주기
-			e.printStackTrace();
-			model.addAttribute("errorMsg", e.getMessage());
-			return null;
+		} else {
+			// 검색 메인화면에 최상위 카테고리 선택할수 있게 표시
+			ResponseDto<ProductListOutputDto> responseDto = service.searchProducts(// 주문수로 전체상품 정렬하여 조회
+					QueryStringDataDto.builder().orderType(OptionSetQueryData.BY_ORDER_COUNT).build(), 0);
+			List<ProductListOutputDto> productList = responseDto.getData();
+			model.addAttribute("productList", productList);
 		}
+		model.addAttribute("categoryList", categoryList);
+		return "product/product";
 	}
-	//대분류 카테고리를 선택하고 검색메인화면으로 들어간 경우
-	
+	// 대분류 카테고리를 선택하고 검색메인화면으로 들어간 경우
 
-	//제품디테일 ++++++관련상품 20개 뽑기 옆으로 스크롤해서+++++같은 프로덕트의 다른 옵션들 뽑기
+	// 제품디테일 ++++++관련상품 20개 뽑기 옆으로 스크롤해서+++++같은 프로덕트의 다른 옵션들 뽑기
 	@GetMapping("/product{optionSetId}")
-	public String productDetail(HttpSession session, @PathVariable Long optionSetId, Model model) {
-		try {
-			ProductDto productList =(ProductDto) service.findById(optionSetId).getData().get(0);
-			//해당 옵션셋 찾아서 뿌리기
-			List<ProductDto> optionSets = (List<ProductDto>) service.showOtherOptionSets(optionSetId).getData();
-			service.updateViewCount(optionSetId);
-			//디테일 들어갈때 조회수도 증가
-			if(session.getAttribute("sUserId")!=null) {//로그인유저일시
-				String username =(String)session.getAttribute("sUserId");
-				MemberResponseDto member = memberService.getMemberBy(username);
-			recentViewService.addRecentView(RecentViewDto.builder()
-					.memberId(member.getId())//memberId
-					.optionSetId(optionSetId)
-					.build());
-			//최근본상품에 추가
-			List<Boolean> isInterested=(List<Boolean>) interestService.isMyInterest(optionSetId, username).getData();
-			model.addAttribute("isInterested",isInterested.get(0));
-			
-			List<ProductDto>hits=service.displayHitProductsForMember(optionSetId, username).getData();
-			model.addAttribute("hits",hits);
-			}else{
-			List<ProductDto> hits = service.displayHitProducts(optionSetId).getData();
-			model.addAttribute("hits",hits);
-			List<Boolean> isInterested=new ArrayList<>();
-			isInterested.add(false);
-			model.addAttribute("isInterested",isInterested.get(0));
-			}
-			//같은 카테고리의 히트상품도 표시
-			model.addAttribute("productList",productList);
-			model.addAttribute("otherOptions",optionSets);
-			return "product/product_detail";
-		} catch (Exception e) {
-			// error페이지, 페이지내 에러 메세지 넘겨주기
-			e.printStackTrace();
-			model.addAttribute("errorMsg", e.getMessage());
-			return "redirect:exception.html";
+	public String productDetail(HttpSession session, @PathVariable Long optionSetId, Model model)
+			throws FoundNoMemberException, FoundNoOptionSetException {
+		List<ProductDto> productList = service.findById(optionSetId).getData();
+		if (productList == null || productList.size() == 0) {
+			throw new FoundNoObjectException.FoundNoOptionSetException();
 		}
-	}
-	
 
+		// 해당 옵션셋 찾아서 뿌리기
+		ResponseDto<OtherOptionSetDto> optionSets = service.showOtherOptionSets(optionSetId);
+		if (optionSets.getMsg().equals(ProductExceptionMsg.FOUND_NO_PRODUCT)) {
+			log.warn("this optionset(" + optionSetId + ") has no product belonged");
+			throw new FoundNoOptionSetException();
+		}
+		service.updateViewCount(optionSetId);
+
+		ResponseDto<ProductListOutputDto> hits = null;
+		// 디테일 들어갈때 조회수도 증가
+		if (session.getAttribute("sUserId") != null) {// 로그인유저일시
+			String username = (String) session.getAttribute("sUserId");
+			MemberResponseDto member = null;
+			try {
+				member = memberService.getMemberBy(username);
+			} catch (Exception e) {
+				log.warn("login user(username=" + session.getAttribute("sUserId")
+						+ ") but failed to find in memberlist");
+				e.printStackTrace();
+				throw new FoundNoMemberException();
+			}
+			recentViewService
+					.addRecentView(RecentViewDto.builder().memberId(member.getId()).optionSetId(optionSetId).build());
+			// 최근본상품에 추가
+			List<Boolean> isInterested;
+			ResponseDto<?> interestResult = interestService.isMyInterest(optionSetId, username);
+			if (interestResult.getMsg().equals(ProductSuccessMsg.IS_MY_INTEREST)) {
+				isInterested = (List<Boolean>) interestResult.getData();
+				model.addAttribute("isInterested", isInterested.get(0));
+			}
+			hits = service.displayHitProductsForMember(optionSetId, username, 0);
+		} else {
+			hits = service.displayHitProducts(optionSetId, 0);
+			List<Boolean> isInterested = new ArrayList<>();
+			isInterested.add(false);
+			model.addAttribute("isInterested", isInterested.get(0));
+		}
+		// 같은 카테고리의 히트상품도 표시
+		if (hits.getMsg().equals(ProductSuccessMsg.SEARCH_PRODUCTS)) {
+			model.addAttribute("hits", hits.getData());
+		} else if (hits.getMsg().equals(ProductExceptionMsg.FOUND_NO_CATEGORY)) {
+			log.warn("this optionset(id=" + optionSetId + ") has no category");
+		}
+		model.addAttribute("productList", productList.get(0));
+		model.addAttribute("otherOptions", optionSets.getData());
+		return "product/product_detail";
+	}
 }

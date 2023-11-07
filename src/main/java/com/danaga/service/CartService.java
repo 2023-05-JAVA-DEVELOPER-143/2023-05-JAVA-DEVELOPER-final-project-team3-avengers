@@ -21,7 +21,10 @@ public interface CartService {
 
 	// 비회원 카트 리스트
 	FUserCartResponseDto findfUserCartList(CartDto dto);
-
+	
+	// 중복제품 수량 체크
+	int isDuplicateProduct(String value,Long optionsetId) throws Exception;
+	
 	// 카트 추가
 	void addCart(CartDto dto, String value) throws Exception;
 

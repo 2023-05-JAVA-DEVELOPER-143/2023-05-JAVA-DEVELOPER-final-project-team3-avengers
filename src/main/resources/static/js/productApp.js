@@ -3,31 +3,35 @@ import * as api from "./p_apiService.js"
 let hash = window.location.hash
 let path = hash.substring(1);
 let html = '';
-
+let firstResult = 0;
 let filterDto = {};
 filterDto["orderType"] = "판매순";
+filterDto["firstResult"] = firstResult;
 
 /*
 초기실행메쏘드
 */
 export function init() {
 	registEvent();
-	navigate();
 }
 
 function registEvent() {
 
+	$('#otherOptions option').each(function() {
+		let $this = $(this);
+		$this.attr('title', $this.data('tooltip'));
+	});
 	$('#orderTypeSearch').change(function() {
 		filterDto["orderType"] = $('#orderTypeSearch option:selected').val();
 		api.searchResult(filterDto);
 	});
-	$('#minPriceSearch').keydown(function() {
-		filterDto["minPrice"] = $('#minPridceSearch').val();
+	$('#minPriceSearch').keyup(function() {
+		filterDto["minPrice"] = $('#minPriceSearch').val();
 	});
-	$('#maxPriceSearch').keydown(function() {
+	$('#maxPriceSearch').keyup(function() {
 		filterDto["maxPrice"] = $('#maxPriceSearch').val();
 	});
-	$('#nameKeywordSearch').keydown(function() {
+	$('#nameKeywordSearch').keyup(function() {
 		filterDto["nameKeyword"] = $('#nameKeywordSearch').val();
 	});
 
@@ -54,10 +58,12 @@ function registEvent() {
 			filterDto["category"]["id"] = categoryId;
 			filterDto["category"]["name"] = subCategoryName;
 			api.searchResult(filterDto);
+			firstResult = 0;
 			filterDto.optionset = [];
 			console.log(filterDto);
 
 		} else if ($(e.target).attr('product-heart')) {
+			e.preventDefault();
 			let optionSetId = $(e.target).attr('product-heart');
 			api.untapHeart(optionSetId, function callback() {
 				let button = $(e.target);
@@ -67,6 +73,7 @@ function registEvent() {
 				button.removeClass('active');
 			});
 		} else if ($(e.target).attr('product-heart-yet')) {
+			e.preventDefault();
 			let optionSetId = $(e.target).attr('product-heart-yet');
 			api.tapHeart(optionSetId, function callback() {
 				let button = $(e.target);
@@ -91,28 +98,30 @@ function registEvent() {
 			let optionName = $(e.target).closest('tr').find('th').text();
 			let optionValue = $(e.target).attr('data-optionValue');
 			let checked = $(e.target).is(":checked");
-			console.log(optionName,optionValue,checked);
+			console.log(optionName, optionValue, checked);
 			updateQueryDataDto(optionName, optionValue, checked);
 			console.log(filterDto);
+			firstResult = 0;
 			api.searchResult(filterDto);
 		} else if ($(e.target).attr('id') == 'main-search-btn') {
+			firstResult = 0;
 			api.searchResult(filterDto);
 		} else if ($(e.target).attr('data-toast-message') == "successfuly added to cart!") {
+			e.preventDefault();
 			let optionSetId = $(e.target).attr('data-optionSetId');
 			let qty = 1;
 			if ($(e.target).attr('data-cart-qty')) {
 				qty = $('#qty option:selected').text();
 				optionSetId = $('#otherOptions option:selected').val();
 			}
-			e.stopPropagation();
 			api.addToCart(optionSetId, qty);
 		} else if ($(e.target).attr('heart')) {
+			e.preventDefault();
 			let parentButton = undefined;
 			if ($(e.target).parent().attr('product-heart')) {
 				parentButton = $(e.target).parent();
 				let optionSetId = parentButton.attr('product-heart');
 				api.untapHeart(optionSetId, function callback() {
-					// product-heart-yet 속성의 값을 product-heart로 옮기기
 					parentButton.attr('product-heart-yet', parentButton.attr('product-heart'));
 					parentButton.removeAttr('product-heart');
 					parentButton.removeClass('active');
@@ -121,17 +130,14 @@ function registEvent() {
 				parentButton = $(e.target).parent();
 				let optionSetId = parentButton.attr('product-heart-yet');
 				api.tapHeart(optionSetId, function callback() {
-					// product-heart-yet 속성의 값을 product-heart로 옮기기
 					parentButton.attr('product-heart', parentButton.attr('product-heart-yet'));
 					parentButton.removeAttr('product-heart-yet');
 					parentButton.addClass('active');
 				});
 			}
+
 		} else if ($(e.target).attr('toOrder')) {
-			/*let qty = $('#qty option:selected').text();
-			let	optionSetId = $('#otherOptions option:selected').val();
 			e.stopPropagation();
-			api.productOrder(optionSetId, qty);*/
 			$('#productOrderForm').submit();
 		}
 	});
@@ -181,5 +187,25 @@ function navigate() {
 		$('#page_list_content').html(html);
 	}
 }
+const $result =$("#toObserve");
+const $end = document.createElement("div");
+$end.id = 'product-list-observed';
+$result.append($end);
 
-//init();
+const callback = (entries, observer) => {
+	entries.forEach((entry) => {
+		if (entry.isIntersecting) {
+			firstResult += 20;
+			filterDto.firstResult = firstResult;
+			api.continueSearchResult(filterDto, observer);
+		}
+	});
+}
+const options = {
+	root: null, // 뷰포트를 기준으로 타켓의 가시성 검사
+	rootMargin: '0px 0px 0px 0px', // 확장 또는 축소 X
+	threshold: 1 // 타켓의 가시성 0%일 때 옵저버 실행
+};
+const observer = new IntersectionObserver(callback, options);
+observer.observe($end);
+

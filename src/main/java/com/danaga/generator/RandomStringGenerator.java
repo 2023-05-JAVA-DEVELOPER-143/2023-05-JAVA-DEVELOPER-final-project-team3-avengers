@@ -3,11 +3,11 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 public class RandomStringGenerator {
-    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%^&*()_+";
 
     public static String generateRandomString() throws NoSuchAlgorithmException {
         SecureRandom random = new SecureRandom();
-        StringBuilder sb = new StringBuilder(12);
+        StringBuilder sb = new StringBuilder(10);
 
         // 최소 하나의 영문, 숫자 및 특수 문자를 추가
         sb.append(CHARACTERS.charAt(random.nextInt(26))); // 영문
@@ -15,7 +15,7 @@ public class RandomStringGenerator {
         sb.append(CHARACTERS.charAt(2 * 26 + random.nextInt(10))); // 숫자
         sb.append(CHARACTERS.charAt(2 * 26 + 10 + random.nextInt(7))); // 특수 문자
 
-        for (int i = 4; i < 12; i++) {
+        for (int i = 4; i < 10; i++) {
             sb.append(CHARACTERS.charAt(random.nextInt(CHARACTERS.length())));
         }
 

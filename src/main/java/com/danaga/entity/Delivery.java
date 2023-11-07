@@ -22,7 +22,7 @@ public class Delivery {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DELIVERY_DELIVERY_NO_SEQ")
 	@Column(length = 20)
 	private Long id; //PK
-	@Column(length = 10)
+	@Column(length = 20)
 	private String name; //수령인
 	@Column(length = 20)
 	private String phoneNumber; //수령인전화번호

@@ -20,9 +20,11 @@ import com.danaga.dto.OrdersDto;
 import com.danaga.dto.OrdersProductDto;
 import com.danaga.entity.Cart;
 import com.danaga.entity.Delivery;
+import com.danaga.entity.Member;
 import com.danaga.entity.Orders;
 import com.danaga.repository.DeliveryRepository;
 import com.danaga.repository.OrderItemRepository;
+import com.danaga.repository.OrderRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -39,6 +41,8 @@ class OrderServiceImplTest {
 	DeliveryRepository deliveryRepository;
 	@Autowired
 	CartService cartService;
+	@Autowired
+	OrderRepository orderRepository;
 	
 	/*************************************비회원*********************************/
 //	@Transactional
@@ -185,7 +189,7 @@ class OrderServiceImplTest {
 	@Transactional
 	@Rollback(false)
 	@Test
-	//@Disabled
+	@Disabled
 	void testMemberOrderList()throws Exception {
 		
 		System.out.println("-----------------------------"+orderService.memberOrderList("User1"));
@@ -251,6 +255,20 @@ class OrderServiceImplTest {
 		orderService.updateStatementByCancleOrder(6L);
 		orderService.updateStatementByCancleOrder(19L);
 	}
+	
+	@Test
+	//@Disabled
+	@Transactional
+	@Rollback(false)
+	void testOrdersMemberIdNull()throws Exception {
+		
+		String userName = "Kakao3152284904";
+		orderService.ordersMemberIdNull(userName);
+		
+	}
+	
+	
+	
 }
 //	@Test
 //	@Disabled

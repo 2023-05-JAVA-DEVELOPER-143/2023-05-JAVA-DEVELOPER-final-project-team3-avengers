@@ -1,9 +1,12 @@
 package com.danaga.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.boot.autoconfigure.cassandra.CassandraProperties.Request;
+import org.springframework.http.HttpStatus;import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +20,7 @@ import com.danaga.dto.CartDto;
 import com.danaga.dto.ResponseDto;
 import com.danaga.dto.SUserCartResponseDto;
 import com.danaga.dto.product.ProductDto;
+import com.danaga.entity.Cart;
 import com.danaga.service.CartService;
 import com.danaga.service.product.OptionSetService;
 
@@ -35,16 +39,22 @@ public class CartRestController {
 	static List<CartDto> fUserCarts; // 비회원 장바구니(세션)
 	static String sUserId; // 로그인 유저 아이디
 
-	@Operation(summary = " 카트 추가 ")
 	@PostMapping
-	public void addCart(@RequestBody CartDto dto, HttpSession session) throws Exception {
+	public ResponseEntity<?> addCart(@RequestBody CartDto dto, HttpSession session) throws Exception {
 		sUserId = (String) session.getAttribute("sUserId");
 		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
+		HttpStatus code = HttpStatus.OK ;
 		// 1번 경우 = 회원 + 세션 장바구니 비어있음
 		if (sUserId != null && fUserCarts == null) {
-			cartService.addCart(dto, sUserId);
-			countCarts(session);
-		 
+			int qty = cartService.isDuplicateProduct(sUserId, dto.getOptionSetId());
+			// 장바구니에 담을 수량 제한
+			if(qty+dto.getQty()>5) {
+				code=HttpStatus.INTERNAL_SERVER_ERROR;
+			}else {
+				cartService.addCart(dto, sUserId);
+				countCarts(session);
+				code=HttpStatus.OK;
+			}
 		} else {// 3번 경우 = 비회원 + 세션 장바구니 X
 			if (sUserId == null && fUserCarts == null) {
 				// 들어온 dto -> list에 추가 후 세션에 저장
@@ -52,22 +62,30 @@ public class CartRestController {
 				fUserCarts.add(dto);
 				session.setAttribute("fUserCarts", fUserCarts);
 				countCarts(session);
+				code=HttpStatus.OK;
 			} else if (sUserId == null && fUserCarts != null) {
 				// 4번 경우 = 비회원 + 세션 장바구니 O
 				int findIndex = findFUserCart(fUserCarts, dto);
 				if (findIndex == -1) {
 					fUserCarts.add(dto);
+					code=HttpStatus.OK;
 				} else {
+					if(fUserCarts.get(findIndex).getQty()+dto.getQty()>5) {
+						code=HttpStatus.INTERNAL_SERVER_ERROR;
+					}else {
 					fUserCarts.get(findIndex).setQty(fUserCarts.get(findIndex).getQty() + dto.getQty());
+					code=HttpStatus.OK;
+					}
+					session.setAttribute("fUserCarts", fUserCarts);
+					countCarts(session);
+					}
 				}
-				session.setAttribute("fUserCarts", fUserCarts);
-				countCarts(session);
 			}
-		}
-		//return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.builder().build());
+	
+		
+		return ResponseEntity.status(HttpStatus.OK).body(code);
 	}
 
-	@Operation(summary = "카트 옵션 변경")
 	@PostMapping("/optionset")
 	public void updateOptionset(@RequestBody List<Long> ids, HttpSession session) throws Exception {
 		sUserId = (String) session.getAttribute("sUserId");
@@ -83,7 +101,7 @@ public class CartRestController {
 			// return ResponseEntity.status(HttpStatus.OK).body(list);
 		} else if (fUserCarts != null) {
 			// 기존 제품 == 변경하고자 하는 제품 예외
-			
+
 			for (int i = 0; i < fUserCarts.size(); i++) {
 				// 기존옵션셋 아이디 수량 , 변경하고자 하는옵션셋 아이디 수량 ,
 				if (oldId == fUserCarts.get(i).getOptionSetId()) {
@@ -95,14 +113,9 @@ public class CartRestController {
 			}
 			int oldFUserCartIndex = fUserCarts.indexOf(oldFUserCart);
 			int ChangeFUserIndex = fUserCarts.indexOf(changeFUserCart);
-			// 1. 변경 전 옵션셋 아이디 수량 1 + 변경 want 옵션셋 존재 --> 변경 전 CartDto 삭제 , 변경 want CartDto 수량 + 1
-			// 2. 변경 전 옵션셋 아이디 수량 1 + 변경 want 옵션셋 존재 X --> 변경 전 CartDto 삭제 , 변경 want CartDto 생성
-			// 3. 변경 전 옵션셋 아이디 수량 >=2 + 변경 want 옵션셋 존재 --> 변경 전 CartDto 수량 -1 , 변경 want CartDto 수량 +1
-			// 4. 변경 전 옵션셋 아이디 수량 >=2 + 변경 want 옵션셋 X --> 변경 전 CartDto 수량 -1 , 변경 want CartDto 생성
-
-			// 변경하고자하는 옵션셋 아이디 이미 존재
+			// [ 중복 제품 O ]
 			if (isDuplicateId == true) {
-				// 1번 경우
+				//  변경 전 수량 1 
 				if (oldFUserCart.getQty() == 1) {
 					changeFUserCart.setQty(changeFUserCart.getQty() + 1);
 					fUserCarts.set(ChangeFUserIndex, changeFUserCart);
@@ -110,54 +123,43 @@ public class CartRestController {
 					session.setAttribute("fUserCarts", fUserCarts);
 					countCarts(session);
 				} else if (oldFUserCart.getQty() >= 2) {
-					// 3번 경우
+					//  변경 전 수량 >=2 
 					oldFUserCart.setQty(oldFUserCart.getQty() - 1);
 					changeFUserCart.setQty(changeFUserCart.getQty() + 1);
 					fUserCarts.set(oldFUserCartIndex, oldFUserCart);
 					fUserCarts.set(ChangeFUserIndex, changeFUserCart);
-					
 					session.setAttribute("fUserCarts", fUserCarts);
 				}
-			} else if (isDuplicateId == false) {
-				// 2번경우
+			} else if (isDuplicateId == false) { // 중복 제품 X
+				// 변경 전 수량 1 
 				if (oldFUserCart.getQty() == 1) {
 					fUserCarts.remove(oldFUserCart);
 					CartDto newFUserCart = CartDto.builder().optionSetId(changeId).qty(1).build();
 					fUserCarts.add(newFUserCart);
 					session.setAttribute("fUserCarts", fUserCarts);
 				} else if (oldFUserCart.getQty() >= 2) {
-					// 4번 경우
+					// 변경 전 수량 >= 2
 					oldFUserCart.setQty(oldFUserCart.getQty() - 1);
 					CartDto newFUserCart = CartDto.builder().optionSetId(changeId).qty(1).build();
 					fUserCarts.set(oldFUserCartIndex, oldFUserCart);
 					fUserCarts.add(newFUserCart);
 					session.setAttribute("fUserCarts", fUserCarts);
 				}
-
 			}
-
-			// return null;
 		} else {
 			System.out.println("이거 보이면 나도모름 말도안되는 에러");
-			// 말도 안되는 상황
-			// return null;
 		}
-
+		
 	}
 
-	// 회원, 비회원 테스트 성공
-	@Operation(summary = "카트 수량 변경")
 	@PutMapping("/qty")
-	public ResponseEntity<CartDto> updateQty(@RequestBody CartDto dto, HttpSession session) throws Exception {
+	public void updateQty(@RequestBody CartDto dto, HttpSession session) throws Exception {
 		// 로그인 유저 체크
-//	 if (optionSetService.findById(dto.getOptionSetId()).getData().get(0).getStock()>dto.getQty());{
-//		 // 재고량이 부족합니다.
-//	 }
 		sUserId = (String) session.getAttribute("sUserId");
 		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
 		if (sUserId != null) {
 			// 회원이면 cartService 로직 호출
-			return ResponseEntity.status(HttpStatus.OK).body(cartService.updateCartQty(dto, sUserId));
+			//return ResponseEntity.status(HttpStatus.OK).body(cartService.updateCartQty(dto, sUserId));
 		} else {
 			for (int i = 0; i < fUserCarts.size(); i++) {
 				// 비회원일 경우 카트리스트를 돌리면서 dto의 optionsetId 와 동일한 옵션셋 아이디 체크
@@ -168,21 +170,18 @@ public class CartRestController {
 					break;
 				}
 			}
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(CartDto.builder().optionSetId(dto.getOptionSetId()).qty(dto.getQty()).build());
+			/*
+			 * return ResponseEntity.status(HttpStatus.OK)
+			 * .body(CartDto.builder().optionSetId(dto.getOptionSetId()).qty(dto.getQty()).
+			 * build());
+			 */
 			// 비회원일경우 body에 업데이트된 세션카트를 CartUpdateQtyDto 타입으로 변환 후 리턴
 		}
-	 }
-	
+		
+	}
 
-	// 회원,비회원 테스트 성공
-	// 선택삭제 optionsetId 리스트로 받기 --> 체크박스 2개 이상 선택시 여러개 존재
-	@Operation(summary = "카트 선택삭제")
 	@DeleteMapping(value = "/deletecart")
 	public void deleteCart(@RequestParam(name = "idlist[]") List<Long> idList, HttpSession session) throws Exception {
-		System.out.println("------------------ 비회원 카트 삭제 --------------------------");
-		System.out.println(" 비회원 카트에서 삭제할 옵션셋 아이디들 " + idList);
-		// Long id == 회원일시 카트 pk , 비회원 일시 optionsetId
 		sUserId = (String) session.getAttribute("sUserId");
 		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
 		// 회원일 경우
@@ -192,7 +191,6 @@ public class CartRestController {
 			}
 		} else if (fUserCarts != null) { // 비회원일 경우
 			// 선택 optionsetId 와 카트리스트의 optionsetId 동일한 것 찾고 삭제 후 세션에 저장
-			System.out.println(" >>>>>>>>>> 비회원 삭제 전 카트 사이즈 " + fUserCarts.size());
 			for (int i = 0; i < idList.size(); i++) {
 				for (int j = 0; j < fUserCarts.size(); j++) {
 					if (idList.get(i) == fUserCarts.get(j).getOptionSetId()) {
@@ -201,26 +199,24 @@ public class CartRestController {
 					}
 				}
 			}
-			countCarts(session); // 세션에 장바구니수량
-			if(fUserCarts.isEmpty()) {
-				session.setAttribute("fUserCarts", null); // 위치 for문 안에 ? 끝나고 난 후에 ?
-			}else if(fUserCarts!=null) {
+			countCarts(session); 
+			if (fUserCarts.isEmpty()) {
+				session.setAttribute("fUserCarts", null);
+			} else if (fUserCarts != null) {
 				session.setAttribute("fUserCarts", fUserCarts);
 			}
 		}
+		
 	}
 
-	// 회원 성공 + 비회원 성공
 
 	// 장바구니에 몇개 담겼는지 숫자 체크
 	void countCarts(HttpSession session) throws Exception {
 		sUserId = (String) session.getAttribute("sUserId");
-		// sUserId = "User3";
 		if (sUserId != null) {
 			session.setAttribute("countCarts", cartService.countCarts(sUserId));
 		} else if (fUserCarts != null) { // 비회원 일시 장바구니 리스트의 사이즈
 			fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
-			//System.out.println(">>>>>>>>>"+fUserCarts.size());
 			session.setAttribute("countCarts", fUserCarts.size());
 		}
 	};

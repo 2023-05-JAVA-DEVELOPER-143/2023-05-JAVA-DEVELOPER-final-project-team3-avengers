@@ -19,10 +19,10 @@ function call(api, method,request){
         options.body = JSON.stringify(request);
     }
     return fetch(options.url, options).then((response) => {
-        if(response.status === 200){
+        if(response.status === 200||response.status ===201){
             return response.json();
         }else if(response.status===403){
-            window.location.href="/member/login";// redirect
+            window.location.href="/member/login/form";// redirect
         }else{
             Promise.reject(response);
             throw Error(response);
@@ -92,6 +92,7 @@ export function showOptions(categoryId) {
 		});
 }
 export function searchResult(filterDto) {//검색결과 보여주기
+filterDto.firstResult=0;
 			console.log(filterDto);
 	return call(SEARCH.url, SEARCH.method, filterDto)
 		.then((response) => {
@@ -101,6 +102,19 @@ export function searchResult(filterDto) {//검색결과 보여주기
 			$('#main-product-item-template-position').html(mixedTemplate);
 		});
 }
+export function continueSearchResult(filterDto,observer) {//검색결과 보여주기
+			console.log(filterDto);
+	return call(SEARCH.url, SEARCH.method, filterDto)
+		.then((response) => {
+			console.log(response);
+			if(response.error=='end'){
+				observer.unobserve($('#product-list-observed'));
+			}
+			let template = Handlebars.compile($('#main-product-item-template').html());
+			let mixedTemplate = template(response);
+			$('#product-list-observed').before(mixedTemplate);
+		});
+}
 export function addToCart(optionSetId, qty){
 	let cartDto={
 		"optionSetId": optionSetId,
@@ -108,16 +122,11 @@ export function addToCart(optionSetId, qty){
 	}
 	return call(ADD_TO_CART.url,ADD_TO_CART.method,cartDto)
 	.then((response)=>{
+		//location.href="http://localhost:80/cart_list"
+		if(response.status==500){
+			alert('장바구니에는 5개이상 못담아요');
+		}
+	}).catch((error)=>{
 		
-	});
+	})
 }
-/*export function productOrder(optionSetId,qty){
-	let cartDto={
-		"optionSetId": optionSetId,
-		"qty":qty
-	}
-	return call(PRODUCT_ORDER.url,PRODUCT_ORDER.method,cartDto)
-	.then((response)=>{
-		
-	});
-}*/

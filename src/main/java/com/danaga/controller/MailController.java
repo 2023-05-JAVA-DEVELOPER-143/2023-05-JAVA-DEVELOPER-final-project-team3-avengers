@@ -1,6 +1,9 @@
 package com.danaga.controller;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,7 +23,7 @@ public class MailController {
 //        return "Mail";
 //    }
     @ResponseBody
-    @PostMapping("/emailAuthentication")
+    @PostMapping("/emailauthentication")
     public String joinMailSend(String mail){
 
        int number = mailService.joinSendMail(mail);
@@ -30,28 +33,25 @@ public class MailController {
        return num;
     }
     @ResponseBody
-    @PostMapping("/findEmailAuthentication")
-    public String findPassMailSend(String mail) throws Exception{
+    @PostMapping("/findpassemailauthentication")
+    public Map findPassMailSend(String mail) throws Exception{
     	
     	String randomPass = null;
-		try {
-			randomPass = mailService.findPassSendMail(mail);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	System.out.println("##################"+randomPass);
+		randomPass = mailService.findPassSendMail(mail);
+		HashMap map=new HashMap<>();
+    	map.put("newPass", randomPass);
     	
-    	return randomPass;
+    	return map;
     }
     @ResponseBody
-    @PostMapping("/findidEmailAuthentication")
-    public String findidMailSend(String mail) throws Exception{
+    @PostMapping("/findidemailauthentication")
+    public Map findidMailSend(String mail) throws Exception{
     	
     	String id = null;
 		id = mailService.findIdSendMail(mail);
-    	
-    	return id;
+    	HashMap map=new HashMap<>();
+    	map.put("sendId", id);
+    	return map;
     }
 
 }

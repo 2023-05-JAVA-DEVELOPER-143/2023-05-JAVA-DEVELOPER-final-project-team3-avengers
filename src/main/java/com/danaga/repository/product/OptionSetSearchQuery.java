@@ -1,15 +1,10 @@
 package com.danaga.repository.product;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import com.danaga.dto.product.CategoryDto;
 import com.danaga.dto.product.OptionDto;
-import com.danaga.dto.product.OptionNameValueMapDto;
 import com.danaga.dto.product.QueryStringDataDto;
-import com.danaga.entity.Category;
-import com.danaga.entity.Options;
 
 public class OptionSetSearchQuery {
 
@@ -36,7 +31,7 @@ public class OptionSetSearchQuery {
 			this.searchQuery = "SELECT os " + "FROM OptionSet os " + " join fetch os.product p" + " WHERE os.stock >0 ";
 		}
 		if (searchDto.getOptionset() != null) {
-			List<OptionNameValueMapDto> optionset = searchDto.getOptionset();
+			List<OptionDto.OptionNameValueMapDto> optionset = searchDto.getOptionset();
 
 			for (int i = 0; i < optionset.size(); i++) {
 				String key = optionset.get(i).getOptionName();
@@ -122,12 +117,12 @@ public class OptionSetSearchQuery {
 
 	private void onlyMaxConstraint(int maxPrice) {
 		String maxConstraint = "AND os.totalPrice <= :maxPrice ";
-		maxConstraint = maxConstraint.replace(":minPrice", String.valueOf(maxPrice));
+		maxConstraint = maxConstraint.replace(":maxPrice", String.valueOf(maxPrice));
 		this.searchQuery += maxConstraint;
 	}
 
 	public void nameKeyword(String nameKeyword) {
-		String name_keyword = "AND os.product.name like :nameKeyword ";
+		String name_keyword = "AND LOWER(os.product.name) like LOWER(:nameKeyword) ";
 		name_keyword = name_keyword.replace(":nameKeyword", "'%" + nameKeyword + "%'");
 		this.searchQuery += name_keyword;
 	}

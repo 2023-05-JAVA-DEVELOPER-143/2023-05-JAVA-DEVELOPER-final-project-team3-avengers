@@ -2,6 +2,9 @@ package com.danaga.dto.product;
 
 import com.danaga.entity.Product;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,25 +15,26 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductSaveDto {
-	
-	private Long id;
+	@NotBlank
+	@NotNull
 	private String name;
+	@NotBlank
 	private String brand;
+	@NotNull
+	@Min(1)
 	private Integer price;
 	private String descImage;
 	private String prevImage;
+	@NotNull
 	private String img;
-	private Double rating;
 	
 	public Product toEntity() {
 		return Product.builder()
-				.id(id)
 				.name(name)
 				.brand(brand)
 				.descImage(descImage)
 				.prevImage(prevImage)
 				.img(img)
-				.rating(rating)
 				.price(price)
 				.build();
 	}

@@ -1,20 +1,26 @@
 package com.danaga.dao.product;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.danaga.dto.product.OptionSetCreateDto;
 import com.danaga.dto.product.OptionSetUpdateDto;
-import com.danaga.dto.product.ProductDto;
+import com.danaga.dto.product.ProductListOutputDto;
 import com.danaga.dto.product.QueryStringDataDto;
+import com.danaga.entity.Member;
 import com.danaga.entity.OptionSet;
 import com.danaga.entity.Options;
+import com.danaga.exception.product.FoundNoObjectException.FoundNoMemberException;
+import com.danaga.exception.product.FoundNoObjectException.FoundNoOptionSetException;
+import com.danaga.exception.product.FoundNoObjectException.FoundNoOptionsException;
+import com.danaga.exception.product.FoundNoObjectException.FoundNoProductException;
+import com.danaga.repository.MemberRepository;
 import com.danaga.repository.product.OptionSetRepository;
 import com.danaga.repository.product.OptionSetSearchQuery;
+import com.danaga.repository.product.OptionsRepository;
+import com.danaga.repository.product.ProductRepository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -26,30 +32,48 @@ import lombok.RequiredArgsConstructor;
 public class OptionSetDaoImpl implements OptionSetDao{
 
 	private final OptionSetRepository repository;
+	private final OptionsRepository optionsRepository;
+	private final MemberRepository memberRepository;
+	private final ProductRepository productRepository;
 	
 	@PersistenceContext
 	private EntityManager em;
+
 	
 	@Override
-	public List<OptionSet> findByFilter(QueryStringDataDto dataDto){
+	public List<ProductListOutputDto> findByFilter(QueryStringDataDto dataDto,Integer firstResult){
 		String jpql = new OptionSetSearchQuery(dataDto).build();
 		TypedQuery<OptionSet> query = em.createQuery(jpql,OptionSet.class);
-		return query.getResultList();
+		query.setFirstResult(firstResult);
+		query.setMaxResults(20);
+		List<ProductListOutputDto> finalResult = query.getResultList().stream()
+		        .map(t -> {
+		            ProductListOutputDto productDto = new ProductListOutputDto(t);
+		            return productDto;
+		        })
+		        .collect(Collectors.toList());
+		return finalResult;
 	}
 	@Override
-	public List<ProductDto> findForMemberByFilter(QueryStringDataDto dataDto, String username){
-		String mainJpql = new OptionSetSearchQuery(dataDto).build();
-		TypedQuery<OptionSet> query = em.createQuery(mainJpql,OptionSet.class);
-		String findHeartJpql = "SELECT i.optionSet.id FROM Interest i WHERE i.member.userName= :username";
-		TypedQuery<Long> heart = em.createQuery(findHeartJpql,Long.class);
-		heart.setParameter("username", username);
-		List<Long> heartOptionSetId = heart.getResultList();
-		List<OptionSet> searchResult = query.getResultList();
-		List<ProductDto> finalResult = searchResult.stream().map(t -> {
-			ProductDto productDto = new ProductDto(t);
-			productDto.setIsInterested(heartOptionSetId.contains(t.getId()));
-			return productDto;
-				}).collect(Collectors.toList());
+	public List<ProductListOutputDto> findForMemberByFilter(QueryStringDataDto dataDto, String username,Integer firstResult ) throws FoundNoMemberException{
+		 Member member = memberRepository.findByUserName(username).orElseThrow(FoundNoMemberException::new);
+		    String mainJpql = new OptionSetSearchQuery(dataDto).build();
+		    TypedQuery<OptionSet> query = em.createQuery(mainJpql, OptionSet.class);
+		    query.setFirstResult(firstResult);
+		    query.setMaxResults(20);
+		    TypedQuery<Long> heartQuery = em.createQuery("SELECT i.optionSet.id FROM Interest i WHERE i.member = :member", Long.class);
+		    heartQuery.setParameter("member", member);
+		    List<Long> heartOptionSetIds = heartQuery.getResultList();
+		    
+		    List<ProductListOutputDto> finalResult = query.getResultList().stream()
+		        .map(t -> {
+		            ProductListOutputDto productDto = new ProductListOutputDto(t);
+		            if (!heartOptionSetIds.isEmpty()) {
+		                productDto.setIsInterested(heartOptionSetIds.contains(t.getId()));
+		            }
+		            return productDto;
+		        })
+		        .collect(Collectors.toList());
 		return finalResult;
 	}
 	@Override
@@ -65,48 +89,53 @@ public class OptionSetDaoImpl implements OptionSetDao{
 		return repository.save(dto.toEntity());
 	}
 	@Override
-	public void deleteById(Long id) {
+	public void deleteById(Long id) throws FoundNoOptionSetException {
+		repository.findById(id).orElseThrow(() -> new FoundNoOptionSetException());
 		repository.deleteById(id);
 	}
 	@Override
-	public void deleteAllByProductId(Long productId) {
+	public void deleteAllByProductId(Long productId) throws FoundNoProductException {
+		productRepository.findById(productId).orElseThrow(() -> new FoundNoProductException());
 		repository.deleteAllByProductId(productId);
 		
 	}
 	@Override
-	public List<OptionSet> findAllByRecentView_MemberId(Long memberId) {
+	public List<OptionSet> findAllByRecentView_MemberId(Long memberId) throws FoundNoMemberException {
+		memberRepository.findById(memberId).orElseThrow(() -> new FoundNoMemberException());
 		return repository.findAllByRecentViews_MemberId(memberId);
 	}
 	@Override
-	public List<OptionSet> findAllByInterest_MemberId(Long memberId) {
+	public List<OptionSet> findAllByInterest_MemberId(Long memberId) throws FoundNoMemberException {
+		memberRepository.findById(memberId).orElseThrow(() -> new FoundNoMemberException());
 		return repository.findAllByInterests_MemberId(memberId);
 	}
 	@Override
-	public OptionSet findByOptionId(Long optionId) {
+	public OptionSet findByOptionId(Long optionId) throws FoundNoOptionsException {
+		optionsRepository.findById(optionId).orElseThrow(() -> new FoundNoOptionsException());
 		return repository.findByOptions_Id(optionId);
 	}
 	@Override
-	public OptionSet updateStock(OptionSetUpdateDto dto) {
+	public OptionSet updateStock(OptionSetUpdateDto dto) throws FoundNoOptionSetException {
 		//존재하는 optionset인지 검증
-		OptionSet origin = repository.findById(dto.getId()).get();
+		OptionSet origin = repository.findById(dto.getId()).orElseThrow(() -> new FoundNoOptionSetException());
 		origin.setStock(dto.getStock());
 		return repository.save(origin);
 	}
 	@Override
-	public OptionSet updateOrderCount(Long optionSetId, Integer orderCount) {
-		OptionSet origin = repository.findById(optionSetId).get();
+	public OptionSet updateOrderCount(Long optionSetId, Integer orderCount) throws FoundNoOptionSetException {
+		OptionSet origin = repository.findById(optionSetId).orElseThrow(() -> new FoundNoOptionSetException());
 		origin.setOrderCount(orderCount);
 		return repository.save(origin);
 	}
 	@Override
-	public OptionSet updateViewCount(Long optionSetId) {
-		OptionSet origin = repository.findById(optionSetId).get();
+	public OptionSet updateViewCount(Long optionSetId) throws FoundNoOptionSetException {
+		OptionSet origin = repository.findById(optionSetId).orElseThrow(() -> new FoundNoOptionSetException());
 		origin.setViewCount(origin.getViewCount()+1);
 		return repository.save(origin);
 	}
 	@Override
-	public OptionSet calculateTotalPrice(OptionSetUpdateDto dto) {
-		OptionSet origin = repository.findById(dto.getId()).get();
+	public OptionSet calculateTotalPrice(OptionSetUpdateDto dto) throws FoundNoOptionSetException {
+		OptionSet origin = repository.findById(dto.getId()).orElseThrow(() -> new FoundNoOptionSetException());
 		int productPrice = origin.getTotalPrice();
 		int totalPrice = productPrice;
 		List<Options> options = dto.getOptions().stream().map(t -> t.toEntity()).collect(Collectors.toList());

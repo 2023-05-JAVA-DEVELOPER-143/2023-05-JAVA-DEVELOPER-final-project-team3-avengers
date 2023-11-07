@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.danaga.dto.CartDto;
 import com.danaga.dto.ResponseDto;
+import com.danaga.dto.product.CategoryDto;
 import com.danaga.dto.product.ProductDto;
+import com.danaga.dto.product.ProductListOutputDto;
 import com.danaga.dto.product.QueryStringDataDto;
 import com.danaga.repository.product.OptionSetQueryData;
 import com.danaga.service.CartService;
@@ -23,13 +25,16 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class IndexController {
 	private final CartService cartService;
+	private final OptionSetService optionSetService;
 	
 	//메인페이지에서 카테고리별 인기상품
 	//최신상품 뽑는 거 
 	@RequestMapping("/index")
-	public String main(HttpSession session) {
+	public String main(HttpSession session, Model model) {
 		try {
 			countCarts(session);
+			ResponseDto<ProductListOutputDto> hits = optionSetService.searchProducts(QueryStringDataDto.builder().orderType(OptionSetQueryData.BY_VIEW_COUNT).category(CategoryDto.builder().name("전체").id(1L).build()).build(), 0);
+			model.addAttribute("hits", hits.getData());
 //			ResponseDto<ProductDto> responseDto = service.searchProducts(//주문수로 전체상품 정렬하여 조회
 //					QueryStringDataDto.builder()
 //					.orderType(OptionSetQueryData.BY_ORDER_COUNT)
