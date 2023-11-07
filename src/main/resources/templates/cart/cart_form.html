@@ -63,8 +63,8 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:if="${cart == null}">
-							<td colspan="9" class="empty-cart-message">장바구니에 담긴 상품이 없습니다.</td>
+						<tr th:if="${cart == null}" >
+							<td colspan="8" class="empty-cart-message">장바구니에 담긴 상품이 없습니다.</td>
 						</tr>
 						<!-- 반복문 가즈아 -->
 						<tr class="cart_info" th:each="cart:${cart}" th:if="${cart != null}">
@@ -99,6 +99,7 @@
 							<td class="text-center">
 								<div class="count-input">
 									<select id="selectbox" class="form-control" name="checkboxvalue" th:data-id="${cart.osId}" onchange="getSelectValue(this);">
+										<option hidden th:if="${cart.qty} > 5" th:selected="${cart.qty}">[[${cart.qty}]]</option>
 										<option th:selected="${cart.qty} == '1'">1</option>
 										<option th:selected="${cart.qty} == '2'">2</option>
 										<option th:selected="${cart.qty} == '3'">3</option>
@@ -193,7 +194,6 @@
 					</div>
 				</div>
 			</div>
-			
 		</div>
 		<!-- content end -->
 
@@ -365,6 +365,8 @@ function getSelectValue(obj) {
 			}
 		});
 }
+
+
 
 
 
