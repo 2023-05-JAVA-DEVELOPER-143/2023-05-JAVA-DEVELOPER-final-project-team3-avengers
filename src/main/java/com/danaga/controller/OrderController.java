@@ -75,7 +75,7 @@ public class OrderController {
 			Long id = memberService.findIdByUsername(loginUser);
 			Member member = memberRepository.findById(id).get();
 			model.addAttribute("loginUser", member);
-			return "orders/orders1";
+			return "orders/order_member_list";
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("주문목록이 없습니다?", e.getMessage());

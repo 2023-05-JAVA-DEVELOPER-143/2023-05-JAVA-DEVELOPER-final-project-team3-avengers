@@ -89,7 +89,7 @@
 											<span th:text="${ordersDto.id}">주문번호</span>
 										</button>
 									</td>
-									<td th:text="${ordersDto.getDescription()}">주문 내역</td>
+									<td th:text="${ordersDto.getDescription()}" style="max-width: 150px;">주문 내역</td>
 									<td name="orderState" id="orderState" th:text="${ordersDto.getStateMsg()}">주문 상태
 									</td>
 									<td th:text="${ordersDto.getPrice()}"><span class="text-medium">$760.50</span></td>
