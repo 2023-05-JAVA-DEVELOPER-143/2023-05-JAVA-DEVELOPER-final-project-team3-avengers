@@ -356,7 +356,7 @@ public class OrderController {
 			} catch (Exception e) {
 				model.addAttribute("msg", e.getMessage());
 				e.printStackTrace();
-				return "cart/cart_form";
+				return "/index";
 			}
 		} else { // 회원주문
 			try {
@@ -401,7 +401,7 @@ public class OrderController {
 			} catch (Exception e) {
 				model.addAttribute("msg", e.getMessage());
 				e.printStackTrace();
-				return "cart/cart_form";
+				return "/index";
 			}
 		}
 	}
