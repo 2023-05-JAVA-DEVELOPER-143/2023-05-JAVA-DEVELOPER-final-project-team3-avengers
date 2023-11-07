@@ -22,10 +22,12 @@ public class OtherOptionSetDto {//상세페이지 다른옵션 보여줄때
 	@Builder.Default
 	private Boolean isInStock = true;
 	private String optionSetDesc;
+	private Integer totalPrice;
 	public OtherOptionSetDto(OptionSet entity){
 		this.optionSet = entity.getOptions().stream().map(t -> new OptionBasicDto(t)).collect(Collectors.toList());
 		this.isInStock = true;
 		this.osId = entity.getId();
+		this.totalPrice=entity.getTotalPrice();
 		if(entity.getStock()==0) {
 			this.isInStock=false;
 		}

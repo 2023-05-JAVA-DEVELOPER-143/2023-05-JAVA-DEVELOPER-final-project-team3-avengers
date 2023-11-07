@@ -24,14 +24,13 @@ public class FUserCartResponseDto {
 	private Long osId; // 옵션셋 아이디
 	@Builder.Default
 	private List<CartElseOptionsetDto> elseOptionSets = new ArrayList<>();
-	
+
 	@Builder.Default
 	private List<CartOptionDto> options = new ArrayList<>(); // 옵션 네임 밸류
 
 	public static FUserCartResponseDto toDto(OptionSet entity, Integer qty) {
-		return FUserCartResponseDto.builder().pImage(entity.getProduct().getImg()).productName(entity.getProduct().getName())
-				.osId(entity.getId())
-				.qty(qty)
+		return FUserCartResponseDto.builder().pImage(entity.getProduct().getImg())
+				.productName(entity.getProduct().getName()).osId(entity.getId()).qty(qty)
 				.options(entity.getOptions().stream().map(t -> new CartOptionDto(t)).collect(Collectors.toList()))
 				.totalPrice(entity.getTotalPrice()).build();
 

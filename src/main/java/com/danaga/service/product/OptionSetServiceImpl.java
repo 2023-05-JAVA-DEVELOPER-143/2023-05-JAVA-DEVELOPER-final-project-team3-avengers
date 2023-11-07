@@ -106,22 +106,22 @@ public class OptionSetServiceImpl implements OptionSetService {
 	}
 
 	// 같은 카테고리 인기상품
-	@Override
-	@Transactional
-	public ResponseDto<ProductListOutputDto> displayHitProducts(Long optionSetId,Integer firstResult) {
-		List<Category> findCategory = categoryDao.findByOptionSetId(optionSetId);
-		if(findCategory==null) {
-			return ResponseDto.<ProductListOutputDto>builder().msg(ProductExceptionMsg.FOUND_NO_CATEGORY).build();
-		}
-		String orderType = OptionSetQueryData.BY_VIEW_COUNT;
+		@Override
+		@Transactional
+		public ResponseDto<ProductListOutputDto> displayHitProducts(Long optionSetId,Integer firstResult) {
+			List<Category> findCategory = categoryDao.findByOptionSetId(optionSetId);
+			if(findCategory==null) {
+				return ResponseDto.<ProductListOutputDto>builder().msg(ProductExceptionMsg.FOUND_NO_CATEGORY).build();
+			}
+			String orderType = OptionSetQueryData.BY_VIEW_COUNT;
 
-		List<ProductListOutputDto> searchResult = optionSetDao
-				.findByFilter(QueryStringDataDto.builder().orderType(orderType)
-						.category(CategoryDto.builder().name(findCategory.get(findCategory.size() - 1).getName())
-								.id(findCategory.get(findCategory.size() - 1).getId()).build())
-						.build(),firstResult);
-		return ResponseDto.<ProductListOutputDto>builder().data(searchResult).msg(ProductSuccessMsg.SEARCH_PRODUCTS).build();
-	}
+			List<ProductListOutputDto> searchResult = optionSetDao
+					.findByFilter(QueryStringDataDto.builder().orderType(orderType)
+							.category(CategoryDto.builder().name(findCategory.get(findCategory.size() - 1).getName())
+									.id(findCategory.get(findCategory.size() - 1).getId()).build())
+							.build(),firstResult);
+			return ResponseDto.<ProductListOutputDto>builder().data(searchResult).msg(ProductSuccessMsg.SEARCH_PRODUCTS).build();
+		}
 
 	@Override
 	@Transactional
