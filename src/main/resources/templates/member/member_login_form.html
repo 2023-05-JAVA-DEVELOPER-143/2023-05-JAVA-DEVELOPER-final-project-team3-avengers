@@ -10,12 +10,12 @@
   <th:block layout:fragment="content">
       <!-- Page Content-->
       <div class="container padding-bottom-3x mb-2" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
-          <div class="col-md-6">
+          <div class="col-md-5">
             <form class="login-box" id="form-account-login" name="f" method="post" >
               <div class="row margin-bottom-1x">
-                <div class="col-xl-4 col-md-6 col-sm-4"><a class="btn btn-sm btn-block facebook-btn" href="#"><i class="socicon-facebook"></i>&nbsp;Facebook login</a></div>
-                <div class="col-xl-4 col-md-6 col-sm-4"><a class="btn btn-sm btn-block twitter-btn" href="#"><i class="socicon-twitter"></i>&nbsp;Twitter login</a></div>
-                <div class="col-xl-4 col-md-6 col-sm-4"><a class="btn btn-sm btn-block google-btn" href="#"><i class="socicon-googleplus"></i>&nbsp;Google+ login</a></div>
+				  <a href="https://kauth.kakao.com/oauth/authorize?client_id=d389e2d0e8d22f91c546887352d72e46&redirect_uri=http://localhost/kakao_login_action&response_type=code">
+   					 <img width="400" src="images/kakao_login_medium_wide.png" alt="카카오 로고">
+				  </a>
               </div>
               <div class="form-group input-group">
                 <input class="form-control" placeholder="ID" name="userName" id="loginUserId"  required><span class="input-group-addon"><i class="icon-bell"></i></span>
@@ -93,7 +93,6 @@
 			account_login_action_rest(data);
 		});
 	});
-	
 </script>
 </th:block>
   </body>
