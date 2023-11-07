@@ -45,12 +45,12 @@ public class CartController {
 					carts.get(i).setElseOptionSets(findLists.getData().stream().map(t -> new CartElseOptionsetDto(t))
 							.collect(Collectors.toList()));
 				}
-
 				int a = (int) (Math.random() * carts.size());
 				session.setAttribute("countCarts", carts.size());
+				if(!carts.isEmpty()) {
 					model.addAttribute("hits",
 							optionSetService.displayHitProductsForMember(carts.get(a).getOsId(), sUserId, 0).getData());
-				
+				}
 			}
 			model.addAttribute("cart", carts);
 		} else {// 비회원
