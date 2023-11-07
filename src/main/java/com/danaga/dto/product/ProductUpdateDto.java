@@ -4,6 +4,9 @@ import java.util.Optional;
 
 import com.danaga.entity.Product;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,25 +18,30 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProductUpdateDto {
 	
+	@NotNull
 	private Long id;
-	private Optional<String> name;
-	private Optional<String> brand;
-	private Optional<Integer> price;
-	private Optional<String> descImage;
-	private Optional<String> prevImage;
-	private Optional<String> img;
-	private Optional<Double> rating;
+	@NotBlank
+	private String name;
+	@NotBlank
+	private String brand;
+	@Min(0)
+	private Integer price;
+	private String descImage;
+	private String prevImage;
+	@NotBlank
+	private String img;
+	private Double rating;
 	
 	public Product toEntity() {
 		return Product.builder()
 				.id(id)
-				.name(name.get())
-				.brand(brand.get())
-				.descImage(descImage.get())
-				.prevImage(prevImage.get())
-				.img(img.get())
-				.rating(rating.get())
-				.price(price.get())
+				.name(name)
+				.brand(brand)
+				.descImage(descImage)
+				.prevImage(prevImage)
+				.img(img)
+				.rating(rating)
+				.price(price)
 				.build();
 	}
 	

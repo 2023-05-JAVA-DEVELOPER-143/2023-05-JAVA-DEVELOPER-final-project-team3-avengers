@@ -1,10 +1,7 @@
 package com.danaga.repository.product;
 
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.danaga.dto.product.InterestDto;
 import com.danaga.entity.Interest;
 
 public interface InterestRepository extends JpaRepository<Interest, Long> {

@@ -1,5 +1,8 @@
 package com.danaga.entity;
 
+import org.hibernate.annotations.DialectOverride.ColumnDefault;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,6 +25,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "recent_view", uniqueConstraints = @UniqueConstraint(columnNames = {"memberId","optionSetId"}))
 public class RecentView extends BaseEntity{//멤버아이디와 프로덕트아이디로 고유키 제약 
 	//최근 조회한 상품 
 	//30일간만 보관 

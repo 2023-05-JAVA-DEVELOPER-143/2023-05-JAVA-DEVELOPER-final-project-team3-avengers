@@ -10,6 +10,8 @@ import org.springframework.test.annotation.Rollback;
 
 import com.danaga.dto.product.RecentViewDto;
 import com.danaga.entity.RecentView;
+import com.danaga.exception.product.FoundNoObjectException.FoundNoMemberException;
+import com.danaga.exception.product.FoundNoObjectException.FoundNoOptionSetException;
 
 import jakarta.transaction.Transactional;
 @SpringBootTest
@@ -18,7 +20,7 @@ class RecentViewServiceImplTest {
 	private RecentViewService service;
 	@Test
 	@Disabled
-	void testAddRecentView() {
+	void testAddRecentView() throws FoundNoMemberException, FoundNoOptionSetException {
 		service.addRecentView(RecentViewDto.builder().memberId(4L).optionSetId(2L).build());
 	}
 	@Transactional
@@ -42,7 +44,7 @@ class RecentViewServiceImplTest {
 
 	@Test
 	@Disabled
-	void testMyAllRecentViews() {
+	void testMyAllRecentViews() throws FoundNoMemberException {
 		service.myAllRecentViews(3L);
 	}
 	@Transactional

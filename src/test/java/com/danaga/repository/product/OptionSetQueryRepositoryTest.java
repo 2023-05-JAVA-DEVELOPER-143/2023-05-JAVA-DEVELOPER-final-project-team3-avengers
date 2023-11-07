@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.danaga.dto.product.CategoryDto;
-import com.danaga.dto.product.OptionNameValueMapDto;
 import com.danaga.dto.product.QueryStringDataDto;
 @SpringBootTest
 class OptionSetQueryRepositoryTest {
@@ -23,12 +22,12 @@ class OptionSetQueryRepositoryTest {
 				QueryStringDataDto.builder()
 				.orderType(OptionSetQueryData.BY_TOTAL_PRICE)
 				.build(),"User5").size());
-		List<OptionNameValueMapDto> list = new ArrayList<>();
+		List<com.danaga.dto.product.OptionDto.OptionNameValueMapDto> list = new ArrayList<>();
 		List<String> values = new ArrayList<>();
 		values.add("windows11");
 		values.add("windows10");
 		
-		list.add(OptionNameValueMapDto.builder().optionName("os").optionValue(values).build());
+		list.add(com.danaga.dto.product.OptionDto.OptionNameValueMapDto.builder().optionName("os").optionValue(values).build());
 		System.out.println(repository.findByFilter(
 				QueryStringDataDto.builder()
 				.orderType(OptionSetQueryData.BY_TOTAL_PRICE)

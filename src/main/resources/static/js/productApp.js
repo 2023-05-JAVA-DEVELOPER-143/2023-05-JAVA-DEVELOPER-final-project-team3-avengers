@@ -13,22 +13,25 @@ filterDto["firstResult"] = firstResult;
 */
 export function init() {
 	registEvent();
-	navigate();
 }
 
 function registEvent() {
 
+	$('#otherOptions option').each(function(){
+		let $this = $(this);
+		$this.attr('title', $this.data('tooltip'));
+	});
 	$('#orderTypeSearch').change(function() {
 		filterDto["orderType"] = $('#orderTypeSearch option:selected').val();
 		api.searchResult(filterDto);
 	});
-	$('#minPriceSearch').keydown(function() {
-		filterDto["minPrice"] = $('#minPridceSearch').val();
+	$('#minPriceSearch').keyup(function() {
+		filterDto["minPrice"] = $('#minPriceSearch').val();
 	});
-	$('#maxPriceSearch').keydown(function() {
+	$('#maxPriceSearch').keyup(function() {
 		filterDto["maxPrice"] = $('#maxPriceSearch').val();
 	});
-	$('#nameKeywordSearch').keydown(function() {
+	$('#nameKeywordSearch').keyup(function() {
 		filterDto["nameKeyword"] = $('#nameKeywordSearch').val();
 	});
 
@@ -60,6 +63,7 @@ function registEvent() {
 			console.log(filterDto);
 
 		} else if ($(e.target).attr('product-heart')) {
+				e.preventDefault();
 			let optionSetId = $(e.target).attr('product-heart');
 			api.untapHeart(optionSetId, function callback() {
 				let button = $(e.target);
@@ -69,6 +73,7 @@ function registEvent() {
 				button.removeClass('active');
 			});
 		} else if ($(e.target).attr('product-heart-yet')) {
+			e.preventDefault();		
 			let optionSetId = $(e.target).attr('product-heart-yet');
 			api.tapHeart(optionSetId, function callback() {
 				let button = $(e.target);
@@ -102,21 +107,21 @@ function registEvent() {
 			firstResult=0;
 			api.searchResult(filterDto);
 		} else if ($(e.target).attr('data-toast-message') == "successfuly added to cart!") {
+			e.preventDefault();
 			let optionSetId = $(e.target).attr('data-optionSetId');
 			let qty = 1;
 			if ($(e.target).attr('data-cart-qty')) {
 				qty = $('#qty option:selected').text();
 				optionSetId = $('#otherOptions option:selected').val();
 			}
-			e.stopPropagation();
 			api.addToCart(optionSetId, qty);
 		} else if ($(e.target).attr('heart')) {
+				e.preventDefault();
 			let parentButton = undefined;
 			if ($(e.target).parent().attr('product-heart')) {
 				parentButton = $(e.target).parent();
 				let optionSetId = parentButton.attr('product-heart');
 				api.untapHeart(optionSetId, function callback() {
-					// product-heart-yet 속성의 값을 product-heart로 옮기기
 					parentButton.attr('product-heart-yet', parentButton.attr('product-heart'));
 					parentButton.removeAttr('product-heart');
 					parentButton.removeClass('active');
@@ -125,18 +130,15 @@ function registEvent() {
 				parentButton = $(e.target).parent();
 				let optionSetId = parentButton.attr('product-heart-yet');
 				api.tapHeart(optionSetId, function callback() {
-					// product-heart-yet 속성의 값을 product-heart로 옮기기
 					parentButton.attr('product-heart', parentButton.attr('product-heart-yet'));
 					parentButton.removeAttr('product-heart-yet');
 					parentButton.addClass('active');
 				});
-			}
-		} else if ($(e.target).attr('toOrder')) {
-			/*let qty = $('#qty option:selected').text();
-			let	optionSetId = $('#otherOptions option:selected').val();
-			e.stopPropagation();
-			api.productOrder(optionSetId, qty);*/
-			$('#productOrderForm').submit();
+			} 
+			
+		}else if ($(e.target).attr('toOrder')) {
+				e.stopPropagation();
+				$('#productOrderForm').submit();
 		}
 	});
 

@@ -12,15 +12,12 @@
 			<div class="row">
 				<!-- Poduct Gallery-->
 				<div class="col-md-6">
-					<div class="product-gallery" th:object="${productList}">
+					<div class="product-gallary" th:object="${productList}">
 						<div class="gallery-wrapper">
+						<img th:if="${productList.stock==0}" class="product-badge text-danger" src="images/sold-out.png" style="position: absolute; top: 0; left: 0; width: 70px; height: 70px; z-index: 10;">
 						</div>
 						<div class="product-carousel owl-carousel gallery-wrapper">
-							<div class="gallery-item" data-hash="one">
-								<a href="img/shop/products/01.jpg" data-size="1000x667" th:href="@{*{pImage}}"><img
-										src="img/shop/single/01.jpg" alt="Product"
-										th:src="@{*{pImage}}"></a>
-							</div>
+								<img src="img/shop/single/01.jpg" alt="Product" th:src="@{*{pImage}}">
 						</div>
 					</div>
 				</div>
@@ -31,7 +28,8 @@
 					<div class="rating-stars" ><i class="icon-star filled"></i><i class="icon-star"></i>
 					</div><span class="text-muted align-middle" >&nbsp;&nbsp;4.2 | 3
 						customer reviews</span>
-					<h2 class="padding-top-1x text-normal" th:text="${productList.name}">Product Name</h2>
+					<h2 class="padding-top-1x text-normal" th:text="'[품절]'+${productList.name}" th:if="${productList.stock==0}">Product Name</h2>
+					<h2 class="padding-top-1x text-normal" th:text="${productList.name}" th:unless="${productList.stock==0}">Product Name</h2>
 					<span class="h2 d-block" th:text="${productList.totalPrice}">가격</span>
 					<input type="hidden" name="optionSetId" id="optionSetId" th:value="${productList.osId}">
 					<div class="row margin-top-1x">
@@ -39,7 +37,8 @@
 							<div class="form-group">
 								<label for="otherOptions" >다른 옵션 보기</label>
 								<select class="form-control" id="otherOptions">
-									<option th:each="options:${otherOptions}" th:text="${options.optionSet}" th:value="${options.osId}" th:selected="${options.osId==productList.osId}">11.5</option>
+									<option th:each="options:${otherOptions}" th:if="${!options.isInStock}" th:text="'[품절]'+${options.optionSetDesc}" th:value="${options.osId}" th:selected="${options.osId==productList.osId}" th:data-tooltip="'[품절]'+${options.optionSetDesc}">11.5</option>
+									<option th:each="options:${otherOptions}" th:unless="${!options.isInStock}" th:text="${options.optionSetDesc}" th:value="${options.osId}" th:selected="${options.osId==productList.osId}" th:data-tooltip="${options.optionSetDesc}">11.5</option>
 								</select>
 							</div>
 						</div>
@@ -175,10 +174,10 @@
 				<!-- Product-->
 				<div class="grid-item" th:each="productDto:${hits}">
 					<div class="product-card">
-						<a class="product-thumb" href="product-detail.html" th:href="product-detail.html"><img
+						<a class="product-thumb" href="product-detail.html" th:href="@{'http://localhost/product'+${productDto.osId}}"><img
 								src="img/shop/products/09.jpg" alt="Product"
 								th:attr="src=@{${productDto.pImage}}"></a>
-						<h3 class="product-title" th:text="${productDto.name}"><a href="product-detail.html">상품명</a></h3>
+						<h3 class="product-title" th:text="${productDto.name}"><a th:href="@{'http://localhost/product'+${productDto.osId}}">상품명</a></h3>
 						<h4 class="product-price" th:text="${productDto.totalPrice}">$34.99</h4>
 						<div class="product-buttons">
 							<button th:if="${productDto.isInterested}"
@@ -210,5 +209,4 @@
 	</th:block>
 	<th:block layout:fragment="recommendation"></th:block>
 </body>
-
 </html>

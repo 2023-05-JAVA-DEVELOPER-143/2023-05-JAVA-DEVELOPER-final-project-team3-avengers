@@ -9,7 +9,7 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
 
-	<title>SB Admin 2 - Tables</title>
+	<title>다나가닷컴 - 제품 등록</title>
 
 	<!-- Custom fonts for this template -->
 	<link href="/bootstrap_admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -31,7 +31,7 @@
 	<div id="wrapper">
 
 		<!-- Sidebar Start -->
-		<div th:insert="admin/admin_include::nav"></div>
+		<div th:insert="~{admin/admin_include::nav}"></div>
 		<!-- Sidebar End -->
 
 		<!-- Content Wrapper -->
@@ -70,9 +70,12 @@
 														체크)</input>
 													</div>
 												</div>
-												<select class="form-select" id="productSelect" >
+												<select class="form-select" id="productSelect">
+													<option selected>기존 제품을 선택하세요</option>
 													<div th:each="product : ${productList}">
-													<option th:value="${product.id}" th:text="${product.id + '번 ' + product.name}">Two</option>
+														<option th:value="${product.id}"
+															th:text="${product.id + '번 ' + product.name}" th:attr="data-name=${product.name}, data-brand=${product.brand},
+															data-price=${product.price}, data-category=${product.categorySets}">Two</option>
 													</div>
 												</select>
 												<div class="text-center">
@@ -114,18 +117,6 @@
 												<div class="text-center">
 													<h3 class="h5 text-gray-900 mb-2"
 														style="margin-top: 30px; font-weight: bold;">
-														카테고리 정보</h3>
-													<a class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"
-														id="deleteCategory">
-														<i class="fas fa-trash"></i></a>
-													<a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
-														id="createCategory">
-														<i class="fas fa-arrow-right"></i></a>
-												</div>
-												<hr>
-												<div class="text-center">
-													<h3 class="h5 text-gray-900 mb-2"
-														style="margin-top: 30px; font-weight: bold;">
 														이미지</h3>
 												</div>
 												<hr>
@@ -137,9 +128,14 @@
 															accept="image/png, image/jpeg"
 															onchange="imagePreview(this);" />
 														<br />
-
 													</div>
-													<a style="margin-top: 20px;">&nbsp&nbsp&nbsp&nbsp상세페이지 이미지</a>
+													<a style="margin-top: 20px;">&nbsp&nbsp&nbsp&nbsp썸네일 이미지(prev)</a>
+													<div style="margin-top: 20px; margin-bottom: 20px;"
+														class="text-center">
+														<input type="file" id="prevImg" name="prevImg"
+															accept="image/png, image/jpeg" />
+													</div>
+													<a style="margin-top: 20px;">&nbsp&nbsp&nbsp&nbsp상세페이지 이미지(desc)</a>
 													<div style="margin-top: 20px; margin-bottom: 20px;"
 														class="text-center">
 														<input type="file" id="descImg" name="descImg"
@@ -148,7 +144,20 @@
 												</div>
 												<div class="text-center">
 													<h3 class="h5 text-gray-900 mb-2"
-														style="margin-top: 30px; font-weight: bold;">
+														style="margin-top: 30px; font-weight: bold;" id="countCategory">
+														카테고리 정보</h3>
+													<a class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"
+														id="deleteCategory">
+														<i class="fas fa-trash"></i></a>
+													<a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+														id="createCategory">
+														<i class="fas fa-arrow-right"></i></a>
+												</div>
+												<hr>
+												<div id="categoryContainer"></div>
+												<div class="text-center">
+													<h3 class="h5 text-gray-900 mb-2"
+														style="margin-top: 30px; font-weight: bold;" id="countOptions">
 														옵션정보</h3>
 													<a class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"
 														id="deleteOption">
@@ -159,32 +168,7 @@
 												</div>
 												<hr>
 												<div id="optionContainer"></div>
-												<div class="form-group row">
-													<div class="col-sm-6 mb-3 mb-sm-0">
-														<a>&nbsp&nbsp&nbsp&nbsp옵션성격</a>
-														<input type="text" class="form-control form-control-user"
-															id="txtOptionName" placeholder="Option Name" />
-													</div>
-													<div class="col-sm-6">
-														<a>&nbsp&nbsp&nbsp&nbsp옵션값(value)</a>
-														<input type="text" class="form-control form-control-user"
-															id="txtOptionValue" placeholder="Option Value" />
-													</div>
-													<div class="col-sm-6" style="margin-top: 10px;">
-														<a>&nbsp&nbsp&nbsp&nbsp옵션가격</a>
-														<input type="text" class="form-control form-control-user"
-															id="txtOptionPrice" placeholder="Option Price" />
-													</div>
-												</div>
 												<hr>
-												</br>
-												<a href="#" class="btn btn-primary btn-icon-split"
-													style="float: right;">
-													<span class="icon text-white-50">
-														<i class="fas fa-arrow-right"></i>
-													</span>
-													<span class="text">상품등록</span>
-												</a>
 												</br>
 											</form>
 										</div>
@@ -205,48 +189,38 @@
 										<h3 class="h5 text-gray-900 mb-4" style="font-weight: bold;">
 											제품 미리보기
 										</h3>
-										<div class="text-center"
-											style="font-weight: bold; font-size: 1.5em; color: navy;">총가격 : 50,000원
-										</div>
+										<hr>
+										
 										<img id="preview" />
 									</div>
-									<hr>
 									<div class="text-center">
 										<h3 class="h5 text-gray-900 mb-2" style="font-weight: bold;">
 											선택제품(Product)</h3>
+										<hr>
 										<div class="h3" id="selectedProduct"></div>
 										<div class="h3" id="outputProductName"></div>
 									</div>
-									<hr>
 									<div class="text-center">
-										<h3 class="h5 text-gray-900 mb-2" style="font-weight: bold;">
+										<h3 class="h5 text-gray-900 mb-2" style="font-weight: bold; margin-top: 20px; ">
 											카테고리 정보</h3>
-										<div class="form-group row">
-											<div class="col-sm-6 mb-3 mb-sm-0">
-												<a>&nbsp&nbsp&nbsp&nbsp상위 카테고리</a>
-												<select class="form-select" id="parentCategory">
-													<option selected>Open this select menu</option>
-													<option value="1">One</option>
-													<option value="2">Two</option>
-													<option value="3">Three</option>
-												</select>
-											</div>
-											<div class="col-sm-6">
-												<a>&nbsp&nbsp&nbsp&nbsp하위 카테고리</a>
-												<select class="form-select" id="childCategory">
-													<option selected>Open this select menu</option>
-													<option value="1">One</option>
-													<option value="2">Two</option>
-													<option value="3">Three</option>
-												</select>
-											</div>
-										</div>
+										<hr>
+										<table class="table" id="categorySetTable" width="100%" cellspacing="0">
+											<thead>
+												<tr>
+													<th>상위 카테고리</th>
+													<th>하위 카테고리</th>
+												</tr>
+											</thead>
+											<tbody id="categoryTableContainer">
+											</tbody>
+										</table>
 
 									</div>
-									<hr>
+
 									<div class="text-center">
 										<h3 class="h5 text-gray-900 mb-2" style="font-weight: bold;">
 											기본정보(OptionSet)</h3>
+										<hr>
 										<table class="table" id="optionSetTable" width="100%" cellspacing="0">
 											<thead>
 												<tr>
@@ -269,10 +243,11 @@
 											</tbody>
 										</table>
 									</div>
-									<hr>
+
 									<div class="text-center">
 										<h3 class="h5 text-gray-900 mb-2" style="font-weight: bold;">
 											옵션정보</h3>
+										<hr>
 										<table class="table" id="optionTable" width="100%" cellspacing="0">
 											<thead>
 												<tr>
@@ -284,17 +259,25 @@
 											<tfoot>
 												<tr>
 													<th colspan="2">옵션가격합계</th>
-													<th>1500000원</th>
+													<th id="totPrice">0원</th>
 												</tr>
 											</tfoot>
-											<tbody>
-												<tr>
-													<td>CPU</td>
-													<td>i5</td>
-													<td>50000</td>
-												<tr>
+											<tbody id="optionTableContainer">
 											</tbody>
 										</table>
+										
+										<hr>
+										<div class="text-center" id="totProductPrice"
+											style="font-weight: bold; font-size: 1.5em; color: navy;">총가격 : 0원
+										</div>
+										<a href="#" class="btn btn-primary btn-icon-split"
+													style="float: right;">
+													<span class="icon text-white-50">
+														<i class="fas fa-arrow-right"></i>
+													</span>
+													<span class="text">상품등록</span>
+												</a>
+										
 									</div>
 								</div>
 							</div>
@@ -307,13 +290,7 @@
 			<!-- End of Main Content -->
 
 			<!-- Footer -->
-			<footer class="sticky-footer bg-white">
-				<div class="container my-auto">
-					<div class="copyright text-center my-auto">
-						<span>Copyright &copy; Your Website 2020</span>
-					</div>
-				</div>
-			</footer>
+			<div th:insert="~{admin/admin_include::bottom}"></div>
 			<!-- End of Footer -->
 
 		</div>
@@ -411,30 +388,142 @@
 			}
 		}
 
-		function updateSelectedValue() {
-			var selectElement = document.getElementById("productSelect");
-			var selectedValue = selectElement.options[selectElement.selectedIndex].text;
-			var displayElement = document.getElementById("selectedProduct");
-			displayElement.textContent = selectedValue;
-		}
-		updateSelectedValue();
-		$("#productSelect").change(updateSelectedValue);
+		// 기존제품 선택 시 미리보기 변경
+		$(() => {
+			$("#productSelect").change(function () {
+				var selectedName = $("#productSelect option:selected").attr("data-name");
+				var selectedBrand = $("#productSelect option:selected").attr("data-brand");
+				var selectedPrice = $("#productSelect option:selected").attr("data-price");
+				var selectedCategory = $("#productSelect option:selected").attr("data-category");
+				console.log(selectedCategory);
+				$("#selectedProduct").text(selectedName);
+				$("#outputBrand").text(selectedBrand);
+				$("#outputProductPrice").text(selectedPrice);
 
-		// 옵션추가
-		$(function () {
+			});
+		});
+
+		// 카테고리 추가&삭제
+		$(() => {
+			var counter = 1;
+			$('#createCategory').click(function () {
+				$('#countCategory').text('카테고리 정보 (현재 : ' + counter + '개)');
+				var newDiv = $('<div></div>', {
+					id: 'createdCategory' + counter,
+					class: 'form-group row',
+					html: `
+						<div>
+						<a>&nbsp&nbsp&nbsp&nbsp카테고리${counter}</a>
+						</div>
+						</br>
+						<hr>
+					<div class="col-sm-6 mb-3 mb-sm-0">
+						<a>&nbsp&nbsp&nbsp&nbsp상위 카테고리</a>
+					<select class="form-select" id="txtParentCategoryName${counter}" onchange="setInputValue('txtParentCategoryName${counter}', 'parentCategoryName${counter}');">
+						<option selected>상위 카테고리</option>
+						<option value="1">컴퓨터</option>
+						<option value="2">노트북</option>
+					</select>
+					</div>
+              	  <div class="col-sm-6">
+                    <a>&nbsp&nbsp&nbsp&nbsp하위 카테고리</a>
+                    <input type="text" class="form-control form-control-user"
+                        id="txtChildCategoryName${counter}" placeholder="Option Value" onchange="setInputValue('txtChildCategoryName${counter}', 'childCategoryName${counter}');"/>
+                </div>
+            `});
+				$('#categoryContainer').append(newDiv);
+
+				// 미리보기 행 추가
+				var newTable = $('<tr></tr>', {
+					id: 'createdCategoryTable' + counter,
+					html: `
+						<td id="parentCategoryName${counter}"></td>
+						<td id="childCategoryName${counter}"></td>
+					`});
+				$('#categoryTableContainer').append(newTable);
+
+				counter++;
+			});
+			//옵션삭제
+			$('#deleteCategory').click(function () {
+				if (counter > 1) {
+					counter--;
+					$('#countCategory').text('카테고리 정보 (현재 : ' + (counter - 1) + '개)');
+					$(`#createdCategory${counter}`).remove();
+				}
+			});
+		});
+
+		// 옵션 추가&삭제
+		$(() => {
+			let totalOptionPrice = 0;
+			function updateTotalOptionPrice() {
+				let productPrice = parseFloat($('#txtProductPrice').val()) || 0;
+				totalOptionPrice = 0;
+				$('[id^=txtOptionPrice]').each(function () {
+					let price = parseFloat($(this).val()) || 0;
+					totalOptionPrice += price;
+				});
+				$('#totPrice').text(totalOptionPrice + '원');
+				$('#totProductPrice').text('총가격 : ' + (productPrice + totalOptionPrice) + '원');
+			}
+
+			$(document).on('change', '[id^=txtOptionPrice], [id^=txtProductPrice]', function () {
+				updateTotalOptionPrice();
+			});
+
 			var counter = 1;
 			$('#createOption').click(function () {
-				var newDiv = $('<div></div>');
-				newDiv.attr('id', 'txt' + counter);
-				newDiv.text('Text in Div ' + counter);
+				$('#countOptions').text('옵션정보 (현재 : ' + counter + '개)');
+				var newDiv = $('<div></div>', {
+					id: 'createdOption' + counter,
+					class: 'form-group row',
+					html: `
+				<div>
+				<a>&nbsp&nbsp&nbsp&nbsp옵션${counter}</a>
+				</div>
+				</br>
+				<hr>
+                <div class="col-sm-6 mb-3 mb-sm-0">
+                    <a>&nbsp&nbsp&nbsp&nbsp옵션속성</a>
+                    <input type="text" class="form-control form-control-user"
+                        id="txtOptionName${counter}" placeholder="Option Name" onchange="setInputValue('txtOptionName${counter}', 'outputOptionName${counter}');" />
+                </div>
+                <div class="col-sm-6">
+                    <a>&nbsp&nbsp&nbsp&nbsp옵션값(value)</a>
+                    <input type="text" class="form-control form-control-user"
+                        id="txtOptionValue${counter}" placeholder="Option Value" onchange="setInputValue('txtOptionValue${counter}', 'outputOptionValue${counter}');" />
+                </div>
+                <div class="col-sm-6" style="margin-top: 10px;">
+                    <a>&nbsp&nbsp&nbsp&nbsp옵션가격</a>
+                    <input type="text" class="form-control form-control-user"
+                        id="txtOptionPrice${counter}" placeholder="Option Price" onchange="setInputValue('txtOptionPrice${counter}', 'outputOptionPrice${counter}');" />
+                </div>
+                <hr>
+            `});
 				$('#optionContainer').append(newDiv);
+
+				// 미리보기 행 추가
+				var newTable = $('<tr></tr>', {
+					id: 'createdOptionTable' + counter,
+					html: `
+						<td id="outputOptionName${counter}"></td>
+						<td id="outputOptionValue${counter}"></td>
+						<td id="outputOptionPrice${counter}"></td>
+					`});
+				$('#optionTableContainer').append(newTable);
+
 				counter++;
+
 			});
 			//옵션삭제
 			$('#deleteOption').click(function () {
 				if (counter > 1) {
-					$('#txt' + (counter - 1)).remove();
 					counter--;
+					$('#countOptions').text('옵션정보 (현재 : ' + (counter - 1) + '개)');
+					$(`#createdOption${counter}`).remove();
+					$(`#createdOptionTable${counter}`).remove();
+					updateTotalOptionPrice();
 				}
 			});
 		});
@@ -465,6 +554,8 @@
 				$('#selectedProduct').show();
 			}
 		});
+
+
 
 
 	</script>

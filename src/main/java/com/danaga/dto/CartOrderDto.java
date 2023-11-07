@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SUserCartOrderDto {
+public class CartOrderDto {
 	private Long id; // optionsetId
 	private Integer qty;
 	private String productName;

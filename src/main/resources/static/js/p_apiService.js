@@ -19,7 +19,7 @@ function call(api, method,request){
         options.body = JSON.stringify(request);
     }
     return fetch(options.url, options).then((response) => {
-        if(response.status === 200){
+        if(response.status === 200||response.status ===201){
             return response.json();
         }else if(response.status===403){
             window.location.href="/member/login";// redirect
@@ -122,6 +122,11 @@ export function addToCart(optionSetId, qty){
 	}
 	return call(ADD_TO_CART.url,ADD_TO_CART.method,cartDto)
 	.then((response)=>{
+		//location.href="http://localhost:80/cart_list"
+		if(response.status==500){
+			alert('장바구니에는 5개이상 못담아요');
+		}
+	}).catch((error)=>{
 		
-	});
+	})
 }
