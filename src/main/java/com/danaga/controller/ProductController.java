@@ -89,9 +89,7 @@ public class ProductController {
 			ResponseDto<ProductListOutputDto> responseDto = service.searchProductsForMember(// 주문수로 전체상품 정렬하여 조회
 					QueryStringDataDto.builder().orderType(OptionSetQueryData.BY_ORDER_COUNT).build(),
 					(String) session.getAttribute("sUserId"), 0);
-			if (responseDto.getMsg().equals(ProductExceptionMsg.FOUND_NO_MEMBER)) {
-				session.removeAttribute("sUserId");
-			} else if (responseDto.getMsg().equals(ProductSuccessMsg.SEARCH_PRODUCTS)) {
+			if (responseDto.getMsg().equals(ProductSuccessMsg.SEARCH_PRODUCTS)) {
 				List<ProductListOutputDto> productList = responseDto.getData();
 				model.addAttribute("productList", productList);
 			}
@@ -111,10 +109,11 @@ public class ProductController {
 	@GetMapping("/product{optionSetId}")
 	public String productDetail(HttpSession session, @PathVariable Long optionSetId, Model model)
 			throws FoundNoMemberException, FoundNoOptionSetException {
-		List<ProductDto> productList = service.findById(optionSetId).getData();
-		if (productList == null || productList.size() == 0) {
+		
+		if (service.findById(optionSetId) == null || service.findById(optionSetId).getData().isEmpty()) {
 			throw new FoundNoObjectException.FoundNoOptionSetException();
 		}
+		List<ProductDto> productList = service.findById(optionSetId).getData();
 
 		// 해당 옵션셋 찾아서 뿌리기
 		ResponseDto<OtherOptionSetDto> optionSets = service.showOtherOptionSets(optionSetId);
