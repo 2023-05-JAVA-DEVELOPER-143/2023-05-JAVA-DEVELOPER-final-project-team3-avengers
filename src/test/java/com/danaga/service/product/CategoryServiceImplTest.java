@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
 import com.danaga.dto.product.CategoryDto;
-import com.danaga.dto.product.CategorySaveDto;
+import com.danaga.dto.product.CategoryDto.CategorySaveDto;
 
 import jakarta.transaction.Transactional;
 @SpringBootTest

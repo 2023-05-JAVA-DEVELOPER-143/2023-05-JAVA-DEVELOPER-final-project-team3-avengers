@@ -9,6 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
 import com.danaga.dto.product.InterestDto;
+import com.danaga.exception.product.FoundNoObjectException.FoundNoMemberException;
+import com.danaga.exception.product.FoundNoObjectException.FoundNoOptionSetException;
 
 import jakarta.transaction.Transactional;
 @SpringBootTest
@@ -19,7 +21,7 @@ class InterestServiceImplTest {
 	@Transactional
 	@Rollback(false)
 	@Disabled
-	void testClickHeart() {
+	void testClickHeart() throws FoundNoMemberException, FoundNoOptionSetException {
 		System.out.println(service.clickHeart(InterestDto.builder()
 				.memberId(1L)
 				.optionSetId(1L)
@@ -28,14 +30,14 @@ class InterestServiceImplTest {
 
 	@Test
 	@Disabled
-	void testMyInterestingList() {
+	void testMyInterestingList() throws FoundNoMemberException {
 		System.out.println(service.myInterestingList(2L));
 	}
 
 	@Test
 	@Transactional
 	@Rollback(false)
-	void testEmptyMyInterestingList() {
+	void testEmptyMyInterestingList() throws FoundNoMemberException {
 		service.emptyMyInterestingList(2L);
 	}
 

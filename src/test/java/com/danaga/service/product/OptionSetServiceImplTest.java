@@ -13,13 +13,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
 import com.danaga.dto.product.OptionDto;
-import com.danaga.dto.product.OptionUpdateDto;
 import com.danaga.dto.product.OptionSetCreateDto;
 import com.danaga.dto.product.OptionSetUpdateDto;
 import com.danaga.dto.product.ProductSaveDto;
 import com.danaga.dto.product.QueryStringDataDto;
 import com.danaga.dto.product.UploadProductDto;
 import com.danaga.entity.Options;
+import com.danaga.exception.product.FoundNoObjectException.FoundNoOptionSetException;
+import com.danaga.exception.product.FoundNoObjectException.FoundNoOptionsException;
+import com.danaga.exception.product.FoundNoObjectException.FoundNoProductException;
 import com.danaga.repository.product.OptionSetQueryData;
 
 import jakarta.transaction.Transactional;
@@ -31,7 +33,7 @@ class OptionSetServiceImplTest {
 	@Transactional
 	@Rollback(false)
 	@Disabled//아직
-	void testDeleteProduct() {
+	void testDeleteProduct() throws FoundNoProductException {
 		System.out.println(service.deleteProduct(8L));
 	}
 
@@ -39,7 +41,7 @@ class OptionSetServiceImplTest {
 	@Transactional
 	@Rollback(false)
 	@Disabled
-	void testDeleteOptionSet() {
+	void testDeleteOptionSet() throws FoundNoOptionSetException {
 		System.out.println(service.deleteOptionSet(2L));
 	}
 
@@ -47,7 +49,7 @@ class OptionSetServiceImplTest {
 	@Transactional
 	@Rollback(false)
 	@Disabled
-	void testDeleteOption() {
+	void testDeleteOption() throws FoundNoOptionsException {
 		System.out.println(service.deleteOption(1L));
 	}
 
@@ -56,7 +58,7 @@ class OptionSetServiceImplTest {
 	@Transactional
 	@Rollback(false)
 	@Disabled
-	void testUpdateStock() {
+	void testUpdateStock() throws FoundNoOptionSetException {
 		List<OptionDto> list =new ArrayList<OptionDto>();
 		list.add(OptionDto.builder().build());
 		System.out.println(service.updateStock(OptionSetUpdateDto.builder()
@@ -70,7 +72,7 @@ class OptionSetServiceImplTest {
 	@Transactional
 	@Rollback(false)
 	@Disabled
-	void testUpdateOrderCount() {
+	void testUpdateOrderCount() throws FoundNoOptionSetException {
 		System.out.println(service.updateOrderCount(11L, 939));
 	}
 
@@ -78,7 +80,7 @@ class OptionSetServiceImplTest {
 	@Transactional
 	@Rollback(false)
 	@Disabled
-	void testUpdateViewCount() {
+	void testUpdateViewCount() throws FoundNoOptionSetException {
 		System.out.println(service.updateViewCount(11L));
 	}
 
@@ -125,8 +127,8 @@ class OptionSetServiceImplTest {
 	@Rollback(false)
 	@Disabled
 	void testUploadProduct() {
-		List<OptionUpdateDto> list =new ArrayList<OptionUpdateDto>();
-		list.add(OptionUpdateDto.builder()
+		List<OptionDto> list =new ArrayList<OptionDto>();
+		list.add(OptionDto.builder()
 				.extraPrice(10000000)
 				.name("내가만든")
 				.value("내가만든")
