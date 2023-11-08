@@ -2,10 +2,12 @@ package com.danaga.service;
 
 import java.util.List;
 
+import com.danaga.dto.KakaoMemberUpdateDto;
 import com.danaga.dto.MemberInsertGuestDto;
 import com.danaga.dto.MemberResponseDto;
 import com.danaga.dto.MemberUpdateDto;
 import com.danaga.entity.Member;
+import com.danaga.exception.ExistedMemberByNicknameException;
 
 import groovyjarjarantlr4.v4.parse.ANTLRParser.exceptionGroup_return;
 import jakarta.transaction.Transactional;
@@ -17,6 +19,7 @@ public interface MemberService {
 	public MemberResponseDto joinMember(Member member) throws Exception;
 	public MemberResponseDto joinGuest(MemberInsertGuestDto memberInsertGuestDto) throws Exception;
 	public MemberResponseDto updateMember(MemberUpdateDto memberUpdateDto) throws Exception;
+	public MemberResponseDto updateKakaoMember(KakaoMemberUpdateDto kakaoMemberUpdateDto) throws Exception, ExistedMemberByNicknameException;
 	public void deleteMember(String value) throws Exception;
 	public boolean isDuplicateByUserName(String userName) throws Exception;
 	public boolean isDuplicateByEmail(String email) throws Exception;

@@ -58,6 +58,10 @@ public class MemberController {
 	public String member_join_form() {
 		return "member/member_join_form";
 	}
+	@GetMapping("/member_join_complete_page")
+	public String member_join_complete_page() {
+		return "member/member_join_complete_page";
+	}
 
 //	@PostMapping("/member_join_action")
 //	public String member_join_action(@ModelAttribute("fuser") Member member, Model model,
@@ -89,6 +93,16 @@ public class MemberController {
 		MemberResponseDto member = memberService.getMemberBy(loginUser);
 		model.addAttribute("loginUser", member);
 		return "member/member_info_form";
+	}
+	@LoginCheck
+	@GetMapping("/member_join_form_kakao")
+	public String member_join_form_kakao(HttpSession session, Model model) throws Exception {
+		/************** login check **************/
+		/****************************************/
+		String loginUser = (String) session.getAttribute("sUserId");
+		MemberResponseDto member = memberService.getMemberBy(loginUser);
+		model.addAttribute("loginUser", member);
+		return "member/member_join_form_kakao";
 	}
 
 //	@LoginCheck

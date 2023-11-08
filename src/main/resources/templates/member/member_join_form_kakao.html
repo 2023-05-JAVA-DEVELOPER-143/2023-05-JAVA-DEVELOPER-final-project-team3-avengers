@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
- layout:decorate="layout/layout(title='회원가입')">
+ layout:decorate="layout/layout(title='카카오 통합')">
   <!-- Body-->
 	  <!-- Header -->
     <head>
@@ -15,26 +15,24 @@
           <div class="col-md-6">
             <div class="padding-top-3x hidden-md-up"></div>
             <h3 class="margin-bottom-1x">회원가입</h3>
-            <form class="row" name="f" id="form-account-regist" method="post" >
+            <form class="row" name="f" th:object="${loginUser}" id="form-account-regist" method="post" >
               <div class="col-sm-6">
                 <div class="form-group">
                   <label for="reg-username">아이디</label>
-                  <input class="form-control"  name="userName" type="text" id="reg-username" required>
+                  <input class="form-control" value="" th:value="*{userName}" name="userName" type="text" id="reg-username" required>
                 </div>
               </div>
               <div class="col-sm-6">
                 <div class="form-group">
                   <label for="reg-name">이름</label>
-                  <input class="form-control"  name="name" type="text" id="reg-name" required>
+                  <input class="form-control" value="" th:value="*{name}" name="name" type="text" id="reg-name" required disabled>
                 </div>
               </div>
               
               <div class="col-sm-6">
                 <div class="form-group" id="mail_input" name="mail_input">
                   <label for="reg-email">E-mail 주소</label>
-                  <input class="form-control"  name="email" type="email" placeholder="ex) email@google.com" id="reg-email" required>
-			      <button class="btn-account-register btn btn-primary margin-bottom-none"
-			       type="button" id="sendBtn" name="sendBtn" onclick="sendNumber()">이메일 인증</button>
+                  <input class="form-control" value="" th:value="*{email}" name="email" type="email" placeholder="ex) email@google.com" id="reg-email" required disabled>
                 </div>
               </div>
               <div class="col-sm-6">
@@ -45,12 +43,10 @@
 				     type="button" name="confirmBtn" id="confirmBtn" onclick="confirmNumber()">인증번호 확인</button>
 				</div>
               </div>
-			  <br>
-			    <input type="text" id="Confirm" name="Confirm" style="display: none" value="">
               <div class="col-sm-6">
                 <div class="form-group">
                   <label for="reg-pass">비밀번호</label>
-                  <input class="form-control" name="password" type="password" id="reg-pass" required>
+                  <input class="form-control" value="" name="password" th:value="*{password}" type="password" id="reg-pass" required>
 			      <input type="checkbox" id="show-password"> 비밀번호 표시
                 </div>
               </div>
@@ -63,19 +59,19 @@
               <div class="col-sm-6">
                 <div class="form-group">
                   <label for="reg-phone">휴대폰 번호</label>
-                  <input class="form-control"  name="phoneNo" type="text" placeholder="ex) 010-1111-1111" id="reg-phone" required>
+                  <input class="form-control" value="" th:value="*{phoneNo}" name="phoneNo" type="text" placeholder="ex) 010-1111-1111" id="reg-phone" required disabled>
                 </div>
               </div>
               <div class="col-sm-6">
                 <div class="form-group">
                   <label for="reg-nickname">닉네임</label>
-                  <input class="form-control"  name="nickname" type="text" id="reg-nickname" required>
+                  <input class="form-control" value="" th:value="*{nickname}" name="nickname" type="text" id="reg-nickname" required>
                 </div>
               </div>
               <div class="col-sm-6">
                 <div class="form-group">
                   <label for="reg-birthday">생년월일</label>
-                  <input class="form-control"  name="birthday" type="date" id="reg-birthday" required>
+                  <input class="form-control" value="" th:value="${#dates.format(loginUser.birthday, 'yyyy-MM-dd')}" name="birthday" type="date" id="reg-birthday" required disabled>
                 </div>
               </div>
               <!--주소 -->
@@ -83,13 +79,13 @@
 				<div class="form-group">
 					<label for="reg-address">주소</label><br>
 					<input name="postcode"
-					type="text" class="form-control" id="reg-postcode" placeholder="우편번호" disabled required>
+					type="text" class="form-control" value="" th:value="*{postCode}" id="reg-postcode" placeholder="우편번호" disabled required>
 					<input name="findaddr"
 					type="button" class="form-control" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
 					<input name="address"
-					type="text" class="form-control" id="reg-address" placeholder="주소" disabled required>
+					type="text" class="form-control" value="" th:value="*{address}" id="reg-address" placeholder="주소" disabled required>
 					<input name="detailaddress"
-					type="text" class="form-control" id="reg-detailaddress" placeholder="상세주소" required>
+					type="text" class="form-control" value="" th:value="*{detailAddress}" id="reg-detailaddress" placeholder="상세주소" required>
 				</div>
 			  </div>
 			   <!--주소 -->
@@ -105,25 +101,6 @@
     <th:block layout:fragment="script" >
      <script type="text/javascript">
 		  /**************** 회원가입 **********************/
-function isNoValidName(name) {
-    const nameRegex =  /^[가-힣]{2,5}$/;
-    if(nameRegex.test(name)) {
-		return false;
-	}
-    return true;
-}
-function isNoValidUserName(userName) {
-    const userNameRegex = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
-    return userNameRegex.test(userName);
-}
-function isNoValidEmail(email) {
-    // 간단한 이메일 유효성 검사를 수행합니다.
-    const emailRegex =  /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-    if(emailRegex.test(email)) {
-		return false;
-	}
-    return true;
-}
 function isNoValidPassword(password) {
     // 비밀번호 길이가 8에서 20 사이여야 함
     // 최소한 하나의 문자, 하나의 숫자, 그리고 하나의 특수 문자가 포함되어야 함
@@ -135,52 +112,15 @@ function isNoValidPassword(password) {
 	}
 	return false;
 }
-function isNoValidPhoneNo(phoneNo) {
-    // 010-1234-1234 형식의 휴대폰 번호 유효성 검사를 수행합니다.
-    const phoneRegex = /^(01[016789]{1})-?[0-9]{3,4}-?[0-9]{4}$/;
-    if(phoneRegex.test(phoneNo)) {
-		return false;
-	}
-    return true;
-}
-let emailCheck = false;
 let member_join_action_rest=function(data){
-		if(emailCheck) {
 		$.ajax({
-				url:'/member/join_rest',
+				url:'/member/join_rest_kakao',
 				method:'POST',
 				data:JSON.stringify(data),
 				dataType:'json',
 				contentType: 'application/json;charset=UTF-8',
 				success:function(resultJson){
-					if(resultJson.result==1){
-						$('#reg-username').css('border','0.5px solid orange');
-						$('#reg-username').tooltip({'trigger':'hover', 'title': resultJson.msg});
-			    		$('#reg-username').tooltip('show');
-			    		setTimeout(function () {
-					    $('#reg-username').tooltip('dispose');
-					    }, 2000);
-					} else if(resultJson.result==2) {
-						$('#reg-username').css('border','0.5px solid green');
-						$('#reg-email').css('border','0.5px solid orange');
-						$('#reg-email').tooltip({'trigger':'hover', 'title': resultJson.msg});
-			    		$('#reg-email').tooltip('show');
-			    		setTimeout(function () {
-					    $('#reg-email').tooltip('dispose');
-					    }, 2000);
-					} else if(resultJson.result==3) {
-						$('#reg-username').css('border','0.5px solid green');
-						$('#reg-email').css('border','0.5px solid green');
-						$('#reg-phone').css('border','0.5px solid orange');
-						$('#reg-phone').tooltip({'trigger':'hover', 'title': resultJson.msg});
-			    		$('#reg-phone').tooltip('show');
-			    		setTimeout(function () {
-					    $('#reg-phone').tooltip('dispose');
-					    }, 2000);
-					} else if(resultJson.result==4) {
-						$('#reg-username').css('border','0.5px solid green');
-						$('#reg-email').css('border','0.5px solid green');
-						$('#reg-phone').css('border','0.5px solid green');
+					if(resultJson.result==4) {
 						$('#reg-nickname').css('border','0.5px solid orange');
 						$('#reg-nickname').tooltip({'trigger':'hover', 'title': resultJson.msg});
 			    		$('#reg-nickname').tooltip('show');
@@ -195,30 +135,11 @@ let member_join_action_rest=function(data){
 					alert("회원가입 실패 다시 시도해 주십시요.");
 				}
 			});
-		} else {
-        			$('#reg-email').tooltip({'trigger':'hover', 'title':'이메일 인증을 진행해주세요.'});
-        			$('#reg-email').tooltip('show');
-				    setTimeout(function () {
-				    $('#reg-email').tooltip('dispose');
-				    }, 2000);
-        		}
+		}
 			
-};
 $(function(){
     		/**************회원가입폼 유효성체크*********************/
     		$('#join-action-btn').attr('disabled', 'disabled');
-    		//아이디
-    		$('#reg-username').on('change',function(e){
-				if(($('#reg-username').val().length < 8 || $('#reg-username').val().length > 20) || isNoValidUserName($('#reg-username').val())){
-        			$('#reg-username').css('border','0.5px dotted orange');
-        			$('#reg-username').tooltip({'trigger':'hover', 'title':'아이디는 한글 미포함 8 ~ 20자 이내여야 합니다'});
-        			$('#reg-username').tooltip('show');
-        		} else {
-        			$('#reg-username').css('border','0.5px solid green');
-        			$('#reg-username').tooltip('hide');
-        			$('#reg-username').tooltip('dispose');
-        		}
-        	});
         	//닉네임
     		$('#reg-nickname').on('change',function(e){
 				if($('#reg-nickname').val().length < 1 || $('#reg-nickname').val().length > 10){
@@ -229,18 +150,6 @@ $(function(){
         			$('#reg-nickname').css('border','0.5px solid green');
         			$('#reg-nickname').tooltip('hide');
         			$('#reg-nickname').tooltip('dispose');
-        		}
-        	});
-        	//이름
-    		$('#reg-name').on('change',function(e){
-				if(isNoValidName($('#reg-name').val())){
-        			$('#reg-name').css('border','0.5px dotted orange');
-        			$('#reg-name').tooltip({'trigger':'hover', 'title':'이름은 완성된 한글 2~5자 이내여야 합니다'});
-        			$('#reg-name').tooltip('show');
-        		} else {
-        			$('#reg-name').css('border','0.5px solid green');
-        			$('#reg-name').tooltip('hide');
-        			$('#reg-name').tooltip('dispose');
         		}
         	});
         	//비밀번호
@@ -306,30 +215,6 @@ $(function(){
 				}
         	}
         	});
-        	//이메일
-        	$('#reg-email').on('change',function(e){
-        		if(isNoValidEmail($('#reg-email').val())) {
-        			$('#reg-email').css('border','0.5px dotted orange');
-        			$('#reg-email').tooltip({'trigger':'hover', 'title':'올바른 이메일 형식이 아닙니다.'});
-        			$('#reg-email').tooltip('show');
-        		} else {
-        			$('#reg-email').css('border','0.5px solid green');
-        			$('#reg-email').tooltip('hide');
-        			$('#reg-email').tooltip('dispose');
-        		}
-        	});
-        	//번호
-        	$('#reg-phone').on('change',function(e){
-        		if(isNoValidPhoneNo($('#reg-phone').val())) {
-        			$('#reg-phone').css('border','0.5px dotted orange');
-        			$('#reg-phone').tooltip({'trigger':'hover', 'title':'올바른 번호 형식이 아닙니다.'});
-        			$('#reg-phone').tooltip('show');
-        		} else {
-        			$('#reg-phone').css('border','0.5px solid green');
-        			$('#reg-phone').tooltip('hide');
-        			$('#reg-phone').tooltip('dispose');
-        		}
-        	});
         	/******************************/
     		/**********회원가입submit버튼[ajax]************/
         	$('#form-account-regist').on('submit',function(e){
@@ -356,9 +241,6 @@ $(function(){
 				"address" : regAddress,
 				"detailAddress" : regDetailAddress
 			}
-    			$('#reg-username').css('border','0.5px solid green');
-    			$('#reg-username').tooltip('dispose');
-    			$('#form-account-regist').tooltip('dispose');
         		member_join_action_rest(data);
     			e.preventDefault();
     		});
@@ -408,54 +290,7 @@ function execDaumPostcode() {
         }).open();
     }
 //
-function sendNumber(){
-	if(isNoValidEmail($('#reg-email').val())) {
-        			$('#reg-email').css('border','0.5px dotted orange');
-        			$('#reg-email').tooltip({'trigger':'hover', 'title':'올바른 이메일 형식이 아닙니다.'});
-        			$('#reg-email').tooltip('show');
-	} else {
-    	$("#mail_number").css("display","block");
-		$('#reg-email').css('border','0.5px solid green');
-		$('#reg-email').tooltip('hide');
-		$('#reg-email').tooltip('dispose');
-		$.ajax({
-        url:"/emailauthentication",
-        type:"post",
-        dataType:"json",
-        data:{"mail" : $("#reg-email").val()},
-        success: function(data){
-            alert("인증번호 발송");
-            $("#Confirm").attr("value",data);
-        },
-        error: function(){
-			alert("인증번호 발송 실패");
-		}
-    });
-	}
-}
 
-function confirmNumber(){
-    let number1 = $("#number").val();
-    let number2 = $("#Confirm").val();
-
-    if(number1 == number2){
-		$('#number').css('border','0.5px solid green');
-		$('#number').tooltip('show');
-		$('#number').tooltip({'trigger':'hover', 'title':'인증번호가 일치합니다.'});
-		setTimeout(function() {
-	    $('#number').tooltip('dispose');
-	    }, 2000);
-        emailCheck = true;
-    }else{
-        $('#number').css('border','0.5px dotted orange');
-		$('#number').tooltip('show');
-		$('#number').tooltip({'trigger':'hover', 'title':'인증번호가 일치하지 않습니다.'});
-		setTimeout(function() {
-	    $('#number').tooltip('dispose');
-	    }, 2000);
-	    emailCheck = false;
-    }
-}
 function getCurrentDate() {
 	let currentDate = new Date();
 	let year = currentDate.getFullYear();
