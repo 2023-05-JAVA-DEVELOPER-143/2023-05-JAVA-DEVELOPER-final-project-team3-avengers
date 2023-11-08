@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -125,4 +126,22 @@ public class ProductRestController {
 			return ResponseEntity.status(HttpStatus.OK).body(response);
 		}
 	}
+	@ResponseBody
+	@ExceptionHandler(value = {NeedLoginException.class,FoundNoOptionSetException.class,FoundNoMemberException.class,MethodArgumentNotValidException.class})
+	protected ResponseEntity<?> defaultRestException(Exception e) {
+		 ProductExceptionMsg errorMsg=null;
+		    if (e instanceof NeedLoginException) {
+		        errorMsg = ((NeedLoginException) e).getMsg();
+		        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ResponseDto.builder().msg(errorMsg).build());
+		    } else if (e instanceof FoundNoObjectException.FoundNoMemberException) {
+		        errorMsg = ((FoundNoObjectException.FoundNoMemberException) e).getMsg();
+		        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ResponseDto.builder().msg(errorMsg).build());
+		    }  else if (e instanceof FoundNoOptionSetException) {
+		        errorMsg = ((FoundNoOptionSetException) e).getMsg();
+		        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseDto.builder().msg(errorMsg).build());
+		    } else if (e instanceof MethodArgumentNotValidException) {
+		        errorMsg = ProductExceptionMsg.WRONG_PARAMETER;
+		    } 
+		    return ResponseEntity.badRequest().body(ResponseDto.builder().msg(errorMsg).build());
+		}
 }
