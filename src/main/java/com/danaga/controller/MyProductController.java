@@ -75,7 +75,7 @@ public class MyProductController {
 			MemberResponseDto loginUser = memberService.getMemberBy(username);
 			interestService.emptyMyInterestingList(loginUser.getId());// memberId
 			model.addAttribute("loginUser", loginUser);
-			return "product/wishlist";// 빈박스 이미지 넘겨주기
+			return "product/wishlist";
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new FoundNoMemberException();
@@ -93,7 +93,7 @@ public class MyProductController {
 			MemberResponseDto loginUser = memberService.getMemberBy(username);
 			recentViewService.removeMyRecentViews(loginUser.getId());// memberId
 			model.addAttribute("loginUser", loginUser);
-			return "product/recent_view";// 빈박스 이미지 넘겨주기
+			return "product/recent_view";
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new FoundNoMemberException();

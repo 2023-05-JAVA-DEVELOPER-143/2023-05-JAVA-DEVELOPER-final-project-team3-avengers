@@ -81,7 +81,7 @@ public class RefundController {
 			Long id= memberService.findIdByUsername(loginUser);
 			Member member = memberRepository.findById(id).get();
 			model.addAttribute("loginUser", member);
-			return "orders/orders1";
+			return "orders/order_member_list";
 		} catch (Exception e) {
 			model.addAttribute("msg", e.getMessage());
 			e.printStackTrace();

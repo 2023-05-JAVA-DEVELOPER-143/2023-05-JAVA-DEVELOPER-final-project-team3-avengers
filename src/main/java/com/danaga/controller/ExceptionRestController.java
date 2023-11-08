@@ -24,6 +24,7 @@ public class ExceptionRestController {
 		        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ResponseDto.builder().msg(errorMsg).build());
 		    } else if (e instanceof FoundNoObjectException.FoundNoOptionSetException) {
 		        errorMsg = ((FoundNoObjectException.FoundNoOptionSetException) e).getMsg();
+		        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseDto.builder().msg(errorMsg).build());
 		    } else if (e instanceof FoundNoObjectException.FoundNoMemberException) {
 		        errorMsg = ((FoundNoObjectException.FoundNoMemberException) e).getMsg();
 		        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ResponseDto.builder().msg(errorMsg).build());

@@ -512,6 +512,7 @@ public class OrderServiceImpl implements OrderService {
 	public void ordersMemberIdNull(String userName) throws Exception {
 
 		List<Orders> ordersList = this.memberOrdersListNull(userName);
+		
 		for (int i = 0; i < ordersList.size(); i++) {
 			
 			ordersList.get(i).setMember(null);
