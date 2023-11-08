@@ -21,9 +21,9 @@ function call(api, method,request){
             return response.json();
         }else if(response.status===401){
 			alert('로그인이 필요한 서비스입니다.');
-            window.location.href="/member/login/form";// redirect
+            window.location.href="http://localhost/member_login_form";// redirect
         }else if(response.stataus===404){
-			window.location.href="/404.html";			
+			window.location.href="http://localhost/404.html";			
 		}else if(response.msg=='WRONG_PARAMETER'){
 			alert('잘못된 요청입니다. 입력값을 확인해주세요.');
 		}else{
@@ -39,8 +39,10 @@ function call(api, method,request){
 export function tapHeart(optionSetId, callback) {//디테일에서//클릭이벤트핸들러에서 이미지로 어떤 함수 쓸건지 결정
 	return call(TAP_HEART.url.replace('@optionSetId', optionSetId), TAP_HEART.method, null)
 		.then((response) => {
-			console.log('추가성공');
+		
 			callback();
+			console.log('추가성공');
+			
 		});
 }
 export function untapHeart(optionSetId, callback) {//디테일에서//그리고 애초에 서버에서 이미지 뿌릴때 좋아요 여부 확인해서 이미지 알맞게 뿌려야함

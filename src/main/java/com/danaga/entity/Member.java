@@ -90,7 +90,7 @@ public class Member {
 
 	// Orders
 	@ToString.Exclude
-	@OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
+	@OneToMany(mappedBy = "member")
 	@Builder.Default
 	private List<Orders> orderList = new ArrayList<>();
 

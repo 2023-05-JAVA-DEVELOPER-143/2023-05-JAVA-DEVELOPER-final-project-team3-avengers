@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.danaga.dto.MemberResponseDto;
 import com.danaga.dto.ResponseDto;
+import com.danaga.dto.product.ProductListOutputDto;
 import com.danaga.exception.product.FoundNoObjectException;
 import com.danaga.exception.product.NeedLoginException;
 import com.danaga.exception.product.FoundNoObjectException.FoundNoMemberException;
@@ -35,7 +36,7 @@ public class MyProductController {
 		try {
 			String username = (String) session.getAttribute("sUserId");
 			MemberResponseDto loginUser = memberService.getMemberBy(username);
-			ResponseDto<?> resultList = interestService.myInterestingList(loginUser.getId());
+			ResponseDto<ProductListOutputDto> resultList = interestService.myInterestingList(loginUser.getId());
 			model.addAttribute("productList", resultList.getData());// memberId
 			model.addAttribute("loginUser", loginUser);
 			return "product/wishlist";

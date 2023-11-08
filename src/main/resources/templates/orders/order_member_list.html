@@ -5,6 +5,32 @@
 <!-- Header -->
 
 <head>
+
+
+<style>
+
+a {
+    color: black; /* 링크의 색상을 검정으로 설정합니다. */
+    text-decoration: none; /* 링크의 밑줄을 제거합니다. */
+}
+
+a:hover {
+    cursor: pointer; /* a 태그에 마우스를 가져다 대면 포인터 커서로 변경됩니다. */
+}
+
+</style>
+<style>
+.table tbody tr td {
+    background-color: #f5f5f5; /* 옅은 회색으로 설정하세요 */
+}
+</style>
+	    <style>
+        .table th {
+            background-color: #555;
+            color: #fff;
+        }
+    </style>
+
 	<style>
 		.modal-content {
 			margin-top: 100px;
@@ -14,6 +40,11 @@
 
 	<style>
 		button.btn {
+			display: block;
+    		margin: 0 auto;
+		
+		
+		
 			background-color: rgba(255, 255, 255, 0.5);
 			/* 배경색을 투명한 흰색으로 설정 */
 			border: none;
@@ -57,6 +88,16 @@
 			</div>
 		</div>
 
+
+
+	
+
+
+
+
+
+
+
 	</th:block>
 
 
@@ -89,10 +130,12 @@
 											<span th:text="${ordersDto.id}">주문번호</span>
 										</button>
 									</td>
+									
 									<td th:text="${ordersDto.getDescription()}" style="max-width: 150px;">주문 내역</td>
 									<td name="orderState" id="orderState" th:text="${ordersDto.getStateMsg()}">주문 상태
 									</td>
-									<td th:text="${ordersDto.getPrice()}"><span class="text-medium">$760.50</span></td>
+									
+									<td th:text="|${#numbers.formatInteger(ordersDto.Price, 0, 'COMMA')}원|"><span class="text-medium">$760.50</span></td>
 									<td>
 										<button class="refund-button"
 											th:onclick="requestRefund([[${ordersDto.getId()}]], [[${ordersDto.getStateMsg()}]])">환불</button>
@@ -180,7 +223,8 @@
 										content += '<thead><tr><th>제품 사진</th><th>제품 이름</th><th>제품 갯수</th><th>제품 가격</th></tr></thead>';
 										content += '<tbody>';
 										// 데이터에 따라서 테이블 내용을 추가하세요.
-
+										
+										
 										for (var i = 0; i < data.orderItemDtoList.length; i++) {
 											var orderItem = data.orderItemDtoList[i];
 											console.log('#########'+orderItem.pimage);
@@ -191,11 +235,14 @@
 											console.log('#########'+orderItem.orderId);
 											console.log('#########'+orderItem.osId);
 											console.log('#########'+orderItem.optionSet);
+											
+											var  realTotalPrice = orderItem.qty * orderItem.totalPrice;
+											
 											content += '<tr>';
-											content += '<td style="height: 100px;"><img src= ' + orderItem.pimage + ' alt="Product Image" class="img-fluid" style="max-height: 100px; max-width: 100px;"></td>';
-											content += '<td style="height: 100px;"><span class="text-medium">'+ orderItem.productName + '</span></td>';
+											content += '<td style="height: 100px;"><img src= ' + orderItem.pimage + ' alt="Product Image" class="img-fluid" style="max-height: 100px; max-width: 100px;"></a></td>';
+											content += '<td style="height: 100px;"><a href="http://localhost/product' + orderItem.osId + '"><span class="text-medium">'+ orderItem.productName + '</span></td>';
 											content += '<td style="height: 100px;"><span class="text-medium">' + orderItem.qty + '개</span></td>';
-											content += '<td style="height: 100px;"><span class="text-medium">' + orderItem.qty * orderItem.totalPrice + '원</span></td>';
+											content += '<td style="height: 100px;"><span class="text-medium">' + realTotalPrice.toLocaleString() + '원</span></td>';
 											content += '</tr>';
 										}
 
@@ -221,7 +268,7 @@
 											+ '</span>';
 
 										content1 += '<span class="text-medium" style="margin-right: 50px;""> 주문 총가격: '
-											+ data.price
+											+ data.price.toLocaleString()
 											+ '원</span>';
 										content1 += '</tfooter>';
 										$('.modal-footer').html(
@@ -263,6 +310,11 @@
 				});
 
 			}
+			
+
+			
+			
+			
 		</script>
 	</th:block>
 </body>

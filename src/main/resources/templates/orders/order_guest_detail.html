@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="layout/layout(title='비회원 주문상세내역')">
+	layout:decorate="layout/layout(title='비회원 주문 및 상세내역')">
 <!-- Body-->
 <!-- Header -->
 
@@ -15,10 +15,28 @@
 		integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
 		crossorigin="anonymous"></script>
 -->
-
-
+<style>
+.table tbody tr td {
+    background-color: #f5f5f5; /* 옅은 회색으로 설정하세요 */
+}
+</style>
 
 <style>
+.product-name:hover {
+    cursor: pointer;
+}
+</style>
+
+    <style>
+        .table th {
+            background-color: #555;
+            color: #fff;
+        }
+    </style>
+
+<style>
+
+
 .modal-content {
 	margin-top: 100px;
 	/* 모달을 상단에서 50px 아래로 이동 */
@@ -55,6 +73,27 @@ button.btn:hover {
 
 <body>
 	<th:block layout:fragment="modal">
+	
+	<!-- 모달 창 추가 -->
+<div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img id="modalImage" src="" alt="Product Image" class="img-fluid">
+      </div>
+    </div>
+  </div>
+</div>
+	
+	
+	
+	
 	</th:block>
 
 	<!-- Page Content-->
@@ -63,9 +102,10 @@ button.btn:hover {
 		<div class="container padding-bottom-3x mb-2">
 			<div class="row">
 
-				<div class="col-lg-8">
+				<div class="col-lg-10">
 					<div class="padding-top-2x mt-2 hidden-lg-up"></div>
-					<div class="table-responsive">
+					<div class="table-responsive" >
+					<h4 class="text-center" >주문내역보기</h4>
 						<table class="table table-hover margin-bottom-none">
 							<thead>
 								<tr>
@@ -82,8 +122,9 @@ button.btn:hover {
 									<td th:text="${ordersDto.getId()}">주문 내역</td>
 									<td th:text="${ordersDto.getDescription()}">주문 내역</td>
 									<td name="orderState" id="orderState" th:text="${ordersDto.getStateMsg()}">주문 상태</td>
-									<td th:text="${ordersDto.getPrice()}"><span
-										class="text-medium">$760.50</span></td>
+									<td th:text="|${#numbers.formatInteger(ordersDto.Price, 0, 'COMMA')}원|"><span
+										class="text-medium">$760.50</span>
+										</td>
 									<td>
 										<button class="refund-button"
 											th:onclick="requestRefund([[${ordersDto.getId()}]], [[${ordersDto.getStateMsg()}]])">환불</button>
@@ -93,6 +134,9 @@ button.btn:hover {
 								</tr>
 							</tbody>
 						</table>
+						</div>
+						<br><br><br>
+						<h4 class="text-center">주문상세보기</h4>
 						<table class="table table-hover margin-bottom-none">
 							<thead>
 								<tr>
@@ -104,17 +148,16 @@ button.btn:hover {
 							</thead>
 							<tbody>
 								<tr th:each="ordersItemDto: ${orderItemDtoList}">
-									<td><img th:src="${ordersItemDto.getPImage()}" alt="제품 사진"
+								
+									<td><img class="product-image" th:src="${ordersItemDto.getPImage()}" alt="제품 사진"
 										style="max-width: 50px; max-height: 50px;" /></td>
-									<td th:text="${ordersItemDto.getProductName()}"></td>
+									<td  class="product-name" th:text="${ordersItemDto.getProductName()}" th:attr="data-product-id=${ordersItemDto.getOsId()}"></td>
 									<td th:text="${ordersItemDto.getQty()}"></td>
-									<td th:text="${ordersItemDto.getTotalPrice()}"></td>
+									<td th:text="|${#numbers.formatInteger(ordersItemDto.totalPrice, 0, 'COMMA')}원|"></td>
 								</tr>
 							</tbody>
 						</table>
-
-
-					</div>
+					
 					<hr>
 				</div>
 			</div>
@@ -181,7 +224,27 @@ button.btn:hover {
 				});
 
 			}
+			
+			
+			$(document).ready(function () {
+				  $('img.product-image').click(function () {
+				    var src = $(this).attr('src');
+				    $('#modalImage').attr('src', src);
+				    $('#productModal').modal('show');
+				  });
+				});
+			
 		</script>
+
+		<script th:inline="javascript">
+		    $(document).ready(function () {
+		        $('.product-name').click(function () {
+		            var productId = $(this).attr('data-product-id'); // 제품 ID를 가져옵니다.
+		            window.location.href = 'http://localhost/product' + productId; // 제품 상세보기 페이지로 이동합니다.
+		        });
+		    });
+		</script>
+
 
 	</th:block>
 

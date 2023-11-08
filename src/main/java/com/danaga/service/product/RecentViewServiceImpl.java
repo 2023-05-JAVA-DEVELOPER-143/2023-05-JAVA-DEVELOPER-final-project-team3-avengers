@@ -67,7 +67,7 @@ public class RecentViewServiceImpl implements RecentViewService{
 	}
 	
 	//나의 최근 본 상품 전체 조회 
-	public ResponseDto<?> myAllRecentViews(Long memberId) throws FoundNoMemberException{
+	public ResponseDto<ProductListOutputDto> myAllRecentViews(Long memberId) throws FoundNoMemberException{
 		List<ProductListOutputDto> myRecentViews=new ArrayList<>();
 			myRecentViews = optionSetDao.findAllByRecentView_MemberId(memberId).stream().map(t -> new ProductListOutputDto(t)).collect(Collectors.toList());
 		return ResponseDto.<ProductListOutputDto>builder().data(myRecentViews).msg(ProductSuccessMsg.FIND_MY_RECENTVIEWS).build();
