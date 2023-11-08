@@ -34,6 +34,7 @@ function call(api, method,request){
         console.log("http error");
         console.log(error);
     });
+
 }
 
 export function tapHeart(optionSetId, callback) {//디테일에서//클릭이벤트핸들러에서 이미지로 어떤 함수 쓸건지 결정
@@ -88,8 +89,8 @@ export function showOptions(categoryId) {
 		});
 }
 export function searchResult(filterDto) {//검색결과 보여주기
-filterDto.firstResult=0;
-			console.log(filterDto);
+	filterDto.firstResult = 0;
+	console.log(filterDto);
 	return call(SEARCH.url, SEARCH.method, filterDto)
 		.then((response) => {
 			console.log(response);
@@ -98,12 +99,12 @@ filterDto.firstResult=0;
 			$('#main-product-item-template-position').html(mixedTemplate);
 		});
 }
-export function continueSearchResult(filterDto,observer) {//검색결과 보여주기
-			console.log(filterDto);
+export function continueSearchResult(filterDto, observer) {//검색결과 보여주기
+	console.log(filterDto);
 	return call(SEARCH.url, SEARCH.method, filterDto)
 		.then((response) => {
 			console.log(response);
-			if(response.error=='end'){
+			if (response.error == 'end') {
 				observer.unobserve($('#product-list-observed'));
 			}
 			let template = Handlebars.compile($('#main-product-item-template').html());
@@ -111,18 +112,66 @@ export function continueSearchResult(filterDto,observer) {//검색결과 보여�
 			$('#product-list-observed').before(mixedTemplate);
 		});
 }
-export function addToCart(optionSetId, qty){
-	let cartDto={
+export function addToCart(optionSetId, qty) {
+	let cartDto = {
 		"optionSetId": optionSetId,
 		"qty": qty
 	}
-	return call(ADD_TO_CART.url,ADD_TO_CART.method,cartDto)
-	.then((response)=>{
-		//location.href="http://localhost:80/cart_list"
-		if(response.status==500){
-			alert('장바구니에는 5개이상 못담아요');
+	function a() {
+		if (window.confirm('계속 쇼핑 하시겠습니까?')) {
+			location.href = "http://localhost/product";
+		} else {
+			location.href = "http://localhost/cart_list"
 		}
-	}).catch((error)=>{
-		
-	})
+	}
+	return call(ADD_TO_CART.url.replace("@optionSetId", optionSetId), ADD_TO_CART.method, null)
+		.then((response) => {
+			console.log(response)
+			if (response == 1000) {
+				$.ajax({
+					url: "/cart",
+					type: "post",
+					contentType: 'application/json',
+					data: JSON.stringify(cartDto),
+					success: function(code) {
+						if (code == 2100) {
+							if (window.confirm('장바구니 맥스 ')) {
+								location.href = "http://localhost/cart_list";
+							}
+						} else if (code == 2200) {
+							if (window.confirm('장바구니로 이동?')) {
+								location.href = "http://localhost/cart_list";
+							} else {
+								location.href = "http://localhost/product"
+							}
+						}
+					}
+				})
+			} else if (response == 2000) {
+				if (window.confirm('이미 장바구니에 존재하는 제품입니다.')) {
+					$.ajax({
+						url: "/cart",
+						type: "post",
+						contentType: 'application/json',
+						data: JSON.stringify(cartDto),
+						success: function(code) {
+						if (code == 2100) {
+							if (window.confirm('장바구니 맥스 ')) {
+								location.href = "http://localhost/cart_list";
+							}
+						} else if (code == 2200) {
+							if (window.confirm('장바구니로 이동?')) {
+								location.href = "http://localhost/cart_list";
+							} else {
+								location.href = "http://localhost/product"
+							}
+						}
+					}
+					})
+				}
+			}
+
+		}).catch((error) => {
+
+		})
 }
