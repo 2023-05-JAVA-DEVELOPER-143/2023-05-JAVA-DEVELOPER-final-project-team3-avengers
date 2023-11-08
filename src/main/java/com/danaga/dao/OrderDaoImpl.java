@@ -22,6 +22,7 @@ import com.danaga.repository.OrderItemRepository;
 import com.danaga.repository.OrderRepository;
 
 import jakarta.persistence.criteria.Order;
+import jakarta.transaction.Transactional;
 
 @Repository
 public class OrderDaoImpl implements OrderDao {
@@ -155,6 +156,37 @@ public class OrderDaoImpl implements OrderDao {
 			throw new Exception("전화번호가 없습니다.");
 		}
 		
+	}
+	/*
+	 * 주문+주문아이템 목록(회원)
+	 */
+
+	@Transactional
+	public List<Orders> memberOrdersListNull(String userName) throws Exception {
+
+		if (userName == null) {
+			throw new Exception("일치하는 사용자가없습니다.");
+		}
+		List<Orders> orderList = this.findOrdersByMember_UserName(userName);
+		System.out.println("3333333333333333"+orderList);
+		
+		return orderList;
+	}
+	/*
+	 * 오더에 있는 멤버 삭제 (회원탈퇴시 필요)
+	 */
+	@Transactional
+	public void ordersMemberIdNull(String userName) throws Exception {
+
+		List<Orders> ordersList = this.memberOrdersListNull(userName);
+		
+		for (int i = 0; i < ordersList.size(); i++) {
+			
+			ordersList.get(i).setMember(null);
+			System.out.println("&&&&&&&&&&&&&"+ordersList.get(i)); 
+			System.out.println("###################"+ordersList.get(i));
+			orderRepository.save(ordersList.get(i));
+		}
 	}
 
 }

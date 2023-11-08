@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.danaga.dao.MemberDao;
+import com.danaga.dao.OrderDao;
 import com.danaga.dto.MemberInsertGuestDto;
 import com.danaga.dto.MemberResponseDto;
 import com.danaga.dto.MemberUpdateDto;
@@ -31,6 +32,9 @@ public class MemberServiceImpl implements MemberService {
 
 	@Autowired
 	private MemberRepository memberRepository;
+	
+	@Autowired
+	private OrderDao orderDao;
 
 	public List<MemberResponseDto> getMembers() {
 		List<Member> members = memberDao.findMembers();
@@ -91,6 +95,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 	@Transactional
 	public void deleteMember(String value) throws Exception {
+		orderDao.ordersMemberIdNull(value);
 		memberDao.delete(value);
 	}
 
