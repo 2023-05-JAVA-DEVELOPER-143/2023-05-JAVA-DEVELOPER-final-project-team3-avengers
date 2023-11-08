@@ -324,7 +324,7 @@ $(document).ready(function() {
 /* 체크된 체크박스 값들만 주문폼으로 넘기기 */ 
 function checkValue() {
    let checkedData = [];
-
+   let orderData = [];
    // 체크박스 요소들을 가져온다
    let checkboxes = document.querySelectorAll('input[name="checkboxid"]');
    let checkboxesqty = document.querySelectorAll('input[name="checkboxqty"]');
@@ -334,43 +334,44 @@ function checkValue() {
    // 체크된 체크박스의 수량과 값을 객체로 묶어 배열에 추가한다
    for(let i = 0; i < checkboxes.length; i++) {
        if (checkboxes[i].checked) {
+           const optionSetId = checkboxes[i].value;
            const id = checkboxes[i].value;
+           
            const qty = checkboxesqty[i].value;
            const productName = checkboxproductName[i].value;
            const totalPrice = checkboxtotalPrice[i].value;
            const item = { id, qty, productName, totalPrice };
-           checkedData.push(item);
+           const checkItem ={optionSetId,qty};
+           checkedData.push(checkItem);
+           orderData.push(item);
        }
    }
    // 배열에 추가된 객체들을 출력
    console.log("선택된 데이터: ", checkedData);
-   
    $.ajax({
-		url : "/cart_order_form", // 레스트 컨트롤러
+		url : "/order/cart_check_Stock",
 		type : "post",
 		contentType : 'application/json',
 		data : JSON.stringify(checkedData),
 		success : function(response) {
-           if(response==1){
+           if(response=='1'){
+        	   console.log(response)
         	   $.ajax({
         			url : "/cart_order_form",
         			type : "post",
         			contentType : 'application/json',
-        			data : JSON.stringify(checkedData),
+        			data : JSON.stringify(orderData),
         			success : function(response) {
         	     	window.location.href = "/order_save_form"; // 이동할 페이지 URL
         	           console.log(checkedData);
-        	       },
-        	       error : function(message) {
-        	    	   console.log(message);
         	       }
         		});
+           }else if(response=='주문한수량보다 재고가 없습니다.'){
+        	   console.log(response)
+        	   alert(response);
            }
        },
-       error : function(xhr, status, error) {
-           console.error("Ajax 요청 실패");
-           console.log("Status: " + status);
-           console.log("Error: " + error);
+       error : function(message) {
        }
 
 
@@ -414,7 +415,7 @@ function getSelectValue(obj) {
 				console.log(data);
 				console.log('response' + response.qty)
 				console.log('>>>>'+response.optionSetId)
-				//location.href = "http://localhost:80/cart_list";
+				location.reload();
 				//$("#selectbox").replaceAll(response);
 				//let updatedQuantity = response.qty;
 				//[value="${response.qty}"]
