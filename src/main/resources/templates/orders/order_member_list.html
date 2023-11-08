@@ -89,10 +89,12 @@
 											<span th:text="${ordersDto.id}">주문번호</span>
 										</button>
 									</td>
+									
 									<td th:text="${ordersDto.getDescription()}" style="max-width: 150px;">주문 내역</td>
 									<td name="orderState" id="orderState" th:text="${ordersDto.getStateMsg()}">주문 상태
 									</td>
-									<td th:text="${ordersDto.getPrice()}"><span class="text-medium">$760.50</span></td>
+									
+									<td th:text="|${#numbers.formatInteger(ordersDto.Price, 0, 'COMMA')}원|"><span class="text-medium">$760.50</span></td>
 									<td>
 										<button class="refund-button"
 											th:onclick="requestRefund([[${ordersDto.getId()}]], [[${ordersDto.getStateMsg()}]])">환불</button>
@@ -180,7 +182,8 @@
 										content += '<thead><tr><th>제품 사진</th><th>제품 이름</th><th>제품 갯수</th><th>제품 가격</th></tr></thead>';
 										content += '<tbody>';
 										// 데이터에 따라서 테이블 내용을 추가하세요.
-
+										
+										
 										for (var i = 0; i < data.orderItemDtoList.length; i++) {
 											var orderItem = data.orderItemDtoList[i];
 											console.log('#########'+orderItem.pimage);
@@ -191,11 +194,14 @@
 											console.log('#########'+orderItem.orderId);
 											console.log('#########'+orderItem.osId);
 											console.log('#########'+orderItem.optionSet);
+											
+											var  realTotalPrice = orderItem.qty * orderItem.totalPrice;
+											
 											content += '<tr>';
 											content += '<td style="height: 100px;"><img src= ' + orderItem.pimage + ' alt="Product Image" class="img-fluid" style="max-height: 100px; max-width: 100px;"></td>';
 											content += '<td style="height: 100px;"><span class="text-medium">'+ orderItem.productName + '</span></td>';
 											content += '<td style="height: 100px;"><span class="text-medium">' + orderItem.qty + '개</span></td>';
-											content += '<td style="height: 100px;"><span class="text-medium">' + orderItem.qty * orderItem.totalPrice + '원</span></td>';
+											content += '<td style="height: 100px;"><span class="text-medium">' + realTotalPrice.toLocaleString() + '원</span></td>';
 											content += '</tr>';
 										}
 
@@ -221,7 +227,7 @@
 											+ '</span>';
 
 										content1 += '<span class="text-medium" style="margin-right: 50px;""> 주문 총가격: '
-											+ data.price
+											+ data.price.toLocaleString()
 											+ '원</span>';
 										content1 += '</tfooter>';
 										$('.modal-footer').html(

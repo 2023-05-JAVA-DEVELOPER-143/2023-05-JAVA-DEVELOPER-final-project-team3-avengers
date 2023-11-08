@@ -95,7 +95,9 @@
 							<div class="col-md-6 text-right">
 								<button type="button" class="btn btn-secondary ml-2"
 									th:onclick="insertRefund([[${ordersDto.getId()}]])">네</button>
-								<button type="button" class="btn btn-secondary ml-5">아니오</button>
+								<button type="button" class="btn btn-secondary ml-5" onclick="redirectToMemberOrderList()">
+    								아니오
+								</button>
 							</div>
 						</div>
 					</div>
@@ -209,6 +211,19 @@
     form.submit();
 }
    
+
+   function redirectToMemberOrderList() {
+       window.location.href = "/member_order_List";
+   }
+
+   
+   
+   
+   
+   
+   
+   
+   
    function validateRefundAccount() {
 	    var acNo = $('#acNo').val();
 	    var acNoError = $('#acNoError');
@@ -216,7 +231,7 @@
 	    acNoError.text('');
 
 	    if (!/^[0-9]+$/.test(acNo)) {
-	        acNoError.text('숫자만 입력하세요.');
+	        acNoError.text('환불계좌번호는 숫자를 입력해야됩니다.');
 	        return false;
 	    }
 
