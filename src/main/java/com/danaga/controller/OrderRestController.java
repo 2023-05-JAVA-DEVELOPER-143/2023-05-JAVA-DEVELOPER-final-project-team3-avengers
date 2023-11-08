@@ -140,4 +140,21 @@ public class OrderRestController {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
+
+	@PostMapping("/NoStock")
+	public ResponseEntity<?> orderNoStock(@RequestBody CartDto cartDto) {
+		
+		try {
+			String result = "1";
+			if (optionSetService.findById(cartDto.getOptionSetId()).getData().get(0).getStock() < cartDto.getQty()) {
+				throw new Exception("주문한수량보다 재고가 없습니다.");
+			}
+			return ResponseEntity.ok(result);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+		
+	}
 }
