@@ -148,6 +148,15 @@ public class ProductController {
 			}
 			hits = service.displayHitProductsForMember(optionSetId, username, 0);
 		} else {
+			List<Long> recentOptionSetIds=null;
+			if(session.getAttribute("recentviews")==null) {
+			recentOptionSetIds = new ArrayList<Long>();
+			}else {
+			recentOptionSetIds = (List<Long>) session.getAttribute("recentviews");
+			}
+			recentOptionSetIds.add(optionSetId);
+			session.setAttribute("recentviews", recentOptionSetIds);
+			
 			hits = service.displayHitProducts(optionSetId, 0);
 			List<Boolean> isInterested = new ArrayList<>();
 			isInterested.add(false);

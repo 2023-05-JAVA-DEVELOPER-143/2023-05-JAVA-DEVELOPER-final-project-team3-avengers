@@ -76,7 +76,7 @@ public class InterestServiceImpl implements InterestService {
 	}
 	//나의 관심상품 리스트 전체 조회
 	@Override
-	public ResponseDto<?> myInterestingList(Long memberId) throws FoundNoMemberException {
+	public ResponseDto<ProductListOutputDto> myInterestingList(Long memberId) throws FoundNoMemberException {
 		List<ProductListOutputDto> data=new ArrayList<>();
 			data = optionSetDao.findAllByInterest_MemberId(memberId).stream().map(t -> new ProductListOutputDto(t)).collect(Collectors.toList());
 		return ResponseDto.<ProductListOutputDto>builder().data(data).msg(ProductSuccessMsg.MY_INTERESTS).build();

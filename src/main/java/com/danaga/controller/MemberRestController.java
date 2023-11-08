@@ -16,6 +16,7 @@ import com.danaga.dto.MemberFindDto;
 import com.danaga.dto.MemberLoginDto;
 import com.danaga.dto.MemberResponseDto;
 import com.danaga.dto.MemberUpdateDto;
+import com.danaga.dto.product.RecentViewDto;
 import com.danaga.entity.Member;
 import com.danaga.exception.EmailMismatchException;
 import com.danaga.exception.ExistedMemberByEmailException;
@@ -26,6 +27,8 @@ import com.danaga.exception.MemberNotFoundException;
 import com.danaga.exception.PasswordMismatchException;
 import com.danaga.service.CartService;
 import com.danaga.service.MemberService;
+import com.danaga.service.product.OptionSetService;
+import com.danaga.service.product.RecentViewService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +39,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberRestController {
 	private final MemberService memberService;
 	private final CartService cartService;
+	private final RecentViewService recentViewService;
 
 //	@PostMapping("/login")
 //	public ResponseEntity<MemberResponse> member_login_action(@RequestBody MemberResponseDto memberResponseDto, HttpSession session) throws Exception {
@@ -125,6 +129,16 @@ public class MemberRestController {
 			}
 			session.setAttribute("fUserCarts", null);
 			session.setAttribute("countCarts", cartService.countCarts(loginUser.getUserName()));
+		}
+		/***************************************************************************************/
+		/********* 비회원으로 최근 본 상품 로그인시 회원 정보에 insert **********/
+		if(session.getAttribute("recentviews")!=null) {
+		List<Long> recentOptionSetIds= (List<Long>) session.getAttribute("recentviews");
+		for (Long optionSetId : recentOptionSetIds) {
+			recentViewService.addRecentView(RecentViewDto.builder()
+					.optionSetId(optionSetId).memberId(loginUser.getId()).build());
+		}
+		session.removeAttribute("recentviews");
 		}
 		/***************************************************************************************/
 		if (loginUser.getRole().equals("Admin")) {
