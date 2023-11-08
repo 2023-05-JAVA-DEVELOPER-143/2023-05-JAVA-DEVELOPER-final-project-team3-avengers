@@ -60,13 +60,13 @@ public class BoardController {
 		return "board/board_list";
 		
 	}
-	/*
-	 * @GetMapping("/board_create{boardGroupId}") public String
-	 * createForm(@PathVariable Long boardGroupId ,Model model,HttpSession session)
-	 * { log.info("session : {} ",session.getAttribute("sUserId"));
-	 * model.addAttribute("boardGroupId",boardGroupId);
-	 * model.addAttribute("board",new BoardDto()); return "board/create_board"; }
-	 */
+	
+	 @GetMapping("/board_create{boardGroupId}") public String
+	 createForm(@PathVariable Long boardGroupId ,Model model,HttpSession session)
+	 { log.info("session : {} ",session.getAttribute("sUserId"));
+	 model.addAttribute("boardGroupId",boardGroupId);
+	 model.addAttribute("board",new BoardDto()); return "board/create_board"; }
+	 
 
 	@PostMapping("/board_create{boardGroupId}")
 	public String createBoard(@PathVariable("boardGroupId") Long boardGruopId, @ModelAttribute("board") BoardDto dto,
