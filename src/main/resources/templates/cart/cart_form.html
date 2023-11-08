@@ -146,7 +146,7 @@
 			</div>
 			<div class="shopping-cart-footer">
 				<div class="column">
-					<a class="btn btn-outline-secondary" href="shop-grid-ls.html">&nbsp;쇼핑
+					<a class="btn btn-outline-secondary" href="shop-grid-ls.html"  th:href="@{'http://localhost/product'}">&nbsp;쇼핑
 						계속하기</a>
 				</div>
 				<div class="column"></div>
@@ -411,8 +411,8 @@ function selectAlldelete() {
 			checkArr.push($(this).attr("data-selectid")); 
 		 });
 		 console.log(checkArr);
-					 
-		 $.ajax({
+					
+		$.ajax({
 			url : "/cart/deletecart",
 			type : "delete",
 			data : { idlist : checkArr },
@@ -420,8 +420,8 @@ function selectAlldelete() {
 				alert('삭제완료');
 				location.href = "http://localhost:80/cart_list";
 			}
-		 });
-	 } 
+		});
+	} 
 }
 
 
@@ -466,14 +466,19 @@ function selectOption(elseOptionSets, osId) {
 			 type: "post",
 			 contentType: 'application/json',
 			 data: JSON.stringify(data),
-			 success : function() {
-				 console.log(data);
-				 alert('변경완료');
-				 location.href="http://localhost:80/cart_list"
+			 success : function(response) {
+				console.log(response)
+				if(response==2100){
+					$('#exampleModal').modal('hide');
+					if(alert('이미 장바구니에 5개이상존재')){
+					};
+				}else if(response==2200){
+					alert('변경완료');
+					location.href="http://localhost:80/cart_list"
+				}
 			 }
 		  });
 		 }
-		 console.log(data);
 	   });
 }
  function addCart(osId){

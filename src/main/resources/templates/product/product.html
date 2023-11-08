@@ -94,12 +94,13 @@
 										th:product-heart-yet="|${productDto.osId}|">
 										<i class="icon-heart" th:heart="|${productDto.osId}|"></i>
 									</button>
-									<button class="btn btn-outline-primary btn-sm" data-toast
-										data-toast-type="success" data-toast-position="topRight"
-										data-toast-icon="icon-circle-check" data-toast-title="Product"
+									<button class="btn btn-outline-primary btn-sm" 
 										data-toast-message="successfuly added to cart!"
 										th:data-optionSetId="|${productDto.osId}|">Add to
 										Cart</button>
+										<!-- data-toast
+										data-toast-type="success" data-toast-position="topRight"
+										data-toast-icon="icon-circle-check" data-toast-title="Product" -->
 								</div>
 							</div>
 						</div>
