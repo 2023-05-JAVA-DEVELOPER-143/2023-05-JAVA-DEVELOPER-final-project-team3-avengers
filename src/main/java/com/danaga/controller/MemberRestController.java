@@ -125,7 +125,6 @@ public class MemberRestController {
 		session.setAttribute("sUserId", loginUser.getUserName());
 		if (fUserCarts != null) {
 			// 로그인 + 세션 장바구니 존재
-			System.out.println(" >>>>>>>>>>>>>>>> 실행돼야함");
 			for (int i = 0; i < fUserCarts.size(); i++) {
 				cartService.addCart(fUserCarts.get(i), loginUser.getUserName());
 				// 세션 -> db 로 데이타 인서트 후 세션 데이타 초기화 후 세션카트 카운트

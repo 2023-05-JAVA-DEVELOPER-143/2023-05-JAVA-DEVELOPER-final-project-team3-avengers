@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="layout/layout(title='')">
+	layout:decorate="layout/layout(title='비회원 주문찾기')">
 <!-- Body-->
 <!-- Header -->
 
 <head>
+
+
+
 </head>
 
 <body>
@@ -15,10 +18,7 @@
 		<section class="hero-slider"
 			style="background-image: url(img/hero-slider/main-bg.jpg);">
 			<!-- Find Guest Form-->
-			<div class="col-xl-9 col-lg-8">
-				<h2>비회원 주문 찾기</h2>
-			</div>
-			<hr class="padding-bottom-1x">
+
 
 
 			<form class="custom-section" th:object="${ordersGuestDetailDto}">

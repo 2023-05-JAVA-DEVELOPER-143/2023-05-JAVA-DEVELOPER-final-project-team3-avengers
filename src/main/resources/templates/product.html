@@ -51,6 +51,7 @@
 										<option th:value="판매량">판매량</option>
 										<option th:value="조회순">조회순</option>
 										<option th:value="최저가순">최저가순</option>
+										<option th:value="평점순">평점순</option>
 										<option th:value="최신순">최신순</option>
 									</select>
 								</div>
@@ -76,11 +77,36 @@
 											th:text="${productDto.name}">{{name}}</a>
 									</h3>
 									<h4 class="product-price"
-										th:text="${productDto.totalPriceString}+'원'">{{totalPrice}}원</h4>
+										th:text="${productDto.totalPrice}+'원'">{{totalPrice}}원</h4>
 									<div class="product-price"
 										th:text="${productDto.optionSetDesc}">{{optionSetDesc}}</div>
+									<div class="d-inline text-success"
+										th:text="'등록일 : '+${productDto.updateTime}">{{updateTime}}</div>
+									<div class="d-inline text-success">리뷰수</div>
+									<div class="product-buttons">
+										<button th:if="${productDto.isInterested}"
+											class="btn btn-outline-secondary btn-sm btn-wishlist active"
+											data-toggle="tooltip" th:product-heart="|${productDto.osId}|"
+											title="Whishlist">
+											<i class="icon-heart" th:heart="|${productDto.osId}|"></i>
+										</button>
+										<button th:unless="${productDto.isInterested}"
+											class="btn btn-outline-secondary btn-sm btn-wishlist"
+											data-toggle="tooltip" title="Whishlist"
+											th:product-heart-yet="|${productDto.osId}|">
+											<i class="icon-heart" th:heart="|${productDto.osId}|"></i>
+										</button>
+										<button class="btn btn-outline-primary btn-sm" data-toast
+											data-toast-type="success" data-toast-position="topRight"
+											data-toast-icon="icon-circle-check"
+											data-toast-title="Product"
+											data-toast-message="successfuly added to cart!"
+											th:data-optionSetId="|${productDto.osId}|">Add to
+											Cart</button>
+									</div>
 								<div class="d-inline text-success"
 									th:text="'등록일 : '+${productDto.updateTime}">{{updateTime}}</div>
+								<div class="d-inline text-success">리뷰수</div>
 								<div class="product-buttons">
 									<button th:if="${productDto.isInterested}"
 										class="btn btn-outline-secondary btn-sm btn-wishlist active"
@@ -102,7 +128,6 @@
 										data-toast-type="success" data-toast-position="topRight"
 										data-toast-icon="icon-circle-check" data-toast-title="Product" -->
 								</div>
-								
 							</div>
 						</div>
 					</div>
@@ -110,7 +135,6 @@
 				</div>
 			</div>
 		</div>
-	</div>
 		<!-- 클라이언트 요청 -->
 		<script id="main-product-item-template"
 			type="text/x-handlebars-template">
@@ -124,9 +148,10 @@
 							<h3 class="product-title">
 								<a href="http://localhost/product{{osId}}">{{name}}</a>
 							</h3>
-							<h4 class="product-price">{{totalPriceString}}원</h4>
+							<h4 class="product-price">{{totalPrice}}원</h4>
 							<div class="product-price">{{optionSetDesc}}</div>
 						<div class="d-inline text-success">등록일 : {{updateTime}}</div>
+						<div class="d-inline text-success">리뷰수</div>
 						<div class="product-buttons">
 							{{#if isInterested}}
 							<button

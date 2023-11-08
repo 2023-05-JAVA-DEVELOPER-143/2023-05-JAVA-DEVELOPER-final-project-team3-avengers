@@ -39,6 +39,7 @@ public class StatisticController {
 	private final OptionSetService optionSetService;
 	private final ProductRepository productRepository;
 	
+	@AdminCheck
 	@GetMapping
 	public String main(Model model) {
 		try {

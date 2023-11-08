@@ -42,22 +42,12 @@ public class Product extends BaseEntity {//제품의 기본 모델 정보
 	private String prevImage;//디테일이미지
 	private String img;//제품 이미지
 	
-	@ColumnDefault(value = "0.0")
-	@Builder.Default
-	private Double rating=0.0;//평점 리뷰가 등록될 때마다 매번 갱신
-	//(현재 평점* 현재 리뷰 개수+save할 리뷰의 평점)/(현재 리뷰 개수+1)
-	
-
 	@OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
 	@Builder.Default
 	private List<CategorySet> categorySets = new ArrayList<>();
 	//하나의 제품은 부모카테고리, 자식카테고리 여러개를 가질 수 있다. 
 	//예를 들어, 컴퓨터, 일체형PC, 브랜드PC ...
 	
-//	@Builder.Default
-//	@OneToMany(mappedBy = "product")
-//	private List<Review> reviews = new ArrayList<>();
-
 	@ToString.Exclude
 	@OneToMany(mappedBy = "product",cascade = {CascadeType.REMOVE,CascadeType.PERSIST},orphanRemoval = true)
 	@Builder.Default

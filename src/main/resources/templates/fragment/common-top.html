@@ -34,8 +34,6 @@
 					</li>
 					<li><a href="http://localhost/product"><span>제품</span></a></li>
 					<li><a href="http://localhost/cart_list"><span>장바구니</span></a></li>
-					<li th:if="${session.sUserId == null}"><a th:href="@{/find_order_guest}"><span>주문확인</span></a></li>
-					
 					<li><a href="/board1"><span>게시판</span></a>
 						<ul class="sub-menu">
 							<li><a href="/board1">자유게시판</a></li>
@@ -48,6 +46,7 @@
 							<li><a href="/board4">FAQ</a></li>
 						</ul>
 					</li>
+					<li th:if="${session.sUserId == null}"><a th:href="@{/find_order_guest}"><span>비회원 주문확인</span></a></li>
 				</ul>
 			</nav>
 

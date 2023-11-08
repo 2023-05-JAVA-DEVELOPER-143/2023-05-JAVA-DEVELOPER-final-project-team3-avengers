@@ -1,5 +1,5 @@
 import {API_BASE_URL,REMOVE_RECENT_VIEW,REMOVE_WISHLIST,
-    TAP_HEART,UNTAP_HEART,CHILD_CATEGORY,SHOW_OPTIONS,SEARCH, ADD_TO_CART} from "./api-config.js";
+    TAP_HEART,UNTAP_HEART,CHILD_CATEGORY,SHOW_OPTIONS,SEARCH, ADD_TO_CART,TO_ORDER} from "./api-config.js";
 function call(api, method,request){
     let headers = new Headers({
         "Content-Type": "application/json",
@@ -21,9 +21,9 @@ function call(api, method,request){
             return response.json();
         }else if(response.status===401){
 			alert('로그인이 필요한 서비스입니다.');
-            window.location.href="/member/login/form";// redirect
+            window.location.href="http://localhost/member_login_form";// redirect
         }else if(response.stataus===404){
-			window.location.href="/404.html";			
+			window.location.href="http://localhost/404.html";			
 		}else if(response.msg=='WRONG_PARAMETER'){
 			alert('잘못된 요청입니다. 입력값을 확인해주세요.');
 		}else{
@@ -34,13 +34,16 @@ function call(api, method,request){
         console.log("http error");
         console.log(error);
     });
+
 }
 
 export function tapHeart(optionSetId, callback) {//디테일에서//클릭이벤트핸들러에서 이미지로 어떤 함수 쓸건지 결정
 	return call(TAP_HEART.url.replace('@optionSetId', optionSetId), TAP_HEART.method, null)
 		.then((response) => {
-			console.log('추가성공');
+		
 			callback();
+			console.log('추가성공');
+			
 		});
 }
 export function untapHeart(optionSetId, callback) {//디테일에서//그리고 애초에 서버에서 이미지 뿌릴때 좋아요 여부 확인해서 이미지 알맞게 뿌려야함
@@ -86,8 +89,8 @@ export function showOptions(categoryId) {
 		});
 }
 export function searchResult(filterDto) {//검색결과 보여주기
-filterDto.firstResult=0;
-			console.log(filterDto);
+	filterDto.firstResult = 0;
+	console.log(filterDto);
 	return call(SEARCH.url, SEARCH.method, filterDto)
 		.then((response) => {
 			console.log(response);
@@ -96,12 +99,12 @@ filterDto.firstResult=0;
 			$('#main-product-item-template-position').html(mixedTemplate);
 		});
 }
-export function continueSearchResult(filterDto,observer) {//검색결과 보여주기
-			console.log(filterDto);
+export function continueSearchResult(filterDto, observer) {//검색결과 보여주기
+	console.log(filterDto);
 	return call(SEARCH.url, SEARCH.method, filterDto)
 		.then((response) => {
 			console.log(response);
-			if(response.error=='end'){
+			if (response.error == 'end') {
 				observer.unobserve($('#product-list-observed'));
 			}
 			let template = Handlebars.compile($('#main-product-item-template').html());
@@ -109,18 +112,78 @@ export function continueSearchResult(filterDto,observer) {//검색결과 보여�
 			$('#product-list-observed').before(mixedTemplate);
 		});
 }
-export function addToCart(optionSetId, qty){
-	let cartDto={
+export function toOrder(cartDto) {//product->order로 formData들고 fetch요청 보내서 결과 확인하고 맞으면 컨트롤러로 요청 아니면 alert
+	console.log(cartDto);
+	return call(TO_ORDER.url, TO_ORDER.method, cartDto)
+		.then((response) => {
+			console.log(response);
+			if (response == '1') {
+				$('#productOrderForm').submit();
+			}else{
+				alert('주문수량보다 재고가 부족합니다.');
+			}
+		});
+}
+export function addToCart(optionSetId, qty) {
+	let cartDto = {
 		"optionSetId": optionSetId,
 		"qty": qty
 	}
-	return call(ADD_TO_CART.url,ADD_TO_CART.method,cartDto)
-	.then((response)=>{
-		//location.href="http://localhost:80/cart_list"
-		if(response.status==500){
-			alert('장바구니에는 5개이상 못담아요');
+	function a() {
+		if (window.confirm('계속 쇼핑 하시겠습니까?')) {
+			location.href = "http://localhost/product";
+		} else {
+			location.href = "http://localhost/cart_list"
 		}
-	}).catch((error)=>{
-		
-	})
+	}
+	return call(ADD_TO_CART.url.replace("@optionSetId", optionSetId), ADD_TO_CART.method, null)
+		.then((response) => {
+			console.log(response)
+			if (response == 1000) {
+				$.ajax({
+					url: "/cart",
+					type: "post",
+					contentType: 'application/json',
+					data: JSON.stringify(cartDto),
+					success: function(code) {
+						if (code == 2100) {
+							if (window.confirm('장바구니 맥스 ')) {
+								location.href = "http://localhost/cart_list";
+							}
+						} else if (code == 2200) {
+							if (window.confirm('장바구니로 이동?')) {
+								location.href = "http://localhost/cart_list";
+							} else {
+								location.href = "http://localhost/product"
+							}
+						}
+					}
+				})
+			} else if (response == 2000) {
+				if (window.confirm('이미 장바구니에 존재하는 제품입니다.')) {
+					$.ajax({
+						url: "/cart",
+						type: "post",
+						contentType: 'application/json',
+						data: JSON.stringify(cartDto),
+						success: function(code) {
+						if (code == 2100) {
+							if (window.confirm('장바구니 맥스 ')) {
+								location.href = "http://localhost/cart_list";
+							}
+						} else if (code == 2200) {
+							if (window.confirm('장바구니로 이동?')) {
+								location.href = "http://localhost/cart_list";
+							} else {
+								location.href = "http://localhost/product"
+							}
+						}
+					}
+					})
+				}
+			}
+
+		}).catch((error) => {
+
+		})
 }

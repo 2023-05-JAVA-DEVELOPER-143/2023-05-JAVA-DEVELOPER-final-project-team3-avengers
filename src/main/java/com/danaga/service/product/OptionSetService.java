@@ -23,8 +23,6 @@ public interface OptionSetService {
 		ResponseDto<?> updateStock(OptionSetUpdateDto dto) throws FoundNoOptionSetException;
 		ResponseDto<?> updateOrderCount(Long optionSetId, Integer orderCount) throws FoundNoOptionSetException;
 		ResponseDto<?> updateViewCount(Long optionSetId) throws FoundNoOptionSetException;
-		ResponseDto<?> update(ProductUpdateDto dto);
-		ResponseDto<?> updateRating(ProductSaveDto dto);
 		ResponseDto<?> update(OptionDto dto) throws FoundNoOptionsException;
 
 		ResponseDto<?> uploadProduct(UploadProductDto dto);

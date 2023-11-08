@@ -14,7 +14,7 @@ import com.danaga.exception.product.FoundNoObjectException.FoundNoProductExcepti
 
 public interface OptionSetDao {
 
-	OptionSet findById(Long id);
+	OptionSet findById(Long id) throws FoundNoOptionSetException;
 	List<OptionSet> findAllByProductId(Long productId);
 	OptionSet create(OptionSetCreateDto dto);
 	void deleteById(Long id) throws FoundNoOptionSetException;

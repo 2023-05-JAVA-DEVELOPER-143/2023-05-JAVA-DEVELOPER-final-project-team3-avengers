@@ -24,13 +24,10 @@ import lombok.NoArgsConstructor;
 public class ProductDto {//상세페이지
 	private String brand;
 	private String name;
-	private Double rating;
 	private String updateTime;
 	private String descImage;
 	private String prevImage;
 	private String pImage;
-	//@Builder.Default
-	//private List<Review> reviews = new ArrayList<>();
 //	@Builder.Default
 //	private List<Category> categorySet=new ArrayList<>();
 	private Integer stock;
@@ -44,7 +41,6 @@ public class ProductDto {//상세페이지
 	public ProductDto(OptionSet entity) {
 		this.brand=entity.getProduct().getBrand();
 		this.name=entity.getProduct().getName();
-		this.rating=entity.getProduct().getRating();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         this.updateTime = entity.getUpdateTime().format(formatter);
 		this.descImage=entity.getProduct().getDescImage();
@@ -59,7 +55,6 @@ public class ProductDto {//상세페이지
 	public ProductDto(OptionSet entity, String username) {
 		this.brand=entity.getProduct().getBrand();
 		this.name=entity.getProduct().getName();
-		this.rating=entity.getProduct().getRating();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         this.updateTime = entity.getUpdateTime().format(formatter);
 		this.descImage=entity.getProduct().getDescImage();
