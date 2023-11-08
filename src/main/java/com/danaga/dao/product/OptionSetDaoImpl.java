@@ -77,8 +77,8 @@ public class OptionSetDaoImpl implements OptionSetDao{
 		return finalResult;
 	}
 	@Override
-	public OptionSet findById(Long id) {
-		return repository.findById(id).get();
+	public OptionSet findById(Long id) throws FoundNoOptionSetException {
+		return repository.findById(id).orElseThrow(() -> new FoundNoOptionSetException());
 	}
 	@Override
 	public List<OptionSet> findAllByProductId(Long productId) {

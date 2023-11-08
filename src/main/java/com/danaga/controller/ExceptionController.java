@@ -37,12 +37,7 @@ public class ExceptionController {
 		}
 	
 	@ExceptionHandler(Exception.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	protected String exception404 (Exception e) {
-		return "redirect:http://localhost/404.html";
-	}
-	@ExceptionHandler(Exception.class)
-	protected String exception500 (Exception e) {
+	protected String exception (Exception e) {
 		return "redirect:http://localhost/404.html";
 	}
 	

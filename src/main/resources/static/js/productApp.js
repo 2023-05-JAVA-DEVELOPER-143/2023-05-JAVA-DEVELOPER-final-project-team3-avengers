@@ -137,8 +137,16 @@ function registEvent() {
 			}
 
 		} else if ($(e.target).attr('toOrder')) {
-			e.stopPropagation();
-			$('#productOrderForm').submit();
+			e.preventDefault();
+			let optionSetId = $('#optionSetId').val();
+			let qty = $('#qty').val();
+			let cartDto={
+				"optionSetId": optionSetId,
+				"qty": qty
+			};
+			api.toOrder(cartDto);
+			//e.stopPropagation();
+			//$('#productOrderForm').submit();
 		}
 	});
 

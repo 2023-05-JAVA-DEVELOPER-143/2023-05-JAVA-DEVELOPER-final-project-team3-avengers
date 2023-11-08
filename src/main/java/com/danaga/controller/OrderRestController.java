@@ -146,6 +146,7 @@ public class OrderRestController {
 		
 		try {
 			String result = "1";
+			System.out.println(cartDto);
 			if (optionSetService.findById(cartDto.getOptionSetId()).getData().get(0).getStock() < cartDto.getQty()) {
 				throw new Exception("주문한수량보다 재고가 없습니다.");
 			}

@@ -1,5 +1,5 @@
 import {API_BASE_URL,REMOVE_RECENT_VIEW,REMOVE_WISHLIST,
-    TAP_HEART,UNTAP_HEART,CHILD_CATEGORY,SHOW_OPTIONS,SEARCH, ADD_TO_CART} from "./api-config.js";
+    TAP_HEART,UNTAP_HEART,CHILD_CATEGORY,SHOW_OPTIONS,SEARCH, ADD_TO_CART,TO_ORDER} from "./api-config.js";
 function call(api, method,request){
     let headers = new Headers({
         "Content-Type": "application/json",
@@ -110,6 +110,18 @@ export function continueSearchResult(filterDto, observer) {//검색결과 보여
 			let template = Handlebars.compile($('#main-product-item-template').html());
 			let mixedTemplate = template(response);
 			$('#product-list-observed').before(mixedTemplate);
+		});
+}
+export function toOrder(cartDto) {//product->order로 formData들고 fetch요청 보내서 결과 확인하고 맞으면 컨트롤러로 요청 아니면 alert
+	console.log(cartDto);
+	return call(TO_ORDER.url, TO_ORDER.method, cartDto)
+		.then((response) => {
+			console.log(response);
+			if (response == '1') {
+				$('#productOrderForm').submit();
+			}else{
+				alert('주문수량보다 재고가 부족합니다.');
+			}
 		});
 }
 export function addToCart(optionSetId, qty) {
