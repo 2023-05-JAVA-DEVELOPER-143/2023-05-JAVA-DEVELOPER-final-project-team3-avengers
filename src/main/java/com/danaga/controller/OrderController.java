@@ -56,7 +56,6 @@ public class OrderController {
 	public String orderCompleteToIndex() {
 		return "/index";
 	}
-
 	/******************************* 회원 ****************************/
 	/*
 	 * 주문+주문아이템 목록(회원)
@@ -90,6 +89,14 @@ public class OrderController {
 	public String memberProductOrderAddForm(@ModelAttribute("cartDto") CartDto cartDto, Model model,
 			HttpSession session)throws Exception {
 		String sUserId = (String) session.getAttribute("sUserId");
+		
+		
+			if(optionSetService.findById(cartDto.getOptionSetId()).getData().get(0).getStock()<cartDto.getQty()) {
+				throw new Exception("주문한 수량보다 재고가 없습니다.");
+			}
+		
+		
+		
 		if(sUserId==null) {//비회원
 
 			ResponseDto<?> responseDto = optionSetService.findById(cartDto.getOptionSetId());
@@ -211,7 +218,6 @@ public class OrderController {
 					optionSetService.updateStock(optionSetUpdateDto);
 
 				}
-
 				sUserCartOrderDtoList.clear();
 				System.out.println("$$$$" + sUserCartOrderDtoList.size());
 				session.setAttribute("sUserCartOrderDtoList", sUserCartOrderDtoList);
@@ -238,7 +244,13 @@ public class OrderController {
 			HttpSession session) throws Exception {
 		System.out.println("###########" + sUserCartOrderDtoList.size());
 		System.out.println(sUserCartOrderDtoList);
-
+		
+		for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
+			if(optionSetService.findById( sUserCartOrderDtoList.get(i).getId()).getData().get(i).getStock()<sUserCartOrderDtoList.get(i).getQty()) {
+				throw new Exception("주문한 수량보다 재고가 없습니다.");
+			}
+		}
+		
 		String sUserId = (String) session.getAttribute("sUserId");
 		if (sUserId != null) { //회원
 			MemberResponseDto memberResponseDto = memberService.getMemberBy(sUserId);
@@ -493,35 +505,5 @@ public class OrderController {
 		}
 		return gradePoint;
 	}
-	/******************************* 회원 ****************************/
-
-	// 주문상세보기(회원)(이미 완성됨)
-//   memberOrderDetail  
-
-	// 주문+주문아이템 목록 테스트x
-//   memberOrderList
-
-	// 상품에서 직접주문 테스트x
-//   memberProductOrderAdd
-
-	// cart에서 주문 테스트x
-//   memberCartOrderSave
-
-	// cart에서 선택주문 테스트x
-//   memberCartSelectOrderSave
-
-	/******************************* 비회원 ****************************/
-
-	// 주문상세보기(비회원) 테스트x
-// guestOrderList
-
-	// 주문+주문아이템 목록(비회원) 테스트x
-//   memberOrderList
-
-	// 상품에서 주문(비회원) 테스트x
-//   guestProductOrderSave
-
-	// 카트에서 주문(비회원) 테스트x
-//   guestCartOrderSave
 
 }
