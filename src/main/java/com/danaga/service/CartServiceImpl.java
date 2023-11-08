@@ -59,8 +59,9 @@ public class CartServiceImpl implements CartService {
 		return list;
 	}
 
+	// 예외잡기
 	@Override
-	public FUserCartResponseDto findfUserCartList(CartDto dto) {
+	public FUserCartResponseDto findfUserCartList(CartDto dto) throws Exception{
 		OptionSet findOptionset = optionSetDao.findById(dto.getOptionSetId());
 		return FUserCartResponseDto.toDto(findOptionset, dto.getQty());
 	}
