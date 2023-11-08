@@ -103,7 +103,7 @@ public class OrderController {
 
 			Integer realTotalPrice = 0;
 			for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
-				realTotalPrice += sUserCartOrderDtoList.get(i).getTotalPrice();
+				realTotalPrice += sUserCartOrderDtoList.get(i).getTotalPrice()*sUserCartOrderDtoList.get(i).getQty();
 				System.out.println(realTotalPrice);
 			}
 			OrderMemberBasicDto orderMemberBasicDto = new OrderMemberBasicDto("","ex) 010-1111-1111");
@@ -125,9 +125,13 @@ public class OrderController {
 					.qty(cartDto.getQty()).productName(productDto.getName()).totalPrice(productDto.getTotalPrice()).build();
 			sUserCartOrderDtoList.add(sUserCartOrderDto);
 
+			Integer discountRate = gradePoint(memberResponseDto.getGrade());
+			
 			Integer realTotalPrice = 0;
 			for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
-				realTotalPrice += sUserCartOrderDtoList.get(i).getTotalPrice();
+				realTotalPrice += (sUserCartOrderDtoList.get(i).getTotalPrice() * sUserCartOrderDtoList.get(i).getQty())
+				- sUserCartOrderDtoList.get(i).getTotalPrice() * sUserCartOrderDtoList.get(i).getQty()
+				* discountRate / 100;
 				System.out.println(realTotalPrice);
 			}
 			OrderMemberBasicDto orderMemberBasicDto = new OrderMemberBasicDto(memberResponseDto.getName(), memberResponseDto.getPhoneNo());
@@ -236,7 +240,7 @@ public class OrderController {
 		System.out.println(sUserCartOrderDtoList);
 
 		String sUserId = (String) session.getAttribute("sUserId");
-		if (sUserId != null) {
+		if (sUserId != null) { //회원
 			MemberResponseDto memberResponseDto = memberService.getMemberBy(sUserId);
 			Integer discountRate = gradePoint(memberResponseDto.getGrade());
 			Integer realTotalPrice = 0;
@@ -244,7 +248,7 @@ public class OrderController {
 				sUserCartOrderDtoList.get(i).setTotalPrice(
 						(sUserCartOrderDtoList.get(i).getTotalPrice() * sUserCartOrderDtoList.get(i).getQty())
 								- sUserCartOrderDtoList.get(i).getTotalPrice() * sUserCartOrderDtoList.get(i).getQty()
-										* discountRate / 10);
+										* discountRate / 100);
 				realTotalPrice += sUserCartOrderDtoList.get(i).getTotalPrice();
 				System.out.println(realTotalPrice);
 			}
@@ -257,7 +261,7 @@ public class OrderController {
 			session.setAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
 			session.setAttribute("realTotalPrice", realTotalPrice);
 			return "orders/order_save_form";
-		} else {
+		} else { //비회원
 			Integer realTotalPrice = 0;
 			for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
 				realTotalPrice += sUserCartOrderDtoList.get(i).getTotalPrice() * sUserCartOrderDtoList.get(i).getQty();

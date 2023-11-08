@@ -10,11 +10,14 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 
 import com.danaga.dto.MemberInsertGuestDto;
 import com.danaga.dto.MemberUpdateDto;
 import com.danaga.entity.Member;
 import com.danaga.repository.MemberRepository;
+
+import jakarta.transaction.Transactional;
 
 
 @SpringBootTest
@@ -41,7 +44,7 @@ class MemberServiceImplTest {
 //				.build());
 //	}
 	@Test
-	//@Disabled
+	@Disabled
 	void joinGuest() throws Exception {
 		memberService.joinGuest(MemberInsertGuestDto.builder()
 				.name("유저11")
@@ -86,6 +89,13 @@ class MemberServiceImplTest {
 	@Disabled
 	void login() throws Exception {
 		System.out.println(memberService.login("User1", "password1"));
+	}
+	@Test
+	//@Disabled
+	@Transactional
+	@Rollback(false)
+	void memberOrderNull() throws Exception {
+		memberService.deleteMember("Kakao3152284904");
 	}
 
 }

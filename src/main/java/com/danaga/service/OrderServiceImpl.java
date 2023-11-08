@@ -491,35 +491,6 @@ public class OrderServiceImpl implements OrderService {
 		orderDao.save(updateOrder);
 		return OrdersDto.orderDto(updateOrder);
 	}
-	/*
-	 * 주문+주문아이템 목록(회원)
-	 */
-
-	@Transactional
-	public List<Orders> memberOrdersListNull(String userName) throws Exception {
-
-		if (userName == null) {
-			throw new Exception("일치하는 사용자가없습니다.");
-		}
-		List<Orders> orderList = orderDao.findOrdersByMember_UserName(userName);
-
-		return orderList;
-	}
-	/*
-	 * 오더에 있는 멤버 삭제 (회원탈퇴시 필요)
-	 */
-	@Transactional
-	public void ordersMemberIdNull(String userName) throws Exception {
-
-		List<Orders> ordersList = this.memberOrdersListNull(userName);
-		
-		for (int i = 0; i < ordersList.size(); i++) {
-			
-			ordersList.get(i).setMember(null);
-			System.out.println("###################"+ordersList.get(i));
-			orderDao.save(ordersList.get(i));
-		}
-	}
-
+	
 	
 }
