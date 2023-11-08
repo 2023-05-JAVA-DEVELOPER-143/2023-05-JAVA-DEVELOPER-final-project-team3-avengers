@@ -5,6 +5,20 @@
 <!-- Header -->
 
 <head>
+
+
+<style>
+
+a {
+    color: black; /* 링크의 색상을 검정으로 설정합니다. */
+    text-decoration: none; /* 링크의 밑줄을 제거합니다. */
+}
+
+a:hover {
+    cursor: pointer; /* a 태그에 마우스를 가져다 대면 포인터 커서로 변경됩니다. */
+}
+
+</style>
 <style>
 .table tbody tr td {
     background-color: #f5f5f5; /* 옅은 회색으로 설정하세요 */
@@ -73,6 +87,16 @@
 				</div>
 			</div>
 		</div>
+
+
+
+	
+
+
+
+
+
+
 
 	</th:block>
 
@@ -215,8 +239,8 @@
 											var  realTotalPrice = orderItem.qty * orderItem.totalPrice;
 											
 											content += '<tr>';
-											content += '<td style="height: 100px;"><img src= ' + orderItem.pimage + ' alt="Product Image" class="img-fluid" style="max-height: 100px; max-width: 100px;"></td>';
-											content += '<td style="height: 100px;"><span class="text-medium">'+ orderItem.productName + '</span></td>';
+											content += '<td style="height: 100px;"><img src= ' + orderItem.pimage + ' alt="Product Image" class="img-fluid" style="max-height: 100px; max-width: 100px;"></a></td>';
+											content += '<td style="height: 100px;"><a href="http://localhost/product' + orderItem.osId + '"><span class="text-medium">'+ orderItem.productName + '</span></td>';
 											content += '<td style="height: 100px;"><span class="text-medium">' + orderItem.qty + '개</span></td>';
 											content += '<td style="height: 100px;"><span class="text-medium">' + realTotalPrice.toLocaleString() + '원</span></td>';
 											content += '</tr>';
@@ -286,6 +310,11 @@
 				});
 
 			}
+			
+
+			
+			
+			
 		</script>
 	</th:block>
 </body>

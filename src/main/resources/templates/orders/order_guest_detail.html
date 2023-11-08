@@ -21,7 +21,11 @@
 }
 </style>
 
-
+<style>
+.product-name:hover {
+    cursor: pointer;
+}
+</style>
 
     <style>
         .table th {
@@ -144,9 +148,10 @@ button.btn:hover {
 							</thead>
 							<tbody>
 								<tr th:each="ordersItemDto: ${orderItemDtoList}">
+								
 									<td><img class="product-image" th:src="${ordersItemDto.getPImage()}" alt="제품 사진"
 										style="max-width: 50px; max-height: 50px;" /></td>
-									<td th:text="${ordersItemDto.getProductName()}"></td>
+									<td  class="product-name" th:text="${ordersItemDto.getProductName()}" th:attr="data-product-id=${ordersItemDto.getOsId()}"></td>
 									<td th:text="${ordersItemDto.getQty()}"></td>
 									<td th:text="|${#numbers.formatInteger(ordersItemDto.totalPrice, 0, 'COMMA')}원|"></td>
 								</tr>
@@ -230,6 +235,16 @@ button.btn:hover {
 				});
 			
 		</script>
+
+		<script th:inline="javascript">
+		    $(document).ready(function () {
+		        $('.product-name').click(function () {
+		            var productId = $(this).attr('data-product-id'); // 제품 ID를 가져옵니다.
+		            window.location.href = 'http://localhost/product' + productId; // 제품 상세보기 페이지로 이동합니다.
+		        });
+		    });
+		</script>
+
 
 	</th:block>
 
