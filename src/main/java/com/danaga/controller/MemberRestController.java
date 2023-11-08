@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.danaga.dto.CartDto;
+import com.danaga.dto.KakaoMemberUpdateDto;
 import com.danaga.dto.MemberFindDto;
 import com.danaga.dto.MemberLoginDto;
 import com.danaga.dto.MemberResponseDto;
@@ -25,6 +26,7 @@ import com.danaga.exception.ExistedMemberByPhoneNoException;
 import com.danaga.exception.ExistedMemberByUserNameException;
 import com.danaga.exception.MemberNotFoundException;
 import com.danaga.exception.PasswordMismatchException;
+import com.danaga.repository.MemberRepository;
 import com.danaga.service.CartService;
 import com.danaga.service.MemberService;
 import com.danaga.service.product.OptionSetService;
@@ -37,6 +39,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/member")
 @RequiredArgsConstructor
 public class MemberRestController {
+	private final MemberRepository memberRepository;
 	private final MemberService memberService;
 	private final CartService cartService;
 	private final RecentViewService recentViewService;
@@ -200,6 +203,28 @@ public class MemberRestController {
 			map.put("result", result);
 			map.put("msg", member.getPhoneNo() + "는 사용중인 번호입니다.");
 			return map;
+		} catch (ExistedMemberByNicknameException e) {
+			result = 4;
+			map.put("result", result);
+			map.put("msg", member.getNickname() + "는 사용중인 닉네임입니다.");
+			return map;
+		}
+		map.put("result", result);
+		return map;
+	}
+	@PostMapping("/join_rest_kakao")
+	public Map member_join_action_kakao(@RequestBody Member member, HttpSession session) throws Exception {
+		HashMap map = new HashMap<>();
+		// MemberResponseDto memberResponseDto =
+		// MemberResponseDto.builder().userName(userName).password(password).build();
+		int result = 5;
+		MemberResponseDto updatedMember = new MemberResponseDto();
+		try {
+			String sUserId = (String) session.getAttribute("sUserId");
+			Long sUserLongId = memberService.getMemberBy(sUserId).getId();
+			member.setId(sUserLongId);
+			memberService.updateKakaoMember(KakaoMemberUpdateDto.toDto(member));
+			
 		} catch (ExistedMemberByNicknameException e) {
 			result = 4;
 			map.put("result", result);

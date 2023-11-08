@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.danaga.dao.MemberDao;
+import com.danaga.dto.KakaoMemberUpdateDto;
 import com.danaga.dto.MemberInsertGuestDto;
 import com.danaga.dto.MemberResponseDto;
 import com.danaga.dto.MemberUpdateDto;
@@ -77,10 +78,33 @@ public class MemberServiceImpl implements MemberService {
 	@Transactional
 	public MemberResponseDto updateMember(MemberUpdateDto memberUpdateDto) throws Exception, ExistedMemberByNicknameException {
 		Member originalMember = memberRepository.findById(memberUpdateDto.getId()).get();
-		Member member = Member.builder().id(memberUpdateDto.getId()).password(memberUpdateDto.getPassword())
-				.nickname(memberUpdateDto.getNickname()).postCode(memberUpdateDto.getPostCode()).address(memberUpdateDto.getAddress())
+		Member member = Member.builder()
+				.id(memberUpdateDto.getId())
+				.password(memberUpdateDto.getPassword())
+				.nickname(memberUpdateDto.getNickname())
+				.postCode(memberUpdateDto.getPostCode())
+				.address(memberUpdateDto.getAddress())
 				.detailAddress(memberUpdateDto.getDetailAddress()).build();
-		System.out.println(memberUpdateDto);
+		if (originalMember.getNickname().equals(member.getNickname())) {
+			
+		} else if(memberRepository.findByNickname(member.getNickname()).isPresent()) {
+			throw new ExistedMemberByNicknameException(member.getNickname()+"는 사용중인 닉네임 입니다.");
+		}
+		//Member updatedMember = Member.toUpdateEntity(memberUpdateDto);
+		return MemberResponseDto.toDto(memberDao.update(member));
+	}
+	@Transactional
+	public MemberResponseDto updateKakaoMember(KakaoMemberUpdateDto kakaoMemberUpdateDto) throws Exception, ExistedMemberByNicknameException {
+		Member originalMember = memberRepository.findById(kakaoMemberUpdateDto.getId()).get();
+		Member member = Member.builder()
+				.id(kakaoMemberUpdateDto.getId())
+				.password(kakaoMemberUpdateDto.getPassword())
+				.nickname(kakaoMemberUpdateDto.getNickname())
+				.postCode(kakaoMemberUpdateDto.getPostCode())
+				.address(kakaoMemberUpdateDto.getAddress())
+				.detailAddress(kakaoMemberUpdateDto.getDetailAddress())
+				.role("Member")
+				.build();
 		if (originalMember.getNickname().equals(member.getNickname())) {
 			
 		} else if(memberRepository.findByNickname(member.getNickname()).isPresent()) {

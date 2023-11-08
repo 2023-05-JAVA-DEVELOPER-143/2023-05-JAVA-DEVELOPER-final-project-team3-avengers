@@ -53,6 +53,7 @@ public class KaKaoController {
 	    
 	    String kakaoUserName = "Kakao"+kakaoProfile.getId();
 	    String garbagePasswordStr = UUID.randomUUID()+"";
+	    String kakaoUserEmail = kakaoProfile.getKakao_account().getEmail();
 	    
 	    String birthday = kakaoProfile.getKakao_account().getBirthday();
 	    String month = birthday.substring(0, 2);
@@ -61,24 +62,25 @@ public class KaKaoController {
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
 	    try {
-	    	MemberResponseDto originMember = memberService.getMemberBy(kakaoUserName);
-			session.setAttribute("sUserId", originMember.getUserName());
-				
+	    	MemberResponseDto originMember = memberService.getMemberBy(kakaoUserEmail);
+			session.setAttribute("sUserId", originMember.getEmail());
+			session.setAttribute("role",originMember.getRole());
 			
 		} catch (MemberNotFoundException e) {
 			try {
-				memberService.joinMember(Member.builder()
+				MemberResponseDto kakaoMember = memberService.joinMember(Member.builder()
 						.userName(kakaoUserName)
 						.password(garbagePasswordStr)
-						.email(kakaoProfile.getKakao_account().getEmail())
+						.email(kakaoUserEmail)
 						.name(kakaoProfile.getKakao_account().getName())
 						.nickname(kakaoUserName+RandomStringGenerator.generateRandomString())
 						.birthday(sdf.parse(dateString))
 						.phoneNo("0"+kakaoProfile.getKakao_account().getPhone_number().replaceAll("\\+82", "").replaceAll(" ", ""))
 						.role("Kakao")
 						.build());
-				session.setAttribute("sUserId", kakaoUserName);
-				return "redirect:/index";
+				session.setAttribute("sUserId", kakaoUserEmail);
+				session.setAttribute("role",kakaoMember.getRole());
+				return "redirect:/member_join_complete_page";
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

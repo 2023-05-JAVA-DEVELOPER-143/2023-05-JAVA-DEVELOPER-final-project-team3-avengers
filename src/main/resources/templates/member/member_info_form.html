@@ -18,11 +18,11 @@
 				<div class="col-lg-8">
 					<div class="padding-top-2x mt-2 hidden-lg-up"></div>
 					<form class="row" name="f" id="form-account-update" th:object="${loginUser}" method="post">
-						<input type="hidden" name="userName" value="guard" th:value="*{userName}" />
+						<input type="hidden" id="userName" name="userName" value="guard" th:value="*{userName}" />
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label for="reg-email">E-mail 주소</label> <input name="email" value="guard"
-									th:value="*{email}" class="form-control" type="email" id="email" disabled>
+								<label for="reg-email">E-mail 주소</label> 
+								<input name="email" value="guard" th:value="*{email}" class="form-control" type="email" id="email" disabled>
 							</div>
 						</div>
 						<div class="col-sm-6">
@@ -47,6 +47,7 @@
 							<div class="form-group">
 								<label for="reg-pass">비밀번호</label> <input name="password" value="guard"
 									th:value="*{password}" class="form-control" type="password" id="pass" required>
+								<input type="checkbox" id="show-password"> 비밀번호 표시
 							</div>
 						</div>
 						<div class="col-sm-6">
@@ -66,12 +67,13 @@
 								type="text" class="form-control" id="address" placeholder="주소" disabled>
 								<input name="detailaddress" th:value="*{detailAddress}"
 								type="text" class="form-control" id="detailaddress" placeholder="상세주소" required>
-							</div>	
+							</div>
 						</div>
 						<div class="col-12">
 							<hr class="mt-2 mb-3">
 							<div class="col-12 text-center text-sm-right">
 								<div class="custom-control custom-checkbox d-block"></div>
+								<button class="btn-account-profile-update btn btn-primary margin-right-none" id="mergy_account" type="button" onclick="window.location.href = '/member_join_form_kakao';">카카오 통합</button>
 								<button class="btn-account-profile-update btn btn-primary margin-right-none" id="quit_btn" type="button" onclick="window.location.href = '/member_quit_form';">회원탈퇴</button>
 								<button class="btn-account-profile-update btn btn-primary margin-right-none" id="modify_action_btn" type="button">수정하기</button>
 							</div>
@@ -95,7 +97,7 @@
 				return false;
 			}
 		/***************프로필변경 [/member/modify_action_rest]******* */
-		var member_modify_action_rest=function(data){
+		let member_modify_action_rest=function(data){
 			$.ajax({
 					url:'/member/modify_action_rest',
     				method:'PUT',
@@ -212,6 +214,19 @@ function execDaumPostcode() {
             }
         }).open();
     }
+$(document).ready(function() {
+	  $('#show-password').change(function() {
+	    let passwordInput = $('#pass');
+	    let confirm_passwordInput = $('#pass-confirm');
+	    if (this.checked) {
+	      passwordInput.attr('type', 'text');
+	      confirm_passwordInput.attr('type', 'text');
+	    } else {
+	      passwordInput.attr('type', 'password');
+	      confirm_passwordInput.attr('type', 'password');
+	    }
+	  });
+	});
 		</script>
 	</th:block>
 </body>
