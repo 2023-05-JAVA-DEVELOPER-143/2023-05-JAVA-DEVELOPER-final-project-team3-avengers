@@ -1,5 +1,7 @@
 package com.danaga.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,15 +14,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.danaga.dto.AdminOrderUpdate;
 import com.danaga.dto.AdminProductInsertDto;
+import com.danaga.entity.CategorySet;
+import com.danaga.entity.OptionSet;
 import com.danaga.entity.Options;
+import com.danaga.entity.Product;
 import com.danaga.entity.Statistic;
 import com.danaga.repository.BoardRepository;
+import com.danaga.repository.CategorySetRepository;
 import com.danaga.repository.MemberRepository;
+import com.danaga.repository.product.CategoryRepository;
 import com.danaga.repository.product.OptionSetRepository;
+import com.danaga.repository.product.ProductRepository;
 import com.danaga.service.MemberService;
 import com.danaga.service.StatisticService;
 import com.danaga.service.product.OptionSetService;
@@ -40,7 +50,13 @@ public class StatisticRestController {
 	private OptionSetService optionSetService;
 	@Autowired
 	private OptionSetRepository optionSetRepository;
-
+	@Autowired
+	private CategorySetRepository categorySetRepository;
+	@Autowired
+	private ProductRepository productRepository;
+	@Autowired
+	private CategoryRepository categoryRepository;
+	
 	@GetMapping("/daily_update")
 	public ResponseEntity<?> dailyUpdate() {
 		statisticService.updateLatest7Days();
@@ -62,6 +78,12 @@ public class StatisticRestController {
 	@PostMapping("/product")
 	public ResponseEntity<?> createProduct(@RequestBody AdminProductInsertDto adminProductInsertDto) {
 		try {
+			String img = convertPath(adminProductInsertDto.getAdminProductDto().getImg());
+			String prevImage = convertPath(adminProductInsertDto.getAdminProductDto().getPrevImage());
+			String descImage = convertPath(adminProductInsertDto.getAdminProductDto().getDescImage());
+			adminProductInsertDto.getAdminProductDto().setImg(img);
+			adminProductInsertDto.getAdminProductDto().setPrevImage(prevImage);
+			adminProductInsertDto.getAdminProductDto().setDescImage(descImage);
 			statisticService.createProduct(adminProductInsertDto);
 			return new ResponseEntity<>("Product created successfully", HttpStatus.OK);
 		} catch (Exception e) {
@@ -69,14 +91,40 @@ public class StatisticRestController {
 		}
 	}
 
+	@PostMapping("/uploadImg")
+	public ResponseEntity<?> uploadImg(@RequestParam("img") MultipartFile img,
+			@RequestParam("prevImage") MultipartFile prevImage, @RequestParam("descImage") MultipartFile descImage) {
+		try {
+			String imgFileName = saveImage(img);
+            String prevImageFileName = saveImage(prevImage);
+            String descImageFileName = saveImage(descImage);
+			return new ResponseEntity<>("Images uploaded successfully", HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Error uploading images", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
 	@DeleteMapping("/product/{id}")
 	public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
 		try {
-			List<Options> optionList = optionSetRepository.findById(id).get().getOptions();
+			OptionSet os = optionSetRepository.findById(id).get();
+			Product product = os.getProduct();
+			List<CategorySet> cs = product.getCategorySets();
+			//delete Options
+			List<Options> optionList = os.getOptions();
 			for (Options options : optionList) {
 				optionSetService.deleteOption(options.getId());
 			}
+			//delete Option Set
 			optionSetService.deleteOptionSet(id);
+			//delete Category Set
+			for (CategorySet category : cs) {
+				categorySetRepository.delete(category);
+				//delete Category
+				categoryRepository.delete(category.getCategory());
+			}
+			//delete Product
+			productRepository.delete(product);
 			return new ResponseEntity<>("Product deleted successfully", HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>("Error deleting product", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -113,5 +161,20 @@ public class StatisticRestController {
 			return new ResponseEntity<>("Error deleting member", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	private String saveImage(MultipartFile file) throws IOException {
+		String fileName = file.getOriginalFilename();
+		String filePath = System.getProperty("user.dir") + "/src/main/resources/static/images/uploaded/" + File.separator + fileName;
+		
+		File dest = new File(filePath);
+		file.transferTo(dest);
+		return fileName;
+	}
+	
+	public static String convertPath(String originalPath) {
+        String fileName = originalPath.substring(originalPath.lastIndexOf("\\") + 1);
+        String newPath = "/images/uploaded/" + fileName;
+        return newPath;
+    }
 
 }
