@@ -15,10 +15,24 @@
 		integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
 		crossorigin="anonymous"></script>
 -->
+<style>
+.table tbody tr td {
+    background-color: #f5f5f5; /* 옅은 회색으로 설정하세요 */
+}
+</style>
 
 
+
+    <style>
+        .table th {
+            background-color: #555;
+            color: #fff;
+        }
+    </style>
 
 <style>
+
+
 .modal-content {
 	margin-top: 100px;
 	/* 모달을 상단에서 50px 아래로 이동 */
@@ -55,6 +69,27 @@ button.btn:hover {
 
 <body>
 	<th:block layout:fragment="modal">
+	
+	<!-- 모달 창 추가 -->
+<div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img id="modalImage" src="" alt="Product Image" class="img-fluid">
+      </div>
+    </div>
+  </div>
+</div>
+	
+	
+	
+	
 	</th:block>
 
 	<!-- Page Content-->
@@ -109,7 +144,7 @@ button.btn:hover {
 							</thead>
 							<tbody>
 								<tr th:each="ordersItemDto: ${orderItemDtoList}">
-									<td><img th:src="${ordersItemDto.getPImage()}" alt="제품 사진"
+									<td><img class="product-image" th:src="${ordersItemDto.getPImage()}" alt="제품 사진"
 										style="max-width: 50px; max-height: 50px;" /></td>
 									<td th:text="${ordersItemDto.getProductName()}"></td>
 									<td th:text="${ordersItemDto.getQty()}"></td>
@@ -184,6 +219,16 @@ button.btn:hover {
 				});
 
 			}
+			
+			
+			$(document).ready(function () {
+				  $('img.product-image').click(function () {
+				    var src = $(this).attr('src');
+				    $('#modalImage').attr('src', src);
+				    $('#productModal').modal('show');
+				  });
+				});
+			
 		</script>
 
 	</th:block>
