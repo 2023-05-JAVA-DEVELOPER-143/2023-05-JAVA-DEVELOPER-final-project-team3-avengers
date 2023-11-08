@@ -159,7 +159,8 @@ public class CartRestController {
 		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
 		if (sUserId != null) {
 			// 회원이면 cartService 로직 호출
-			//return ResponseEntity.status(HttpStatus.OK).body(cartService.updateCartQty(dto, sUserId));
+			//return ResponseEntity.status(HttpStatus.OK).body();
+			cartService.updateCartQty(dto, sUserId);
 		} else {
 			for (int i = 0; i < fUserCarts.size(); i++) {
 				// 비회원일 경우 카트리스트를 돌리면서 dto의 optionsetId 와 동일한 옵션셋 아이디 체크
