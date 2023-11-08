@@ -91,12 +91,6 @@ public class OrderController {
 			HttpSession session) throws Exception {
 		String sUserId = (String) session.getAttribute("sUserId");
 
-//		if (optionSetService.findById(cartDto.getOptionSetId()).getData().get(0).getStock() < cartDto.getQty()) {
-//			String errorMsg = "주문한수량보다 재고가 없습니다.";
-//			model.addAttribute("errorMsg",errorMsg);
-//			return "redirect:product"+cartDto.getOptionSetId();
-//		}
-
 		if (sUserId == null) {// 비회원
 
 			ResponseDto<?> responseDto = optionSetService.findById(cartDto.getOptionSetId());
