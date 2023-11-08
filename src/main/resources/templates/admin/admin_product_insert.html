@@ -51,11 +51,12 @@
 								<div class="card-header py-3">
 									<h6 class="m-0 font-weight-bold text-primary text-center">제품 등록하기</h6>
 								</div>
-								<div class="card o-hidden border-0 shadow-lg">
-									<div class="card-body p-0">
-										<!-- Nested Row within Card Body -->
-										<div class="p-4">
-											<form class="user">
+								<form class="user" name="f" id="form-insert-product" method="post">
+									<div class="card o-hidden border-0 shadow-lg">
+										<div class="card-body p-0">
+											<!-- Nested Row within Card Body -->
+											<div class="p-4">
+												<!--<form class="user" name="f" id="form-insert-product" method="post">-->
 												<div class="text-center">
 													<h3 class="h5 text-gray-900 mb-2" style="font-weight: bold;">
 														제품선택(Product)</h3>
@@ -170,10 +171,11 @@
 												<div id="optionContainer"></div>
 												<hr>
 												</br>
-											</form>
+
+											</div>
 										</div>
 									</div>
-								</div>
+								</form>
 							</div>
 						</div>
 						<!--상품 등록하기 끝-->
@@ -190,7 +192,7 @@
 											제품 미리보기
 										</h3>
 										<hr>
-										
+
 										<img id="preview" />
 									</div>
 									<div class="text-center">
@@ -265,19 +267,19 @@
 											<tbody id="optionTableContainer">
 											</tbody>
 										</table>
-										
+
 										<hr>
 										<div class="text-center" id="totProductPrice"
 											style="font-weight: bold; font-size: 1.5em; color: navy;">총가격 : 0원
 										</div>
-										<a href="#" class="btn btn-primary btn-icon-split"
-													style="float: right;">
-													<span class="icon text-white-50">
-														<i class="fas fa-arrow-right"></i>
-													</span>
-													<span class="text">상품등록</span>
-												</a>
-										
+										<a class="btn btn-primary btn-icon-split" style="float: right;"
+											onclick="createProduct();">
+											<span class="icon text-white-50">
+												<i class="fas fa-arrow-right"></i>
+											</span>
+											<span class="text">상품등록</span>
+										</a>
+										</form>
 									</div>
 								</div>
 							</div>
@@ -464,8 +466,8 @@
 					let price = parseFloat($(this).val()) || 0;
 					totalOptionPrice += price;
 				});
-				$('#totPrice').text(totalOptionPrice + '원');
-				$('#totProductPrice').text('총가격 : ' + (productPrice + totalOptionPrice) + '원');
+				$('#totPrice').text(totalOptionPrice.toLocaleString() + '원');
+				$('#totProductPrice').text('총가격 : ' + (productPrice + totalOptionPrice).toLocaleString() + '원');
 			}
 
 			$(document).on('change', '[id^=txtOptionPrice], [id^=txtProductPrice]', function () {
@@ -555,8 +557,50 @@
 			}
 		});
 
+		//submit
+		function createProduct() {
+			var sendJsonObject = {
+				"categoryDto": [
+					{
+						"id": 0,
+						"name": $('#txtChildCategoryName1').val(),
+						"parentId": $('#txtParentCategoryName1').val()
+					}
+				],
+				"adminOptionDto": [
+					{
+						"name": $('#txtOptionName1').val(),
+						"value": $('#txtOptionValue1').val(),
+						"extraPrice": $('#txtOptionPrice1').val()
+					}
+				],
+				"adminProductDto": {
+					"name": $('#txtProductName').val(),
+					"brand": $('#txtBrand').val(),
+					"price": $('#txtProductPrice').val(),
+					"descImage": "string",
+					"img": "string",
+					"prevImage": "string",
+					"stock": $('#txtStock').val()
+				}
+			}
+			
+			console.log(sendJsonObject);
+			
+			$.ajax({
+				type: "POST",
+				url: "/admin_data/product",
+				contentType: "application/json",
+				data: JSON.stringify(sendJsonObject),
+				success: function(){
+					location.href='/admin/admin_product_list';
+				},
+				error: function(){
+					alert('왜 안되지?');	
+				}
+			});
 
-
+		}
 
 	</script>
 
