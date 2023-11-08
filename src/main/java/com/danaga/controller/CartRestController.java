@@ -81,7 +81,6 @@ public class CartRestController {
 		sUserId = (String) session.getAttribute("sUserId");
 		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
 		Integer returnNo = NOT_CART_QTY_MAX;
-		System.out.println(">>>>>>>>>>>>>>>>>>>>"+dto);
 		// 1번 경우 = 회원 + 세션 장바구니 비어있음
 		if (sUserId != null && fUserCarts == null) {
 			int qty = cartService.isDuplicateProduct(sUserId, dto.getOptionSetId());
@@ -94,7 +93,6 @@ public class CartRestController {
 			}
 		} else {// 3번 경우 = 비회원 + 세션 장바구니 X
 			if (sUserId == null && fUserCarts == null) {
-				System.out.println(">>>>>>>>>>> 여기 실행돼야함 ㄴㄴㄴ 111 <<<<<<<<<");
 				// 들어온 dto -> list에 추가 후 세션에 저장
 				fUserCarts = new ArrayList<>();
 				fUserCarts.add(dto);
@@ -102,19 +100,14 @@ public class CartRestController {
 				countCarts(session, fUserCarts);
 			} else if (sUserId == null && fUserCarts != null) {
 				// 4번 경우 = 비회원 + 세션 장바구니 O
-				System.out.println(">>>>>>>>>>> 여기 실행돼야함 111 <<<<<<<<<");
-				System.out.println("fUserCarts"+fUserCarts+"dto....."+dto);
 				int findIndex = findFUserCart(fUserCarts, dto);
-				System.out.println(">>>>>>>>>>"+findIndex);
 				if (findIndex == -1) {
-					System.out.println(">>>>>>>>>>> 여기 실행돼야함 ㄴㄴㄴ 222 <<<<<<<<<");
 					fUserCarts.add(dto);
 					countCarts(session, fUserCarts);
 				} else {
 					if (fUserCarts.get(findIndex).getQty() + dto.getQty() > 5) {
 						returnNo = CART_QTY_MAX;
 					} else {
-						System.out.println(">>>>>>>>>>> 여기 실행돼야함 222<<<<<<<<<");
 						fUserCarts.get(findIndex).setQty(fUserCarts.get(findIndex).getQty() + dto.getQty());
 					}
 					session.setAttribute("fUserCarts", fUserCarts);
@@ -200,18 +193,21 @@ public class CartRestController {
 	}
 
 	@PutMapping("/qty")
-	public void updateQty(@RequestBody CartDto dto, HttpSession session) throws Exception {
+	public ResponseEntity<CartDto> updateQty(@RequestBody CartDto dto, HttpSession session) throws Exception {
 		// 로그인 유저 체크
 		sUserId = (String) session.getAttribute("sUserId");
 		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
+		System.out.println("수량 업데이트 컨트롤러 " +dto);
 		if (sUserId != null) {
 			// 회원이면 cartService 로직 호출
 			cartService.updateCartQty(dto, sUserId);
 			//return ResponseEntity.status(HttpStatus.OK).body();
+			System.out.println("회원일 경우 리스폰스 == "+dto.getQty());
+			return ResponseEntity.status(HttpStatus.OK).body(dto);
 		} else {
 			for (int i = 0; i < fUserCarts.size(); i++) {
 				// 비회원일 경우 카트리스트를 돌리면서 dto의 optionsetId 와 동일한 옵션셋 아이디 체크
-				if (dto.getOptionSetId() == fUserCarts.get(i).getOptionSetId()) {
+				if (dto.getOptionSetId().equals(fUserCarts.get(i).getOptionSetId())) {
 					// 동일한 세션카트의 옵션셋 꺼내서 수량변경 후 세션에 다시 저장
 					fUserCarts.get(i).setQty(dto.getQty());
 					session.setAttribute("fUserCarts", fUserCarts);
@@ -224,6 +220,8 @@ public class CartRestController {
 			 * build());
 			 */
 			// 비회원일경우 body에 업데이트된 세션카트를 CartUpdateQtyDto 타입으로 변환 후 리턴
+			System.out.println("비회원일 경우의 리스폰스 == " +dto.getQty());
+			return ResponseEntity.status(HttpStatus.OK).body(dto);
 		}
 
 	}
@@ -241,7 +239,7 @@ public class CartRestController {
 			// 선택 optionsetId 와 카트리스트의 optionsetId 동일한 것 찾고 삭제 후 세션에 저장
 			for (int i = 0; i < idList.size(); i++) {
 				for (int j = 0; j < fUserCarts.size(); j++) {
-					if (idList.get(i) == fUserCarts.get(j).getOptionSetId()) {
+					if (idList.get(i).equals(fUserCarts.get(j).getOptionSetId())) {
 						fUserCarts.remove(j);
 						break;
 					}
@@ -263,22 +261,19 @@ public class CartRestController {
 		if (sUserId != null) {
 			session.setAttribute("countCarts", cartService.countCarts(sUserId));
 		} else if (list != null) { // 비회원 일시 장바구니 리스트의 사이즈
-			// fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
 			session.setAttribute("countCarts", list.size());
 		}
 	};
 
+	
 	// 비회원 장바구니 아이템 넣기 [fUserCarts : 세션 장바구니 ,dto : 장바구니 담을 제품]
 	int findFUserCart(List<CartDto> fUserCarts, CartDto dto) throws Exception {
 		int findIndex = -1;
-		System.out.println("여기는 메쏘드" + fUserCarts.size());
 		for (int i = 0; i < fUserCarts.size(); i++) {
-			if (dto.getOptionSetId() == fUserCarts.get(i).getOptionSetId()) {
-				System.out.println("여기 실행안돼...?");
+			if (dto.getOptionSetId().equals(fUserCarts.get(i).getOptionSetId())) {
 				findIndex = i;
 			}
 		}
-		System.out.println("메쏘드 return 직전 " +findIndex);
 		return findIndex;
 	}
 
@@ -286,7 +281,7 @@ public class CartRestController {
 	static boolean isDuplicate(Long id, List<CartDto> lists) {
 		boolean check = false;
 		for (int i = 0; i < lists.size(); i++) {
-			if (lists.get(i).getOptionSetId() == id) {
+			if (lists.get(i).getOptionSetId().equals(id)) {
 				check = true;
 			}
 		}
