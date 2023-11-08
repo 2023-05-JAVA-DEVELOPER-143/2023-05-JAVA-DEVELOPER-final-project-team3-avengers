@@ -36,7 +36,7 @@ public class RefundController {
 	 
 	
 	// 주문목록에서 환불하기 페이지로 가기
-	@GetMapping("/refund_main_form/{orderId}")
+	@GetMapping("/refund_main_form{orderId}")
 	public String refund_main_form(Model model, @PathVariable Long orderId, HttpServletRequest request)
 			throws Exception {
 		System.out.println("RefundController의 refund_main_form메소드에서 orderId는 " + orderId);
