@@ -41,5 +41,9 @@ public class ExceptionController {
 	protected String exception404 (Exception e) {
 		return "redirect:http://localhost/404.html";
 	}
+	@ExceptionHandler(Exception.class)
+	protected String exception500 (Exception e) {
+		return "redirect:http://localhost/404.html";
+	}
 	
 }

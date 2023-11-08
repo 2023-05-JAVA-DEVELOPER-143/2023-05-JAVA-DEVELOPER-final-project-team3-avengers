@@ -30,7 +30,6 @@ public class ProductUpdateDto {
 	private String prevImage;
 	@NotBlank
 	private String img;
-	private Double rating;
 	
 	public Product toEntity() {
 		return Product.builder()
@@ -40,7 +39,6 @@ public class ProductUpdateDto {
 				.descImage(descImage)
 				.prevImage(prevImage)
 				.img(img)
-				.rating(rating)
 				.price(price)
 				.build();
 	}

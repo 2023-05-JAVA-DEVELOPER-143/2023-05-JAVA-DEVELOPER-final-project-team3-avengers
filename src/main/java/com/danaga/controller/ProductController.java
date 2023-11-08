@@ -47,39 +47,6 @@ public class ProductController {
 	private final MemberService memberService;
 	private final InterestService interestService;
 
-//	// 상단바의 검색 으로 키워드 검색 하는거 만들기
-//	@GetMapping("/site_search")
-//	public String site_search(Model model, HttpSession session) {
-//		String nameKeyword = (String) model.getAttribute("site_search");
-//		if (nameKeyword == null || nameKeyword.equals("")) {
-//			return "redirect:/product";
-//		}
-//		// 검색 메인화면에 최상위 카테고리 선택할수 있게 표시
-//		ResponseDto<CategoryDto> categoryResponseDto = categoryService.AncestorCategories();
-//		List<CategoryDto> categoryList = categoryResponseDto.getData();
-//		if (session.getAttribute("sUserId") == null) {
-//			ResponseDto<ProductListOutputDto> responseDto = service.searchProducts(// 주문수로 전체상품 정렬하여 조회
-//					QueryStringDataDto.builder().nameKeyword(nameKeyword).orderType(OptionSetQueryData.BY_ORDER_COUNT)
-//							.build(),
-//					0);
-//			List<ProductListOutputDto> productList = responseDto.getData();
-//			model.addAttribute("productList", productList);
-//		} else {
-//			ResponseDto<ProductListOutputDto> responseDto = service.searchProductsForMember(// 주문수로 전체상품 정렬하여 조회
-//					QueryStringDataDto.builder().nameKeyword(nameKeyword).orderType(OptionSetQueryData.BY_ORDER_COUNT)
-//							.build(),
-//					(String) session.getAttribute("sUserId"), 0);
-//			if (responseDto.getMsg().equals(ProductExceptionMsg.FOUND_NO_MEMBER)) {
-//				session.removeAttribute("sUserId");
-//			} else if (responseDto.getMsg().equals(ProductSuccessMsg.SEARCH_PRODUCTS)) {
-//				List<ProductListOutputDto> productList = responseDto.getData();
-//				model.addAttribute("productList", productList);
-//			}
-//		}
-//		model.addAttribute("categoryList", categoryList);
-//		return "product/product";
-//	}
-
 	// 전체상품
 	@GetMapping("/product")
 	public String searchProduct(Model model, HttpSession session) {

@@ -60,8 +60,6 @@ public class OptionSetSearchQuery {
 				setOrderType(OptionSetQueryData.BY_VIEW_COUNT);
 			} else if (orderType.equals("최신순")) {
 				setOrderType(OptionSetQueryData.BY_CREATE_TIME);
-			} else if (orderType.equals("평점순")) {
-				setOrderType(OptionSetQueryData.BY_RATING);
 			} else if (orderType.equals("최저가순")) {
 				setOrderType(OptionSetQueryData.BY_TOTAL_PRICE);
 			} else {// default

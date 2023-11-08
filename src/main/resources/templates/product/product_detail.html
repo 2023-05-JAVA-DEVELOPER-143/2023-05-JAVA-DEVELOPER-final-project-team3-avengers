@@ -25,12 +25,9 @@
 				<div class="col-md-6">
 					<form id="productOrderForm" method="get" action="/product_order_form">
 					<div class="padding-top-2x mt-2 hidden-md-up"></div><!--별점 -->
-					<div class="rating-stars" ><i class="icon-star filled"></i><i class="icon-star"></i>
-					</div><span class="text-muted align-middle" >&nbsp;&nbsp;4.2 | 3
-						customer reviews</span>
 					<h2 class="padding-top-1x text-normal" th:text="'[품절]'+${productList.name}" th:if="${productList.stock==0}">Product Name</h2>
 					<h2 class="padding-top-1x text-normal" th:text="${productList.name}" th:unless="${productList.stock==0}">Product Name</h2>
-					<span class="h2 d-block" th:text="${productList.totalPrice}">가격</span>
+					<span class="h2 d-block" th:text="${#numbers.formatInteger(productList.totalPrice, 3, 'COMMA')}+'원'">가격</span>
 					<input type="hidden" name="optionSetId" id="optionSetId" th:value="${productList.osId}">
 					<div class="row margin-top-1x">
 						<div class="col-sm-4">
@@ -88,80 +85,11 @@
 					<ul class="nav nav-tabs" role="tablist">
 						<li class="nav-item"><a class="nav-link active" href="#description" data-toggle="tab"
 								role="tab">Description</a></li>
-						<li class="nav-item"><a class="nav-link" href="#reviews" data-toggle="tab" role="tab">Reviews
-								(3)</a></li>
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane fade show active" id="description" role="tabpanel">
 							<img src="img/reviews/01.jpg" th:src="@{${productList.descImage}}" alt="Review author"
 								><!--상품설명이미지-->
-						</div>
-						<div class="tab-pane fade" id="reviews" role="tabpanel" >
-							<!-- Review-->
-							<div class="comment">
-								<div class="comment-author-ava"><img src="img/reviews/01.jpg" alt="Review author"
-										></div>
-								<div class="comment-body">
-									<div class="comment-header d-flex flex-wrap justify-content-between">
-										<h4 class="comment-title" >리뷰제목</h4>
-										<div class="mb-2">
-											<div class="rating-stars" ><i
-													class="icon-star filled"></i><i class="icon-star"></i>
-											</div>
-										</div>
-									</div>
-									<p class="comment-text" >리뷰내용</p>
-									<div class="comment-footer"><span class="comment-meta"
-											>작성자</span></div>
-								</div>
-							</div>
-							<!-- Review Form-->
-							<h5 class="mb-30 padding-top-1x">Leave Review</h5>
-							<form class="row" method="post">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label for="review_name">Your Name</label>
-										<input class="form-control form-control-rounded" type="text" id="review_name"
-											required>
-									</div>
-								</div>
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label for="review_email">Your Email</label>
-										<input class="form-control form-control-rounded" type="email" id="review_email"
-											required>
-									</div>
-								</div>
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label for="review_subject">Subject</label>
-										<input class="form-control form-control-rounded" type="text" id="review_subject"
-											required>
-									</div>
-								</div>
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label for="review_rating">Rating</label>
-										<select class="form-control form-control-rounded" id="review_rating">
-											<option>5 Stars</option>
-											<option>4 Stars</option>
-											<option>3 Stars</option>
-											<option>2 Stars</option>
-											<option>1 Star</option>
-										</select>
-									</div>
-								</div>
-								<div class="col-12">
-									<div class="form-group">
-										<label for="review_text">Review </label>
-										<textarea class="form-control form-control-rounded" id="review_text" rows="8"
-											required></textarea>
-									</div>
-								</div>
-								<div class="col-12 text-right">
-									<button class="btn btn-outline-primary" type="submit">Submit Review</button>
-								</div>
-							</form>
 						</div>
 					</div>
 				</div>
@@ -178,7 +106,7 @@
 								src="img/shop/products/09.jpg" alt="Product"
 								th:attr="src=@{${productDto.pImage}}"></a>
 						<h3 class="product-title" th:text="${productDto.name}"><a th:href="@{'http://localhost/product'+${productDto.osId}}">상품명</a></h3>
-						<h4 class="product-price" th:text="${productDto.totalPrice}">$34.99</h4>
+						<h4 class="product-price" th:text="${productDto.totalPriceString}+'원'">$34.99</h4>
 						<div class="product-buttons">
 							<button th:if="${productDto.isInterested}"
 									class="btn btn-outline-secondary btn-sm btn-wishlist active"
