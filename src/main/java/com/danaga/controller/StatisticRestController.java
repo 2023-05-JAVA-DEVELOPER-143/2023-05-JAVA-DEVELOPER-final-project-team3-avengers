@@ -20,11 +20,17 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.danaga.dto.AdminOrderUpdate;
 import com.danaga.dto.AdminProductInsertDto;
+import com.danaga.entity.CategorySet;
+import com.danaga.entity.OptionSet;
 import com.danaga.entity.Options;
+import com.danaga.entity.Product;
 import com.danaga.entity.Statistic;
 import com.danaga.repository.BoardRepository;
+import com.danaga.repository.CategorySetRepository;
 import com.danaga.repository.MemberRepository;
+import com.danaga.repository.product.CategoryRepository;
 import com.danaga.repository.product.OptionSetRepository;
+import com.danaga.repository.product.ProductRepository;
 import com.danaga.service.MemberService;
 import com.danaga.service.StatisticService;
 import com.danaga.service.product.OptionSetService;
@@ -44,7 +50,13 @@ public class StatisticRestController {
 	private OptionSetService optionSetService;
 	@Autowired
 	private OptionSetRepository optionSetRepository;
-
+	@Autowired
+	private CategorySetRepository categorySetRepository;
+	@Autowired
+	private ProductRepository productRepository;
+	@Autowired
+	private CategoryRepository categoryRepository;
+	
 	@GetMapping("/daily_update")
 	public ResponseEntity<?> dailyUpdate() {
 		statisticService.updateLatest7Days();
@@ -95,11 +107,24 @@ public class StatisticRestController {
 	@DeleteMapping("/product/{id}")
 	public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
 		try {
-			List<Options> optionList = optionSetRepository.findById(id).get().getOptions();
+			OptionSet os = optionSetRepository.findById(id).get();
+			Product product = os.getProduct();
+			List<CategorySet> cs = product.getCategorySets();
+			//delete Options
+			List<Options> optionList = os.getOptions();
 			for (Options options : optionList) {
 				optionSetService.deleteOption(options.getId());
 			}
+			//delete Option Set
 			optionSetService.deleteOptionSet(id);
+			//delete Category Set
+			for (CategorySet category : cs) {
+				categorySetRepository.delete(category);
+				//delete Category
+				categoryRepository.delete(category.getCategory());
+			}
+			//delete Product
+			productRepository.delete(product);
 			return new ResponseEntity<>("Product deleted successfully", HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>("Error deleting product", HttpStatus.INTERNAL_SERVER_ERROR);
