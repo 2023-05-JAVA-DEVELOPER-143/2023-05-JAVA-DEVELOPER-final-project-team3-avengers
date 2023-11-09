@@ -55,72 +55,70 @@
 									<div class="card-body p-0">
 										<!-- Nested Row within Card Body -->
 										<div class="p-4">
-											<form class="user">
-												<div class="text-center">
-													<h3 class="h5 text-gray-900 mb-2" style="font-weight: bold;">
-														제품선택(Product)</h3>
+											<div class="text-center">
+												<h3 class="h5 text-gray-900 mb-2" style="font-weight: bold;">
+													제품선택(Product)</h3>
+											</div>
+											<hr>
+											<div class="form-group row">
+												<div class="col-sm-6 mb-3 mb-sm-0">
+													<a>&nbsp&nbsp&nbsp&nbsp제품명(기존제품)</a>
 												</div>
-												<hr>
-												<div class="form-group row">
-													<div class="col-sm-6 mb-3 mb-sm-0">
-														<a>&nbsp&nbsp&nbsp&nbsp제품명(기존제품)</a>
-													</div>
-													<div class="text-right">
-														<input type="checkbox" id="checkNewProduct">(신규제품일 경우
-														체크)</input>
-													</div>
+												<div class="text-right">
+													<input type="checkbox" id="checkNewProduct">(신규제품일 경우
+													체크)</input>
 												</div>
-												<select class="form-select" id="productSelect">
-													<option selected>기존 제품을 선택하세요</option>
-													<div th:each="product : ${productList}">
-														<option th:value="${product.id}"
-															th:text="${product.id + '번 ' + product.name}" th:attr="data-name=${product.name}, data-brand=${product.brand},
+											</div>
+											<select class="form-select" id="productSelect">
+												<option selected>기존 제품을 선택하세요</option>
+												<div th:each="product : ${productList}">
+													<option th:value="${product.id}"
+														th:text="${product.id + '번 ' + product.name}" th:attr="data-name=${product.name}, data-brand=${product.brand},
 															data-price=${product.price}, data-category=${product.categorySets}">Two</option>
-													</div>
-												</select>
-												<div class="text-center">
-													<h3 class="h5 text-gray-900 mb-2"
-														style="margin-top: 30px; font-weight: bold;">
-														기본정보(OptionSet)
-													</h3>
 												</div>
-												<hr>
-												<div class="form-group row">
-													<div class="col-sm-6 mb-3 mb-sm-0">
-														<a>&nbsp&nbsp&nbsp&nbsp제품명(신규제품)</a>
-														<input type="text" class="form-control form-control-user"
-															id="txtProductName" placeholder="New Product Name"
-															onchange="setInputValue('txtProductName', 'outputProductName');"
-															disabled />
-													</div>
-													<div class="col-sm-6">
-														<a>&nbsp&nbsp&nbsp&nbsp브랜드</a>
-														<input type="text" class="form-control form-control-user"
-															id="txtBrand" placeholder="Brand"
-															onchange="setInputValue('txtBrand', 'outputBrand');"
-															disabled />
-													</div>
-													<div class="col-sm-6" style="margin-top: 10px;">
-														<a>&nbsp&nbsp&nbsp&nbsp가격(Product)</a>
-														<input type="text" class="form-control form-control-user"
-															id="txtProductPrice" placeholder="Price"
-															onchange="setInputValue('txtProductPrice', 'outputProductPrice');"
-															disabled />
-													</div>
-													<div class="col-sm-6" style="margin-top: 10px;">
-														<a>&nbsp&nbsp&nbsp&nbsp재고</a>
-														<input type="text" class="form-control form-control-user"
-															id="txtStock" placeholder="OptionSet Stock"
-															onchange="setInputValue('txtStock', 'outputStock');" />
-													</div>
+											</select>
+											<div class="text-center">
+												<h3 class="h5 text-gray-900 mb-2"
+													style="margin-top: 30px; font-weight: bold;">
+													기본정보(OptionSet)
+												</h3>
+											</div>
+											<hr>
+											<div class="form-group row">
+												<div class="col-sm-6 mb-3 mb-sm-0">
+													<a>&nbsp&nbsp&nbsp&nbsp제품명(신규제품)</a>
+													<input type="text" class="form-control form-control-user"
+														id="txtProductName" placeholder="New Product Name"
+														onchange="setInputValue('txtProductName', 'outputProductName');"
+														disabled />
 												</div>
-												<div class="text-center">
-													<h3 class="h5 text-gray-900 mb-2"
-														style="margin-top: 30px; font-weight: bold;">
-														이미지</h3>
+												<div class="col-sm-6">
+													<a>&nbsp&nbsp&nbsp&nbsp브랜드</a>
+													<input type="text" class="form-control form-control-user"
+														id="txtBrand" placeholder="Brand"
+														onchange="setInputValue('txtBrand', 'outputBrand');" disabled />
 												</div>
-												<hr>
-												<div class="form-group">
+												<div class="col-sm-6" style="margin-top: 10px;">
+													<a>&nbsp&nbsp&nbsp&nbsp가격(Product)</a>
+													<input type="text" class="form-control form-control-user"
+														id="txtProductPrice" placeholder="Price"
+														onchange="setInputValue('txtProductPrice', 'outputProductPrice');"
+														disabled />
+												</div>
+												<div class="col-sm-6" style="margin-top: 10px;">
+													<a>&nbsp&nbsp&nbsp&nbsp재고</a>
+													<input type="text" class="form-control form-control-user"
+														id="txtStock" placeholder="OptionSet Stock"
+														onchange="setInputValue('txtStock', 'outputStock');" />
+												</div>
+											</div>
+											<div class="text-center">
+												<h3 class="h5 text-gray-900 mb-2"
+													style="margin-top: 30px; font-weight: bold;">
+													이미지</h3>
+											</div>
+											<hr>
+											<div class="form-group">
 													<a>&nbsp&nbsp&nbsp&nbsp제품 이미지</a>
 													<div style="margin-top: 20px; margin-bottom: 20px;"
 														class="text-center">
@@ -141,36 +139,36 @@
 														<input type="file" id="descImg" name="descImg"
 															accept="image/png, image/jpeg" />
 													</div>
-												</div>
-												<div class="text-center">
-													<h3 class="h5 text-gray-900 mb-2"
-														style="margin-top: 30px; font-weight: bold;" id="countCategory">
-														카테고리 정보</h3>
-													<a class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"
-														id="deleteCategory">
-														<i class="fas fa-trash"></i></a>
-													<a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
-														id="createCategory">
-														<i class="fas fa-arrow-right"></i></a>
-												</div>
-												<hr>
-												<div id="categoryContainer"></div>
-												<div class="text-center">
-													<h3 class="h5 text-gray-900 mb-2"
-														style="margin-top: 30px; font-weight: bold;" id="countOptions">
-														옵션정보</h3>
-													<a class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"
-														id="deleteOption">
-														<i class="fas fa-trash"></i></a>
-													<a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
-														id="createOption">
-														<i class="fas fa-arrow-right"></i></a>
-												</div>
-												<hr>
-												<div id="optionContainer"></div>
-												<hr>
-												</br>
-											</form>
+											</div>
+											<div class="text-center">
+												<h3 class="h5 text-gray-900 mb-2"
+													style="margin-top: 30px; font-weight: bold;" id="countCategory">
+													카테고리 정보</h3>
+												<a class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"
+													id="deleteCategory">
+													<i class="fas fa-trash"></i></a>
+												<a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+													id="createCategory">
+													<i class="fas fa-arrow-right"></i></a>
+											</div>
+											<hr>
+											<div id="categoryContainer"></div>
+											<div class="text-center">
+												<h3 class="h5 text-gray-900 mb-2"
+													style="margin-top: 30px; font-weight: bold;" id="countOptions">
+													옵션정보</h3>
+												<a class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"
+													id="deleteOption">
+													<i class="fas fa-trash"></i></a>
+												<a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+													id="createOption">
+													<i class="fas fa-arrow-right"></i></a>
+											</div>
+											<hr>
+											<div id="optionContainer"></div>
+											<hr>
+											</br>
+
 										</div>
 									</div>
 								</div>
@@ -190,7 +188,7 @@
 											제품 미리보기
 										</h3>
 										<hr>
-										
+
 										<img id="preview" />
 									</div>
 									<div class="text-center">
@@ -265,19 +263,18 @@
 											<tbody id="optionTableContainer">
 											</tbody>
 										</table>
-										
+
 										<hr>
 										<div class="text-center" id="totProductPrice"
 											style="font-weight: bold; font-size: 1.5em; color: navy;">총가격 : 0원
 										</div>
-										<a href="#" class="btn btn-primary btn-icon-split"
-													style="float: right;">
-													<span class="icon text-white-50">
-														<i class="fas fa-arrow-right"></i>
-													</span>
-													<span class="text">상품등록</span>
-												</a>
-										
+										<a class="btn btn-primary btn-icon-split" style="float: right;"
+											onclick="createProduct();">
+											<span class="icon text-white-50">
+												<i class="fas fa-arrow-right"></i>
+											</span>
+											<span class="text">상품등록</span>
+										</a>
 									</div>
 								</div>
 							</div>
@@ -464,8 +461,8 @@
 					let price = parseFloat($(this).val()) || 0;
 					totalOptionPrice += price;
 				});
-				$('#totPrice').text(totalOptionPrice + '원');
-				$('#totProductPrice').text('총가격 : ' + (productPrice + totalOptionPrice) + '원');
+				$('#totPrice').text(totalOptionPrice.toLocaleString() + '원');
+				$('#totProductPrice').text('총가격 : ' + (productPrice + totalOptionPrice).toLocaleString() + '원');
 			}
 
 			$(document).on('change', '[id^=txtOptionPrice], [id^=txtProductPrice]', function () {
@@ -555,8 +552,96 @@
 			}
 		});
 
+		//submit
+		function createProduct() {
+			var img = $('#img')[0].files[0];
+			var prevImage = $('#prevImg')[0].files[0];
+			var descImage = $('#descImg')[0].files[0];
 
+			var formData = new FormData();
+			formData.append("img", img);
+			formData.append("prevImage", prevImage);
+			formData.append("descImage", descImage);
+			
+			$.ajax({
+				type: "POST",
+				url: "/admin_data/uploadImg",
+				data: formData,
+				contentType: false,
+				processData: false,
+				success: function (response) {
+				},
+				error: function (error) {
+					alert(error);
+				}
+			});
+			
+			
+			var sendJsonObject = {
+				"categoryDto": [
+					{
+						"id": 0,
+						"name": $('#txtChildCategoryName1').val(),
+						"parentId": $('#txtParentCategoryName1').val()
+					}
+				],
+				"adminOptionDto": [
+					{
+						"name": $('#txtOptionName1').val(),
+						"value": $('#txtOptionValue1').val(),
+						"extraPrice": $('#txtOptionPrice1').val()
+					}
+				],
+				"adminProductDto": {
+					"name": $('#txtProductName').val(),
+					"brand": $('#txtBrand').val(),
+					"price": $('#txtProductPrice').val(),
+					"img": $('#img').val(),
+					"prevImage": $('#prevImg').val(),
+					"descImage": $('#descImg').val(),
+					"stock": $('#txtStock').val()
+				}
+			}
 
+			$.ajax({
+				type: "POST",
+				url: "/admin_data/product",
+				contentType: "application/json",
+				data: JSON.stringify(sendJsonObject),
+				success: function () {
+					location.href = '/admin/admin_product_list';
+				},
+				error: function (e) {
+					alert(e + '왜 안되지?');
+				}
+			});
+
+		}
+
+		function uploadImg() {
+			var img = $('#img')[0].files[0];
+			var prevImage = $('#prevImg')[0].files[0];
+			var descImage = $('#descImg')[0].files[0];
+
+			var formData = new FormData();
+			formData.append("img", img);
+			formData.append("prevImage", prevImage);
+			formData.append("descImage", descImage);
+
+			$.ajax({
+				type: "POST",
+				url: "/admin_data/uploadImg",
+				data: formData,
+				contentType: false,
+				processData: false,
+				success: function (response) {
+					alert(response + '상품등록을 완료해주세요');
+				},
+				error: function (error) {
+					alert(error);
+				}
+			});
+		}
 
 	</script>
 

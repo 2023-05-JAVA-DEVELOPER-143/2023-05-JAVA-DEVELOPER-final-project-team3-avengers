@@ -15,9 +15,7 @@ import com.danaga.dto.product.ProductDto;
 import com.danaga.entity.OptionSet;
 import com.danaga.service.OrderService;
 import com.danaga.service.product.OptionSetService;
-import com.mysql.cj.x.protobuf.MysqlxCrud.Order;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
@@ -139,5 +137,42 @@ public class OrderRestController {
 			e.printStackTrace();
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
+	}
+
+	@PostMapping("/check_Stock")
+	public ResponseEntity<?> orderNoStock(@RequestBody CartDto cartDto) {
+		try {
+			String result = "1";
+			System.out.println(cartDto);
+			if (optionSetService.findById(cartDto.getOptionSetId()).getData().get(0).getStock() < cartDto.getQty()) {
+				throw new Exception("주문한수량보다 재고가 없습니다.");
+			}
+			return ResponseEntity.ok().body(result);
+
+		}catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
+
+	@PostMapping("/cart_check_Stock")
+	public ResponseEntity<String> cartOrderNoStock(
+			@org.springframework.web.bind.annotation.RequestBody List<CartDto> cartDtos) {
+		System.out.println("order 체크전 >>>>>>" + cartDtos.size());
+		String result = "";
+		try {
+			for (int i = 0; i < cartDtos.size(); i++) {
+				if (optionSetService.findById(cartDtos.get(i).getOptionSetId()).getData().get(0).getStock() > cartDtos
+						.get(i).getQty()) {
+					result = "1";
+				} else {
+					throw new Exception("주문한수량보다 재고가 없습니다.");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.OK).body(e.getMessage());
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 }

@@ -51,6 +51,7 @@
                 <div class="form-group">
                   <label for="reg-pass">비밀번호</label>
                   <input class="form-control" name="password" type="password" id="reg-pass" required>
+			      <input type="checkbox" id="show-password"> 비밀번호 표시
                 </div>
               </div>
               <div class="col-sm-6">
@@ -187,8 +188,7 @@ let member_join_action_rest=function(data){
 					    $('#reg-nickname').tooltip('dispose');
 					    }, 2000);
 					} else {
-						alert("회원가입을 환영합니다!!");
-						location.href="/member_login_form";
+						location.href="/member_join_complete_page";
 		   			}
 				},
 				error:function(){
@@ -276,14 +276,14 @@ $(function(){
 			$('#reg-pass-confirm').on('change',function(e){
         	if(($('#reg-pass-confirm').val().length < 8 || $('#reg-pass-confirm').val().length > 20)){
         		if(isNoValidPassword($('#reg-pass-confirm').val())){
-        			$('#reg-pass').css('border','0.5px dotted orange');
+        			$('#reg-pass,#reg-pass-confirm').css('border','0.5px dotted orange');
         			$('#reg-pass,#reg-pass-confirm').tooltip('hide');
         			$('#reg-pass,#reg-pass-confirm').tooltip('dispose');
         			$('#reg-pass-confirm').tooltip({'trigger':'hover', 'title':'비밀번호는 8 ~ 20자 이내이고 최소한 하나의 문자, 숫자, 특수 문자가 포함되어야 합니다.'});
         			$('#reg-pass-confirm').tooltip('show');
         			$('#join-action-btn').attr('disabled', 'disabled');
         		} else {
-        			$('#reg-pass').css('border','0.5px dotted orange');
+        			$('#reg-pass,#reg-pass-confirm').css('border','0.5px dotted orange');
         			$('#reg-pass,#reg-pass-confirm').tooltip('hide');
         			$('#reg-pass,#reg-pass-confirm').tooltip('dispose');
         			$('#reg-pass-confirm').tooltip({'trigger':'hover', 'title':'비밀번호는 8 ~ 20자 이내이고 최소한 하나의 문자, 숫자, 특수 문자가 포함되어야 합니다.'});
@@ -328,18 +328,6 @@ $(function(){
         			$('#reg-phone').css('border','0.5px solid green');
         			$('#reg-phone').tooltip('hide');
         			$('#reg-phone').tooltip('dispose');
-        		}
-        	});
-        	//생일
-        	$('#reg-birthday').on('change',function(e){
-        		if(new Date($('#reg-birthday').val()) > new Date()) {
-        			$('#reg-birthday').css('border','0.5px dotted orange');
-        			$('#reg-birthday').tooltip({'trigger':'hover', 'title':'선택할 수 없는 날짜 입니다.'});
-        			$('#reg-birthday').tooltip('show');
-        		} else {
-        			$('#reg-birthday').css('border','0.5px solid green');
-        			$('#reg-birthday').tooltip('hide');
-        			$('#reg-birthday').tooltip('dispose');
         		}
         	});
         	/******************************/
@@ -468,7 +456,30 @@ function confirmNumber(){
 	    emailCheck = false;
     }
 }
-	
+function getCurrentDate() {
+	let currentDate = new Date();
+	let year = currentDate.getFullYear();
+	let month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+	let day = currentDate.getDate().toString().padStart(2, '0');
+	return year + '-' + month + '-' + day;
+}
+$(document).ready(function(){
+	let birthday = $('#reg-birthday');
+	birthday.attr('max', getCurrentDate());
+});
+$(document).ready(function() {
+  $('#show-password').change(function() {
+    let passwordInput = $('#reg-pass');
+    let confirm_passwordInput = $('#reg-pass-confirm');
+    if (this.checked) {
+      passwordInput.attr('type', 'text');
+      confirm_passwordInput.attr('type', 'text');
+    } else {
+      passwordInput.attr('type', 'password');
+      confirm_passwordInput.attr('type', 'password');
+    }
+  });
+});
 </script>
 </th:block>
   </body>

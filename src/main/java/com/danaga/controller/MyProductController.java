@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.danaga.dto.MemberResponseDto;
 import com.danaga.dto.ResponseDto;
+import com.danaga.dto.product.ProductListOutputDto;
 import com.danaga.exception.product.FoundNoObjectException;
 import com.danaga.exception.product.NeedLoginException;
 import com.danaga.exception.product.FoundNoObjectException.FoundNoMemberException;
@@ -35,7 +36,7 @@ public class MyProductController {
 		try {
 			String username = (String) session.getAttribute("sUserId");
 			MemberResponseDto loginUser = memberService.getMemberBy(username);
-			ResponseDto<?> resultList = interestService.myInterestingList(loginUser.getId());
+			ResponseDto<ProductListOutputDto> resultList = interestService.myInterestingList(loginUser.getId());
 			model.addAttribute("productList", resultList.getData());// memberId
 			model.addAttribute("loginUser", loginUser);
 			return "product/wishlist";
@@ -74,7 +75,7 @@ public class MyProductController {
 			MemberResponseDto loginUser = memberService.getMemberBy(username);
 			interestService.emptyMyInterestingList(loginUser.getId());// memberId
 			model.addAttribute("loginUser", loginUser);
-			return "product/wishlist";// 빈박스 이미지 넘겨주기
+			return "product/wishlist";
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new FoundNoMemberException();
@@ -92,7 +93,7 @@ public class MyProductController {
 			MemberResponseDto loginUser = memberService.getMemberBy(username);
 			recentViewService.removeMyRecentViews(loginUser.getId());// memberId
 			model.addAttribute("loginUser", loginUser);
-			return "product/recent_view";// 빈박스 이미지 넘겨주기
+			return "product/recent_view";
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new FoundNoMemberException();

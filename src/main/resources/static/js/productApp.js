@@ -2,7 +2,6 @@ import * as api from "./p_apiService.js"
 
 let hash = window.location.hash
 let path = hash.substring(1);
-let html = '';
 let firstResult = 0;
 let filterDto = {};
 filterDto["orderType"] = "판매순";
@@ -16,7 +15,10 @@ export function init() {
 }
 
 function registEvent() {
-
+ 	$('#otherOptions').change(function() {
+            var selectedValue = $(this).val();
+            window.location.href = "http://localhost/product" + selectedValue; // 여기에 이동하고 싶은 URL을 넣으세요
+        });
 	$('#otherOptions option').each(function() {
 		let $this = $(this);
 		$this.attr('title', $this.data('tooltip'));
@@ -137,8 +139,16 @@ function registEvent() {
 			}
 
 		} else if ($(e.target).attr('toOrder')) {
-			e.stopPropagation();
-			$('#productOrderForm').submit();
+			e.preventDefault();
+			let optionSetId = $('#optionSetId').val();
+			let qty = $('#qty').val();
+			let cartDto={
+				"optionSetId": optionSetId,
+				"qty": qty
+			};
+			api.toOrder(cartDto);
+			//e.stopPropagation();
+			//$('#productOrderForm').submit();
 		}
 	});
 
@@ -174,19 +184,6 @@ function updateQueryDataDto(optionName, optionValue, checked) {
 	}
 }
 
-
-function navigate() {
-	if (path == '/api/shop-list-ns') {
-		/**************** /shop-list-ns******************/
-		//let resultJsonObject=ajaxRequest("GET","");
-		html = product_list_list_view();
-		$('#page_list_content').html(html);
-	} else if (path == '/api/shop-grid-ns') {
-		/**************** /shop-grid-ns******************/
-		html = product_list_grid_view();
-		$('#page_list_content').html(html);
-	}
-}
 const $result =$("#toObserve");
 const $end = document.createElement("div");
 $end.id = 'product-list-observed';
@@ -208,4 +205,3 @@ const options = {
 };
 const observer = new IntersectionObserver(callback, options);
 observer.observe($end);
-

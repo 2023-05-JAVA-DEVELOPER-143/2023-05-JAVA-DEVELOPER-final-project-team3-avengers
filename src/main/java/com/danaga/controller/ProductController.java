@@ -47,51 +47,17 @@ public class ProductController {
 	private final MemberService memberService;
 	private final InterestService interestService;
 
-//	// 상단바의 검색 으로 키워드 검색 하는거 만들기
-//	@GetMapping("/site_search")
-//	public String site_search(Model model, HttpSession session) {
-//		String nameKeyword = (String) model.getAttribute("site_search");
-//		if (nameKeyword == null || nameKeyword.equals("")) {
-//			return "redirect:/product";
-//		}
-//		// 검색 메인화면에 최상위 카테고리 선택할수 있게 표시
-//		ResponseDto<CategoryDto> categoryResponseDto = categoryService.AncestorCategories();
-//		List<CategoryDto> categoryList = categoryResponseDto.getData();
-//		if (session.getAttribute("sUserId") == null) {
-//			ResponseDto<ProductListOutputDto> responseDto = service.searchProducts(// 주문수로 전체상품 정렬하여 조회
-//					QueryStringDataDto.builder().nameKeyword(nameKeyword).orderType(OptionSetQueryData.BY_ORDER_COUNT)
-//							.build(),
-//					0);
-//			List<ProductListOutputDto> productList = responseDto.getData();
-//			model.addAttribute("productList", productList);
-//		} else {
-//			ResponseDto<ProductListOutputDto> responseDto = service.searchProductsForMember(// 주문수로 전체상품 정렬하여 조회
-//					QueryStringDataDto.builder().nameKeyword(nameKeyword).orderType(OptionSetQueryData.BY_ORDER_COUNT)
-//							.build(),
-//					(String) session.getAttribute("sUserId"), 0);
-//			if (responseDto.getMsg().equals(ProductExceptionMsg.FOUND_NO_MEMBER)) {
-//				session.removeAttribute("sUserId");
-//			} else if (responseDto.getMsg().equals(ProductSuccessMsg.SEARCH_PRODUCTS)) {
-//				List<ProductListOutputDto> productList = responseDto.getData();
-//				model.addAttribute("productList", productList);
-//			}
-//		}
-//		model.addAttribute("categoryList", categoryList);
-//		return "product/product";
-//	}
-
 	// 전체상품
 	@GetMapping("/product")
 	public String searchProduct(Model model, HttpSession session) {
 		ResponseDto<CategoryDto> categoryResponseDto = categoryService.AncestorCategories();
 		List<CategoryDto> categoryList = categoryResponseDto.getData();
 		if (session.getAttribute("sUserId") != null) {
+			
 			ResponseDto<ProductListOutputDto> responseDto = service.searchProductsForMember(// 주문수로 전체상품 정렬하여 조회
 					QueryStringDataDto.builder().orderType(OptionSetQueryData.BY_ORDER_COUNT).build(),
 					(String) session.getAttribute("sUserId"), 0);
-			if (responseDto.getMsg().equals(ProductExceptionMsg.FOUND_NO_MEMBER)) {
-				session.removeAttribute("sUserId");
-			} else if (responseDto.getMsg().equals(ProductSuccessMsg.SEARCH_PRODUCTS)) {
+			if (responseDto.getMsg().equals(ProductSuccessMsg.SEARCH_PRODUCTS)) {
 				List<ProductListOutputDto> productList = responseDto.getData();
 				model.addAttribute("productList", productList);
 			}
@@ -111,10 +77,11 @@ public class ProductController {
 	@GetMapping("/product{optionSetId}")
 	public String productDetail(HttpSession session, @PathVariable Long optionSetId, Model model)
 			throws FoundNoMemberException, FoundNoOptionSetException {
-		List<ProductDto> productList = service.findById(optionSetId).getData();
-		if (productList == null || productList.size() == 0) {
+		
+		if (service.findById(optionSetId) == null || service.findById(optionSetId).getData().isEmpty()) {
 			throw new FoundNoObjectException.FoundNoOptionSetException();
 		}
+		List<ProductDto> productList = service.findById(optionSetId).getData();
 
 		// 해당 옵션셋 찾아서 뿌리기
 		ResponseDto<OtherOptionSetDto> optionSets = service.showOtherOptionSets(optionSetId);
@@ -148,6 +115,15 @@ public class ProductController {
 			}
 			hits = service.displayHitProductsForMember(optionSetId, username, 0);
 		} else {
+			List<Long> recentOptionSetIds=null;
+			if(session.getAttribute("recentviews")==null) {
+			recentOptionSetIds = new ArrayList<Long>();
+			}else {
+			recentOptionSetIds = (List<Long>) session.getAttribute("recentviews");
+			}
+			recentOptionSetIds.add(optionSetId);
+			session.setAttribute("recentviews", recentOptionSetIds);
+			
 			hits = service.displayHitProducts(optionSetId, 0);
 			List<Boolean> isInterested = new ArrayList<>();
 			isInterested.add(false);

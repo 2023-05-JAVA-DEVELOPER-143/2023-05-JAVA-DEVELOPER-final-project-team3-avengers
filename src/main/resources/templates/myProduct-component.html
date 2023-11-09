@@ -9,14 +9,14 @@
       </tr>
     </thead>
     <tbody>
-    <th:block th:if="${productList.size()==0}">
+    <th:block th:if="${productList==null||productList.isEmpty()}">
     <tr style="text-align: center;">
     <td style="display: inline-block;">
 		<img src="images/out-of-stock.png" style="display: block; margin: 0 auto;">
 		<h1 style="text-align: center;"><a href="http://localhost/product">Go to Shopping</a></h1>
 		</td></tr>
     </th:block>
-    <th:block th:unless="${productList.size()==0}">
+    <th:block th:unless="${productList==null||productList.isEmpty()}">
       <tr th:each="productDto:${productList}">
         <td>
           <div class="product-item">
@@ -25,8 +25,8 @@
             </a>
             <div class="product-info">
               <h4 class="product-title" th:text="${productDto.name}">
-                <a href="shop-single.html" th:href="@{http://localhost/product${productDto.osId}}">Unionbay Park</a></h4>
-              <div class="text-lg text-medium text-muted" th:text="${productDto.totalPrice}">$43.90</div>
+                <a href="shop-single.html" th:href="@{http://localhost/product__${productDto.osId}__}">Unionbay Park</a></h4>
+              <div class="text-lg text-medium text-muted" th:text="${#numbers.formatInteger(productDto.totalPrice, 3, 'COMMA')}+'원'">$43.90</div>
             </div>
           </div>
         </td>

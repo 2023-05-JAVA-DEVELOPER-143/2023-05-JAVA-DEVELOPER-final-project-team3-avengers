@@ -60,8 +60,7 @@ public class IndexController {
 			session.setAttribute("countCarts", cartService.countCarts(sUserId));
 		} else if (fUserCarts != null) { // 비회원 일시 장바구니 리스트의 사이즈
 			fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
-			//fUserCarts.size();
-			session.setAttribute("countCarts", 2);
+			session.setAttribute("countCarts",fUserCarts.size());
 		}
 	};
 	

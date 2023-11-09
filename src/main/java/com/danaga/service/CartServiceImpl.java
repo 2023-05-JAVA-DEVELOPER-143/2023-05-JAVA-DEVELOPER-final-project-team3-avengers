@@ -26,6 +26,14 @@ public class CartServiceImpl implements CartService {
 	private final OptionSetDao optionSetDao;
 
 	@Override
+	public Cart findCart(String value, Long optionSetId) throws Exception {
+		Long memberId = memberDao.findMember(value).getId();
+		return cartRepository.findByOptionSetIdAndMemberId(optionSetId, memberId);
+	}
+	
+	
+	
+	@Override
 	public int isDuplicateProduct(String value, Long optionsetId) throws Exception{
 		Long findId = memberDao.findMember(value).getId();
 		Cart findCart = cartRepository.findByOptionSetIdAndMemberId(optionsetId,findId);
@@ -51,8 +59,9 @@ public class CartServiceImpl implements CartService {
 		return list;
 	}
 
+	// 예외잡기
 	@Override
-	public FUserCartResponseDto findfUserCartList(CartDto dto) {
+	public FUserCartResponseDto findfUserCartList(CartDto dto) throws Exception{
 		OptionSet findOptionset = optionSetDao.findById(dto.getOptionSetId());
 		return FUserCartResponseDto.toDto(findOptionset, dto.getQty());
 	}

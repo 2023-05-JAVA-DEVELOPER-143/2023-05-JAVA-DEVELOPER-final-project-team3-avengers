@@ -256,19 +256,6 @@ class OrderServiceImplTest {
 		orderService.updateStatementByCancleOrder(19L);
 	}
 	
-	@Test
-	//@Disabled
-	@Transactional
-	@Rollback(false)
-	void testOrdersMemberIdNull()throws Exception {
-		
-		String userName = "Kakao3152284904";
-		orderService.ordersMemberIdNull(userName);
-		
-	}
-	
-	
-	
 }
 //	@Test
 //	@Disabled

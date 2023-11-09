@@ -267,40 +267,16 @@ public class OptionSetServiceImpl implements OptionSetService {
 	// 옵션셋 아이디로 옵션셋 찾기 디테일 들어갈때사용
 	@Override
 	public ResponseDto<ProductDto> findById(Long optionSetId) {
-		OptionSet optionSet = optionSetDao.findById(optionSetId);
+		OptionSet optionSet=null;
+		try {
+			optionSet = optionSetDao.findById(optionSetId);
+		} catch (FoundNoOptionSetException e) {
+			e.printStackTrace();
+			return ResponseDto.<ProductDto>builder().msg(e.getMsg()).build();
+		}
 		List<ProductDto> data = new ArrayList<>();
 		data.add(new ProductDto(optionSet));
 		return ResponseDto.<ProductDto>builder().data(data).msg(ProductSuccessMsg.FIND_OPTIONSET_BY_ID).build();
-	}
-
-	/////////////////////////////////////////////////////////
-	// 카테고리도 바꿀수 있게
-	@Override
-	@Transactional
-	public ResponseDto<?> update(@Valid ProductUpdateDto dto) {
-//		Product origin = productDao.findById(dto.getId());
-//		dto.getName().ifPresent(t->origin.setName(t));
-//		dto.getBrand().ifPresent(t->origin.setBrand(t));
-//		dto.getPrice().ifPresent(t->origin.setPrice(t));
-//		dto.getDescImage().ifPresent(t->origin.setDescImage(t));
-//		dto.getPrevDesc().ifPresent(t->origin.setPrevDesc(t));
-//		dto.getImg().ifPresent(t->origin.setImg(t));
-//		
-//		if() {//변경하려는 속성들이 기존 제품의 속성과 겹치지 않았을때
-//			
-//		}else {
-//		return ResponseDto.<Product>builder().error("이미 등록되어 있는 제품입니다.").build();
-//		}
-		return null;
-	}
-
-	// 프로덕트 별점 업뎃
-	// 리뷰가 등록될때마다 갱신
-	@Override
-	@Transactional
-	public ResponseDto<?> updateRating(@Valid ProductSaveDto dto) {
-		// 기존 프로덕트의 리뷰들을
-		return null;
 	}
 
 }

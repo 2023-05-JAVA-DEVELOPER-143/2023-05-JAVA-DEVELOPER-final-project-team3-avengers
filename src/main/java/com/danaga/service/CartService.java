@@ -8,7 +8,7 @@ import com.danaga.dto.FUserCartResponseDto;
 import com.danaga.dto.ResponseDto;
 import com.danaga.dto.SUserCartResponseDto;
 import com.danaga.dto.product.ProductDto;
-import com.danaga.dto.CartUpdateResponseDto;
+import com.danaga.dto.CartCheckResponseDto;
 import com.danaga.entity.Cart;
 import jakarta.transaction.Transactional;
 
@@ -20,14 +20,17 @@ public interface CartService {
 	List<SUserCartResponseDto> findsUserCartList(String value) throws Exception;
 
 	// 비회원 카트 리스트
-	FUserCartResponseDto findfUserCartList(CartDto dto);
+	FUserCartResponseDto findfUserCartList(CartDto dto)  throws Exception;
 	
 	// 중복제품 수량 체크
 	int isDuplicateProduct(String value,Long optionsetId) throws Exception;
 	
+	//카트 1개 찾기
+	Cart findCart(String value,Long optionSetId) throws Exception;
+	
 	// 카트 추가
 	void addCart(CartDto dto, String value) throws Exception;
-
+	
 	// 카트 1개 삭제
 	void deleteCart(Long optionSetId, String value) throws Exception;
 

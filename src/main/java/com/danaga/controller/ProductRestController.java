@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -43,57 +44,6 @@ public class ProductRestController {
 	private final MemberService memberService;
 	private final InterestService interestService;
 	private final CategoryService categoryService;
-
-//	private ResponseEntity<?> processHeartOperation(HttpSession session, Long optionSetId, Function<InterestDto, ResponseDto<?>> operation) {
-//	    ResponseDto<?> responseBody = new ResponseDto();
-//	    if (session.getAttribute("sUserId") == null) {
-//	        responseBody.setMsg(ProductExceptionMsg.NEED_LOGIN);
-//	        return ResponseEntity.badRequest().body(responseBody);
-//	    }
-//	    if (service.findById(optionSetId).getMsg().equals(ProductSuccessMsg.FIND_OPTIONSET_BY_ID)) {
-//	        try {
-//	            String username = (String) session.getAttribute("sUserId");
-//	            MemberResponseDto member = memberService.getMemberBy(username);
-//	            if (member == null) {
-//	                responseBody.setMsg(ProductExceptionMsg.FOUND_NO_MEMBER);
-//	                return ResponseEntity.badRequest().body(responseBody);
-//	            }
-//	            responseBody = operation.apply(InterestDto.builder().memberId(member.getId()).optionSetId(optionSetId).build());
-//	            HttpStatus status = (operation == interestService::clickHeart) ? HttpStatus.CREATED : HttpStatus.OK;
-//	            return ResponseEntity.status(status).body(responseBody);
-//	        } catch (Exception e) {
-//	            responseBody.setMsg(ProductExceptionMsg.FOUND_NO_MEMBER);
-//	            return ResponseEntity.badRequest().body(responseBody);
-//	        }
-//	    } else {
-//	        responseBody.setMsg(ProductExceptionMsg.FOUND_NO_OPTIONSET);
-//	        return ResponseEntity.badRequest().body(responseBody);
-//	    }
-//	}
-//
-//	@PostMapping("/heart/{optionSetId}")
-//	public ResponseEntity<?> tapHeartInDetail(HttpSession session, @PathVariable Long optionSetId) {
-//	    return processHeartOperation(session, optionSetId, dto -> {
-//	        try {
-//	            return interestService.clickHeart(dto);
-//	        } catch (FoundNoMemberException | FoundNoOptionSetException | ExistsInterestException e) {
-//	            e.printStackTrace();
-//	            return ResponseDto.builder().msg(e.getMsg()).build();
-//	        }
-//	    });
-//	}
-//
-//	@DeleteMapping("/heart/{optionSetId}")
-//	public ResponseEntity<?> untapHeartInDetail(HttpSession session, @PathVariable Long optionSetId) {
-//	    return processHeartOperation(session, optionSetId, dto -> {
-//	        try {
-//	            return interestService.deleteHeart(dto);
-//	        } catch (FoundNoMemberException | FoundNoOptionSetException | FoundNoInterestException e) {
-//	            e.printStackTrace();
-//	            return ResponseDto.builder().msg(e.getMsg()).build();
-//	        }
-//	    });
-//	}
 
 	// 제품디테일에서 하트 누르면 관심제품 추가
 	@PostMapping("/heart/{optionSetId}")
@@ -176,4 +126,22 @@ public class ProductRestController {
 			return ResponseEntity.status(HttpStatus.OK).body(response);
 		}
 	}
+	@ResponseBody
+	@ExceptionHandler(value = {NeedLoginException.class,FoundNoOptionSetException.class,FoundNoMemberException.class,MethodArgumentNotValidException.class})
+	protected ResponseEntity<?> defaultRestException(Exception e) {
+		 ProductExceptionMsg errorMsg=null;
+		    if (e instanceof NeedLoginException) {
+		        errorMsg = ((NeedLoginException) e).getMsg();
+		        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ResponseDto.builder().msg(errorMsg).build());
+		    } else if (e instanceof FoundNoObjectException.FoundNoMemberException) {
+		        errorMsg = ((FoundNoObjectException.FoundNoMemberException) e).getMsg();
+		        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ResponseDto.builder().msg(errorMsg).build());
+		    }  else if (e instanceof FoundNoOptionSetException) {
+		        errorMsg = ((FoundNoOptionSetException) e).getMsg();
+		        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ResponseDto.builder().msg(errorMsg).build());
+		    } else if (e instanceof MethodArgumentNotValidException) {
+		        errorMsg = ProductExceptionMsg.WRONG_PARAMETER;
+		    } 
+		    return ResponseEntity.badRequest().body(ResponseDto.builder().msg(errorMsg).build());
+		}
 }

@@ -33,12 +33,11 @@ import lombok.RequiredArgsConstructor;
 public class StatisticController {
 	private final StatisticService statisticService;
 	private final MemberService memberService;
-	private final OrderRepository orderRepository;
-	private final BoardRepository boardRepository;
 	private final OptionSetRepository optionSetRepository;
 	private final OptionSetService optionSetService;
 	private final ProductRepository productRepository;
 	
+	//@AdminCheck
 	@GetMapping
 	public String main(Model model) {
 		try {
@@ -81,19 +80,34 @@ public class StatisticController {
 	}
 	@GetMapping("/admin_order_list")
 	public String adminOrderList(Model model) {
-		model.addAttribute("orderList", orderRepository.findAll());
+		model.addAttribute("orderList", statisticService.orderList());
 		return "admin/admin_order_list";
+	}
+	@GetMapping("/admin_refund_list")
+	public String adminRefundList(Model model) {
+		model.addAttribute("orderList", statisticService.refundList());
+		return "admin/admin_refund_list";
 	}
 	@Operation(summary = "admin : 회원리스트 출력")
 	@GetMapping("/admin_member_list")
 	public String adminMemberList(Model model) {
-		model.addAttribute("memberList", memberService.getMembers());
+		model.addAttribute("memberList", statisticService.memberList());
 		return "admin/admin_member_list";
 	}
 	@GetMapping("/admin_board_list")
 	public String adminBoardList(Model model) {
-		model.addAttribute("boardList", boardRepository.findAll());
+		model.addAttribute("boardList", statisticService.boardList());
 		return "admin/admin_board_list";
+	}
+	@GetMapping("/admin_1to1_list")
+	public String adminOneToOneList(Model model) {
+		model.addAttribute("boardList", statisticService.oneToOneList());
+		return "admin/admin_1to1_list";
+	}
+	@GetMapping("/admin_board_upload")
+	public String uploadBoard(Model model) {
+		model.addAttribute("boardList", statisticService.boardList());
+		return "admin/admin_board_upload";
 	}
 	
 	public List<Statistic> changeDateFormat(List<Statistic> statistics) {

@@ -44,13 +44,13 @@
 				<div class="container-fluid">
 
 					<!-- Page Heading -->
-					<h1 class="h3 mb-2 text-gray-800" style="margin-top: 20px;">주문 현황</h1>
+					<h1 class="h3 mb-2 text-gray-800" style="margin-top: 20px;">배송 현황</h1>
 
 					<!-- DataTales Example -->
 					<div class="card shadow mb-4" style="margin-top: 20px;">
 						<div class="card-header py-3">
 							<h6 class="m-0 font-weight-bold text-primary"
-								th:text="${#calendars.format(#calendars.createNow(),'yyyy년 MM월 dd일') + ' 기준'}">회원명단</h6>
+								th:text="${#calendars.format(#calendars.createNow(),'yyyy년 MM월 dd일') + ' 기준'}"></h6>
 						</div>
 						<div class="card-body">
 							<div class="table-responsive">
@@ -78,7 +78,21 @@
 											</td>
 											<td>
 												<div class="dropdown mb-4"
-													th:if="${order.getStatement().toString().equals('입금대기중') || order.getStatement().toString().equals('배송완료') || order.getStatement().toString().equals('배송중')}">
+													th:if="${order.getStatement().toString().equals('입금대기중')}">
+													<button class="btn btn-danger dropdown-toggle" type="button"
+														id="dropdownMenuButton" data-toggle="dropdown"
+														aria-haspopup="true" aria-expanded="false">
+														<span th:class="'dropdown-selected'+${order.id}" th:text="${order.statement}"></span>
+													</button>
+													<div class="dropdown-menu animated--fade-in"
+														aria-labelledby="dropdownMenuButton">
+														<a class="dropdown-item" th:onclick="updateStatement([[${order.id}]], '입금대기중')">입금대기중</a>
+														<a class="dropdown-item" th:onclick="updateStatement([[${order.id}]], '배송중')">배송중</a>
+														<a class="dropdown-item" th:onclick="updateStatement([[${order.id}]], '배송완료')">배송완료</a>
+													</div>
+												</div>
+												<div class="dropdown mb-4"
+													th:if="${order.getStatement().toString().equals('배송완료')}">
 													<button class="btn btn-primary dropdown-toggle" type="button"
 														id="dropdownMenuButton" data-toggle="dropdown"
 														aria-haspopup="true" aria-expanded="false">
@@ -92,17 +106,17 @@
 													</div>
 												</div>
 												<div class="dropdown mb-4"
-													th:unless="${order.getStatement().toString().equals('입금대기중') || order.getStatement().toString().equals('배송완료') || order.getStatement().toString().equals('배송중')}">
-													<button class="btn btn-danger dropdown-toggle" type="button"
+													th:if="${order.getStatement().toString().equals('배송중')}">
+													<button class="btn btn-success dropdown-toggle" type="button"
 														id="dropdownMenuButton" data-toggle="dropdown"
 														aria-haspopup="true" aria-expanded="false">
 														<span th:class="'dropdown-selected'+${order.id}" th:text="${order.statement}"></span>
 													</button>
 													<div class="dropdown-menu animated--fade-in"
 														aria-labelledby="dropdownMenuButton">
-														<a class="dropdown-item" th:onclick="updateStatement([[${order.id}]], '환불대기중')">환불대기중</a>
-														<a class="dropdown-item" th:onclick="updateStatement([[${order.id}]], '환불완료')">환불완료</a>
-														<a class="dropdown-item" th:onclick="updateStatement([[${order.id}]], '취소')">취소</a>
+														<a class="dropdown-item" th:onclick="updateStatement([[${order.id}]], '입금대기중')">입금대기중</a>
+														<a class="dropdown-item" th:onclick="updateStatement([[${order.id}]], '배송중')">배송중</a>
+														<a class="dropdown-item" th:onclick="updateStatement([[${order.id}]], '배송완료')">배송완료</a>
 													</div>
 												</div>
 											</td>
@@ -133,26 +147,6 @@
 	<a class="scroll-to-top rounded" href="#page-top">
 		<i class="fas fa-angle-up"></i>
 	</a>
-
-	<!-- Delete Modal-->
-	<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-		aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">주문내역을 정말 삭제하시겠습니까?</h5>
-					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">×</span>
-					</button>
-				</div>
-				<div class="modal-body">"삭제" 버튼을 누르면 주문정보가 영구히 삭제됩니다.</div>
-				<div class="modal-footer">
-					<button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
-					<a class="btn btn-primary" href="login.html">삭제</a>
-				</div>
-			</div>
-		</div>
-	</div>
 
 	<!-- Bootstrap core JavaScript-->
 	<script src="/bootstrap_admin/vendor/jquery/jquery.min.js"></script>

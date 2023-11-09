@@ -61,11 +61,15 @@ public class MemberDaoImpl implements MemberDao {
 		Member updatedMember = null;
 		if (findOptionalMember.isPresent()) {
 			Member member = findOptionalMember.get();
+			member.setUserName(updateMember.getUserName());
 			member.setPassword(updateMember.getPassword());
 			member.setNickname(updateMember.getNickname());
 			member.setPostCode(updateMember.getPostCode());
 			member.setAddress(updateMember.getAddress());
 			member.setDetailAddress(updateMember.getDetailAddress());
+			member.setRole(updateMember.getRole());
+			member.setGrade(updateMember.getGrade());
+			member.setGradePoint(updateMember.getGradePoint());
 			updatedMember = memberRepository.save(member);
 		} else {
 			throw new MemberNotFoundException("존재하지 않는 회원입니다");

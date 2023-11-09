@@ -2,6 +2,7 @@ package com.danaga.service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -16,14 +17,18 @@ import com.danaga.dto.AdminProductDto;
 import com.danaga.dto.AdminProductInsertDto;
 import com.danaga.dto.product.CategoryDto;
 import com.danaga.dto.product.OptionSetCreateDto;
+import com.danaga.entity.Board;
 import com.danaga.entity.Category;
 import com.danaga.entity.CategorySet;
+import com.danaga.entity.Member;
 import com.danaga.entity.OptionSet;
 import com.danaga.entity.Options;
 import com.danaga.entity.Orders;
 import com.danaga.entity.Product;
 import com.danaga.entity.Statistic;
+import com.danaga.repository.BoardRepository;
 import com.danaga.repository.CategorySetRepository;
+import com.danaga.repository.MemberRepository;
 import com.danaga.repository.OrderRepository;
 import com.danaga.repository.StatisticRepository;
 import com.danaga.repository.product.CategoryRepository;
@@ -47,6 +52,11 @@ public class StatisticServiceImpl implements StatisticService {
 	private CategorySetRepository categorySetRepository;
 	@Autowired
 	private OptionsRepository optionsRepository;
+	@Autowired
+	private MemberRepository memberRepository;
+	@Autowired
+	private BoardRepository boardRepository;
+
 
 	// 오늘날짜 단순 반환
 	@Override
@@ -174,36 +184,109 @@ public class StatisticServiceImpl implements StatisticService {
 		List<CategoryDto> categoryDto = dto.getCategoryDto();
 		AdminProductDto adminProductDto = dto.getAdminProductDto();
 		List<AdminOptionDto> adminOptionDto = dto.getAdminOptionDto();
-		//가격계산
+		// 가격계산
 		Integer totPrice = 0;
 		for (AdminOptionDto option : adminOptionDto) {
 			totPrice += option.getExtraPrice();
 		}
-		//Product 추가
+		// Product 추가
 		Product product = productRepository.save(adminProductDto.toEntity());
-		//Category & CategorySet 추가
+		// Category & CategorySet 추가
 		for (CategoryDto category : categoryDto) {
 			Category createdCategory = categoryRepository.save(category.toEntity());
 			categorySetRepository.save(CategorySet.builder().category(createdCategory).product(product).build());
 		}
-		//OptionSet 추가
-		OptionSet optionSet = optionSetDao.create(OptionSetCreateDto.builder()
-				.stock(adminProductDto.getStock())
-				.productId(product.getId())
-				.productPrice(adminProductDto.getPrice()+totPrice)
-				.build());
-		//Option 추가
+		// OptionSet 추가
+		OptionSet optionSet = optionSetDao.create(OptionSetCreateDto.builder().stock(adminProductDto.getStock())
+				.productId(product.getId()).productPrice(adminProductDto.getPrice() + totPrice).build());
+		// Option 추가
 		for (AdminOptionDto option : adminOptionDto) {
-			optionsRepository.save(Options.builder()
-					.name(option.getName())
-					.value(option.getValue())
-					.extraPrice(option.getExtraPrice())
-					.optionSet(optionSet)
-					.build());
+			optionsRepository.save(Options.builder().name(option.getName()).value(option.getValue())
+					.extraPrice(option.getExtraPrice()).optionSet(optionSet).build());
 		}
-
-
 	}
+
+	// orderList 출력 (탈퇴회원 구분)
+	@Override
+	public List<Orders> orderList() {
+		List<Orders> orders = secession();
+		List<Orders> returnOrders = new ArrayList<>();
+		for (Orders order : orders) {
+			if (order.getStatement().equals(OrderStateMsg.입금대기중) || order.getStatement().equals(OrderStateMsg.배송중)
+					|| order.getStatement().equals(OrderStateMsg.배송완료)) {
+				returnOrders.add(order);
+			}
+		}
+		return returnOrders;
+	}
+
+	// refundList 출력
+	@Override
+	public List<Orders> refundList() {
+		List<Orders> orders = secession();
+		List<Orders> returnOrders = new ArrayList<>();
+		for (Orders order : orders) {
+			if (order.getStatement().equals(OrderStateMsg.환불대기중) || order.getStatement().equals(OrderStateMsg.환불대기중)
+					|| order.getStatement().equals(OrderStateMsg.환불완료)) {
+				returnOrders.add(order);
+			}
+		}
+		return returnOrders;
+	}
+
+	// memberList 출력 (비회원, admin, 탈퇴회원 제외)
+	@Override
+	public List<Member> memberList() {
+		List<Member> members = memberRepository.findAll();
+		List<Member> normalMembers = new ArrayList<>();
+		for (Member member : members) {
+			if (member.getRole().equals("Member") || member.getRole().equals("Kakao")) {
+				normalMembers.add(member);
+			}
+		}
+		return normalMembers;
+	}
+
+	// 자유게시판 출력
+	@Override
+	public List<Board> boardList() {
+		List<Board> boards = boardRepository.findAll();
+		List<Board> returnBoards = new ArrayList<>();
+		for (Board board : boards) {
+			if (board.getBoardGroup().getId().equals(1L)) {
+				returnBoards.add(board);
+			}
+		}
+		return returnBoards;
+	}
+	// 1:1 문의 출력
+	@Override
+	public List<Board> oneToOneList() {
+		List<Board> boards = boardRepository.findAll();
+		List<Board> returnBoards = new ArrayList<>();
+		for (Board board : boards) {
+			if (board.getBoardGroup().getId().equals(2L)) {
+				returnBoards.add(board);
+			}
+		}
+		return returnBoards;
+	}
+	// 게시판 업로드
 	
-	
+	/*
+	*
+	*
+	*
+	*
+	*/
+	// 탈퇴회원 9999화
+	public List<Orders> secession() {
+		List<Orders> orders = orderRepository.findAll();
+		for (Orders order : orders) {
+			if (order.getMember() == null) {
+				order.setMember(memberRepository.findById(999999999999999999L).get());
+			}
+		}
+		return orders;
+	}
 }

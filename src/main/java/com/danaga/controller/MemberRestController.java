@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.danaga.dto.CartDto;
+import com.danaga.dto.KakaoMemberUpdateDto;
 import com.danaga.dto.MemberFindDto;
 import com.danaga.dto.MemberLoginDto;
 import com.danaga.dto.MemberResponseDto;
 import com.danaga.dto.MemberUpdateDto;
+import com.danaga.dto.product.RecentViewDto;
 import com.danaga.entity.Member;
 import com.danaga.exception.EmailMismatchException;
 import com.danaga.exception.ExistedMemberByEmailException;
@@ -26,6 +28,7 @@ import com.danaga.exception.MemberNotFoundException;
 import com.danaga.exception.PasswordMismatchException;
 import com.danaga.service.CartService;
 import com.danaga.service.MemberService;
+import com.danaga.service.product.RecentViewService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -36,20 +39,8 @@ import lombok.RequiredArgsConstructor;
 public class MemberRestController {
 	private final MemberService memberService;
 	private final CartService cartService;
+	private final RecentViewService recentViewService;
 
-//	@PostMapping("/login")
-//	public ResponseEntity<MemberResponse> member_login_action(@RequestBody MemberResponseDto memberResponseDto, HttpSession session) throws Exception {
-//		memberService.login(memberResponseDto.getUserName(), memberResponseDto.getPassword());
-//		session.setAttribute("sUserId", memberResponseDto.getUserName());
-//		
-//		MemberResponse response = new MemberResponse();
-//		response.setStatus(MemberResponseStatusCode.LOGIN_SUCCESS);
-//		response.setMessage(MemberResponseMessage.LOGIN_SUCCESS);
-//		response.setData(memberResponseDto);
-//		HttpHeaders httpHeaders = new HttpHeaders();
-//		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-//		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
-//	}
 	@PostMapping(value = "/findid_rest", produces = "application/json;charset=UTF-8")
 	public Map member_findid_action_rest(@RequestBody MemberFindDto memberFindDto, HttpSession session)
 			throws Exception {
@@ -118,13 +109,22 @@ public class MemberRestController {
 		session.setAttribute("sUserId", loginUser.getUserName());
 		if (fUserCarts != null) {
 			// 로그인 + 세션 장바구니 존재
-			System.out.println(" >>>>>>>>>>>>>>>> 실행돼야함");
 			for (int i = 0; i < fUserCarts.size(); i++) {
 				cartService.addCart(fUserCarts.get(i), loginUser.getUserName());
 				// 세션 -> db 로 데이타 인서트 후 세션 데이타 초기화 후 세션카트 카운트
 			}
 			session.setAttribute("fUserCarts", null);
 			session.setAttribute("countCarts", cartService.countCarts(loginUser.getUserName()));
+		}
+		/***************************************************************************************/
+		/********* 비회원으로 최근 본 상품 로그인시 회원 정보에 insert **********/
+		if(session.getAttribute("recentviews")!=null) {
+		List<Long> recentOptionSetIds= (List<Long>) session.getAttribute("recentviews");
+		for (Long optionSetId : recentOptionSetIds) {
+			recentViewService.addRecentView(RecentViewDto.builder()
+					.optionSetId(optionSetId).memberId(loginUser.getId()).build());
+		}
+		session.removeAttribute("recentviews");
 		}
 		/***************************************************************************************/
 		if (loginUser.getRole().equals("Admin")) {
@@ -134,32 +134,6 @@ public class MemberRestController {
 		map.put("result", result);
 		return map;
 	}
-
-//	@LoginCheck
-//	@GetMapping("/logout")
-//	public ResponseEntity<MemberResponse> member_logout_action(HttpSession session) throws Exception {
-//		session.invalidate();
-//		MemberResponse response = new MemberResponse();
-//		response.setStatus(MemberResponseStatusCode.LOGOUT_USER);
-//		response.setMessage(MemberResponseMessage.LOGOUT_USER);
-//
-//		HttpHeaders httpHeaders = new HttpHeaders();
-//		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-//		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
-//	}
-
-//	@PostMapping("/join")
-//	public ResponseEntity<MemberResponse> member_join_action(@RequestBody Member member) throws Exception {
-//		memberService.joinMember(member);
-//		
-//		MemberResponse response = new MemberResponse();
-//		response.setStatus(MemberResponseStatusCode.CREATED_USER);
-//		response.setMessage(MemberResponseMessage.CREATED_USER);
-//		response.setData(member);
-//		HttpHeaders httpHeaders = new HttpHeaders();
-//		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-//		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.CREATED);
-//	}
 
 	@PostMapping("/join_rest")
 	public Map member_join_action(@RequestBody Member member) throws Exception {
@@ -195,33 +169,44 @@ public class MemberRestController {
 		map.put("result", result);
 		return map;
 	}
+	@PostMapping("/join_rest_kakao")
+	public Map member_join_action_kakao(@RequestBody Member member, HttpSession session) throws Exception {
+		HashMap map = new HashMap<>();
+		// MemberResponseDto memberResponseDto =
+		// MemberResponseDto.builder().userName(userName).password(password).build();
+		int result = 3;
+		try {
+			String sUserId = (String) session.getAttribute("sUserId");
+			Long sUserLongId = memberService.getMemberBy(sUserId).getId();
+			member.setId(sUserLongId);
+			memberService.updateKakaoMember(KakaoMemberUpdateDto.toDto(member));
+		}catch (ExistedMemberByUserNameException e) {
+			result = 1;
+			map.put("result", result);
+			map.put("msg", member.getUserName() + "는 사용중인 아이디입니다.");
+			return map;
+		} catch (ExistedMemberByNicknameException e) {
+			result = 2;
+			map.put("result", result);
+			map.put("msg", member.getNickname() + "는 사용중인 닉네임입니다.");
+			return map;
+		}
+		map.put("result", result);
+		session.removeAttribute("role");
+		return map;
+	}
 
-//	@LoginCheck
-//	@PutMapping("/{id}")
-//	public ResponseEntity<MemberResponse> member_modify_action(@PathVariable(name = "id") String id,
-//			@RequestBody MemberUpdateDto memberUpdateDto) throws Exception {
-//		MemberResponseDto updatedMember = memberService.updateMember(memberUpdateDto);
-//
-//		MemberResponse response = new MemberResponse();
-//		response.setStatus(MemberResponseStatusCode.UPDATE_USER);
-//		response.setMessage(MemberResponseMessage.UPDATE_USER);
-//		response.setData(updatedMember);
-//		HttpHeaders httpHeaders = new HttpHeaders();
-//		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-//		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
-//	}
 	@LoginCheck
 	@PutMapping(value = "/modify_action_rest", produces = "application/json;charset=UTF-8")
 	public Map member_modify_action(@RequestBody MemberUpdateDto memberUpdateDto, HttpSession session)
 			throws Exception {
 		HashMap map = new HashMap<>();
 		int result = 2;
-		MemberResponseDto updatedMember = new MemberResponseDto();
 		try {
 			String sUserId = (String) session.getAttribute("sUserId");
 			Long sUserLongId = memberService.getMemberBy(sUserId).getId();
 			memberUpdateDto.setId(sUserLongId);
-			updatedMember = memberService.updateMember(memberUpdateDto);
+			memberService.updateMember(memberUpdateDto);
 		} catch (ExistedMemberByNicknameException e) {
 			result = 1;
 			map.put("result", result);
@@ -231,32 +216,6 @@ public class MemberRestController {
 		map.put("result", result);
 		return map;
 	}
-
-//	@GetMapping("/list")
-//	public ResponseEntity<MemberResponse> member_list() {
-//		List<MemberResponseDto> memberList = memberService.getMembers();
-//		MemberResponse response = new MemberResponse();
-//		response.setStatus(MemberResponseStatusCode.READ_USER);
-//		response.setMessage(MemberResponseMessage.READ_USER);
-//		response.setData(memberList);
-//
-//		HttpHeaders httpHeaders = new HttpHeaders();
-//		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-//		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
-//	}
-//	@LoginCheck
-//	@GetMapping("/{id}")
-//	public ResponseEntity<MemberResponse> member_info(@PathVariable(name = "id") String id) throws Exception {
-//		MemberResponseDto loginUser = memberService.getMemberBy(id);
-//		MemberResponse response = new MemberResponse();
-//		response.setStatus(MemberResponseStatusCode.READ_USER);
-//		response.setMessage(MemberResponseMessage.READ_USER);
-//		response.setData(loginUser);
-//		
-//		HttpHeaders httpHeaders = new HttpHeaders();
-//		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-//		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
-//	}
 	@LoginCheck
 	@DeleteMapping(value = "/delete_action_rest", produces = "application/json;charset=UTF-8")
 	public Map delete_action_rest(@RequestBody MemberLoginDto memberLoginDto, HttpSession session) throws Exception {
@@ -281,26 +240,5 @@ public class MemberRestController {
 		return map;
 	}
 
-//	@ExceptionHandler(value = MemberNotFoundException.class)
-//	public ResponseEntity<MemberResponse> member_not_found_exception_handler(MemberNotFoundException e) throws Exception {
-//		MemberResponse response = new MemberResponse();
-//		response.setStatus(MemberResponseStatusCode.LOGIN_FAIL_NOT_FOUND_USER);
-//		response.setMessage(MemberResponseMessage.LOGIN_FAIL_NOT_FOUND_USER);
-//		response.setData(e.getData());
-//		HttpHeaders httpHeaders = new HttpHeaders();
-//		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-//		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
-//	}
-//
-//	@ExceptionHandler(value = PasswordMismatchException.class)
-//	public ResponseEntity<MemberResponse> member_password_mismatch_handler(PasswordMismatchException e) throws Exception {
-//		MemberResponse response = new MemberResponse();
-//		response.setStatus(MemberResponseStatusCode.LOGIN_FAIL_PASSWORD_MISMATCH_USER);
-//		response.setMessage(MemberResponseMessage.LOGIN_FAIL_PASSWORD_MISMATCH_USER);
-//		response.setData(e.getData());
-//		HttpHeaders httpHeaders = new HttpHeaders();
-//		httpHeaders.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-//		return new ResponseEntity<MemberResponse>(response, httpHeaders, HttpStatus.OK);
-//	}
 
 }

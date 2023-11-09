@@ -1,5 +1,6 @@
 package com.danaga.dto.product;
 
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -25,10 +26,10 @@ import lombok.NoArgsConstructor;
 public class ProductListOutputDto {//리스트,히트상품,관심,최근상품리스트
 	private String brand;
 	private String name;
-	private Double rating;
 	private String updateTime;
 	private String pImage;
 	private Integer totalPrice;
+	private String totalPriceString;
 	private Long osId;
 	@Builder.Default
 	private List<OptionDto.OptionBasicDto> optionSet = new ArrayList<>();
@@ -37,13 +38,13 @@ public class ProductListOutputDto {//리스트,히트상품,관심,최근상품�
 	
 	
 	public ProductListOutputDto(OptionSet entity) {
+		this.totalPriceString=new DecimalFormat("#,###").format(entity.getTotalPrice());
 		this.brand=entity.getProduct().getBrand();
 		this.name=entity.getProduct().getName();
-		this.rating=entity.getProduct().getRating();
+		this.totalPrice = entity.getTotalPrice();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         this.updateTime = entity.getUpdateTime().format(formatter);
 		this.pImage=entity.getProduct().getImg();
-		this.totalPrice=entity.getTotalPrice();
 		this.osId=entity.getId();
 		this.optionSet = entity.getOptions().stream().map(t -> new OptionDto.OptionBasicDto(t)).collect(Collectors.toList());
 		this.isInterested=false;
@@ -59,13 +60,13 @@ public class ProductListOutputDto {//리스트,히트상품,관심,최근상품�
 		this.optionSetDesc=result;
 	}
 	public ProductListOutputDto(OptionSet entity, String username) {
+		this.totalPrice = entity.getTotalPrice();
 		this.brand=entity.getProduct().getBrand();
 		this.name=entity.getProduct().getName();
-		this.rating=entity.getProduct().getRating();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         this.updateTime = entity.getUpdateTime().format(formatter);
 		this.pImage=entity.getProduct().getImg();
-		this.totalPrice=entity.getTotalPrice();
+		this.totalPriceString=new DecimalFormat("#,###").format(entity.getTotalPrice());
 		this.osId=entity.getId();
 		this.optionSet = entity.getOptions().stream().map(t -> new OptionDto.OptionBasicDto(t)).collect(Collectors.toList());
 		this.isInterested=entity.getInterests().stream().anyMatch(t -> t.getMember().getUserName().equals(username));
