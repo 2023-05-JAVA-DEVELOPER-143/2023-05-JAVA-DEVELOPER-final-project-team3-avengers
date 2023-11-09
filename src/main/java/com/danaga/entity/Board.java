@@ -106,15 +106,7 @@ public class Board extends BaseEntity {
 	}
 
 	public void patch(BoardDto dto) {
-		if (this.id != dto.getId()) {
-			throw new IllegalArgumentException("수정 실패!~ 대상이 잘못됬습니다.");
-		}
-		if (this.getMember().getUserName() != dto.getUserName()) {
-			throw new IllegalArgumentException("수정 실패!~ 회원이 잘못됬습니다.");
-		}
-		if (this.getBoardGroup().getId() != dto.getBoardGroupId()) {
-			throw new IllegalArgumentException("수정 실패!~ 게시판 선택이 잘못됬습니다.");
-		}
+		
 		if (dto.getTitle() != null) {
 			this.title = dto.getTitle();
 		}
