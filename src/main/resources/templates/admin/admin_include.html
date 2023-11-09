@@ -30,12 +30,27 @@
 			<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
 				aria-expanded="true" aria-controls="collapseTwo">
 				<i class="fas fa-fw fa-cog"></i>
-				<span>상품관리</span>
+				<span>상품관리(통합)</span>
 			</a>
 			<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
 				<div class="bg-white py-2 collapse-inner rounded">
-					<a class="collapse-item" href="/admin/admin_product_insert">상품등록</a>
-					<a class="collapse-item" href="/admin/admin_product_list">상품삭제</a>
+					<a class="collapse-item" href="/admin/admin_product_insert">Product 등록(기존)</a>
+					<a class="collapse-item" href="/admin/admin_product_list">상품 전체삭제</a>
+				</div>
+			</div>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
+				aria-expanded="true" aria-controls="collapseThree">
+				<i class="fas fa-fw fa-cog"></i>
+				<span>상품관리(개별)</span>
+			</a>
+			<div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+				<div class="bg-white py-2 collapse-inner rounded">
+					<a class="collapse-item" href="/admin/admin_category_insert">카테고리 등록/조회</a>
+					<a class="collapse-item" href="/admin/admin_product_only_insert">Product 등록</a>
+					<a class="collapse-item" href="/admin/admin_optionset_insert">OptionSet 등록</a>
+					<a class="collapse-item" href="/admin/admin_optionset_list">OptionSet 삭제</a>
 				</div>
 			</div>
 		</li>

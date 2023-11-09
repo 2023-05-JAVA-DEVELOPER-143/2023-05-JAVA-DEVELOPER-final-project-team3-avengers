@@ -18,8 +18,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.danaga.dao.product.ProductDao;
 import com.danaga.dto.AdminOrderUpdate;
 import com.danaga.dto.AdminProductInsertDto;
+import com.danaga.dto.AdminProductOnlyDto;
+import com.danaga.dto.product.CategoryDto;
+import com.danaga.dto.product.ProductDto;
+import com.danaga.dto.product.ProductSaveDto;
+import com.danaga.entity.Category;
 import com.danaga.entity.CategorySet;
 import com.danaga.entity.OptionSet;
 import com.danaga.entity.Options;
@@ -55,8 +61,10 @@ public class StatisticRestController {
 	@Autowired
 	private ProductRepository productRepository;
 	@Autowired
+	private ProductDao productDao;
+	@Autowired
 	private CategoryRepository categoryRepository;
-	
+
 	@GetMapping("/daily_update")
 	public ResponseEntity<?> dailyUpdate() {
 		statisticService.updateLatest7Days();
@@ -75,6 +83,7 @@ public class StatisticRestController {
 		return list;
 	}
 
+	// 기존방식
 	@PostMapping("/product")
 	public ResponseEntity<?> createProduct(@RequestBody AdminProductInsertDto adminProductInsertDto) {
 		try {
@@ -96,34 +105,59 @@ public class StatisticRestController {
 			@RequestParam("prevImage") MultipartFile prevImage, @RequestParam("descImage") MultipartFile descImage) {
 		try {
 			String imgFileName = saveImage(img);
-            String prevImageFileName = saveImage(prevImage);
-            String descImageFileName = saveImage(descImage);
+			String prevImageFileName = saveImage(prevImage);
+			String descImageFileName = saveImage(descImage);
 			return new ResponseEntity<>("Images uploaded successfully", HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>("Error uploading images", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
+	// 신규방식 - 카테고리
+	@PostMapping("/createCategory")
+	public ResponseEntity<?> createCategory(@RequestBody CategoryDto dto) {
+		try {
+			categoryRepository.save(dto.toEntity());
+			return new ResponseEntity<>("Category created successfully", HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Error creating category", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 	
+	// 신규방식 - product
+		@PostMapping("/createProduct")
+		public ResponseEntity<?> createProductOnly(@RequestBody AdminProductOnlyDto adminProductOnlyDto) {
+			try {
+				adminProductOnlyDto.getProductSaveDto().setImg(convertPath(adminProductOnlyDto.getProductSaveDto().getImg()));
+				adminProductOnlyDto.getProductSaveDto().setPrevImage(convertPath(adminProductOnlyDto.getProductSaveDto().getPrevImage()));
+				adminProductOnlyDto.getProductSaveDto().setDescImage(convertPath(adminProductOnlyDto.getProductSaveDto().getDescImage()));
+				statisticService.createProductOnly(adminProductOnlyDto);
+				return new ResponseEntity<>("Product created successfully", HttpStatus.OK);
+			} catch (Exception e) {
+				return new ResponseEntity<>("Error creating Product", HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
+
 	@DeleteMapping("/product/{id}")
 	public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
 		try {
 			OptionSet os = optionSetRepository.findById(id).get();
 			Product product = os.getProduct();
 			List<CategorySet> cs = product.getCategorySets();
-			//delete Options
+			// delete Options
 			List<Options> optionList = os.getOptions();
 			for (Options options : optionList) {
 				optionSetService.deleteOption(options.getId());
 			}
-			//delete Option Set
+			// delete Option Set
 			optionSetService.deleteOptionSet(id);
-			//delete Category Set
+			// delete Category Set
 			for (CategorySet category : cs) {
 				categorySetRepository.delete(category);
-				//delete Category
+				// delete Category
 				categoryRepository.delete(category.getCategory());
 			}
-			//delete Product
+			// delete Product
 			productRepository.delete(product);
 			return new ResponseEntity<>("Product deleted successfully", HttpStatus.OK);
 		} catch (Exception e) {
@@ -161,20 +195,21 @@ public class StatisticRestController {
 			return new ResponseEntity<>("Error deleting member", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	private String saveImage(MultipartFile file) throws IOException {
 		String fileName = file.getOriginalFilename();
-		String filePath = System.getProperty("user.dir") + "/src/main/resources/static/images/uploaded/" + File.separator + fileName;
-		
+		String filePath = System.getProperty("user.dir") + "/src/main/resources/static/images/uploaded/"
+				+ File.separator + fileName;
+
 		File dest = new File(filePath);
 		file.transferTo(dest);
 		return fileName;
 	}
-	
+
 	public static String convertPath(String originalPath) {
-        String fileName = originalPath.substring(originalPath.lastIndexOf("\\") + 1);
-        String newPath = "/images/uploaded/" + fileName;
-        return newPath;
-    }
+		String fileName = originalPath.substring(originalPath.lastIndexOf("\\") + 1);
+		String newPath = "/images/uploaded/" + fileName;
+		return newPath;
+	}
 
 }
