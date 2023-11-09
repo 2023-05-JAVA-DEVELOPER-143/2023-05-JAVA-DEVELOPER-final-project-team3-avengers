@@ -149,7 +149,7 @@ public class OrderRestController {
 			}
 			return ResponseEntity.ok().body(result);
 
-		} catch (Exception e) {
+		}catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
