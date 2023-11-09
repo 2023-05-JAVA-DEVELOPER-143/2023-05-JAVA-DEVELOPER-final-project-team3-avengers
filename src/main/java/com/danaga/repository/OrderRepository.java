@@ -13,6 +13,9 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
 	//  주문전체(특정사용자)
 	List<Orders> findOrdersByMember_UserName(String userName);
 	
+	//  주문전체(특정사용자)
+	List<Orders> findOrdersByMember_Email(String email);
+	
 //	//  주문이 일정시간경과되면 자동삭제(지금은 임의로 보여주기위해 3분으로 지정)
 //	void deleteByCreatedAtBefore(LocalDateTime timeAgo);
 
