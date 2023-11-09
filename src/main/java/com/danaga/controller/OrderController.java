@@ -310,7 +310,7 @@ public class OrderController {
 						(sUserCartOrderDtoList.get(i).getTotalPrice() * sUserCartOrderDtoList.get(i).getQty())
 								- (sUserCartOrderDtoList.get(i).getTotalPrice() * sUserCartOrderDtoList.get(i).getQty()
 										* discountRate / 100));
-				realTotalPrice += sUserCartOrderDtoList.get(i).getTotalPrice();
+				realTotalPrice += sUserCartOrderDtoList.get(i).getTotalPrice() * sUserCartOrderDtoList.get(i).getQty();
 				System.out.println(realTotalPrice);
 			}
 			OrderMemberBasicDto orderMemberBasicDto = new OrderMemberBasicDto(memberResponseDto.getName(),
