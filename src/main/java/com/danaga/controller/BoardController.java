@@ -36,7 +36,8 @@ public class BoardController {
 	private BoardService bService;
 	@Autowired
 	private CommentsService cService;
-
+	
+	
 	@GetMapping("/board{boardGroupId}")
 	public String list(@PathVariable(name = "boardGroupId") Long boardGroupId,
 			@RequestParam(name = "searchKeyword", required = false, defaultValue = "") String searchKeyword,
@@ -49,9 +50,10 @@ public class BoardController {
 
 		Page<BoardDto> boardList = bService.boards(pageable, searchKeyword, searchType, boardGroupId);
 
-		log.info("boardList : {} ",boardList); List<BoardDto> top10List =
-		bService.popularPost(); log.info("top10List : {} ",top10List); String name =
-		bService.getBoardGroupName(boardGroupId);
+		log.info("boardList : {} ",boardList.getContent()); 
+		List<BoardDto> top10List =bService.popularPost(); 
+		log.info("top10List : {} ",top10List); 
+		String name =bService.getBoardGroupName(boardGroupId);
 		model.addAttribute("boardGroupId",boardGroupId);
 		model.addAttribute("boardGroupName",name);
 		model.addAttribute("boardList",boardList);
@@ -94,25 +96,27 @@ public class BoardController {
 	@GetMapping("/board_edit{id}")
 	public String edit(@PathVariable Long id, Model model) {
 		BoardDto board = bService.boardDetail(id);
-
+		log.info("board : {} ",board);
 		model.addAttribute("board", board);
 
-		return "board/edit";
+		return "board/edit_board";
 	}
 
 	@PostMapping("/board_edit{id}")
 	public String updated(@PathVariable Long id, BoardDto dto, Model model, RedirectAttributes rttr) {
 		BoardDto board = bService.boardDetail(id);
+		log.info("board : {} ",board);
 		board = bService.update(dto);
 		model.addAttribute("board", board);
 		rttr.addFlashAttribute("upd", "수정이 완료 되었습니다.");
-		return "redirect:/board/" + board.getId() + "/show";
+		return "redirect:/show"+ board.getId();
 	}
 
 	@GetMapping("/board_delete{id}")
 	public String delete(@PathVariable Long id, RedirectAttributes rttr, HttpSession session) {
 		// 1. 삭제 대상을 가져온다~
 		BoardDto target = bService.boardDetail(id);
+		log.info("target : {} ",target);
 		String user = (String) session.getAttribute("sUserId");
 		// 2. 대상을 삭제한다~
 		if (target != null) {
