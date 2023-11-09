@@ -117,7 +117,7 @@ public class OrderController {
 			session.setAttribute("orderMemberBasicDto", orderMemberBasicDto);
 			session.setAttribute("realTotalPrice", realTotalPrice);
 			session.setAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
-			return "orders/order_save_form";
+			return "orders/product_order_save_form";
 		} else { // 회원
 			MemberResponseDto memberResponseDto = memberService.getMemberBy(sUserId);
 			ResponseDto<?> responseDto = optionSetService.findById(cartDto.getOptionSetId());
@@ -133,7 +133,7 @@ public class OrderController {
 
 			Integer realTotalPrice = 0;
 			for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
-				realTotalPrice += (sUserCartOrderDtoList.get(i).getTotalPrice());
+				realTotalPrice += (sUserCartOrderDtoList.get(i).getTotalPrice()* sUserCartOrderDtoList.get(i).getQty());
 				System.out.println(realTotalPrice);
 			}
 			OrderMemberBasicDto orderMemberBasicDto = new OrderMemberBasicDto(memberResponseDto.getName(),
@@ -144,9 +144,153 @@ public class OrderController {
 			session.setAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
 			session.setAttribute("realTotalPrice", realTotalPrice);
 			session.setAttribute("orderMemberBasicDto", orderMemberBasicDto);
-			return "orders/order_save_form";
+			return "orders/product_order_save_form";
 		}
 	}
+	
+	
+	
+	
+	
+	
+	/*
+	 * 상품에서 주문(action)(공통)
+	 */
+	@PostMapping("/product_order_action") 
+	public String memberProductOrderAddAction(@ModelAttribute("ordersProductDto") OrderTotalDto orderTotalDto,
+			 Model model, HttpSession session) {
+
+		String sUserId = (String) session.getAttribute("sUserId");
+		int countCarts = 0;
+		if (sUserId == null) { // 비회원주문
+			try {
+				List<CartOrderDto> sUserCartOrderDtoList = (List<CartOrderDto>) session
+						.getAttribute("sUserCartOrderDto");
+				List<CartDto> fUserCarts = new ArrayList<>();
+				List<OptionSetUpdateDto> optionSetUpdateDtoList = new ArrayList<>();
+				for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
+					CartDto cartDto = CartDto.builder().optionSetId(sUserCartOrderDtoList.get(i).getId())
+							.qty(sUserCartOrderDtoList.get(i).getQty()).build();
+					fUserCarts.add(cartDto);
+
+					List<ProductDto> productDtoList = (List<ProductDto>) optionSetService
+							.findById(cartDto.getOptionSetId()).getData();
+
+					OptionSetUpdateDto optionSetUpdateDto = OptionSetUpdateDto.builder().id(cartDto.getOptionSetId())
+							.stock(productDtoList.get(0).getStock() - cartDto.getQty()).build();
+					optionSetService.updateStock(optionSetUpdateDto);
+					optionSetUpdateDtoList.add(optionSetUpdateDto);
+				}
+
+				DeliveryDto deliveryDto = new DeliveryDto();
+				deliveryDto.setName(orderTotalDto.getReceiverName());
+				deliveryDto.setPhoneNumber(orderTotalDto.getReceiverPhoneNo());
+				deliveryDto.setAddress(orderTotalDto.getReceiverAddress());
+				deliveryDto.setDetailAddress(orderTotalDto.getReceiverDetailAddress());
+				deliveryDto.setPostCode(orderTotalDto.getReceiverPostCode());
+				OrderGuestDto orderGuestDto = new OrderGuestDto();
+				orderGuestDto.setName(orderTotalDto.getOrdererName());
+				orderGuestDto.setPhoneNo(orderTotalDto.getOrdererPhoneNo());
+
+				OrdersDto ordersDto = orderService.guestCartSelectOrderSave(deliveryDto, fUserCarts, orderGuestDto);
+
+				model.addAttribute("orderId", ordersDto.getId());
+				List<CartDto> cartDtos = (List<CartDto>) session.getAttribute("fUserCarts");
+				if(cartDtos!=null) {
+					for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
+						for (int j = 0; j < cartDtos.size(); j++) {
+							if (cartDtos.get(j).getOptionSetId() == sUserCartOrderDtoList.get(i).getId()) {
+								cartDtos.remove(cartDtos.get(j));
+							}
+						}
+					}
+					// size=0 이면 전체주문 null 세션에 넣기 or size !=0 이면 선택주문 삭제된 cartDtos
+					if (cartDtos.size() == 0) {
+						cartDtos = null;
+					} else {
+						countCarts = cartDtos.size();
+					}
+					System.out.println(">>>>> order cart 조건문 끝 " + cartDtos + countCarts);
+					System.out.println("$$$$" + sUserCartOrderDtoList.size());
+					session.setAttribute("fUserCarts", cartDtos);
+					System.out.println(cartDtos);
+					System.out.println("$$$$$" + cartDtos);
+				}
+				session.setAttribute("sUserCartOrderDtoList", sUserCartOrderDtoList);
+				session.setAttribute("realTotalPrice", 0);
+				session.setAttribute("countCarts", countCarts);
+				OrderMemberBasicDto orderMemberBasicDto = (OrderMemberBasicDto) session
+						.getAttribute("orderMemberBasicDto");
+				orderMemberBasicDto.setUserName("");
+				orderMemberBasicDto.setPhoneNo("");
+				session.setAttribute("orderMemberBasicDto", orderMemberBasicDto);
+				return "orders/order_complete";
+			} catch (Exception e) {
+				model.addAttribute("msg", e.getMessage());
+				e.printStackTrace();
+				return "/index";
+			}
+		} else { // 회원주문
+			try {
+				List<CartOrderDto> sUserCartOrderDtoList = (List<CartOrderDto>) session
+						.getAttribute("sUserCartOrderDto");
+				List<CartDto> fUserCarts = new ArrayList<>();
+				List<OptionSetUpdateDto> optionSetUpdateDtoList = new ArrayList<>();
+				for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
+					CartDto cartDto = CartDto.builder().optionSetId(sUserCartOrderDtoList.get(i).getId())
+							.qty(sUserCartOrderDtoList.get(i).getQty()).build();
+					fUserCarts.add(cartDto);
+
+					List<ProductDto> productDtoList = (List<ProductDto>) optionSetService
+							.findById(cartDto.getOptionSetId()).getData();
+
+					OptionSetUpdateDto optionSetUpdateDto = OptionSetUpdateDto.builder().id(cartDto.getOptionSetId())
+							.stock(productDtoList.get(0).getStock() - cartDto.getQty()).build();
+					optionSetUpdateDtoList.add(optionSetUpdateDto);
+					optionSetService.updateStock(optionSetUpdateDto);
+				}
+				DeliveryDto deliveryDto = new DeliveryDto();
+				deliveryDto.setName(orderTotalDto.getReceiverName());
+				deliveryDto.setPhoneNumber(orderTotalDto.getReceiverPhoneNo());
+				deliveryDto.setAddress(orderTotalDto.getReceiverAddress());
+				deliveryDto.setDetailAddress(orderTotalDto.getReceiverDetailAddress());
+				deliveryDto.setPostCode(orderTotalDto.getReceiverPostCode());
+				OrdersDto ordersDto = orderService.memberCartSelectOrderSave(sUserId, deliveryDto, fUserCarts);
+
+				sUserCartOrderDtoList.clear();
+				System.out.println("$$$$" + sUserCartOrderDtoList.size());
+				session.setAttribute("sUserCartOrderDtoList", sUserCartOrderDtoList);
+				session.setAttribute("realTotalPrice", 0);
+				session.setAttribute("countCarts", cartService.countCarts(sUserId));
+				OrderMemberBasicDto orderMemberBasicDto = (OrderMemberBasicDto) session
+						.getAttribute("orderMemberBasicDto");
+				orderMemberBasicDto.setUserName("");
+				orderMemberBasicDto.setPhoneNo("");
+				session.setAttribute("orderMemberBasicDto", orderMemberBasicDto);
+				model.addAttribute("orderId", ordersDto.getId());
+				return "orders/order_complete";
+			} catch (Exception e) {
+				model.addAttribute("msg", e.getMessage());
+				e.printStackTrace();
+				return "/index";
+			}
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/*
 	 * 카트에서 보내온 데이터로 주문(form)(공통)
 	 */
@@ -310,7 +454,9 @@ public class OrderController {
 				deliveryDto.setPostCode(orderTotalDto.getReceiverPostCode());
 				OrdersDto ordersDto = orderService.memberCartSelectOrderSave(sUserId, deliveryDto, fUserCarts);
 				for (CartDto cartDto : fUserCarts) {
-					cartService.deleteCart(cartDto.getOptionSetId(), sUserId);
+					if(cartService.findCart(sUserId,cartDto.getOptionSetId())!=null) {
+						cartService.deleteCart(cartDto.getOptionSetId(), sUserId);
+					}
 				}
 				sUserCartOrderDtoList.clear();
 				System.out.println("$$$$" + sUserCartOrderDtoList.size());
@@ -324,7 +470,7 @@ public class OrderController {
 				session.setAttribute("orderMemberBasicDto", orderMemberBasicDto);
 				model.addAttribute("orderId", ordersDto.getId());
 				return "orders/order_complete";
-			} catch (Exception e) {
+			}  catch (Exception e) {
 				model.addAttribute("msg", e.getMessage());
 				e.printStackTrace();
 				return "/index";
