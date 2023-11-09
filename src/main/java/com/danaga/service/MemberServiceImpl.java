@@ -87,10 +87,10 @@ public class MemberServiceImpl implements MemberService {
 				.userName(originalMember.getUserName())
 				.password(memberUpdateDto.getPassword())
 				.nickname(memberUpdateDto.getNickname())
-				.role(originalMember.getRole())
 				.postCode(memberUpdateDto.getPostCode())
 				.address(memberUpdateDto.getAddress())
 				.detailAddress(memberUpdateDto.getDetailAddress())
+				.role(originalMember.getRole())
 				.grade(originalMember.getGrade())
 				.gradePoint(originalMember.getGradePoint())
 				.build();
@@ -115,6 +115,8 @@ public class MemberServiceImpl implements MemberService {
 				.address(kakaoMemberUpdateDto.getAddress())
 				.detailAddress(kakaoMemberUpdateDto.getDetailAddress())
 				.role("Member")
+				.grade(originalMember.getGrade())
+				.gradePoint(originalMember.getGradePoint())
 				.build();
 		if (originalMember.getNickname().equals(member.getNickname())) {
 			

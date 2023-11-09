@@ -57,9 +57,6 @@
 						<div class="account" th:if="${session.role == 'Admin'}" onclick="window.location.href = '/admin';">
 							<i class="icon-head"></i>
 						</div>
-						<div class="search">
-							<i class="icon-search"></i>
-						</div>
 						<div class="account">
 							<a th:if="${session.sUserId != null}" th:href="@{/member_info_form}"></a>
 							<!-- Thymeleaf 조건문을 사용하여 sUserId가 null인 경우 로그인 페이지로 이동 -->
