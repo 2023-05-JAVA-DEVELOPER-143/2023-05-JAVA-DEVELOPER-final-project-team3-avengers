@@ -162,7 +162,7 @@ public class OrderRestController {
 		String result = "";
 		try {
 			for (int i = 0; i < cartDtos.size(); i++) {
-				if (optionSetService.findById(cartDtos.get(i).getOptionSetId()).getData().get(0).getStock() > cartDtos
+				if (optionSetService.findById(cartDtos.get(i).getOptionSetId()).getData().get(0).getStock() >= cartDtos
 						.get(i).getQty()) {
 					result = "1";
 				} else {

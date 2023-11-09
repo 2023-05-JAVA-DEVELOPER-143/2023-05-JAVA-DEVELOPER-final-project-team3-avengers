@@ -117,7 +117,7 @@ public class OrderController {
 			session.setAttribute("orderMemberBasicDto", orderMemberBasicDto);
 			session.setAttribute("realTotalPrice", realTotalPrice);
 			session.setAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
-			return "orders/product_order_save_form";
+			return "orders/order_save_form";
 		} else { // 회원
 			MemberResponseDto memberResponseDto = memberService.getMemberBy(sUserId);
 			ResponseDto<?> responseDto = optionSetService.findById(cartDto.getOptionSetId());
@@ -144,7 +144,7 @@ public class OrderController {
 			session.setAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
 			session.setAttribute("realTotalPrice", realTotalPrice);
 			session.setAttribute("orderMemberBasicDto", orderMemberBasicDto);
-			return "orders/product_order_save_form";
+			return "orders/order_save_form";
 		}
 	}
 	
