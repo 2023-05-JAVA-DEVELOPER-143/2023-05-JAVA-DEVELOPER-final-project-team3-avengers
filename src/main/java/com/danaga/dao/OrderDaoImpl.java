@@ -128,6 +128,20 @@ public class OrderDaoImpl implements OrderDao {
 			throw new Exception("일치하는 이름이 없습니다.");
 		}
 	}
+	
+	// Email로 주문전체(특정사용자)
+
+	@Override
+	public List<Orders> findOrdersByMember_Email(String email) throws Exception {
+		if(email!=null) {
+			List<Orders> orders = orderRepository.findOrdersByMember_Email(email);
+			return orders;
+			
+		} else {
+			throw new Exception("일치하는 이메일이 없습니다.");
+		}
+	}
+	
 
 	// 주문 번호로 1개보기(주문상세리스트)
 	// 주문번호는 id+10000이므로 받을때 id-10000으로 받아야함 --컨트롤러에서!!

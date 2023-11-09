@@ -35,6 +35,8 @@ public interface OrderDao {
 	  
 	  List<Orders> findOrdersByMember_UserName(String userName)throws Exception;
 	  
+	  
+	  List<Orders> findOrdersByMember_Email(String email) throws Exception;
 	//  주문1개보기(주문상세리스트)
 	  
 	  Orders findById(Long id)throws Exception;

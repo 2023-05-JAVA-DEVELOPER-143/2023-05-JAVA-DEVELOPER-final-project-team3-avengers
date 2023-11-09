@@ -68,13 +68,15 @@ public class OrderController {
 		try {
 //		   String sUserId = "User1";
 			String loginUser = (String) session.getAttribute("sUserId");
+			System.out.println("@@@@@@@@@"+loginUser);
 			List<OrdersDto> orderDtoList = orderService.memberOrderList(loginUser);
 			// orderDtoList를 id 기준으로 오름차순 정렬
 			orderDtoList.sort(Comparator.comparing(OrdersDto::getId));
 			model.addAttribute("orderDtoList", orderDtoList);
-			Long id = memberService.findIdByUsername(loginUser);
-			Member member = memberRepository.findById(id).get();
+			System.out.println("%%%%%%%%%%%"+orderDtoList);
+			Member member = Member.toResponseEntity(memberService.getMemberBy(loginUser));
 			model.addAttribute("loginUser", member);
+			System.out.println("@@@@@@@@@"+member);
 			return "orders/order_member_list";
 		} catch (Exception e) {
 			e.printStackTrace();
