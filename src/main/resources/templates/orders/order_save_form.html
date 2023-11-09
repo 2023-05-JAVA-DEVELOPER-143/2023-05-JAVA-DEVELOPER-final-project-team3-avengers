@@ -36,7 +36,7 @@
 									<th style="width: 500px; white-space: nowrap; text-align: center; border: 1px solid #ccc;">상품
 										이름</th>
 									<th style="width: 500px; white-space: nowrap; text-align: center; border: 1px solid #ccc;">수량</th>
-									<th style="width: 500px; white-space: nowrap; text-align: center; border: 1px solid #ccc;">가격</th>
+									<th style="width: 500px; white-space: nowrap; text-align: center; border: 1px solid #ccc;">결제금액</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -47,7 +47,7 @@
 									<td style="width: 500px; white-space: nowrap; text-align: center; border: 1px solid #ccc; border-radius: 10px; background-color: #f5f5f5"
 										th:text="${item.qty}">2023.10.15</td>
 									<td style="width: 500px; white-space: nowrap; text-align: center; border: 1px solid #ccc; border-radius: 10px; background-color: #f5f5f5">
-										<span class="price" th:text="|${#numbers.formatInteger(item.totalPrice, 0, 'COMMA')}원|"></span> 
+										<span class="price" th:text="|${#numbers.formatInteger(item.totalPrice * item.qty, 0, 'COMMA')}원|"></span> 
 									</td>
 								</tr>
 								<tr>
