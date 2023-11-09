@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.danaga.dto.ResponseDto;
 import com.danaga.dto.product.ProductDto;
 import com.danaga.dto.product.QueryStringDataDto;
+import com.danaga.entity.Category;
 import com.danaga.entity.OptionSet;
 import com.danaga.entity.Product;
 import com.danaga.entity.Statistic;
 import com.danaga.repository.BoardRepository;
 import com.danaga.repository.OrderRepository;
+import com.danaga.repository.product.CategoryRepository;
 import com.danaga.repository.product.OptionSetQueryData;
 import com.danaga.repository.product.OptionSetRepository;
 import com.danaga.repository.product.ProductRepository;
@@ -36,6 +38,7 @@ public class StatisticController {
 	private final OptionSetRepository optionSetRepository;
 	private final OptionSetService optionSetService;
 	private final ProductRepository productRepository;
+	private final CategoryRepository categoryRepository;
 	
 	//@AdminCheck
 	@GetMapping
@@ -78,6 +81,34 @@ public class StatisticController {
 		model.addAttribute("productList",productList);
 		return "admin/admin_product_list";
 	}
+	@GetMapping("/admin_category_insert")
+	public String adminCategoryInsert(Model model) {
+		List<Category> computerList = categoryRepository.findChildTypesByParent_Id(1L);
+		List<Category> laptopList = categoryRepository.findChildTypesByParent_Id(2L);
+		model.addAttribute("computerList", computerList);
+		model.addAttribute("laptopList", laptopList);
+		return "admin/admin_category_insert";
+	}
+	@GetMapping("/admin_product_only_insert")
+	public String adminProductOnlyInsert(Model model) {
+		List<Category> computerList = categoryRepository.findChildTypesByParent_Id(1L);
+		List<Category> laptopList = categoryRepository.findChildTypesByParent_Id(2L);
+		model.addAttribute("computerList", computerList);
+		model.addAttribute("laptopList", laptopList);
+		return "admin/admin_product_only_insert";
+	}
+	@GetMapping("/admin_optionset_insert")
+	public String adminOptionSetInsert(Model model) {
+		List<Product> productList = productRepository.findAll();
+		model.addAttribute("productList", productList);
+		return "admin/admin_optionset_insert";
+	}
+	@GetMapping("/admin_optionset_list")
+	public String adminOptionSetList(Model model) {
+		List<OptionSet> productList = optionSetRepository.findAll();
+		model.addAttribute("productList",productList);
+		return "admin/admin_optionset_list";
+	}
 	@GetMapping("/admin_order_list")
 	public String adminOrderList(Model model) {
 		model.addAttribute("orderList", statisticService.orderList());
@@ -88,7 +119,6 @@ public class StatisticController {
 		model.addAttribute("orderList", statisticService.refundList());
 		return "admin/admin_refund_list";
 	}
-	@Operation(summary = "admin : 회원리스트 출력")
 	@GetMapping("/admin_member_list")
 	public String adminMemberList(Model model) {
 		model.addAttribute("memberList", statisticService.memberList());
