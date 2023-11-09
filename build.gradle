@@ -80,23 +80,3 @@ implementation 'mysql:mysql-connector-java:8.0.28'
 tasks.named('test') {
 	useJUnitPlatform()
 }
-task('release'){
-dependsOn("build")
-
-doLast{
-def stdout = new ByteArrayOutputStream()
-def ebcommand = '/Users/USER/AppData/Roaming/Python/Python311/Scripts/eb'
-def environment = 'avengers-dev'
-exec{
-commandLine ebcommand,'setenv','SPRING_PROFILES_ACTIVE=prod' environment
-standardOutput=stdout
-}
-println "eb setenv SPRING_PROFILES_ACTIVE=prod :\n$stdout";
-exec{
-commandLine ebcommand,'deploy' environment
-standardOutput = stdout
-}
-println "eb deploy:\n$stdout";
-println "Release succeeded."
-}
-}
