@@ -41,10 +41,17 @@
 		</li>
 
 		<li class="nav-item">
-			<a class="nav-link" href="/admin/admin_order_list">
-				<i class="fas fa-fw fa-folder"></i>
+			<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOrders"
+				aria-expanded="true" aria-controls="collapseOrders">
+				<i class="fas fa-fw fa-cog"></i>
 				<span>주문관리</span>
 			</a>
+			<div id="collapseOrders" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+				<div class="bg-white py-2 collapse-inner rounded">
+					<a class="collapse-item" href="/admin/admin_order_list">배송 관리</a>
+					<a class="collapse-item" href="/admin/admin_refund_list">환불/취소 관리</a>
+				</div>
+			</div>
 		</li>
 
 		<!-- Divider -->
@@ -62,12 +69,22 @@
 				<span>회원 리스트</span>
 			</a>
 		</li>
+		
 
 		<!-- Nav Item - Tables -->
 		<li class="nav-item">
-			<a class="nav-link" href="/admin/admin_board_list">
-				<i class="fas fa-fw fa-table"></i>
-				<span>게시글 리스트</span></a>
+			<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBoard"
+				aria-expanded="true" aria-controls="collapseBoard">
+				<i class="fas fa-fw fa-cog"></i>
+				<span>게시글 관리</span>
+			</a>
+			<div id="collapseBoard" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+				<div class="bg-white py-2 collapse-inner rounded">
+					<a class="collapse-item" href="/admin/admin_board_list">자유게시판</a>
+					<a class="collapse-item" href="/admin/admin_1to1_list">1:1문의</a>
+					<a class="collapse-item" href="/admin/admin_board_upload">공지사항/FAQ 업로드</a>
+				</div>
+			</div>
 		</li>
 
 		<!-- Divider -->

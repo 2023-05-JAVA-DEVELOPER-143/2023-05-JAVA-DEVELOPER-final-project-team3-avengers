@@ -6,6 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.danaga.dto.AdminOrderDataDto;
 import com.danaga.dto.AdminProductInsertDto;
+import com.danaga.entity.Board;
+import com.danaga.entity.Member;
+import com.danaga.entity.Orders;
 import com.danaga.entity.Statistic;
 
 @Transactional
@@ -48,6 +51,18 @@ public interface StatisticService {
 	/****************** InsertProduct ***************/
 	//신규 제품 추가
 	void createProduct(AdminProductInsertDto dto);
+	
+	/****************** order / member / board custom List ***************/
+	//배송관리
+	List<Orders> orderList();
+	//환불관리
+	List<Orders> refundList();
+	//Role = Member 리스트
+	List<Member> memberList();
+	// 자유게시판
+	List<Board> boardList();
+	List<Board> oneToOneList();
+	
 	
 
 
