@@ -172,9 +172,10 @@ button.btn:hover {
 			if (orderStatus === '배송완료') {
 		        let form = document.createElement('form');
 		        form.method = 'GET';
-		        form.action = '/refund_main_form/' + orderId;
+		        form.action = '/refund_main_form' + orderId;
 		        document.body.appendChild(form);
 		        form.submit();
+		        console.log('form submit됌');
 		    } else {
 		        alert('주문상태가 배송완료 상태일때만 환불가능합니다.');
 		    }
