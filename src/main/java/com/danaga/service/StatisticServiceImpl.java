@@ -15,8 +15,10 @@ import com.danaga.dto.AdminOptionDto;
 import com.danaga.dto.AdminOrderDataDto;
 import com.danaga.dto.AdminProductDto;
 import com.danaga.dto.AdminProductInsertDto;
+import com.danaga.dto.AdminProductOnlyDto;
 import com.danaga.dto.product.CategoryDto;
 import com.danaga.dto.product.OptionSetCreateDto;
+import com.danaga.dto.product.ProductSaveDto;
 import com.danaga.entity.Board;
 import com.danaga.entity.Category;
 import com.danaga.entity.CategorySet;
@@ -205,6 +207,19 @@ public class StatisticServiceImpl implements StatisticService {
 					.extraPrice(option.getExtraPrice()).optionSet(optionSet).build());
 		}
 	}
+	// 신규방식 Product Only 추가
+		@Override
+		public void createProductOnly(AdminProductOnlyDto dto) {
+			List<CategoryDto> categoryDto = dto.getCategoryDto();
+			ProductSaveDto productDto = dto.getProductSaveDto();
+			// Product 추가
+			Product product = productRepository.save(productDto.toEntity());
+			// Category & CategorySet 추가
+			for (CategoryDto category : categoryDto) {
+				Category foundCategory = categoryRepository.findById(category.getId()).get();
+				categorySetRepository.save(CategorySet.builder().category(foundCategory).product(product).build());
+			}
+		}
 
 	// orderList 출력 (탈퇴회원 구분)
 	@Override
