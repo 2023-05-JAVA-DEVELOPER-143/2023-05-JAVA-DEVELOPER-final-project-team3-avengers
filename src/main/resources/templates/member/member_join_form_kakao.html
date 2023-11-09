@@ -37,10 +37,6 @@
               </div>
               <div class="col-sm-6">
 				<div class="form-group" id="mail_number" name="mail_number" style="display: none">
-				  <label for="mail_number">인증번호</label>
-				  <input class="form-control" type="text" name="number" id="number" placeholder="인증번호 입력" required>
-				  <button class="btn-account-register btn btn-primary margin-bottom-none"
-				     type="button" name="confirmBtn" id="confirmBtn" onclick="confirmNumber()">인증번호 확인</button>
 				</div>
               </div>
               <div class="col-sm-6">
@@ -101,6 +97,10 @@
     <th:block layout:fragment="script" >
      <script type="text/javascript">
 		  /**************** 회원가입 **********************/
+function isNoValidUserName(userName) {
+    const userNameRegex = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+    return userNameRegex.test(userName);
+}
 function isNoValidPassword(password) {
     // 비밀번호 길이가 8에서 20 사이여야 함
     // 최소한 하나의 문자, 하나의 숫자, 그리고 하나의 특수 문자가 포함되어야 함
@@ -120,7 +120,14 @@ let member_join_action_rest=function(data){
 				dataType:'json',
 				contentType: 'application/json;charset=UTF-8',
 				success:function(resultJson){
-					if(resultJson.result==4) {
+					if(resultJson.result==1){
+						$('#reg-username').css('border','0.5px solid orange');
+						$('#reg-username').tooltip({'trigger':'hover', 'title': resultJson.msg});
+			    		$('#reg-username').tooltip('show');
+			    		setTimeout(function () {
+					    $('#reg-username').tooltip('dispose');
+					    }, 2000);
+					}else if(resultJson.result==2) {
 						$('#reg-nickname').css('border','0.5px solid orange');
 						$('#reg-nickname').tooltip({'trigger':'hover', 'title': resultJson.msg});
 			    		$('#reg-nickname').tooltip('show');
@@ -132,7 +139,7 @@ let member_join_action_rest=function(data){
 		   			}
 				},
 				error:function(){
-					alert("회원가입 실패 다시 시도해 주십시요.");
+					alert("카카오 통합 실패 다시 시도해 주십시요.");
 				}
 			});
 		}
@@ -140,6 +147,18 @@ let member_join_action_rest=function(data){
 $(function(){
     		/**************회원가입폼 유효성체크*********************/
     		$('#join-action-btn').attr('disabled', 'disabled');
+    		//아이디
+    		$('#reg-username').on('change',function(e){
+				if(($('#reg-username').val().length < 8 || $('#reg-username').val().length > 20) || isNoValidUserName($('#reg-username').val())){
+        			$('#reg-username').css('border','0.5px dotted orange');
+        			$('#reg-username').tooltip({'trigger':'hover', 'title':'아이디는 한글 미포함 8 ~ 20자 이내여야 합니다'});
+        			$('#reg-username').tooltip('show');
+        		} else {
+        			$('#reg-username').css('border','0.5px solid green');
+        			$('#reg-username').tooltip('hide');
+        			$('#reg-username').tooltip('dispose');
+        		}
+        	});
         	//닉네임
     		$('#reg-nickname').on('change',function(e){
 				if($('#reg-nickname').val().length < 1 || $('#reg-nickname').val().length > 10){
@@ -291,17 +310,6 @@ function execDaumPostcode() {
     }
 //
 
-function getCurrentDate() {
-	let currentDate = new Date();
-	let year = currentDate.getFullYear();
-	let month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-	let day = currentDate.getDate().toString().padStart(2, '0');
-	return year + '-' + month + '-' + day;
-}
-$(document).ready(function(){
-	let birthday = $('#reg-birthday');
-	birthday.attr('max', getCurrentDate());
-});
 $(document).ready(function() {
   $('#show-password').change(function() {
     let passwordInput = $('#reg-pass');

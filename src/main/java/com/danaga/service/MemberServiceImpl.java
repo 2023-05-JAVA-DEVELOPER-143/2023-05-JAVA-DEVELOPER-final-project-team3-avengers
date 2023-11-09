@@ -84,11 +84,17 @@ public class MemberServiceImpl implements MemberService {
 		Member originalMember = memberRepository.findById(memberUpdateDto.getId()).get();
 		Member member = Member.builder()
 				.id(memberUpdateDto.getId())
+				.userName(originalMember.getUserName())
 				.password(memberUpdateDto.getPassword())
 				.nickname(memberUpdateDto.getNickname())
+				.role(originalMember.getRole())
 				.postCode(memberUpdateDto.getPostCode())
 				.address(memberUpdateDto.getAddress())
-				.detailAddress(memberUpdateDto.getDetailAddress()).build();
+				.detailAddress(memberUpdateDto.getDetailAddress())
+				.grade(originalMember.getGrade())
+				.gradePoint(originalMember.getGradePoint())
+				.build();
+				
 		if (originalMember.getNickname().equals(member.getNickname())) {
 			
 		} else if(memberRepository.findByNickname(member.getNickname()).isPresent()) {
@@ -102,6 +108,7 @@ public class MemberServiceImpl implements MemberService {
 		Member originalMember = memberRepository.findById(kakaoMemberUpdateDto.getId()).get();
 		Member member = Member.builder()
 				.id(kakaoMemberUpdateDto.getId())
+				.userName(kakaoMemberUpdateDto.getUserName())
 				.password(kakaoMemberUpdateDto.getPassword())
 				.nickname(kakaoMemberUpdateDto.getNickname())
 				.postCode(kakaoMemberUpdateDto.getPostCode())

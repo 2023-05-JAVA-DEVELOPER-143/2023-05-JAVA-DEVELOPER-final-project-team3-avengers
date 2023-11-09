@@ -16,6 +16,7 @@ import lombok.ToString;
 @ToString
 public class KakaoMemberUpdateDto {
 	private Long id;
+	private String userName;
 	private String password;
 	private String nickname;
 	private String postCode;
@@ -26,6 +27,7 @@ public class KakaoMemberUpdateDto {
 	public static KakaoMemberUpdateDto toDto(Member entity) {
     	return KakaoMemberUpdateDto.builder()
     			.id(entity.getId())
+    			.userName(entity.getUserName())
     			.password(entity.getPassword())
     			.nickname(entity.getNickname())
     			.postCode(entity.getPostCode())
