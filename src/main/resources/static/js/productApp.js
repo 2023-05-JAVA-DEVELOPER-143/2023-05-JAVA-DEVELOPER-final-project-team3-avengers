@@ -2,7 +2,6 @@ import * as api from "./p_apiService.js"
 
 let hash = window.location.hash
 let path = hash.substring(1);
-let html = '';
 let firstResult = 0;
 let filterDto = {};
 filterDto["orderType"] = "판매순";
@@ -16,7 +15,10 @@ export function init() {
 }
 
 function registEvent() {
-
+ 	$('#otherOptions').change(function() {
+            var selectedValue = $(this).val();
+            window.location.href = "http://localhost/product" + selectedValue; // 여기에 이동하고 싶은 URL을 넣으세요
+        });
 	$('#otherOptions option').each(function() {
 		let $this = $(this);
 		$this.attr('title', $this.data('tooltip'));

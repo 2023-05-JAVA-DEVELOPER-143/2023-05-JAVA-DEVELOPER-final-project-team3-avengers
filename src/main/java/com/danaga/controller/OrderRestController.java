@@ -141,7 +141,6 @@ public class OrderRestController {
 
 	@PostMapping("/check_Stock")
 	public ResponseEntity<?> orderNoStock(@RequestBody CartDto cartDto) {
-		
 		try {
 			String result = "1";
 			System.out.println(cartDto);
@@ -149,10 +148,31 @@ public class OrderRestController {
 				throw new Exception("주문한수량보다 재고가 없습니다.");
 			}
 			return ResponseEntity.ok().body(result);
-			
-		}catch (Exception e) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
+	}
+
+	@PostMapping("/cart_check_Stock")
+	public ResponseEntity<String> cartOrderNoStock(
+			@org.springframework.web.bind.annotation.RequestBody List<CartDto> cartDtos) {
+		System.out.println("order 체크전 >>>>>>" + cartDtos.size());
+		String result = "";
+		try {
+			for (int i = 0; i < cartDtos.size(); i++) {
+				if (optionSetService.findById(cartDtos.get(i).getOptionSetId()).getData().get(0).getStock() > cartDtos
+						.get(i).getQty()) {
+					result = "1";
+				} else {
+					throw new Exception("주문한수량보다 재고가 없습니다.");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.OK).body(e.getMessage());
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 }
