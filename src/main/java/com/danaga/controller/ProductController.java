@@ -53,6 +53,7 @@ public class ProductController {
 		ResponseDto<CategoryDto> categoryResponseDto = categoryService.AncestorCategories();
 		List<CategoryDto> categoryList = categoryResponseDto.getData();
 		if (session.getAttribute("sUserId") != null) {
+			
 			ResponseDto<ProductListOutputDto> responseDto = service.searchProductsForMember(// 주문수로 전체상품 정렬하여 조회
 					QueryStringDataDto.builder().orderType(OptionSetQueryData.BY_ORDER_COUNT).build(),
 					(String) session.getAttribute("sUserId"), 0);

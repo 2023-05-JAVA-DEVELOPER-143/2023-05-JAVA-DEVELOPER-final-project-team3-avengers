@@ -56,7 +56,12 @@ public class OptionSetDaoImpl implements OptionSetDao{
 	}
 	@Override
 	public List<ProductListOutputDto> findForMemberByFilter(QueryStringDataDto dataDto, String username,Integer firstResult ) throws FoundNoMemberException{
-		 Member member = memberRepository.findByUserName(username).orElseThrow(FoundNoMemberException::new);
+		Member member = null;
+			if(username.contains("@")) {
+				member =memberRepository.findByEmail(username).orElseThrow(FoundNoMemberException::new);
+			}else { 
+			member = memberRepository.findByUserName(username).orElseThrow(FoundNoMemberException::new);
+			}
 		    String mainJpql = new OptionSetSearchQuery(dataDto).build();
 		    TypedQuery<OptionSet> query = em.createQuery(mainJpql, OptionSet.class);
 		    query.setFirstResult(firstResult);
