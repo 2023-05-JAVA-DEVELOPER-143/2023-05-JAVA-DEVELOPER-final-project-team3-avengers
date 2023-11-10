@@ -82,6 +82,7 @@ public class CartRestController {
 		fUserCarts = (List<CartDto>) session.getAttribute("fUserCarts");
 		Integer returnNo = NOT_CART_QTY_MAX;
 		// 1번 경우 = 회원 + 세션 장바구니 비어있음
+		
 		if (sUserId != null && fUserCarts == null) {
 			int qty = cartService.isDuplicateProduct(sUserId, dto.getOptionSetId());
 			// 장바구니에 담을 수량 제한
