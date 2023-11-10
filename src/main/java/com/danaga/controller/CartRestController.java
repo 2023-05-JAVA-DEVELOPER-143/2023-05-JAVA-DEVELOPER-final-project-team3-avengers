@@ -96,7 +96,7 @@ public class CartRestController {
 			int qty = cartService.isDuplicateProduct(sUserId, dto.getOptionSetId());
 			if (qty + dto.getQty() > 5) {
 				returnNo = CART_QTY_MAX;
-				message = "장바구니에는 5개까지 담을 수 있습니다. \n     장바구니로 이동하시겠습니까?";
+				message = "장바구니에는 5개까지 담을 수 있습니다. \n 장바구니로 이동하시겠습니까?";
 				dto.setQty(5 - qty);
 				cartService.addCart(dto, sUserId);
 			} else {
