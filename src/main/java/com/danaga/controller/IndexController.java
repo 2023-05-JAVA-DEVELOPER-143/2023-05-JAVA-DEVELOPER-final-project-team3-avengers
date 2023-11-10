@@ -64,8 +64,4 @@ public class IndexController {
 		}
 	};
 	
-	@RequestMapping("/")
-	public String home() {
-		return "home";
-	}
 }

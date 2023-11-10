@@ -5,7 +5,7 @@
     <thead>
       <tr>
         <th>Product Name</th>
-        <th class="text-center"><a class="btn btn-sm btn-outline-danger" th:href="@{|http://localhost/${from}_delete|}">전체 삭제</a></th>
+        <th class="text-center"><a class="btn btn-sm btn-outline-danger" th:href="@{|/${from}_delete|}">전체 삭제</a></th>
       </tr>
     </thead>
     <tbody>
@@ -13,19 +13,19 @@
     <tr style="text-align: center;">
     <td style="display: inline-block;">
 		<img src="images/out-of-stock.png" style="display: block; margin: 0 auto;">
-		<h1 style="text-align: center;"><a href="http://localhost/product">Go to Shopping</a></h1>
+		<h1 style="text-align: center;"><a href="/product">Go to Shopping</a></h1>
 		</td></tr>
     </th:block>
     <th:block th:unless="${productList==null||productList.isEmpty()}">
       <tr th:each="productDto:${productList}">
         <td>
           <div class="product-item">
-            <a class="product-thumb" href="shop-single.html" th:href="@{http://localhost/product__${productDto.osId}__}">
+            <a class="product-thumb" href="shop-single.html" th:href="@{/product__${productDto.osId}__}">
               <img src="img/shop/product/01.jpg" th:src="${productDto.pImage}" alt="Product">
             </a>
             <div class="product-info">
               <h4 class="product-title" th:text="${productDto.name}">
-                <a href="shop-single.html" th:href="@{http://localhost/product__${productDto.osId}__}">Unionbay Park</a></h4>
+                <a href="shop-single.html" th:href="@{/product__${productDto.osId}__}">Unionbay Park</a></h4>
               <div class="text-lg text-medium text-muted" th:text="${#numbers.formatInteger(productDto.totalPrice, 3, 'COMMA')}+'원'">$43.90</div>
             </div>
           </div>

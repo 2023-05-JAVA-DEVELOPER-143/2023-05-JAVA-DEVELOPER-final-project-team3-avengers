@@ -23,9 +23,9 @@ function call(api, method, request) {
 			return response.json();
 		} else if (response.status === 401) {
 			alert('로그인이 필요한 서비스입니다.');
-			window.location.href = "http://localhost/member_login_form";// redirect
+			window.location.href = "/member_login_form";// redirect
 		} else if (response.stataus === 404) {
-			window.location.href = "http://localhost/404.html";
+			window.location.href = "/404.html";
 		} else if (response.msg == 'WRONG_PARAMETER') {
 			alert('잘못된 요청입니다. 입력값을 확인해주세요.');
 		} else {
@@ -149,7 +149,7 @@ export function addToCart(optionSetId, qty) {
 						} else if (addResponse.no == 2200) {
 							console.log('ssssssssssssssssssssssssssss')
 							if (window.confirm(addResponse.message)) {
-								location.href = "http://localhost/cart_list";
+								location.href = "/cart_list";
 							} else {
 								location.reload();
 							}
@@ -166,14 +166,14 @@ export function addToCart(optionSetId, qty) {
 						success: function(addResponse) {
 							if (addResponse.no == 2100) {
 								if (window.confirm(addResponse.message)) {
-									location.href = "http://localhost/cart_list";
+									location.href = "/cart_list";
 								} else {
 									location.reload();
 								}
 
 							} else if (addResponse.no == 2200) {
 								if (window.confirm(addResponse.message)) {
-									location.href = "http://localhost/cart_list";
+									location.href = "/cart_list";
 								} else {
 									location.reload();
 								}

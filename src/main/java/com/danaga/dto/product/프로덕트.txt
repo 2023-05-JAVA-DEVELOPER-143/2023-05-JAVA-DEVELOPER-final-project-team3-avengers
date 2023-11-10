@@ -7,3 +7,7 @@ HTTPS, SSL/TLS, OAuth 등의 보안 프로토콜 및 보안 취약점에 대한 
 배포, 쿼리dsl
 
 프로덕트 업로드
+
+product description image가 없을때 보여줄 사진 수정 
+
+모든 템플릿, 클릭 이벤트시 요청 href localhost삭제하기

@@ -17,7 +17,7 @@ export function init() {
 function registEvent() {
  	$('#otherOptions').change(function() {
             var selectedValue = $(this).val();
-            window.location.href = "http://localhost/product" + selectedValue; // 여기에 이동하고 싶은 URL을 넣으세요
+            window.location.href = "/product" + selectedValue; 
         });
 	$('#otherOptions option').each(function() {
 		let $this = $(this);
@@ -98,7 +98,7 @@ function registEvent() {
 			});
 		} else if ($(e.target).attr('data-optionValue')) {
 			let optionName = $(e.target).closest('tr').find('th').text();
-			let optionValue = $(e.target).attr('data-optionValue');
+			let optionValue = $(e.target).val();
 			let checked = $(e.target).is(":checked");
 			console.log(optionName, optionValue, checked);
 			updateQueryDataDto(optionName, optionValue, checked);

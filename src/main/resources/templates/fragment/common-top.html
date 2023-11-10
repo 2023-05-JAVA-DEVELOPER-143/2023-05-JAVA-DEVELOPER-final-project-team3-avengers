@@ -32,8 +32,8 @@
 				<ul>
 					<li th:classappend="${title == ''} ? 'has-megamenu active' : 'has-megamenu'" class="has-megamenu"><a href="index"><span>메인</span></a>
 					</li>
-					<li th:classappend="${title == 'Product'} ? 'has-megamenu active' : 'has-megamenu'" class="has-megamenu"><a href="http://localhost/product"><span>제품</span></a></li>
-					<li th:classappend="${title == '장바구니'} ? 'has-megamenu active' : 'has-megamenu'" class="has-megamenu"><a href="http://localhost/cart_list"><span>장바구니</span></a></li>
+					<li th:classappend="${title == 'Product'} ? 'has-megamenu active' : 'has-megamenu'" class="has-megamenu"><a href="/product"><span>제품</span></a></li>
+					<li th:classappend="${title == '장바구니'} ? 'has-megamenu active' : 'has-megamenu'" class="has-megamenu"><a href="/cart_list"><span>장바구니</span></a></li>
 					<li th:classappend="${title == '자유게시판' || title == '1:1문의'} ? 'has-children active' : 'has-children'" class="has-children"><a href="/board1"><span>게시판</span></a>
 						<ul class="sub-menu">
 							<li th:classappend="${title == '자유게시판'} ? 'has-megamenu active' : 'has-megamenu'" class="has-megamenu"><a href="/board1">자유게시판</a></li>

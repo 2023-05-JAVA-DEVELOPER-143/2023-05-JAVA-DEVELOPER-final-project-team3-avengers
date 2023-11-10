@@ -120,10 +120,10 @@
 				<!-- Product-->
 				<div class="grid-item" th:each="productDto:${hits}">
 					<div class="product-card">
-						<a class="product-thumb" href="product-detail.html" th:href="@{'http://localhost/product'+${productDto.osId}}"><img
+						<a class="product-thumb" href="product-detail.html" th:href="@{'/product'+${productDto.osId}}"><img
 								src="img/shop/products/09.jpg" alt="Product"
 								th:attr="src=@{${productDto.pImage}}"></a>
-						<h3 class="product-title" th:text="${productDto.name}"><a th:href="@{'http://localhost/product'+${productDto.osId}}">상품명</a></h3>
+						<h3 class="product-title" th:text="${productDto.name}"><a th:href="@{'/product'+${productDto.osId}}">상품명</a></h3>
 						<h4 class="product-price" th:text="${productDto.totalPriceString}+'원'">$34.99</h4>
 						<div class="product-buttons">
 							<button th:if="${productDto.isInterested}"
