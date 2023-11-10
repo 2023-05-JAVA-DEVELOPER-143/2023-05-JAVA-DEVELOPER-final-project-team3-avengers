@@ -1,13 +1,16 @@
 package com.danaga.service;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import com.danaga.dao.OrderDao;
 import com.danaga.dto.MemberResponseDto;
 import com.danaga.dto.MemberUpdateDto;
 import com.danaga.entity.Member;
+import com.danaga.entity.Orders;
 import com.danaga.generator.RandomStringGenerator;
 
 import jakarta.mail.MessagingException;
@@ -24,6 +27,7 @@ public class MailService {
     //private static final String senderEmail= "danaga@gmail.com";
     private static int number;
     private static String randomString;
+    private final OrderDao orderDao;
 
     public static void createNumber(){
        number = (int)(Math.random() * (90000)) + 100000;// (int) Math.random() * (최댓값-최소값+1) + 최소값
@@ -49,6 +53,24 @@ public class MailService {
             e.printStackTrace();
         }
         return message;
+    }
+    public MimeMessage orderCreateMail(String mail)throws Exception{
+    	MimeMessage message = javaMailSender.createMimeMessage();
+    	List<Orders> orderList= orderDao.findOrdersByMember_Email(mail);
+    	String orderId= Long.toString(orderList.get(orderList.size()-1).getId());
+    	try {
+    		//message.setFrom(new InternetAddress(senderEmail));
+    		message.setRecipients(MimeMessage.RecipientType.TO, mail);
+    		message.setSubject("다나가 이메일 인증");
+    		String body = "";
+    		body += "<h3>" + "주문하신 번호는" + "</h3>";
+    		body += "<h1>" + orderId + "</h1>";
+    		body += "<h3>" + "입니다 감사합니다." + "</h3>";
+    		message.setText(body,"UTF-8", "html");
+    	} catch (MessagingException e) {
+    		e.printStackTrace();
+    	}
+    	return message;
     }
     public int joinSendMail(String mail){
 
@@ -115,5 +137,14 @@ public class MailService {
     	javaMailSender.send(message);
     	
     	return memberService.getMemberBy(mail).getUserName();
+    }
+    public String findOrderIdSendMail(String mail) throws Exception{
+    	
+    	MimeMessage message = orderCreateMail(mail);
+    	
+    	javaMailSender.send(message);
+    	List<Orders> orderList= orderDao.findOrdersByMember_Email(mail);
+    	String orderId= Long.toString(orderList.get(orderList.size()-1).getId());
+    	return orderId;
     }
 }

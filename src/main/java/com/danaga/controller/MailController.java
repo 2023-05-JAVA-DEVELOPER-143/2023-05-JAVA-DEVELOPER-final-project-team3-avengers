@@ -53,5 +53,15 @@ public class MailController {
     	map.put("sendId", id);
     	return map;
     }
+    @ResponseBody
+    @PostMapping("/sendOrderIdemailauthentication")
+    public Map sendOrderIdMailSend(String mail) throws Exception{
+    	
+    	String id = null;
+    	id = mailService.findOrderIdSendMail(mail);
+    	HashMap map=new HashMap<>();
+    	map.put("orderId", id);
+    	return map;
+    }
 
 }

@@ -86,6 +86,18 @@
 								</div>
 							</div>
 						</div>
+						<div class="custom-section">
+							<div id="ordererErrorEmail" class="error-message"></div>
+							<div class="col-sm-8">
+								<div class="form-group" style="display: flex; align-items: center;">
+									<label for="checkout-ordererEmail"
+										style="flex: 1; text-align: right; margin-right: 1rem; pointer-events: none;">주문자이메일</label>
+									<input class="form-control" type="text" id="ordererEmail" name="ordererEmail"
+										style="flex: 2; width: 80%;" value="aaa@naver.com"
+										th:value="${orderMemberBasicDto.email}">
+								</div>
+							</div>
+						</div>
 
 						<div class="custom-section">
 							<div id="receiverNameError" class="error-message"></div>
@@ -244,6 +256,7 @@
 				var form = document.getElementById('orderAction'); // Form element
 				var ordererName = document.getElementById('ordererName').value;
 				var ordererPhoneNo = document.getElementById('ordererPhoneNo').value;
+				var ordererEmail = document.getElementById('ordererEmail').value;
 				var receiverName = document.getElementById('receiverName').value;
 				var receiverPhoneNo = document.getElementById('receiverPhoneNo').value;
 				var receiverPostCode = document.getElementById('receiverPostCode').value;

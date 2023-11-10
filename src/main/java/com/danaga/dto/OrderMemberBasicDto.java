@@ -15,4 +15,5 @@ import lombok.ToString;
 public class OrderMemberBasicDto {
 	private String userName;
 	private String phoneNo;
+	private String email;
 }

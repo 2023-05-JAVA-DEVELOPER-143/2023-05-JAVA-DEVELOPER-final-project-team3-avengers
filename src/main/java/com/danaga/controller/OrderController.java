@@ -110,7 +110,7 @@ public class OrderController {
 				realTotalPrice += sUserCartOrderDtoList.get(i).getTotalPrice() * sUserCartOrderDtoList.get(i).getQty();
 				System.out.println(realTotalPrice);
 			}
-			OrderMemberBasicDto orderMemberBasicDto = new OrderMemberBasicDto("", "ex) 010-1111-1111");
+			OrderMemberBasicDto orderMemberBasicDto = new OrderMemberBasicDto("", "ex) 010-1111-1111","");
 			model.addAttribute("orderMemberBasicDto", orderMemberBasicDto);
 			model.addAttribute("realTotalPrice", realTotalPrice);
 			model.addAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
@@ -137,7 +137,7 @@ public class OrderController {
 				System.out.println(realTotalPrice);
 			}
 			OrderMemberBasicDto orderMemberBasicDto = new OrderMemberBasicDto(memberResponseDto.getName(),
-					memberResponseDto.getPhoneNo());
+					memberResponseDto.getPhoneNo(),memberResponseDto.getEmail());
 			model.addAttribute("orderMemberBasicDto", orderMemberBasicDto);
 			model.addAttribute("realTotalPrice", realTotalPrice);
 			model.addAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
@@ -191,10 +191,10 @@ public class OrderController {
 				OrderGuestDto orderGuestDto = new OrderGuestDto();
 				orderGuestDto.setName(orderTotalDto.getOrdererName());
 				orderGuestDto.setPhoneNo(orderTotalDto.getOrdererPhoneNo());
+				orderGuestDto.setEmail(orderTotalDto.getOrdererEmail());
 
 				OrdersDto ordersDto = orderService.guestCartSelectOrderSave(deliveryDto, fUserCarts, orderGuestDto);
 
-				model.addAttribute("orderId", ordersDto.getId());
 				List<CartDto> cartDtos = (List<CartDto>) session.getAttribute("fUserCarts");
 				if(cartDtos!=null) {
 					for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
@@ -221,8 +221,11 @@ public class OrderController {
 				session.setAttribute("countCarts", countCarts);
 				OrderMemberBasicDto orderMemberBasicDto = (OrderMemberBasicDto) session
 						.getAttribute("orderMemberBasicDto");
+				model.addAttribute("orderId", ordersDto.getId());
+				model.addAttribute("email",orderMemberBasicDto.getEmail());
 				orderMemberBasicDto.setUserName("");
 				orderMemberBasicDto.setPhoneNo("");
+				orderMemberBasicDto.setEmail("");
 				session.setAttribute("orderMemberBasicDto", orderMemberBasicDto);
 				return "orders/order_complete";
 			} catch (Exception e) {
@@ -264,10 +267,11 @@ public class OrderController {
 				session.setAttribute("countCarts", cartService.countCarts(sUserId));
 				OrderMemberBasicDto orderMemberBasicDto = (OrderMemberBasicDto) session
 						.getAttribute("orderMemberBasicDto");
+				model.addAttribute("orderId", ordersDto.getId());
 				orderMemberBasicDto.setUserName("");
 				orderMemberBasicDto.setPhoneNo("");
+				orderMemberBasicDto.setEmail("");
 				session.setAttribute("orderMemberBasicDto", orderMemberBasicDto);
-				model.addAttribute("orderId", ordersDto.getId());
 				return "orders/order_complete";
 			} catch (Exception e) {
 				model.addAttribute("msg", e.getMessage());
@@ -300,7 +304,7 @@ public class OrderController {
 				System.out.println(realTotalPrice);
 			}
 			OrderMemberBasicDto orderMemberBasicDto = new OrderMemberBasicDto(memberResponseDto.getName(),
-					memberResponseDto.getPhoneNo());
+					memberResponseDto.getPhoneNo(),memberResponseDto.getEmail());
 			System.out.println("333333333" + realTotalPrice);
 			model.addAttribute("orderMemberBasicDto", orderMemberBasicDto);
 			model.addAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
@@ -316,7 +320,7 @@ public class OrderController {
 				System.out.println(realTotalPrice);
 			}
 
-			OrderMemberBasicDto orderMemberBasicDto = new OrderMemberBasicDto("", "ex) 010-1111-1111");
+			OrderMemberBasicDto orderMemberBasicDto = new OrderMemberBasicDto("", "ex) 010-1111-1111","");
 			model.addAttribute("orderMemberBasicDto", orderMemberBasicDto);
 			model.addAttribute("sUserCartOrderDto", sUserCartOrderDtoList);
 			model.addAttribute("realTotalPrice", realTotalPrice);
@@ -374,11 +378,13 @@ public class OrderController {
 				OrderGuestDto orderGuestDto = new OrderGuestDto();
 				orderGuestDto.setName(orderTotalDto.getOrdererName());
 				orderGuestDto.setPhoneNo(orderTotalDto.getOrdererPhoneNo());
-
+				orderGuestDto.setEmail(orderTotalDto.getOrdererEmail());
+				System.out.println("999999999999999999999999"+orderGuestDto);
 				OrdersDto ordersDto = orderService.guestCartSelectOrderSave(deliveryDto, fUserCarts, orderGuestDto);
 				System.out.println("$$$$$$$$$$$$$$$$$$$$$$$"+ordersDto);
 				
 				model.addAttribute("orderId", ordersDto.getId());
+				model.addAttribute("email", orderGuestDto.getEmail());
 				List<CartDto> cartDtos = (List<CartDto>) session.getAttribute("fUserCarts");
 				if(cartDtos!=null) {
 					for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
@@ -412,7 +418,7 @@ public class OrderController {
 			} catch (Exception e) {
 				model.addAttribute("msg", e.getMessage());
 				e.printStackTrace();
-				return "/index";
+				return "/404";
 			}
 		} else { // 회원주문
 			try {
@@ -456,6 +462,7 @@ public class OrderController {
 				orderMemberBasicDto.setPhoneNo("");
 				session.setAttribute("orderMemberBasicDto", orderMemberBasicDto);
 				model.addAttribute("orderId", ordersDto.getId());
+				model.addAttribute("email",orderMemberBasicDto.getEmail());
 				return "orders/order_complete";
 			}  catch (Exception e) {
 				model.addAttribute("msg", e.getMessage());
