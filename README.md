@@ -17,7 +17,7 @@ https://danaga.com
 </div>
 
 
-#
+# 사용 기술
 ![Danaga Tech Stack](https://github.com/2023-05-JAVA-DEVELOPER-143/2023-05-JAVA-DEVELOPER-final-project-team3-avengers/assets/133833132/0d9abc7b-7cc6-4afc-a1ba-0adedff29ad0)
 
 
