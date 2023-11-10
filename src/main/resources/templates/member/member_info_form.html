@@ -21,7 +21,7 @@
 						<input type="hidden" id="userName" name="userName" value="guard" th:value="*{userName}" />
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label for="reg-email">E-mail 주소</label> 
+								<label for="email">E-mail 주소</label> 
 								<input name="email" value="guard" th:value="*{email}" class="form-control" type="email" id="email" disabled>
 							</div>
 						</div>
@@ -33,27 +33,27 @@
 						</div>
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label for="reg-nickname">닉네임</label> 
+								<label for="nickname">닉네임</label> 
 								<input name="nickname" value="guard" th:value="*{nickname}" class="form-control" type="text" id="nickname" required>
 							</div>
 						</div>
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label for="reg-birthday">생년월일</label> 
+								<label for="birthday">생년월일</label> 
 								<input name="birthday" value="guard"
 									th:value="${#dates.format(loginUser.birthday, 'yyyy-MM-dd')}" class="form-control" type="text" id="birthday" disabled>
 							</div>
 						</div>
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label for="reg-pass">비밀번호</label> 
+								<label for="pass">비밀번호</label> 
 								<input name="password" value="guard" th:value="*{password}" class="form-control" type="password" id="pass" required>
 								<input type="checkbox" id="show-password"> 비밀번호 표시
 							</div>
 						</div>
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label for="reg-pass-confirm">비밀번호 확인</label> 
+								<label for="pass-confirm">비밀번호 확인</label> 
 								<input name="password2" class="form-control" type="password" id="pass-confirm" required>
 							</div>
 						</div>
@@ -147,29 +147,84 @@
     		}
     	});
     	/*********사용자정보수정폼 패쓰워드와 패쓰워드확인 유효성처리**********/
-		$('#pass').on('keyup',function(e){
-        		if(($('#pass').val().length < 8 || $('#pass').val().length > 20) || isNoValidPassword($('#pass').val())){
+		//비밀번호
+        	$('#pass').on('change',function(e){
+        		if(($('#pass').val().length < 8 || $('#pass').val().length > 20)){
+        		if(isNoValidPassword($('#reg-pass').val())){
         			$('#pass').css('border','0.5px dotted orange');
         			$('#pass').tooltip({'trigger':'hover', 'title':'비밀번호는 8 ~ 20자 이내이고 최소한 하나의 문자, 숫자, 특수 문자가 포함되어야 합니다.'});
         			$('#pass').tooltip('show');
+        			$('#modify_action_btn').attr('disabled', 'disabled');
         		} else {
+        			$('#pass').css('border','0.5px dotted orange');
+        			$('#pass').tooltip({'trigger':'hover', 'title':'비밀번호는 8 ~ 20자 이내이고 최소한 하나의 문자, 숫자, 특수 문자가 포함되어야 합니다.'});
+        			$('#pass').tooltip('show');
+        			$('#modify_action_btn').attr('disabled', 'disabled');
+        		}
+			} else {
+				if(!isNoValidPassword($('#pass').val())){
+				if($('#pass').val()!=$('#pass-confirm').val()) {
+					$('#pass').css('border','0.5px dotted orange');
+					$('#pass').tooltip('hide');
+        			$('#pass').tooltip('dispose');
+        			$('#pass').tooltip({'trigger':'hover', 'title':'비밀번호와 비밀번호확인이 일치하여야 합니다.'});
+        			$('#pass').tooltip('show');
+        			$('#modify_action_btn').attr('disabled', 'disabled');
+				} else if($('#pass').val()==$('#pass-confirm').val()) {
 					$('#pass,#pass-confirm').css('border','0.5px solid green');
-        			$('#pass-confirm').tooltip('hide');
-        			$('#pass-confirm').tooltip('dispose');
+        			$('#pass,#pass-confirm').tooltip('hide');
+        			$('#pass,#pass-confirm').tooltip('dispose');
+        			$('#modify_action_btn').removeAttr('disabled');
 				}
-			});
-			$('#pass-confirm').on('keyup',function(e){
-        		if($('#pass').val()!=$('#pass-confirm').val()){
+			} else {
+				$('#pass').css('border','0.5px dotted orange');
+        			$('#pass').tooltip({'trigger':'hover', 'title':'비밀번호는 8 ~ 20자 이내이고 최소한 하나의 문자, 숫자, 특수 문자가 포함되어야 합니다.'});
+        			$('#pass').tooltip('show');
+        			$('#modify_action_btn').attr('disabled', 'disabled');
+			}
+			}
+        	});
+			$('#pass-confirm').on('change',function(e){
+        	if(($('#pass-confirm').val().length < 8 || $('#pass-confirm').val().length > 20)){
+        		if(isNoValidPassword($('#pass-confirm').val())){
         			$('#pass,#pass-confirm').css('border','0.5px dotted orange');
-        			$('#pass-confirm').tooltip({'trigger':'hover', 'title':'비밀번호와 비밀번호확인이 일치하여야합니다.'});
+        			$('#pass,#pass-confirm').tooltip('hide');
+        			$('#pass,#pass-confirm').tooltip('dispose');
+        			$('#pass-confirm').tooltip({'trigger':'hover', 'title':'비밀번호는 8 ~ 20자 이내이고 최소한 하나의 문자, 숫자, 특수 문자가 포함되어야 합니다.'});
         			$('#pass-confirm').tooltip('show');
         			$('#modify_action_btn').attr('disabled', 'disabled');
         		} else {
-        			$('#pass,#pass-confirm').css('border','0.5px solid green');
-        			$('#pass-confirm').tooltip('hide');
-        			$('#pass-confirm').tooltip('dispose');
-        			$('#modify_action_btn').removeAttr('disabled');
+        			$('#pass,#pass-confirm').css('border','0.5px dotted orange');
+        			$('#pass,#pass-confirm').tooltip('hide');
+        			$('#pass,#pass-confirm').tooltip('dispose');
+        			$('#pass-confirm').tooltip({'trigger':'hover', 'title':'비밀번호는 8 ~ 20자 이내이고 최소한 하나의 문자, 숫자, 특수 문자가 포함되어야 합니다.'});
+        			$('#pass-confirm').tooltip('show');
+        			$('#modify_action_btn').attr('disabled', 'disabled');
         		}
+        	} else {
+				if(!isNoValidPassword($('#pass').val())){
+        		if($('#pass').val()!=$('#pass-confirm').val()){
+        			$('#pass,#pass-confirm').css('border','0.5px dotted orange');
+        			$('#pass,#pass-confirm').tooltip('hide');
+        			$('#pass,#pass-confirm').tooltip('dispose');
+        			$('#pass-confirm').tooltip({'trigger':'hover', 'title':'비밀번호는 8 ~ 20자 이내이고 최소한 하나의 문자, 숫자, 특수 문자가 포함되어야 합니다.'});
+        			$('#pass-confirm').tooltip('show');
+        			$('#modify_action_btn').attr('disabled', 'disabled');
+        		} else if($('#pass').val()==$('#pass-confirm').val()) {
+					$('#pass,#pass-confirm').css('border','0.5px solid green');
+        			$('#pass,#pass-confirm').tooltip('hide');
+        			$('#pass,#pass-confirm').tooltip('dispose');
+        			$('#modify_action_btn').removeAttr('disabled');
+				}
+        	} else {
+        		$('#pass,#pass-confirm').css('border','0.5px dotted orange');
+    			$('#pass,#pass-confirm').tooltip('hide');
+    			$('#pass,#pass-confirm').tooltip('dispose');
+    			$('#pass-confirm').tooltip({'trigger':'hover', 'title':'비밀번호는 8 ~ 20자 이내이고 최소한 하나의 문자, 숫자, 특수 문자가 포함되어야 합니다.'});
+    			$('#pass-confirm').tooltip('show');
+    			$('#modify_action_btn').attr('disabled', 'disabled');
+			}
+			}
         	});
 // 지도
 function execDaumPostcode() {
