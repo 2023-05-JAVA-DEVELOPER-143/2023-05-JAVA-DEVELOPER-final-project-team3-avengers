@@ -18,6 +18,4 @@ import lombok.NoArgsConstructor;
 public class CartDto {
 	private Long optionSetId; //optionsetId
 	private Integer qty;
-	
-	
 }

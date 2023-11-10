@@ -447,7 +447,7 @@ function deleteCart(obj) {
 			data : { idlist : deleteArr },
 			success : function() {
 				alert('삭제완료');
-				location.href = "http://localhost:80/cart_list";
+				location.reload();
 			}
 		});
 	} 
@@ -468,9 +468,13 @@ function selectAlldelete() {
 			url : "/cart/deletecart",
 			type : "delete",
 			data : { idlist : checkArr },
-			success : function() {
+			success : function(e) {
+				console.log(e)
 				alert('삭제완료');
-				location.href = "http://localhost:80/cart_list";
+				location.reload();
+			},
+			error : function(){
+			console.log('dddddddddd')
 			}
 		});
 	} 
