@@ -9,7 +9,7 @@ https://danaga.com
 
 | **권경록** | **김아론** | **박재찬** | **이동현** |
 | :------: |  :------: | :------: | :------: |
-| [@kkr95101](https://github.com/kkr95101) | [@Cheorizzang](https://github.com/Cheorizzang) | [@ykmr0331](https://github.com/ykmr0331) | [@leedong617](https://github.com/leedong617) |
+| [@kkr95101](https://github.com/kkr95101) | [@아론](https://github.com/aronkim92) | [@ykmr0331](https://github.com/ykmr0331) | [@leedong617](https://github.com/leedong617) |
 | **이승현** | **이현승** | **임범준** | **최유강** |
 | [@lsh96900410](https://github.com/lsh96900410) | [@roco-lee](https://github.com/roco-lee) | [@beomjun10](https://github.com/beomjun10) | [@choliea](https://github.com/choliea) |
 
