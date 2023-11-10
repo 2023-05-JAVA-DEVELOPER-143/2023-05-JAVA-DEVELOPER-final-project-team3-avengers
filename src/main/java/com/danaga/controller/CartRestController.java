@@ -49,7 +49,6 @@ public class CartRestController {
 		Integer returnCode = 0;
 		String message = "";
 		CartCheckResponseDto response = new CartCheckResponseDto();
-		System.out.println(">!!!!!!!!!!!!!!!!> " + dto);
 		Integer osStock = optionSetService.findById(dto.getOptionSetId()).getData().get(0).getStock();
 		if (osStock >= dto.getQty()) {
 			if (sUserId != null) {
@@ -81,7 +80,6 @@ public class CartRestController {
 		}
 		response.setMessage(message);
 		response.setNo(returnCode);
-		System.out.println(response);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
@@ -99,6 +97,8 @@ public class CartRestController {
 			if (qty + dto.getQty() > 5) {
 				returnNo = CART_QTY_MAX;
 				message = "장바구니에는 5개까지 담을 수 있습니다. \n     장바구니로 이동하시겠습니까?";
+				dto.setQty(5 - qty);
+				cartService.addCart(dto, sUserId);
 			} else {
 				cartService.addCart(dto, sUserId);
 				countCarts(session, fUserCarts);
@@ -118,7 +118,9 @@ public class CartRestController {
 					countCarts(session, fUserCarts);
 				} else {
 					if (fUserCarts.get(findIndex).getQty() + dto.getQty() > 5) {
+						message = "장바구니에는 5개까지 담을 수 있습니다. \n 장바구니로 이동하시겠습니까?";
 						returnNo = CART_QTY_MAX;
+						fUserCarts.get(findIndex).setQty(5);
 					} else {
 						fUserCarts.get(findIndex).setQty(fUserCarts.get(findIndex).getQty() + dto.getQty());
 					}
@@ -145,8 +147,13 @@ public class CartRestController {
 		Integer returnNo = NOT_CART_QTY_MAX;
 		// 회원
 		if (sUserId != null) {
-			if (cartService.findCart(sUserId, changeId).getQty() >= 5) {
-				returnNo = CART_QTY_MAX;
+			Cart findCart = cartService.findCart(sUserId, changeId);
+			if (findCart != null) {
+				if (findCart.getQty() >= 5) {
+					returnNo = CART_QTY_MAX;
+				} else {
+					cartService.updateCartOptionSet(ids, sUserId);
+				}
 			} else {
 				cartService.updateCartOptionSet(ids, sUserId);
 			}
@@ -174,15 +181,12 @@ public class CartRestController {
 						changeFUserCart.setQty(changeFUserCart.getQty() + 1);
 						fUserCarts.set(ChangeFUserIndex, changeFUserCart);
 						fUserCarts.remove(oldFUserCart);
-						// session.setAttribute("fUserCarts", fUserCarts);
-						// countCarts(session, fUserCarts);
 					} else if (oldFUserCart.getQty() >= 2) {
 						// 변경 전 수량 >=2 --> 수량 감소 , 수량 증가
 						oldFUserCart.setQty(oldFUserCart.getQty() - 1);
 						changeFUserCart.setQty(changeFUserCart.getQty() + 1);
 						fUserCarts.set(oldFUserCartIndex, oldFUserCart);
 						fUserCarts.set(ChangeFUserIndex, changeFUserCart);
-						// session.setAttribute("fUserCarts", fUserCarts);
 					}
 				}
 			} else if (isDuplicateId == false) { // 중복 제품 X
@@ -191,14 +195,12 @@ public class CartRestController {
 					fUserCarts.remove(oldFUserCart);
 					CartDto newFUserCart = CartDto.builder().optionSetId(changeId).qty(1).build();
 					fUserCarts.add(newFUserCart);
-					// session.setAttribute("fUserCarts", fUserCarts);
 				} else if (oldFUserCart.getQty() >= 2) {
 					// 변경 전 수량 >= 2
 					oldFUserCart.setQty(oldFUserCart.getQty() - 1);
 					CartDto newFUserCart = CartDto.builder().optionSetId(changeId).qty(1).build();
 					fUserCarts.set(oldFUserCartIndex, oldFUserCart);
 					fUserCarts.add(newFUserCart);
-					// session.setAttribute("fUserCarts", fUserCarts);
 				}
 			}
 		} else {
@@ -218,7 +220,6 @@ public class CartRestController {
 
 		if (sUserId != null) {
 			cartService.updateCartQty(dto, sUserId);
-			// return ResponseEntity.status(HttpStatus.OK).body();
 			return ResponseEntity.status(HttpStatus.OK).body(dto);
 		} else {
 			for (int i = 0; i < fUserCarts.size(); i++) {
@@ -230,12 +231,6 @@ public class CartRestController {
 					break;
 				}
 			}
-			/*
-			 * return ResponseEntity.status(HttpStatus.OK)
-			 * .body(CartDto.builder().optionSetId(dto.getOptionSetId()).qty(dto.getQty()).
-			 * build());
-			 */
-			// 비회원일경우 body에 업데이트된 세션카트를 CartUpdateQtyDto 타입으로 변환 후 리턴
 			return ResponseEntity.status(HttpStatus.OK).body(dto);
 		}
 
