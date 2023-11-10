@@ -62,18 +62,7 @@ public class BoardServiceImpl implements BoardService{
 		}
 		return top10List;
 	}
-	//페이징작업
-	/*
-	 * @Override public Page<BoardGroup> boards111(Pageable pageable,String
-	 * searchKeyword,String searchType,Long boardGroupId){
-	 * 
-	 * Specification<BoardGroup>
-	 * specification1=BoardGroupSpecification.findBoardGroupWithBooks(boardGroupId);
-	 * Page<BoardGroup> pageBoardGroup= bgRepository.findAll(specification1,
-	 * pageable);
-	 * 
-	 * return pageBoardGroup; }
-	 */
+	
 	@Override
 	public Page<BoardDto> boards(Pageable pageable,String searchKeyword,String searchType,Long boardGroupId){
 		
@@ -95,7 +84,7 @@ public class BoardServiceImpl implements BoardService{
 			}
 		}
 		Page<BoardDto> boardList = bRepository.findAll(specification, pageable).map(BoardDto::responseDto);
-		log.info("리스트 내용 : {}",boardList.get());
+		log.info("specification  : {}",specification);
 		return boardList;
 		
 		

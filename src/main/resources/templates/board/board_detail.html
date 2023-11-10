@@ -100,12 +100,12 @@
     </script>
 									<div class="card-header">
 										<h3>제목 : [[${board.title}]] </h3><span class="badge badge-pill badge-primary"
-											th:if="${board.readCount} &gt; 500" th:text="hot">Product</span>
+											th:if="${board.readCount} &gt; 500" th:text="hot"></span>
 									</div>
 									<div class="card-body">
-										<div class="d-flex"><a class="pr-4 hidden-xs-down" href="shop-single.html"
-												style="max-width: 225px;"><img src="img/shop/products/01.jpg"
-													alt="Product"></a>
+										<div class="d-flex"><a class="pr-4 hidden-xs-down"
+												style="max-width: 225px;"><img src="/images/user_basic.jpg"
+													alt="user"></a>
 											<div>
 												<h5>작성자 : [[${board.nickname}]]</h5>
 												<hr>
@@ -190,7 +190,7 @@
 
 												function upIsLike(action) {
 													const boardId = '[[${board.id}]]';
-													const memberId = 1; //나중에 세션처리할때 풀어놀것.'[[${session.sUserId}]]';  
+													const memberId = '[[${session.sUserId}]]';  
 
 													if (memberId === null) {
 														window.alert("로그인이 필요한 기능입니다.");
@@ -248,7 +248,7 @@
 													<td th:text="${comments.id}">번호</td>
 													<td th:text="${comments.writer}">닉네임</td>
 													<td th:text="${comments.content}">내용</td>
-													<!-- 각 댓글 아래에 "답글 달기"버튼을 추가 -->
+													<!-- 각 댓글 아래에 "답글 달기"버튼을 추가  해당내용 없앰
 													<td>
 														<a class="btn btn-outline-info" data-bs-toggle="modal"
 															data-bs-target="#comment-reply-modal"
@@ -262,11 +262,11 @@
 															data-bs-pw="${comments.pw}">
 															수정
 														</button>
-														<button class="btn btn-outline-danger"
+														<button class="btn btn-outline-danger" 
 															data-bs-target="comment-delete-btn"
 															data-comment-id="${comments.id}"
 															data-comment-pw="${comments.pw}">삭제
-														</button>
+														</button> -->
 									</div>
 									</td>
 
@@ -481,7 +481,7 @@
 									deleteBtns.forEach(btn => {
 										btn.addEventListener("click", (event) => {
 											//이벤트 발생 요소를 선택.(즉 버튼을 가져오기)
-											const commentDeleteBtn = event.srcElement; //event.target으로 대체가능
+											const commentDeleteBtn = event.target; //event.target으로 대체가능
 
 											//삭제 댓글 id 가져오기
 

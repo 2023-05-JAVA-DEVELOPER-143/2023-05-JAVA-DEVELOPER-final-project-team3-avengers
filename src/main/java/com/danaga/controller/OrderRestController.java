@@ -2,21 +2,16 @@ package com.danaga.controller;
 
 import java.util.*;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.danaga.dto.*;
 import com.danaga.dto.product.OptionSetUpdateDto;
 import com.danaga.dto.product.ProductDto;
-import com.danaga.entity.OptionSet;
 import com.danaga.service.OrderService;
 import com.danaga.service.product.OptionSetService;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -149,20 +144,22 @@ public class OrderRestController {
 			}
 			return ResponseEntity.ok().body(result);
 
-		} catch (Exception e) {
+		}catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
-
+	/*
+	 * stock check
+	 */
 	@PostMapping("/cart_check_Stock")
 	public ResponseEntity<String> cartOrderNoStock(
-			@org.springframework.web.bind.annotation.RequestBody List<CartDto> cartDtos) {
+			@RequestBody List<CartDto> cartDtos) {
 		System.out.println("order 체크전 >>>>>>" + cartDtos.size());
 		String result = "";
 		try {
 			for (int i = 0; i < cartDtos.size(); i++) {
-				if (optionSetService.findById(cartDtos.get(i).getOptionSetId()).getData().get(0).getStock() > cartDtos
+				if (optionSetService.findById(cartDtos.get(i).getOptionSetId()).getData().get(0).getStock() >= cartDtos
 						.get(i).getQty()) {
 					result = "1";
 				} else {
