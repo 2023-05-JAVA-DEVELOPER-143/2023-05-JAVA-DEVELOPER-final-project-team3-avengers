@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.danaga.dao.product.ProductDao;
-import com.danaga.dto.AdminOrderUpdate;
-import com.danaga.dto.AdminProductInsertDto;
-import com.danaga.dto.AdminProductOnlyDto;
+import com.danaga.dto.admin.AdminOptionDto;
+import com.danaga.dto.admin.AdminOptionSetDto;
+import com.danaga.dto.admin.AdminOrderUpdate;
+import com.danaga.dto.admin.AdminProductInsertDto;
+import com.danaga.dto.admin.AdminProductOnlyDto;
 import com.danaga.dto.product.CategoryDto;
 import com.danaga.dto.product.ProductDto;
 import com.danaga.dto.product.ProductSaveDto;
@@ -123,20 +125,34 @@ public class StatisticRestController {
 			return new ResponseEntity<>("Error creating category", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	// 신규방식 - product
-		@PostMapping("/createProduct")
-		public ResponseEntity<?> createProductOnly(@RequestBody AdminProductOnlyDto adminProductOnlyDto) {
-			try {
-				adminProductOnlyDto.getProductSaveDto().setImg(convertPath(adminProductOnlyDto.getProductSaveDto().getImg()));
-				adminProductOnlyDto.getProductSaveDto().setPrevImage(convertPath(adminProductOnlyDto.getProductSaveDto().getPrevImage()));
-				adminProductOnlyDto.getProductSaveDto().setDescImage(convertPath(adminProductOnlyDto.getProductSaveDto().getDescImage()));
-				statisticService.createProductOnly(adminProductOnlyDto);
-				return new ResponseEntity<>("Product created successfully", HttpStatus.OK);
-			} catch (Exception e) {
-				return new ResponseEntity<>("Error creating Product", HttpStatus.INTERNAL_SERVER_ERROR);
-			}
+	@PostMapping("/createProduct")
+	public ResponseEntity<?> createProductOnly(@RequestBody AdminProductOnlyDto adminProductOnlyDto) {
+		try {
+			adminProductOnlyDto.getProductSaveDto()
+					.setImg(convertPath(adminProductOnlyDto.getProductSaveDto().getImg()));
+			adminProductOnlyDto.getProductSaveDto()
+					.setPrevImage(convertPath(adminProductOnlyDto.getProductSaveDto().getPrevImage()));
+			adminProductOnlyDto.getProductSaveDto()
+					.setDescImage(convertPath(adminProductOnlyDto.getProductSaveDto().getDescImage()));
+			statisticService.createProductOnly(adminProductOnlyDto);
+			return new ResponseEntity<>("Product created successfully", HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Error creating Product", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+
+	// 신규방식 - optionSet
+	@PostMapping("/createOptionSet")
+	public ResponseEntity<?> createOptionSet(@RequestBody AdminOptionSetDto dto) {
+		try {
+			statisticService.createOptionSet(dto);
+			return new ResponseEntity<>("OptionSet created successfully", HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Error creating OptionSet", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
 	@DeleteMapping("/product/{id}")
 	public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
@@ -159,6 +175,23 @@ public class StatisticRestController {
 			}
 			// delete Product
 			productRepository.delete(product);
+			return new ResponseEntity<>("Product deleted successfully", HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Error deleting product", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@DeleteMapping("/optionSet/{id}")
+	public ResponseEntity<?> deleteOptionSet(@PathVariable Long id) {
+		try {
+			OptionSet os = optionSetRepository.findById(id).get();
+			// delete Options
+			List<Options> optionList = os.getOptions();
+			for (Options options : optionList) {
+				optionSetService.deleteOption(options.getId());
+			}
+			// delete Option Set
+			optionSetService.deleteOptionSet(id);
 			return new ResponseEntity<>("Product deleted successfully", HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>("Error deleting product", HttpStatus.INTERNAL_SERVER_ERROR);

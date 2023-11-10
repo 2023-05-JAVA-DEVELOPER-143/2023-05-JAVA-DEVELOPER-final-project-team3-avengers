@@ -57,6 +57,7 @@
 								<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 									<thead>
 										<tr>
+											<th>ID</th>
 											<th>이메일</th>
 											<th>회원명</th>
 											<th>생년월일</th>
@@ -68,6 +69,7 @@
 									</thead>
 									<tbody>
 										<tr th:each="member : ${memberList}">
+											<td th:text="${member.id}"></td>
 											<td th:text="${member.email}"></td>
 											<td th:text="${member.name}"></td>
 											<td th:text="${#dates.format(member.birthday, 'yyyy-MM-dd')}"></td>

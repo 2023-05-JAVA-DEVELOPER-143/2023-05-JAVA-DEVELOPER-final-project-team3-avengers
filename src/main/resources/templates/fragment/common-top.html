@@ -55,7 +55,7 @@
 				<div class="inner">
 					<div class="tools">
 						<div class="account" th:if="${session.role == 'Admin'}" onclick="window.location.href = '/admin';">
-							<i class="icon-head"></i>
+							<i class="icon-open"></i>
 						</div>
 						<div class="account">
 							<a th:if="${session.sUserId != null}" th:href="@{/member_info_form}"></a>
