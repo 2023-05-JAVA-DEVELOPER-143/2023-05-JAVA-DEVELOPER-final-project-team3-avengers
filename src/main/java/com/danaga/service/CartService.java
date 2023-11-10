@@ -23,7 +23,7 @@ public interface CartService {
 	FUserCartResponseDto findfUserCartList(CartDto dto)  throws Exception;
 	
 	// 중복제품 수량 체크
-	int isDuplicateProduct(String value,Long optionsetId) throws Exception;
+	Integer isDuplicateProduct(String value,Long optionsetId) throws Exception;
 	
 	//카트 1개 찾기
 	Cart findCart(String value,Long optionSetId) throws Exception;

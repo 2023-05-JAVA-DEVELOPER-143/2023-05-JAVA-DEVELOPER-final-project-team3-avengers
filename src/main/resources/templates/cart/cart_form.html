@@ -97,7 +97,7 @@
 									<div class="product-info">
 										<h4 class="product-title">
 											<a href="shop-single.html"
-												th:href="@{'http://localhost/product'+${cart.osId}}"
+												th:href="@{'/product'+${cart.osId}}"
 												th:text="${cart.productName}">Unionbay Park</a>
 										</h4>
 										<div th:each="option: ${cart.options}">
@@ -170,7 +170,7 @@
 			<div class="shopping-cart-footer">
 				<div class="column">
 					<a class="btn btn-outline-secondary" href="shop-grid-ls.html"
-						th:href="@{'http://localhost/product'}">&nbsp;쇼핑 계속하기</a>
+						th:href="@{'/product'}">&nbsp;쇼핑 계속하기</a>
 				</div>
 				<div class="column"></div>
 				<div class="column">
@@ -193,7 +193,7 @@
 				<div class="grid-item" th:each="productDto:${hits}">
 					<div class="product-card">
 						<a class="product-thumb" href="product-detail.html"
-							th:href="@{'http://localhost/product'+${productDto.osId}}"><img
+							th:href="@{'/product'+${productDto.osId}}"><img
 							src="img/shop/products/09.jpg" alt="Product"
 							th:attr="src=@{${productDto.pImage}}"></a>
 						<!-- th:href="product-detail.html" -->
@@ -415,15 +415,6 @@ function getSelectValue(obj) {
 				console.log('response' + response.qty)
 				console.log('>>>>'+response.optionSetId)
 				location.reload();
-				//$("#selectbox").replaceAll(response);
-				//let updatedQuantity = response.qty;
-				//[value="${response.qty}"]
-				//let thymeleafExpression = `select#selectbox option[th\\:data-id="${selectosId}"][value="${updatedQuantity}"]`;
-				//let selectedOption = document.querySelector(thymeleafExpression);
-				//if (selectedOption) {
-				//selectedOption.selected = true;
-				//}
-				//calculateSalePrice();
 			}
 			
 		});
@@ -527,11 +518,11 @@ function selectOption(elseOptionSets, osId) {
 				console.log(response)
 				if(response==2100){
 					$('#exampleModal').modal('hide');
-					if(alert('이미 장바구니에 5개이상존재')){
+					if(alert('이미 장바구니에 5개이상존재합니다. ')){
 					};
 				}else if(response==2200){
-					alert('변경완료');
-					location.href="http://localhost:80/cart_list"
+					alert('변경 완료');
+					location.reload();
 				}
 			 }
 		  });
@@ -556,7 +547,7 @@ function selectOption(elseOptionSets, osId) {
 				
 			}else{
 			alert('장바구니에 담겼습니다.')
-			location.href= "http://localhost:80/cart_list";
+			location.href= "/cart_list";
 				
 			}
 		},
