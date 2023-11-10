@@ -493,29 +493,26 @@ function selectOption(elseOptionSets, osId) {
       if(option.value == selectCartid) {
 		  option.selected = true;
 	  }
-      
    }
-   
-   
-   	  let lastupdataId = 0;
-  	  $("#modalSelectbox").on('change', function() {
+   	  let lastupdataId = osId;
+  	  $("#modalSelectbox").change(function() {
+  		  console.log($(this).val());
 	  		lastupdataId = $(this).val();
 	  });
-	    
 	  $("#modalsave").click(function() {
 		 if(data[0] == lastupdataId) {
 			 alert('동일한 옵션입니다');
 		 } else {
-		    while (data.length < 2) {
+			 while (data.length < 2) {
 				data.push(lastupdataId);
 	    	}
-		  $.ajax({
+		 	 $.ajax({
 			 url: "/cart/optionset",
 			 type: "post",
 			 contentType: 'application/json',
 			 data: JSON.stringify(data),
 			 success : function(response) {
-				console.log(response)
+				 console.log(response)
 				if(response==2100){
 					$('#exampleModal').modal('hide');
 					if(alert('이미 장바구니에 5개이상존재합니다. ')){
@@ -523,7 +520,7 @@ function selectOption(elseOptionSets, osId) {
 				}else if(response==2200){
 					alert('변경 완료');
 					location.reload();
-				}
+				} 
 			 }
 		  });
 		 }
@@ -548,9 +545,6 @@ function selectOption(elseOptionSets, osId) {
 			}else{
 			alert('장바구니에 담겼습니다.')
 			location.href= "/cart_list";
-			
-			
-				
 			}
 		},
 		error:function(){
