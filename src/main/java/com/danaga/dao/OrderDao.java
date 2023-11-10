@@ -43,7 +43,7 @@ public interface OrderDao {
 	  
 	//  비회원 주문1개보기(주문상세리스트)
 	  
-	  Orders findOrdersByIdAndNameAndPhoneNo(Long orderNo, String name,String phoneNo)throws Exception;
+	  Orders findOrdersByIdAndPhoneNo(Long orderNo,String phoneNo)throws Exception;
 	  
 	  List<Orders> memberOrdersListNull(String userName) throws Exception;
 	   

@@ -47,17 +47,6 @@
 					<!-- 주문자전화번호 에러 메시지 -->
 				</div>
 
-				<div class="col-sm-6">
-					<div class="form-group">
-						<label for="name">주문자이름</label> <input class="form-control"
-							type="text" id="name" name="name" value="name" required
-							th:field="*{name}">
-						<div id="nameError" class="error-message"
-							style="color: red; margin-left: 10px;"></div>
-					</div>
-
-					<!-- 주문자이름 에러 메시지 -->
-				</div>
 
 				<hr class="padding-bottom-1x">
 
@@ -67,10 +56,12 @@
 							<span class="hidden-xs-down">주문찾기&nbsp;</span><i
 							class="icon-arrow-right"></i>
 						</a>
+						<div id="errorText" style="color: red;"></div>
 					</div>
 				</div>
 			</form>
-
+			
+			
 
 		</section>
 
@@ -82,17 +73,14 @@
 			function guestOrderDetail() {
 				let orderNo = $('#orderNo').val();
 				let phoneNumber = $('#phoneNumber').val();
-				let name = $('#name').val();
 				let data = {
 						"orderNo": orderNo,
 						"phoneNumber": phoneNumber,
-						"name": name
 						
 				}
 				// 에러 메시지 초기화
 				$('#orderNoError').text('');
 				$('#phoneNumberError').text('');
-				$('#nameError').text('');
 
 				if (!orderNo) {
 					$('#orderNoError').text('주문번호가 입력되지 않았습니다.');
@@ -125,44 +113,30 @@
 					});
 						return;
 					}
+				 
 
-				if (!name) {
-					$('#nameError').text('주문자이름이 입력되지 않았습니다.');
-					$('#name').mouseenter(function() {
-						$('#nameError').text('');
-					});
-					return;
-					
+
+				    $.ajax({
+				        type: 'GET',
+				        url: '/order_guest_detail',
+				        data: {
+				            orderNo: orderNo,
+				            phoneNumber: phoneNumber
+				        },
+				        success: function(response) {
+				            // 성공적으로 응답을 받았을 때 처리
+				            console.log('성공~~~~~');
+				            console.log(response); // 서버에서 온 응답을 콘솔에 출력하거나, 필요한 처리 수행
+				        },
+				        error: function(xhr, status, error) {
+				            // 서버 응답이 실패했을 때 처리
+				            console.log('실패~~~~~');
+				            console.error(error); // 에러 로그 출력
+				            $('#errorText').text('일치하지 않는 주문번호 또는 전화번호입니다.');
+				        }
+				    });
 				}
 
-				    var form = document.createElement('form');
-				    form.method = 'GET';
-				    form.action = '/order_guest_detail';
-
-				    var orderNoInput = document.createElement('input');
-				    orderNoInput.type = 'hidden';
-				    orderNoInput.name = 'orderNo';
-				    orderNoInput.value = $('#orderNo').val();
-
-				    var phoneNumberInput = document.createElement('input');
-				    phoneNumberInput.type = 'hidden';
-				    phoneNumberInput.name = 'phoneNumber';
-				    phoneNumberInput.value = $('#phoneNumber').val();
-
-				    var nameInput = document.createElement('input');
-				    nameInput.type = 'hidden';
-				    nameInput.name = 'name';
-				    nameInput.value = $('#name').val();
-
-				    form.appendChild(orderNoInput);
-				    form.appendChild(phoneNumberInput);
-				    form.appendChild(nameInput);
-
-				    document.body.appendChild(form);
-				    form.submit();
-				
-
-			}
 		</script>
 	</th:block>
 

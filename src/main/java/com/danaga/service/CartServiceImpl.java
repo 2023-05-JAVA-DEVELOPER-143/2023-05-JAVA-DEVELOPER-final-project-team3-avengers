@@ -31,19 +31,18 @@ public class CartServiceImpl implements CartService {
 		Long memberId = memberDao.findMember(value).getId();
 		return cartRepository.findByOptionSetIdAndMemberId(optionSetId, memberId);
 	}
-	
+
 	@Override
-	public int isDuplicateProduct(String value, Long optionsetId) throws Exception{
+	public Integer isDuplicateProduct(String value, Long optionsetId) throws Exception {
 		Long findId = memberDao.findMember(value).getId();
-		Cart findCart = cartRepository.findByOptionSetIdAndMemberId(optionsetId,findId);
-		if(findCart!=null) {
+		Cart findCart = cartRepository.findByOptionSetIdAndMemberId(optionsetId, findId);
+		if (findCart != null) {
 			return findCart.getQty();
-		}else {
+		} else {
 			return 0;
 		}
 	}
-	
-	
+
 	// 유저 카트 리스트
 	@Override
 	public List<SUserCartResponseDto> findsUserCartList(String sUserId) throws Exception {
@@ -58,7 +57,7 @@ public class CartServiceImpl implements CartService {
 
 	// 예외잡기
 	@Override
-	public FUserCartResponseDto findfUserCartList(CartDto dto) throws Exception{
+	public FUserCartResponseDto findfUserCartList(CartDto dto) throws Exception {
 		OptionSet findOptionset = optionSetDao.findById(dto.getOptionSetId());
 		return FUserCartResponseDto.toDto(findOptionset, dto.getQty());
 	}
@@ -99,12 +98,11 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public List<SUserCartResponseDto> updateCartOptionSet(List<Long> ids, String sUserId) throws Exception {
 		List<SUserCartResponseDto> updateCarts = new ArrayList<>();
-		Long memberId = memberDao.findMember(sUserId).getId(); // 회원의 MemberPk
-		Long oldOptionsetId = ids.get(0); // 기존 카트에 담겨있던 OptionsetId
-		Long changeOptionsetId = ids.get(1); // 변경하고자 하는 OptionsetId
+		Long memberId = memberDao.findMember(sUserId).getId(); 
+		Long oldOptionsetId = ids.get(0); 
+		Long changeOptionsetId = ids.get(1);
 		// 옵션셋 변경할 카트
 		Cart findCart = cartRepository.findByOptionSetIdAndMemberId(oldOptionsetId, memberId); // 기존 옵션셋이 담긴 카트
-		// 기존 옵션셋 카트 수량 2 이상일시 사용할 기존 옵션셋카트
 
 		Cart newCart = Cart.builder().member(findCart.getMember()).optionSet(optionSetDao.findById(ids.get(1))).qty(1)
 				.build(); // 변경된 옵션셋
@@ -113,15 +111,14 @@ public class CartServiceImpl implements CartService {
 		Cart findDuplicateCart = cartRepository.findByOptionSetIdAndMemberId(changeOptionsetId, memberId);
 
 		if (findDuplicateCart == null) {
-			// 변경할 카트 수량 1일시 findCart == 옵션셋이 변경된 카트
+			// 변경할 카트 수량 1일시 
 			if (findCart.getQty() == 1) {
-				// 기존 옵션셋아이디와 멤버아이디로 찾은 카트의 옵션셋을 변경 후 세이브
 				findCart.setOptionSet(optionSetDao.findById(changeOptionsetId));
 				cartRepository.save(findCart);
 				SUserCartResponseDto sUserCartResponseDto = SUserCartResponseDto.toDto(findCart);
 				updateCarts.add(sUserCartResponseDto);
 			} else if (findCart.getQty() >= 2) {
-				// 기존 카트의 수량이 2 이상 , 중복 옵션셋 카트 X == 수량 변경시 기존 카트 수량 -1 후 세이브 , 변경 카트 인써트
+				// 기존 카트의 수량이 2 이상 , 중복 옵션셋 카트 X 
 				findCart.setQty(findCart.getQty() - 1);
 				cartRepository.save(findCart);
 				cartRepository.save(newCart);
@@ -130,13 +127,13 @@ public class CartServiceImpl implements CartService {
 			}
 		} else {
 			if (findCart.getQty() == 1) {
-				// 기존 카트의 수량 1 , 중복 옵션셋 카트 O == 중복 옵션셋 카트 수량 + 1 , 기존 카트는 삭제
+				// 기존 카트의 수량 1 , 중복 옵션셋 카트 O 
 				findDuplicateCart.setQty(findDuplicateCart.getQty() + 1);
 				cartRepository.save(findDuplicateCart);
 				cartRepository.deleteById(findCart.getId());
 				updateCarts.add(SUserCartResponseDto.toDto(findDuplicateCart));
 			} else if (findCart.getQty() >= 2) {
-				// 기존 카트의 수량 2 이상 , 중복 옵션셋 카트 O == 중복 옵션셋 카트 수량 + 1 , 기존 변경전 옵션셋 수량 -1
+				// 기존 카트의 수량 2 이상 , 중복 옵션셋 카트 O 
 				findCart.setQty(findCart.getQty() - 1);
 				findDuplicateCart.setQty(findDuplicateCart.getQty() + 1);
 				cartRepository.save(findCart);
@@ -152,7 +149,7 @@ public class CartServiceImpl implements CartService {
 	 * 카트 1개 삭제
 	 */
 	@Override
-	public void deleteCart(Long optionSetId, String value)  {
+	public void deleteCart(Long optionSetId, String value) {
 		Long memberId;
 		try {
 			memberId = memberDao.findMember(value).getId();

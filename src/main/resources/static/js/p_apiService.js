@@ -147,7 +147,6 @@ export function addToCart(optionSetId, qty) {
 								location.reload();
 							}
 						} else if (addResponse.no == 2200) {
-							console.log('ssssssssssssssssssssssssssss')
 							if (window.confirm(addResponse.message)) {
 								location.href = "/cart_list";
 							} else {
