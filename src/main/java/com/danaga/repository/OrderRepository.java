@@ -19,8 +19,8 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
 //	//  주문이 일정시간경과되면 자동삭제(지금은 임의로 보여주기위해 3분으로 지정)
 //	void deleteByCreatedAtBefore(LocalDateTime timeAgo);
 
-	// 비회원 : 주문 번호, 회원 이름, 회원 전화번호를 기반으로 주문 조회
-	Orders findOrdersByIdAndMember_NameAndMember_PhoneNo(Long orderNo, String Name, String phoneNo);
+	// 비회원 : 주문 번호, 회원 전화번호를 기반으로 주문 조회
+	Orders findOrdersByIdAndMember_PhoneNo(Long orderNo, String phoneNo);
 	
 
 }

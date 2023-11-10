@@ -277,20 +277,6 @@ public class OrderController {
 		}
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	/*
 	 * 카트에서 보내온 데이터로 주문(form)(공통)
 	 */
@@ -390,7 +376,8 @@ public class OrderController {
 				orderGuestDto.setPhoneNo(orderTotalDto.getOrdererPhoneNo());
 
 				OrdersDto ordersDto = orderService.guestCartSelectOrderSave(deliveryDto, fUserCarts, orderGuestDto);
-
+				System.out.println("$$$$$$$$$$$$$$$$$$$$$$$"+ordersDto);
+				
 				model.addAttribute("orderId", ordersDto.getId());
 				List<CartDto> cartDtos = (List<CartDto>) session.getAttribute("fUserCarts");
 				if(cartDtos!=null) {
@@ -477,7 +464,8 @@ public class OrderController {
 			}
 		}
 	}
-
+	
+	
 	/******************************* 비회원 ****************************/
 
 	/*
@@ -499,17 +487,16 @@ public class OrderController {
 			Model model) {
 		try {
 			log.info("orderNo={}", "name={}", "phoneNumber={}", ordersGuestDetailDto.getOrderNo(),
-					ordersGuestDetailDto.getName(), ordersGuestDetailDto.getPhoneNumber());
+					 ordersGuestDetailDto.getPhoneNumber());
 			log.info("ordersGuestDetailDto={}", ordersGuestDetailDto);
 			System.out.println("@@@@@@getOrderNo: " + ordersGuestDetailDto.getOrderNo());
-			if (ordersGuestDetailDto.getName()
-					.equals(orderDao.findById(ordersGuestDetailDto.getOrderNo()).getMember().getName())) {
+	
 
 				if (ordersGuestDetailDto.getPhoneNumber()
 						.equals(orderDao.findById(ordersGuestDetailDto.getOrderNo()).getMember().getPhoneNo())) {
 
 					List<OrdersDto> ordersDtoList = orderService.guestOrderList(ordersGuestDetailDto.getOrderNo(),
-							ordersGuestDetailDto.getPhoneNumber(), ordersGuestDetailDto.getName());
+							ordersGuestDetailDto.getPhoneNumber());
 
 					System.out.println("@@@@@@@@@@@@@@@@ordersDtoList: " + ordersDtoList);
 					System.out.println(
@@ -521,8 +508,7 @@ public class OrderController {
 				} else {
 					return "orders/find_order_guest";
 				}
-			}
-			return "orders/find_order_guest";
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();

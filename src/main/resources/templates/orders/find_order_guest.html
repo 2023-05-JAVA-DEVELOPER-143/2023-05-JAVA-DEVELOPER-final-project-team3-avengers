@@ -47,17 +47,6 @@
 					<!-- 주문자전화번호 에러 메시지 -->
 				</div>
 
-				<div class="col-sm-6">
-					<div class="form-group">
-						<label for="name">주문자이름</label> <input class="form-control"
-							type="text" id="name" name="name" value="name" required
-							th:field="*{name}">
-						<div id="nameError" class="error-message"
-							style="color: red; margin-left: 10px;"></div>
-					</div>
-
-					<!-- 주문자이름 에러 메시지 -->
-				</div>
 
 				<hr class="padding-bottom-1x">
 
@@ -82,17 +71,14 @@
 			function guestOrderDetail() {
 				let orderNo = $('#orderNo').val();
 				let phoneNumber = $('#phoneNumber').val();
-				let name = $('#name').val();
 				let data = {
 						"orderNo": orderNo,
 						"phoneNumber": phoneNumber,
-						"name": name
 						
 				}
 				// 에러 메시지 초기화
 				$('#orderNoError').text('');
 				$('#phoneNumberError').text('');
-				$('#nameError').text('');
 
 				if (!orderNo) {
 					$('#orderNoError').text('주문번호가 입력되지 않았습니다.');
@@ -126,14 +112,6 @@
 						return;
 					}
 
-				if (!name) {
-					$('#nameError').text('주문자이름이 입력되지 않았습니다.');
-					$('#name').mouseenter(function() {
-						$('#nameError').text('');
-					});
-					return;
-					
-				}
 
 				    var form = document.createElement('form');
 				    form.method = 'GET';
@@ -149,14 +127,9 @@
 				    phoneNumberInput.name = 'phoneNumber';
 				    phoneNumberInput.value = $('#phoneNumber').val();
 
-				    var nameInput = document.createElement('input');
-				    nameInput.type = 'hidden';
-				    nameInput.name = 'name';
-				    nameInput.value = $('#name').val();
 
 				    form.appendChild(orderNoInput);
 				    form.appendChild(phoneNumberInput);
-				    form.appendChild(nameInput);
 
 				    document.body.appendChild(form);
 				    form.submit();
