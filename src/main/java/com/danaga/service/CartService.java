@@ -32,7 +32,7 @@ public interface CartService {
 	void addCart(CartDto dto, String value) throws Exception;
 	
 	// 카트 1개 삭제
-	void deleteCart(Long optionSetId, String value) throws Exception;
+	void deleteCart(Long optionSetId, String value) ;
 
 	// 멤버 아이디로 카트삭제 [전체 삭제]
 	void deleteCarts(String sUserId) throws Exception;

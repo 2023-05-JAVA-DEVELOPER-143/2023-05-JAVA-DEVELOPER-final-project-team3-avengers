@@ -1,49 +1,51 @@
-import {API_BASE_URL,REMOVE_RECENT_VIEW,REMOVE_WISHLIST,
-    TAP_HEART,UNTAP_HEART,CHILD_CATEGORY,SHOW_OPTIONS,SEARCH, ADD_TO_CART,TO_ORDER} from "./api-config.js";
-function call(api, method,request){
-    let headers = new Headers({
-        "Content-Type": "application/json",
-    })
-    // const accessToken = localStorage.getItem("ACCESS_TOKEN");
-    // if( accessToken &&accessToken !==null){
-    //     headers.append("Authorization","Bearer " + accessToken);
-    // }
-    let options = {
-        headers: headers,
-        url: API_BASE_URL +api,
-        method: method, 
-    }; 
-    if(request){
-        options.body = JSON.stringify(request);
-    }
-    return fetch(options.url, options).then((response) => {
-        if(response.status === 200||response.status ===201){
-            return response.json();
-        }else if(response.status===401){
+import {
+	API_BASE_URL, REMOVE_RECENT_VIEW, REMOVE_WISHLIST,
+	TAP_HEART, UNTAP_HEART, CHILD_CATEGORY, SHOW_OPTIONS, SEARCH, ADD_TO_CART, TO_ORDER
+} from "./api-config.js";
+function call(api, method, request) {
+	let headers = new Headers({
+		"Content-Type": "application/json",
+	})
+	// const accessToken = localStorage.getItem("ACCESS_TOKEN");
+	// if( accessToken &&accessToken !==null){
+	//     headers.append("Authorization","Bearer " + accessToken);
+	// }
+	let options = {
+		headers: headers,
+		url: API_BASE_URL + api,
+		method: method,
+	};
+	if (request) {
+		options.body = JSON.stringify(request);
+	}
+	return fetch(options.url, options).then((response) => {
+		if (response.status === 200 || response.status === 201) {
+			return response.json();
+		} else if (response.status === 401) {
 			alert('로그인이 필요한 서비스입니다.');
-            window.location.href="http://localhost/member_login_form";// redirect
-        }else if(response.stataus===404){
-			window.location.href="http://localhost/404.html";			
-		}else if(response.msg=='WRONG_PARAMETER'){
+			window.location.href = "http://localhost/member_login_form";// redirect
+		} else if (response.stataus === 404) {
+			window.location.href = "http://localhost/404.html";
+		} else if (response.msg == 'WRONG_PARAMETER') {
 			alert('잘못된 요청입니다. 입력값을 확인해주세요.');
-		}else{
-            Promise.reject(response);
-            throw Error(response);
-        }
-    }).catch((error) => {
-        console.log("http error");
-        console.log(error);
-    });
+		} else {
+			Promise.reject(response);
+			throw Error(response);
+		}
+	}).catch((error) => {
+		console.log("http error");
+		console.log(error);
+	});
 
 }
 
 export function tapHeart(optionSetId, callback) {//디테일에서//클릭이벤트핸들러에서 이미지로 어떤 함수 쓸건지 결정
 	return call(TAP_HEART.url.replace('@optionSetId', optionSetId), TAP_HEART.method, null)
 		.then((response) => {
-		
+
 			callback();
 			console.log('추가성공');
-			
+
 		});
 }
 export function untapHeart(optionSetId, callback) {//디테일에서//그리고 애초에 서버에서 이미지 뿌릴때 좋아요 여부 확인해서 이미지 알맞게 뿌려야함
@@ -119,7 +121,7 @@ export function toOrder(cartDto) {//product->order로 formData들고 fetch요청
 			console.log(response);
 			if (response == '1') {
 				$('#productOrderForm').submit();
-			}else{
+			} else {
 				alert('주문수량보다 재고가 부족합니다.');
 			}
 		});
@@ -129,58 +131,58 @@ export function addToCart(optionSetId, qty) {
 		"optionSetId": optionSetId,
 		"qty": qty
 	}
-	function a() {
-		if (window.confirm('계속 쇼핑 하시겠습니까?')) {
-			location.href = "http://localhost/product";
-		} else {
-			location.href = "http://localhost/cart_list"
-		}
-	}
-	return call(ADD_TO_CART.url.replace("@optionSetId", optionSetId), ADD_TO_CART.method, null)
+
+	return call(ADD_TO_CART.url, ADD_TO_CART.method, cartDto)
 		.then((response) => {
 			console.log(response)
-			if (response == 1000) {
+			if (response.no == 1000) {
 				$.ajax({
 					url: "/cart",
 					type: "post",
 					contentType: 'application/json',
 					data: JSON.stringify(cartDto),
-					success: function(code) {
-						if (code == 2100) {
-							if (window.confirm('장바구니 맥스 ')) {
-								location.href = "http://localhost/cart_list";
+					success: function(addResponse) {
+						if (addResponse.no == 2100) {
+							if (window.confirm(addResponse.message)) {
+								location.reload();
 							}
-						} else if (code == 2200) {
-							if (window.confirm('장바구니로 이동?')) {
+						} else if (addResponse.no == 2200) {
+							console.log('ssssssssssssssssssssssssssss')
+							if (window.confirm(addResponse.message)) {
 								location.href = "http://localhost/cart_list";
 							} else {
-								location.href = "http://localhost/product"
+								location.reload();
 							}
 						}
 					}
 				})
-			} else if (response == 2000) {
-				if (window.confirm('이미 장바구니에 존재하는 제품입니다.')) {
+			} else if (response.no == 2000) {
+				if (window.confirm(response.message)) {
 					$.ajax({
 						url: "/cart",
 						type: "post",
 						contentType: 'application/json',
 						data: JSON.stringify(cartDto),
-						success: function(code) {
-						if (code == 2100) {
-							if (window.confirm('장바구니 맥스 ')) {
-								location.href = "http://localhost/cart_list";
-							}
-						} else if (code == 2200) {
-							if (window.confirm('장바구니로 이동?')) {
-								location.href = "http://localhost/cart_list";
-							} else {
-								location.href = "http://localhost/product"
+						success: function(addResponse) {
+							if (addResponse.no == 2100) {
+								if (window.confirm(addResponse.message)) {
+									location.href = "http://localhost/cart_list";
+								} else {
+									location.reload();
+								}
+
+							} else if (addResponse.no == 2200) {
+								if (window.confirm(addResponse.message)) {
+									location.href = "http://localhost/cart_list";
+								} else {
+									location.reload();
+								}
 							}
 						}
-					}
 					})
 				}
+			} else if (response.no == 3000) {
+				window.alert(response.message);
 			}
 
 		}).catch((error) => {
