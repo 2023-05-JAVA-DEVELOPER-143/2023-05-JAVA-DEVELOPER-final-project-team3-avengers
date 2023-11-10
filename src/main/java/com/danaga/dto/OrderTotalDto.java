@@ -12,6 +12,7 @@ import lombok.*;
 public class OrderTotalDto {
 	private String ordererName;
 	private String ordererPhoneNo;
+	private String ordererEmail;
     private String receiverName;
     private String receiverPhoneNo;
     private String receiverAddress;

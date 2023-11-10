@@ -18,6 +18,7 @@ public class MemberInsertGuestDto {
 	private String name;
 	private String phoneNo;
 	private String userName;
+	private String email;
 	@Builder.Default
 	private String role = "Guest";
 	
@@ -28,6 +29,7 @@ public class MemberInsertGuestDto {
     			.phoneNo(entity.getPhoneNo())
     			.userName(entity.getUserName())
     			.role(entity.getRole())
+    			.email(entity.getEmail())
     			.build();
     }
 }

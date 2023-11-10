@@ -125,7 +125,7 @@ public class OrderServiceImpl implements OrderService {
 		System.out.println("@@@@@@@@@@@@@@@delivery= " + delivery);
 
 		MemberResponseDto memberResponseDto = memberService.joinGuest(MemberInsertGuestDto.builder()
-				.name(orderGuestDto.getName()).phoneNo(orderGuestDto.getPhoneNo()).role("Guest").build());
+				.name(orderGuestDto.getName()).phoneNo(orderGuestDto.getPhoneNo()).email(orderGuestDto.getEmail()).role("Guest").build());
 		Member member = Member.toResponseEntity(memberResponseDto);
 
 		Orders orders = orderDao.save(Orders.builder().description(optionSet.getProduct().getName())
@@ -152,8 +152,13 @@ public class OrderServiceImpl implements OrderService {
 		int oi_tot_count = 0;
 
 		MemberResponseDto memberResponseDto = memberService.joinGuest(MemberInsertGuestDto.builder()
-				.name(orderGuestDto.getName()).phoneNo(orderGuestDto.getPhoneNo()).role("Guest").build());
+				.name(orderGuestDto.getName())
+				.phoneNo(orderGuestDto.getPhoneNo())
+				.email(orderGuestDto.getEmail())
+				.role("Guest")
+				.build());
 		Member member = Member.toResponseEntity(memberResponseDto);
+		System.out.println("##########################"+member);
 
 		for (int i = 0; i < fUserCarts.size(); i++) {
 
