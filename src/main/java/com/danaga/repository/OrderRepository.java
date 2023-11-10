@@ -2,6 +2,8 @@ package com.danaga.repository;
 
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.danaga.config.OrderStateMsg;
 import com.danaga.entity.Orders;
 
 public interface OrderRepository extends JpaRepository<Orders, Long> {
@@ -21,6 +23,11 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
 
 	// 비회원 : 주문 번호, 회원 이름, 회원 전화번호를 기반으로 주문 조회
 	Orders findOrdersByIdAndMember_NameAndMember_PhoneNo(Long orderNo, String Name, String phoneNo);
+	
+	// 탈퇴회원 리스트
+	List<Orders> findByMemberIdIsNull();
+	// 배송상태 리스트
+	List<Orders> findByStatementIn(List<OrderStateMsg> statement);
 	
 
 }

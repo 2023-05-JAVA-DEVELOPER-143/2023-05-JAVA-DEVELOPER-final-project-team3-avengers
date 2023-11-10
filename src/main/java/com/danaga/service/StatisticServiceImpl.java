@@ -3,6 +3,7 @@ package com.danaga.service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -266,29 +267,19 @@ public class StatisticServiceImpl implements StatisticService {
 	// orderList 출력 (탈퇴회원 구분)
 	@Override
 	public List<Orders> orderList() {
-		List<Orders> orders = secession();
-		List<Orders> returnOrders = new ArrayList<>();
-		for (Orders order : orders) {
-			if (order.getStatement().equals(OrderStateMsg.입금대기중) || order.getStatement().equals(OrderStateMsg.배송중)
-					|| order.getStatement().equals(OrderStateMsg.배송완료)) {
-				returnOrders.add(order);
-			}
-		}
-		return returnOrders;
+		secession();
+		List<OrderStateMsg> states = Arrays.asList(OrderStateMsg.입금대기중, OrderStateMsg.배송중, OrderStateMsg.배송완료);
+		List<Orders> orders = orderRepository.findByStatementIn(states);
+		return orders;
 	}
 
 	// refundList 출력
 	@Override
 	public List<Orders> refundList() {
-		List<Orders> orders = secession();
-		List<Orders> returnOrders = new ArrayList<>();
-		for (Orders order : orders) {
-			if (order.getStatement().equals(OrderStateMsg.환불대기중) || order.getStatement().equals(OrderStateMsg.환불대기중)
-					|| order.getStatement().equals(OrderStateMsg.환불완료)) {
-				returnOrders.add(order);
-			}
-		}
-		return returnOrders;
+		secession();
+		List<OrderStateMsg> states = Arrays.asList(OrderStateMsg.환불대기중, OrderStateMsg.환불완료, OrderStateMsg.취소);
+		List<Orders> orders = orderRepository.findByStatementIn(states);
+		return orders;
 	}
 
 	// memberList 출력 (비회원, admin, 탈퇴회원 제외)
@@ -338,13 +329,13 @@ public class StatisticServiceImpl implements StatisticService {
 	*
 	*/
 	// 탈퇴회원 9999화
-	public List<Orders> secession() {
-		List<Orders> orders = orderRepository.findAll();
+	public void secession() {
+		List<Orders> orders = orderRepository.findByMemberIdIsNull();
 		for (Orders order : orders) {
 			if (order.getMember() == null) {
 				order.setMember(memberRepository.findById(999999999999999999L).get());
 			}
 		}
-		return orders;
+		return;
 	}
 }
