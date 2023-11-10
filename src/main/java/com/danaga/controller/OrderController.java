@@ -507,7 +507,7 @@ public class OrderController {
 					return "orders/order_guest_detail";
 				} else {
 					System.out.println("일치하지않는 주문번호 또는 전화번호입니다.");
-		            model.addAttribute("error", "일치하지 않는 주문번호 또는 전화번호입니다.");
+		            model.addAttribute("notSame", "일치하지 않는 주문번호 또는 전화번호입니다.");
 		            return "orders/find_order_guest";
 				}
 			
