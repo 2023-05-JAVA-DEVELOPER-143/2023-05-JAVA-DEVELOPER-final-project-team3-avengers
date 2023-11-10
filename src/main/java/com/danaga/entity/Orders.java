@@ -78,6 +78,7 @@ public class Orders {
 	
 	public static Orders toResponseEntity(OrdersDto ordersDto) {
 		return Orders.builder()
+					 .createDate(ordersDto.getCreateDate())
 					 .description(ordersDto.getDescription())
 					 .price(ordersDto.getPrice())
 					 .statement(ordersDto.getStateMsg())

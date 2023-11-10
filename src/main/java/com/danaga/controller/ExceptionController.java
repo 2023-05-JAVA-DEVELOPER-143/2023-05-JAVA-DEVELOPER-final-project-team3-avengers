@@ -37,6 +37,7 @@ public class ExceptionController {
 		}
 	
 	@ExceptionHandler(Exception.class)
+	@ResponseStatus
 	protected String exception (Exception e) {
 		return "redirect:http://localhost/404.html";
 	}
