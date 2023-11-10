@@ -1,9 +1,8 @@
-package com.danaga.dto;
+package com.danaga.dto.admin;
 
 import java.util.List;
 
 import com.danaga.dto.product.CategoryDto;
-import com.danaga.dto.product.ProductSaveDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,8 +13,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminProductOnlyDto {
+public class AdminProductInsertDto {
 	private List<CategoryDto> categoryDto;
-	private ProductSaveDto productSaveDto;
+	private List<AdminOptionDto> adminOptionDto;
+	private AdminProductDto adminProductDto;
 
 }

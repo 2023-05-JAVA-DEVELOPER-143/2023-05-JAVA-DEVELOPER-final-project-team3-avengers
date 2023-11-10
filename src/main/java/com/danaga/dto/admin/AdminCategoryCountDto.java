@@ -1,4 +1,6 @@
-package com.danaga.dto;
+package com.danaga.dto.admin;
+
+import com.danaga.entity.Category;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,8 +13,8 @@ import lombok.ToString;
 @Builder
 @Data
 @ToString
-public class AdminOrderUpdate {
-	private long orderId;
-	private String statement;
-	
+public class AdminCategoryCountDto {
+	private Category category;
+	private Integer count;
+
 }

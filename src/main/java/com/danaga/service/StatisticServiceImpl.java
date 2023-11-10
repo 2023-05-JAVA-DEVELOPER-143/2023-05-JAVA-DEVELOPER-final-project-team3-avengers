@@ -11,11 +11,13 @@ import org.springframework.stereotype.Service;
 
 import com.danaga.config.OrderStateMsg;
 import com.danaga.dao.product.OptionSetDao;
-import com.danaga.dto.AdminOptionDto;
-import com.danaga.dto.AdminOrderDataDto;
-import com.danaga.dto.AdminProductDto;
-import com.danaga.dto.AdminProductInsertDto;
-import com.danaga.dto.AdminProductOnlyDto;
+import com.danaga.dto.admin.AdminCategoryCountDto;
+import com.danaga.dto.admin.AdminOptionDto;
+import com.danaga.dto.admin.AdminOptionSetDto;
+import com.danaga.dto.admin.AdminOrderDataDto;
+import com.danaga.dto.admin.AdminProductDto;
+import com.danaga.dto.admin.AdminProductInsertDto;
+import com.danaga.dto.admin.AdminProductOnlyDto;
 import com.danaga.dto.product.CategoryDto;
 import com.danaga.dto.product.OptionSetCreateDto;
 import com.danaga.dto.product.ProductSaveDto;
@@ -38,27 +40,20 @@ import com.danaga.repository.product.OptionSetRepository;
 import com.danaga.repository.product.OptionsRepository;
 import com.danaga.repository.product.ProductRepository;
 
-@Service
-public class StatisticServiceImpl implements StatisticService {
-	@Autowired
-	private StatisticRepository statisticRepository;
-	@Autowired
-	private OrderRepository orderRepository;
-	@Autowired
-	private CategoryRepository categoryRepository;
-	@Autowired
-	private ProductRepository productRepository;
-	@Autowired
-	private OptionSetDao optionSetDao;
-	@Autowired
-	private CategorySetRepository categorySetRepository;
-	@Autowired
-	private OptionsRepository optionsRepository;
-	@Autowired
-	private MemberRepository memberRepository;
-	@Autowired
-	private BoardRepository boardRepository;
+import lombok.RequiredArgsConstructor;
 
+@Service
+@RequiredArgsConstructor
+public class StatisticServiceImpl implements StatisticService {
+	private final StatisticRepository statisticRepository;
+	private final OrderRepository orderRepository;
+	private final CategoryRepository categoryRepository;
+	private final ProductRepository productRepository;
+	private final OptionSetDao optionSetDao;
+	private final CategorySetRepository categorySetRepository;
+	private final OptionsRepository optionsRepository;
+	private final MemberRepository memberRepository;
+	private final BoardRepository boardRepository;
 
 	// 오늘날짜 단순 반환
 	@Override
@@ -207,19 +202,66 @@ public class StatisticServiceImpl implements StatisticService {
 					.extraPrice(option.getExtraPrice()).optionSet(optionSet).build());
 		}
 	}
+
 	// 신규방식 Product Only 추가
-		@Override
-		public void createProductOnly(AdminProductOnlyDto dto) {
-			List<CategoryDto> categoryDto = dto.getCategoryDto();
-			ProductSaveDto productDto = dto.getProductSaveDto();
-			// Product 추가
-			Product product = productRepository.save(productDto.toEntity());
-			// Category & CategorySet 추가
-			for (CategoryDto category : categoryDto) {
-				Category foundCategory = categoryRepository.findById(category.getId()).get();
-				categorySetRepository.save(CategorySet.builder().category(foundCategory).product(product).build());
-			}
+	@Override
+	public void createProductOnly(AdminProductOnlyDto dto) {
+		List<CategoryDto> categoryDto = dto.getCategoryDto();
+		ProductSaveDto productDto = dto.getProductSaveDto();
+		// Product 추가
+		Product product = productRepository.save(productDto.toEntity());
+		// Category & CategorySet 추가
+		for (CategoryDto category : categoryDto) {
+			Category foundCategory = categoryRepository.findById(category.getId()).get();
+			categorySetRepository.save(CategorySet.builder().category(foundCategory).product(product).build());
 		}
+	}
+
+	// 신규방식 OptionSet 추가
+	@Override
+	public void createOptionSet(AdminOptionSetDto dto) {
+		List<AdminOptionDto> list = dto.getOptionsDto();
+		Product product = productRepository.findById(dto.getProductNo()).get();
+		// OptionSet Price 계산
+		Integer totPrice = 0;
+		for (AdminOptionDto option : list) {
+			totPrice += option.getExtraPrice();
+		}
+		// OptionSet 추가
+		OptionSet optionSet = optionSetDao.create(OptionSetCreateDto.builder().stock(dto.getOsStock())
+				.productId(product.getId()).productPrice(product.getPrice() + totPrice).build());
+		// Option 추가
+		for (AdminOptionDto option : list) {
+			optionsRepository.save(Options.builder().name(option.getName()).value(option.getValue())
+					.extraPrice(option.getExtraPrice()).optionSet(optionSet).build());
+		}
+
+	}
+
+	// 카테고리 제품수 반환
+	@Override
+	public List<AdminCategoryCountDto> countCategoryComputer() {
+		List<AdminCategoryCountDto> list = new ArrayList<>();
+		List<Category> computerList = categoryRepository.findChildTypesByParent_Id(1L);
+		for (Category category : computerList) {
+			AdminCategoryCountDto dto = AdminCategoryCountDto.builder().category(category)
+					.count(categorySetRepository.countByCategoryId(category.getId())).build();
+			list.add(dto);
+		}
+		return list;
+	}
+
+	@Override
+	public List<AdminCategoryCountDto> countCategoryLaptop() {
+		List<AdminCategoryCountDto> list = new ArrayList<>();
+		List<Category> computerList = categoryRepository.findChildTypesByParent_Id(2L);
+		for (Category category : computerList) {
+			AdminCategoryCountDto dto = AdminCategoryCountDto.builder().category(category)
+					.count(categorySetRepository.countByCategoryId(category.getId())).build();
+			list.add(dto);
+		}
+		return list;
+	}
 
 	// orderList 출력 (탈퇴회원 구분)
 	@Override
@@ -274,6 +316,7 @@ public class StatisticServiceImpl implements StatisticService {
 		}
 		return returnBoards;
 	}
+
 	// 1:1 문의 출력
 	@Override
 	public List<Board> oneToOneList() {
@@ -287,7 +330,7 @@ public class StatisticServiceImpl implements StatisticService {
 		return returnBoards;
 	}
 	// 게시판 업로드
-	
+
 	/*
 	*
 	*

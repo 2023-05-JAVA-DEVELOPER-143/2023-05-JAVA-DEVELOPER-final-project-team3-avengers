@@ -158,18 +158,18 @@
 	<script src="/bootstrap_admin/js/demo/datatables-demo.js"></script>
 	
 	<script>
-		function updateModalContent(productName, productId) {
+		function updateModalContent(productName, opsionSetId) {
 			var modalTitle = document.getElementById("exampleModalLabel");
 			var modalBody = document.querySelector(".modal-body");
 			var deleteButton = document.querySelector(".btn-primary");
 
-			modalTitle.textContent = productId + "번 " + productName + " 제품을 정말 삭제하시겠습니까?";
+			modalTitle.textContent = opsionSetId + "번 " + productName + " 제품을 정말 삭제하시겠습니까?";
 			modalBody.textContent = "\"삭제\" 버튼을 누르면 제품이 영구히 삭제됩니다.";
 			
 			deleteButton.addEventListener("click", function () {
 				$.ajax({
 					type: "DELETE",
-					url: "/admin_data/product/" + productId,
+					url: "/admin_data/optionSet/" + opsionSetId,
 					success: function () {
 						location.reload();
 					},

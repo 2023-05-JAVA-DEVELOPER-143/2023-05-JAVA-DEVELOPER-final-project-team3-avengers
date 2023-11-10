@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.danaga.dto.ResponseDto;
+import com.danaga.dto.admin.AdminCategoryCountDto;
 import com.danaga.dto.product.ProductDto;
 import com.danaga.dto.product.QueryStringDataDto;
 import com.danaga.entity.Category;
@@ -83,8 +84,8 @@ public class StatisticController {
 	}
 	@GetMapping("/admin_category_insert")
 	public String adminCategoryInsert(Model model) {
-		List<Category> computerList = categoryRepository.findChildTypesByParent_Id(1L);
-		List<Category> laptopList = categoryRepository.findChildTypesByParent_Id(2L);
+		List<AdminCategoryCountDto> computerList = statisticService.countCategoryComputer();
+		List<AdminCategoryCountDto> laptopList = statisticService.countCategoryLaptop();
 		model.addAttribute("computerList", computerList);
 		model.addAttribute("laptopList", laptopList);
 		return "admin/admin_category_insert";

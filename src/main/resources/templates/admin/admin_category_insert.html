@@ -105,9 +105,9 @@
 												</thead>
 												<tbody>
 													<tr th:each="computer : ${computerList}">
-														<td th:text="${computer.id}"></td>
-														<td th:text="${computer.name}"></td>
-														<td >10</td>
+														<td th:text="${computer.category.id}"></td>
+														<td th:text="${computer.category.name}"></td>
+														<td th:text="${computer.count}"></td>
 													</tr>
 												</tbody>
 											</table>
@@ -133,9 +133,9 @@
 										</thead>
 										<tbody>
 											<tr th:each="laptop : ${laptopList}">
-												<td th:text="${laptop.id}"></td>
-												<td th:text="${laptop.name}"></td>
-												<td >10</td>
+												<td th:text="${laptop.category.id}"></td>
+												<td th:text="${laptop.category.name}"></td>
+												<td th:text="${laptop.count}"></td>
 											</tr>
 										</tbody>
 									</table>

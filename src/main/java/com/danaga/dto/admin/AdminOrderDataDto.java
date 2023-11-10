@@ -1,4 +1,4 @@
-package com.danaga.dto;
+package com.danaga.dto.admin;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

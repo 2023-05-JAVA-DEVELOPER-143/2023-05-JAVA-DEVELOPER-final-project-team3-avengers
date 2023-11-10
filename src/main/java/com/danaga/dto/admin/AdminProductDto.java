@@ -1,4 +1,4 @@
-package com.danaga.dto;
+package com.danaga.dto.admin;
 
 import com.danaga.entity.Product;
 
