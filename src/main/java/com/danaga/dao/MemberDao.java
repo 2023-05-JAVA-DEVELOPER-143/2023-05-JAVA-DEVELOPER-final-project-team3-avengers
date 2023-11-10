@@ -15,4 +15,6 @@ public interface MemberDao {
 	public boolean existedMemberByEmail(String email) throws Exception;
 	public boolean existedMemberByPhoneNo(String phoneNo) throws Exception;
 	public boolean existedMemberByNickname(String nickname) throws Exception;
+	public Member updateGuestPhoneNo(Member updateMember) throws Exception;
+	public Member updateGuestEmail(Member updateMember) throws Exception;
 	}

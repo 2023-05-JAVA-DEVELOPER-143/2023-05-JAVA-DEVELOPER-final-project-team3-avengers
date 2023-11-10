@@ -33,7 +33,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Autowired
 	private MemberRepository memberRepository;
-	
+
 	@Autowired
 	private OrderDao orderDao;
 
@@ -49,6 +49,7 @@ public class MemberServiceImpl implements MemberService {
 	public MemberResponseDto getMemberBy(String value) throws Exception {
 		return MemberResponseDto.toDto(memberDao.findMember(value));
 	}
+
 	@Transactional
 	public MemberResponseDto joinMember(Member member) throws Exception, ExistedMemberByUserNameException {
 		// 1.중복체크
@@ -73,59 +74,64 @@ public class MemberServiceImpl implements MemberService {
 
 	@Transactional
 	public MemberResponseDto joinGuest(MemberInsertGuestDto memberInsertGuestDto) throws Exception {
-		if (memberDao.existedMemberByPhoneNo(memberInsertGuestDto.getPhoneNo())) {
-			return MemberResponseDto.toDto(memberDao.findMember((memberInsertGuestDto).getPhoneNo()));
+		if (memberDao.existedMemberByEmail(memberInsertGuestDto.getEmail())
+				&& memberDao.existedMemberByPhoneNo(memberInsertGuestDto.getPhoneNo())) {
+			Member member = memberDao.findMember((memberInsertGuestDto).getPhoneNo());
+			member.setEmail(null);
+			memberDao.updateGuestEmail(member);
+			return MemberResponseDto.toDto(member);
+		} else if (memberDao.existedMemberByEmail(memberInsertGuestDto.getEmail())) {
+			Member member = memberDao.findMember((memberInsertGuestDto).getEmail());
+			member.setPhoneNo(memberInsertGuestDto.getPhoneNo());
+			memberDao.updateGuestPhoneNo(member);
+			return MemberResponseDto.toDto(member);
+		} else if (memberDao.existedMemberByPhoneNo(memberInsertGuestDto.getPhoneNo())) {
+			Member member = memberDao.findMember((memberInsertGuestDto).getPhoneNo());
+			member.setEmail(memberInsertGuestDto.getEmail());
+			memberDao.updateGuestEmail(member);
+			return MemberResponseDto.toDto(member);
 		} else {
 			return MemberResponseDto.toDto(memberDao.insert(Member.toGuestEntity(memberInsertGuestDto)));
 		}
 	}
+
 	@Transactional
-	public MemberResponseDto updateMember(MemberUpdateDto memberUpdateDto) throws Exception, ExistedMemberByNicknameException {
+	public MemberResponseDto updateMember(MemberUpdateDto memberUpdateDto)
+			throws Exception, ExistedMemberByNicknameException {
 		Member originalMember = memberRepository.findById(memberUpdateDto.getId()).get();
-		Member member = Member.builder()
-				.id(memberUpdateDto.getId())
-				.userName(originalMember.getUserName())
-				.password(memberUpdateDto.getPassword())
-				.nickname(memberUpdateDto.getNickname())
-				.postCode(memberUpdateDto.getPostCode())
-				.address(memberUpdateDto.getAddress())
-				.detailAddress(memberUpdateDto.getDetailAddress())
-				.role(originalMember.getRole())
-				.grade(originalMember.getGrade())
-				.gradePoint(originalMember.getGradePoint())
-				.build();
-				
+		Member member = Member.builder().id(memberUpdateDto.getId()).userName(originalMember.getUserName())
+				.password(memberUpdateDto.getPassword()).nickname(memberUpdateDto.getNickname())
+				.postCode(memberUpdateDto.getPostCode()).address(memberUpdateDto.getAddress())
+				.detailAddress(memberUpdateDto.getDetailAddress()).role(originalMember.getRole())
+				.grade(originalMember.getGrade()).gradePoint(originalMember.getGradePoint()).build();
+
 		if (originalMember.getNickname().equals(member.getNickname())) {
-			
-		} else if(memberRepository.findByNickname(member.getNickname()).isPresent()) {
-			throw new ExistedMemberByNicknameException(member.getNickname()+"는 사용중인 닉네임 입니다.");
+
+		} else if (memberRepository.findByNickname(member.getNickname()).isPresent()) {
+			throw new ExistedMemberByNicknameException(member.getNickname() + "는 사용중인 닉네임 입니다.");
 		}
-		//Member updatedMember = Member.toUpdateEntity(memberUpdateDto);
+		// Member updatedMember = Member.toUpdateEntity(memberUpdateDto);
 		return MemberResponseDto.toDto(memberDao.update(member));
 	}
+
 	@Transactional
-	public MemberResponseDto updateKakaoMember(KakaoMemberUpdateDto kakaoMemberUpdateDto) throws Exception, ExistedMemberByNicknameException {
+	public MemberResponseDto updateKakaoMember(KakaoMemberUpdateDto kakaoMemberUpdateDto)
+			throws Exception, ExistedMemberByNicknameException {
 		Member originalMember = memberRepository.findById(kakaoMemberUpdateDto.getId()).get();
-		Member member = Member.builder()
-				.id(kakaoMemberUpdateDto.getId())
-				.userName(kakaoMemberUpdateDto.getUserName())
-				.password(kakaoMemberUpdateDto.getPassword())
-				.nickname(kakaoMemberUpdateDto.getNickname())
-				.postCode(kakaoMemberUpdateDto.getPostCode())
-				.address(kakaoMemberUpdateDto.getAddress())
-				.detailAddress(kakaoMemberUpdateDto.getDetailAddress())
-				.role("Member")
-				.grade(originalMember.getGrade())
-				.gradePoint(originalMember.getGradePoint())
-				.build();
+		Member member = Member.builder().id(kakaoMemberUpdateDto.getId()).userName(kakaoMemberUpdateDto.getUserName())
+				.password(kakaoMemberUpdateDto.getPassword()).nickname(kakaoMemberUpdateDto.getNickname())
+				.postCode(kakaoMemberUpdateDto.getPostCode()).address(kakaoMemberUpdateDto.getAddress())
+				.detailAddress(kakaoMemberUpdateDto.getDetailAddress()).role("Member").grade(originalMember.getGrade())
+				.gradePoint(originalMember.getGradePoint()).build();
 		if (originalMember.getNickname().equals(member.getNickname())) {
-			
-		} else if(memberRepository.findByNickname(member.getNickname()).isPresent()) {
-			throw new ExistedMemberByNicknameException(member.getNickname()+"는 사용중인 닉네임 입니다.");
+
+		} else if (memberRepository.findByNickname(member.getNickname()).isPresent()) {
+			throw new ExistedMemberByNicknameException(member.getNickname() + "는 사용중인 닉네임 입니다.");
 		}
-		//Member updatedMember = Member.toUpdateEntity(memberUpdateDto);
+		// Member updatedMember = Member.toUpdateEntity(memberUpdateDto);
 		return MemberResponseDto.toDto(memberDao.update(member));
 	}
+
 	@Transactional
 	public void deleteMember(String value) throws Exception {
 		orderDao.ordersMemberIdNull(value);
@@ -136,12 +142,15 @@ public class MemberServiceImpl implements MemberService {
 	public boolean isDuplicateByUserName(String userName) throws Exception {
 		return memberDao.existedMemberByUserName(userName);
 	}
+
 	public boolean isDuplicateByEmail(String email) throws Exception {
 		return memberDao.existedMemberByEmail(email);
 	}
+
 	public boolean isDuplicateByPhoneNo(String phoneNo) throws Exception {
 		return memberDao.existedMemberByPhoneNo(phoneNo);
 	}
+
 	public boolean isDuplicateByNickname(String nickname) throws Exception {
 		return memberDao.existedMemberByNickname(nickname);
 	}
@@ -159,18 +168,17 @@ public class MemberServiceImpl implements MemberService {
 		}
 		return true;
 	}
+
 	@Transactional
 	@Override
 	public void updateGrade(Member member, int gradePoint) throws Exception {
 		member.setGradePoint(member.getGradePoint() + gradePoint);
 		if (member.getGradePoint() <= 1000) {
-			/* Rookie Bronze, Silver, Gold, Platinum, Diamond 결제 가격의 1%가 등급 포인트로 쌓임
-			등급 점수   Rookie : 0 ~ 1000
-			Bronze : 1001 ~ 5000
-			Silver : 5001 ~ 10000
-			Gold : 10001 ~ 20000
-			Platinum : 20001 ~ 35000
-			Diamond : 35001 ~  */
+			/*
+			 * Rookie Bronze, Silver, Gold, Platinum, Diamond 결제 가격의 1%가 등급 포인트로 쌓임 등급 점수
+			 * Rookie : 0 ~ 1000 Bronze : 1001 ~ 5000 Silver : 5001 ~ 10000 Gold : 10001 ~
+			 * 20000 Platinum : 20001 ~ 35000 Diamond : 35001 ~
+			 */
 			member.setGrade("Rookie");
 		} else if (member.getGradePoint() > 1000 && member.getGradePoint() <= 5000) {
 			member.setGrade("Bronze");
@@ -184,9 +192,10 @@ public class MemberServiceImpl implements MemberService {
 			member.setGrade("Diamond");
 		}
 		memberDao.updatePoint(member);
-		System.out.println("멤버가 안찾아짐"+member);
+		System.out.println("멤버가 안찾아짐" + member);
 
 	}
+
 	@Override
 	public Long findIdByUsername(String username) throws Exception {
 		return memberDao.findMember(username).getId();
