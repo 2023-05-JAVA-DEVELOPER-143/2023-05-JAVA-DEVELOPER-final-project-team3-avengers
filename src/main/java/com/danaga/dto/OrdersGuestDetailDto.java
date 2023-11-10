@@ -22,6 +22,5 @@ import lombok.*;
 public class OrdersGuestDetailDto {
 	private Long orderNo;
 	private String phoneNumber;
-	private String name;
 	
 }

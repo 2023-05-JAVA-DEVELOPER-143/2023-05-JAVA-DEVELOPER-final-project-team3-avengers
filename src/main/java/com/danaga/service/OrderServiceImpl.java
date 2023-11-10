@@ -203,8 +203,8 @@ public class OrderServiceImpl implements OrderService {
 	 */
 
 	@Transactional
-	public List<OrdersDto> guestOrderList(Long orderNo, String phoneNumber, String name) throws Exception {
-		if (name.equals(memberService.getMemberBy(phoneNumber).getName())) {
+	public List<OrdersDto> guestOrderList(Long orderNo, String phoneNumber) throws Exception {
+		if (phoneNumber.equals(memberService.getMemberBy(phoneNumber).getPhoneNo())) {
 			if (orderNo == orderDao.findById(orderNo).getId()) {
 				List<Orders> orderList = new ArrayList<>();
 				orderList.add(orderDao.findById(orderNo));
@@ -224,9 +224,9 @@ public class OrderServiceImpl implements OrderService {
 	 * 주문상세보기(회원)
 	 */
 	@Transactional
-	public OrdersDto guestOrderDetail(Long orderNo, String name, String phoneNo) throws Exception {
+	public OrdersDto guestOrderDetail(Long orderNo, String phoneNo) throws Exception {
 
-		Orders orders = orderDao.findOrdersByIdAndNameAndPhoneNo(orderNo, name, phoneNo);
+		Orders orders = orderDao.findOrdersByIdAndPhoneNo(orderNo, phoneNo);
 
 		return OrdersDto.orderDto(orders);
 	}
@@ -342,7 +342,7 @@ public class OrderServiceImpl implements OrderService {
 	/*
 	 * cart에서 선택주문(회원)
 	 */
-
+	@Transactional
 	public OrdersDto memberCartSelectOrderSave(String sUserId, DeliveryDto deliveryDto, List<CartDto> fUserCarts)
 			throws Exception {
 
