@@ -61,7 +61,6 @@
 											<th>이름</th>
 											<th>브랜드</th>
 											<th>카테고리</th>
-											<th>평점</th>
 											<th>등록일자</th>
 											<th>삭제</th>
 										</tr>
@@ -86,7 +85,6 @@
 												th:unless="${product.product.categorySets != null and product.product.categorySets.size() > 0}">
 												<td th:text="'-'"></td>
 											</span>
-											<td th:text="${product.product.rating}"></td>
 											<td th:text="${#temporals.format(product.createTime, 'yyyy-MM-dd')}"></td>
 											<td><a class="dropdown-item" href="#" data-toggle="modal"
 													data-target="#deleteModal"

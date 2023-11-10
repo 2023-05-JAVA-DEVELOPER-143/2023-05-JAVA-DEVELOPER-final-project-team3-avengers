@@ -15,6 +15,7 @@ import com.danaga.dto.product.ProductDto;
 import lombok.RequiredArgsConstructor;
 import com.danaga.entity.Cart;
 import com.danaga.entity.OptionSet;
+import com.danaga.exception.MemberNotFoundException;
 import com.danaga.repository.CartRepository;
 
 /*****************************************************************************************/
@@ -30,8 +31,6 @@ public class CartServiceImpl implements CartService {
 		Long memberId = memberDao.findMember(value).getId();
 		return cartRepository.findByOptionSetIdAndMemberId(optionSetId, memberId);
 	}
-	
-	
 	
 	@Override
 	public int isDuplicateProduct(String value, Long optionsetId) throws Exception{
@@ -49,9 +48,7 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public List<SUserCartResponseDto> findsUserCartList(String sUserId) throws Exception {
 		Long memberId = findMemberId(sUserId);
-		System.out.println(">>>>>>>>>>>>>" + memberId);
 		List<Cart> findCarts = cartRepository.findByMemberId(memberId);
-		System.out.println(">>>>>>>>>> findCarts 리스트의 사이즈 == " + findCarts.size());
 		List<SUserCartResponseDto> list = new ArrayList<>();
 		for (int i = 0; i < findCarts.size(); i++) {
 			list.add(SUserCartResponseDto.toDto(findCarts.get(i)));
@@ -88,7 +85,6 @@ public class CartServiceImpl implements CartService {
 	public CartDto updateCartQty(CartDto dto, String value) throws Exception {
 		Long memberId = memberDao.findMember(value).getId();
 		Cart findCart = cartRepository.findByOptionSetIdAndMemberId(dto.getOptionSetId(), memberId);
-		System.out.println(">>>>>>>>>>>>>>>>>>>>" + findCart.getQty());
 		findCart.setQty(dto.getQty());
 		cartRepository.save(findCart);
 		return CartDto.builder().optionSetId(findCart.getId()).qty(dto.getQty()).build();
@@ -156,12 +152,15 @@ public class CartServiceImpl implements CartService {
 	 * 카트 1개 삭제
 	 */
 	@Override
-	public void deleteCart(Long optionSetId, String value) throws Exception {
-		Long memberId = memberDao.findMember(value).getId();
-		// 삭제할 카트
-		Cart findCart = cartRepository.findByOptionSetIdAndMemberId(optionSetId, memberId);
-		// 찾은 카트의 Id로 삭제
-		cartRepository.deleteById(findCart.getId());
+	public void deleteCart(Long optionSetId, String value)  {
+		Long memberId;
+		try {
+			memberId = memberDao.findMember(value).getId();
+			Cart findCart = cartRepository.findByOptionSetIdAndMemberId(optionSetId, memberId);
+			cartRepository.deleteById(findCart.getId());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	// 카트 전체삭제 [세션(Controller) -> sUserId -> memberId -> delete ]

@@ -408,18 +408,25 @@ public class OrderServiceImpl implements OrderService {
 	 */
 
 	@Transactional
-	public List<OrdersDto> memberOrderList(String userName) throws Exception {
-
-		if (userName == null) {
-			throw new Exception("일치하는 사용자가없습니다.");
-		}
-		List<Orders> orderList = orderDao.findOrdersByMember_UserName(userName);
+	public List<OrdersDto> memberOrderList(String value) throws Exception {
 		List<OrdersDto> ordersDtoList = new ArrayList<>();
+		if (value == null) {
+			throw new Exception("일치하는 사용자가없습니다.");
+		} 
+		if(value.contains("@")) {
+			List<Orders> orderList = orderDao.findOrdersByMember_Email(value);
+			
+			for (Orders orders : orderList) {
+				OrdersDto ordersDto = OrdersDto.orderDto(orders);
+				ordersDtoList.add(ordersDto);
+			}
+		}else {
+		List<Orders> orderList = orderDao.findOrdersByMember_UserName(value);
 		for (Orders orders : orderList) {
 			OrdersDto ordersDto = OrdersDto.orderDto(orders);
 			ordersDtoList.add(ordersDto);
 		}
-
+		}
 		return ordersDtoList;
 	}
 
