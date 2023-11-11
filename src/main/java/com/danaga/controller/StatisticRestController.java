@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.danaga.dao.product.ProductDao;
+import com.danaga.dto.admin.AdminBoardUploadDto;
 import com.danaga.dto.admin.AdminOptionDto;
 import com.danaga.dto.admin.AdminOptionSetDto;
 import com.danaga.dto.admin.AdminOrderUpdate;
@@ -27,12 +28,15 @@ import com.danaga.dto.admin.AdminProductOnlyDto;
 import com.danaga.dto.product.CategoryDto;
 import com.danaga.dto.product.ProductDto;
 import com.danaga.dto.product.ProductSaveDto;
+import com.danaga.entity.Board;
+import com.danaga.entity.BoardGroup;
 import com.danaga.entity.Category;
 import com.danaga.entity.CategorySet;
 import com.danaga.entity.OptionSet;
 import com.danaga.entity.Options;
 import com.danaga.entity.Product;
 import com.danaga.entity.Statistic;
+import com.danaga.repository.BoardGroupRepository;
 import com.danaga.repository.BoardRepository;
 import com.danaga.repository.CategorySetRepository;
 import com.danaga.repository.MemberRepository;
@@ -63,9 +67,9 @@ public class StatisticRestController {
 	@Autowired
 	private ProductRepository productRepository;
 	@Autowired
-	private ProductDao productDao;
-	@Autowired
 	private CategoryRepository categoryRepository;
+	@Autowired
+	private BoardGroupRepository boardGroupRepository;
 
 	@GetMapping("/daily_update")
 	public ResponseEntity<?> dailyUpdate() {
@@ -218,6 +222,19 @@ public class StatisticRestController {
 			return new ResponseEntity<>("Error deleting member", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	@PostMapping("/board")
+	public ResponseEntity<?> uploadBoard(@RequestBody AdminBoardUploadDto adminBoardUploadDto) {
+		try {
+			Board board = Board.builder().title(adminBoardUploadDto.getTitle()).content(adminBoardUploadDto.getContent())
+					.boardGroup(boardGroupRepository.findById(4L).get()).disLike(0).isAdmin(1)
+					.member(memberRepository.findById(4L).get()).isLike(0).readCount(0).build();
+			boardRepository.save(board);
+			return new ResponseEntity<>("Board uploaded successfully", HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e+"Error uploading board", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
 	@DeleteMapping("/board/{id}")
 	public ResponseEntity<?> deleteBoard(@PathVariable Long id) {
@@ -225,7 +242,7 @@ public class StatisticRestController {
 			boardRepository.deleteById(id);
 			return new ResponseEntity<>("Board deleted successfully", HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<>("Error deleting member", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>("Error deleting Board", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 

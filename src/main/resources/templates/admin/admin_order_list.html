@@ -82,13 +82,17 @@
 													<button class="btn btn-danger dropdown-toggle" type="button"
 														id="dropdownMenuButton" data-toggle="dropdown"
 														aria-haspopup="true" aria-expanded="false">
-														<span th:class="'dropdown-selected'+${order.id}" th:text="${order.statement}"></span>
+														<span th:class="'dropdown-selected'+${order.id}"
+															th:text="${order.statement}"></span>
 													</button>
 													<div class="dropdown-menu animated--fade-in"
 														aria-labelledby="dropdownMenuButton">
-														<a class="dropdown-item" th:onclick="updateStatement([[${order.id}]], '입금대기중')">입금대기중</a>
-														<a class="dropdown-item" th:onclick="updateStatement([[${order.id}]], '배송중')">배송중</a>
-														<a class="dropdown-item" th:onclick="updateStatement([[${order.id}]], '배송완료')">배송완료</a>
+														<a class="dropdown-item"
+															th:onclick="updateStatement([[${order.id}]], '입금대기중')">입금대기중</a>
+														<a class="dropdown-item"
+															th:onclick="updateStatement([[${order.id}]], '배송중')">배송중</a>
+														<a class="dropdown-item"
+															th:onclick="updateStatement([[${order.id}]], '배송완료')">배송완료</a>
 													</div>
 												</div>
 												<div class="dropdown mb-4"
@@ -96,13 +100,17 @@
 													<button class="btn btn-primary dropdown-toggle" type="button"
 														id="dropdownMenuButton" data-toggle="dropdown"
 														aria-haspopup="true" aria-expanded="false">
-														<span th:class="'dropdown-selected'+${order.id}" th:text="${order.statement}"></span>
+														<span th:class="'dropdown-selected'+${order.id}"
+															th:text="${order.statement}"></span>
 													</button>
 													<div class="dropdown-menu animated--fade-in"
 														aria-labelledby="dropdownMenuButton">
-														<a class="dropdown-item" th:onclick="updateStatement([[${order.id}]], '입금대기중')">입금대기중</a>
-														<a class="dropdown-item" th:onclick="updateStatement([[${order.id}]], '배송중')">배송중</a>
-														<a class="dropdown-item" th:onclick="updateStatement([[${order.id}]], '배송완료')">배송완료</a>
+														<a class="dropdown-item"
+															th:onclick="updateStatement([[${order.id}]], '입금대기중')">입금대기중</a>
+														<a class="dropdown-item"
+															th:onclick="updateStatement([[${order.id}]], '배송중')">배송중</a>
+														<a class="dropdown-item"
+															th:onclick="updateStatement([[${order.id}]], '배송완료')">배송완료</a>
 													</div>
 												</div>
 												<div class="dropdown mb-4"
@@ -110,13 +118,17 @@
 													<button class="btn btn-success dropdown-toggle" type="button"
 														id="dropdownMenuButton" data-toggle="dropdown"
 														aria-haspopup="true" aria-expanded="false">
-														<span th:class="'dropdown-selected'+${order.id}" th:text="${order.statement}"></span>
+														<span th:class="'dropdown-selected'+${order.id}"
+															th:text="${order.statement}"></span>
 													</button>
 													<div class="dropdown-menu animated--fade-in"
 														aria-labelledby="dropdownMenuButton">
-														<a class="dropdown-item" th:onclick="updateStatement([[${order.id}]], '입금대기중')">입금대기중</a>
-														<a class="dropdown-item" th:onclick="updateStatement([[${order.id}]], '배송중')">배송중</a>
-														<a class="dropdown-item" th:onclick="updateStatement([[${order.id}]], '배송완료')">배송완료</a>
+														<a class="dropdown-item"
+															th:onclick="updateStatement([[${order.id}]], '입금대기중')">입금대기중</a>
+														<a class="dropdown-item"
+															th:onclick="updateStatement([[${order.id}]], '배송중')">배송중</a>
+														<a class="dropdown-item"
+															th:onclick="updateStatement([[${order.id}]], '배송완료')">배송완료</a>
 													</div>
 												</div>
 											</td>
@@ -178,7 +190,18 @@
 				contentType: "application/json",
 				data: JSON.stringify(data),
 				success: function () {
-					$('.dropdown-selected'+orderId).text(statement);
+					var $selectedSpan = $('.dropdown-selected' + orderId);
+					$selectedSpan.text(statement);
+					var $dropdownButton = $selectedSpan.closest('button');
+					if(statement==='입금대기중') {
+					$dropdownButton.removeClass('btn-primary').removeClass('btn-success').addClass('btn-danger');
+					}
+					if(statement==='배송중') {
+					$dropdownButton.removeClass('btn-primary').removeClass('btn-danger').addClass('btn-success');
+					}
+					if(statement==='배송완료') {
+					$dropdownButton.removeClass('btn-success').removeClass('btn-danger').addClass('btn-primary');
+					}
 				},
 				error: function () {
 					modalBody.textContent = "변경이 안되는데요ㅠㅠ?";

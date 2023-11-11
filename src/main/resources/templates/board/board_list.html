@@ -95,9 +95,8 @@
 								</h6>
 								<h6 class="text-muted text-normal text-uppercase" th:if="${boardGroupId} eq 2">1:1문의
 								</h6>
-								<h6 class="text-muted text-normal text-uppercase" th:if="${boardGroupId} eq 3">공지사항</h6>
-								<h6 class="text-muted text-normal text-uppercase" th:if="${boardGroupId} eq 4">자주묻는질문
-								</h6>
+								<h6 class="text-muted text-normal text-uppercase" th:if="${boardGroupId} eq 3">자주묻는질문</h6>
+								<h6 class="text-muted text-normal text-uppercase" th:if="${boardGroupId} eq 4">공지사항</h6>
 								
 								<th:block th:with="pageSize=${boardList.pageable.pageSize},
                     pageNumber=${boardList.pageable.pageNumber},
