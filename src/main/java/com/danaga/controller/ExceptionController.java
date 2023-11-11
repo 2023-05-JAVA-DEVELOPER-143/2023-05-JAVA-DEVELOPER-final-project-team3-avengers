@@ -25,21 +25,21 @@ public class ExceptionController {
 			,FoundNoMemberException.class,NoSuchElementException.class})
 	protected String defaultException(Exception e, HttpSession session) {
 		    if (e instanceof FoundNoOptionSetException) {
-		    	return "redirect:http://localhost/404.html"; //없는 상품 조회
+		    	return "redirect:404"; //없는 상품 조회
 			} else if (e instanceof NoSuchElementException) {
-				return "redirect:http://localhost/404.html";
+				return "redirect:404";
 			} else if (e instanceof NeedLoginException) {
-				return "redirect:http://localhost/member_login_form";
+				return "redirect:member_login_form";
 			} else if (e instanceof FoundNoMemberException) {
-				return "redirect:http://localhost/member_login_form";
+				return "redirect:member_login_form";
 			}
-		    return "redirect:http://localhost/404.html"; //없는 상품 조회
+		    return "redirect:404"; //없는 상품 조회
 		}
 	
 	@ExceptionHandler(Exception.class)
 	@ResponseStatus
 	protected String exception (Exception e) {
-		return "redirect:http://localhost/404.html";
+		return "redirect:404";
 	}
 	
 }

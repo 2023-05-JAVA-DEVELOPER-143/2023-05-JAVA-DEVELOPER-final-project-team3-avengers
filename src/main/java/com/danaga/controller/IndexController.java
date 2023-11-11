@@ -29,7 +29,7 @@ public class IndexController {
 	
 	//메인페이지에서 카테고리별 인기상품
 	//최신상품 뽑는 거 
-	@RequestMapping("/index")
+	@RequestMapping(value = {"/index","/"})
 	public String main(HttpSession session, Model model) {
 		try {
 			countCarts(session);

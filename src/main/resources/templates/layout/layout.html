@@ -45,14 +45,14 @@
 	<!-- Off-Canvas Category Menu-->
 	<!-- common-top.html start -->
 	<div class="offcanvas-container" id="shop-categories"
-		th:insert="~{/fragment/common-top::common-top}" th:remove="tag"></div>
+		th:insert="~{fragment/common-top::common-top}" th:remove="tag"></div>
 	<!-- common-top.html end      -->
 	<!-- Off-Canvas Wrapper-->
 	<div class="offcanvas-wrapper">
 		<!--banner 시작-->
 		<th:block th:if="${title!=''}">
 			<div class="page-title"
-				th:insert="~{/fragment/page-title::page-title(${title})}"
+				th:insert="~{fragment/page-title::page-title(${title})}"
 				th:remove="tag"></div>
 		</th:block>
 		<!--banner 끝-->
