@@ -29,5 +29,4 @@ public interface MemberService {
 	public void updateGrade(Member member, int gradePoint) throws Exception;
 	Long findIdByUsername(String userName) throws Exception;
 	public boolean isMatchEmailByUserName(String userName, String email) throws Exception;
-	public int randomPoint();
 }

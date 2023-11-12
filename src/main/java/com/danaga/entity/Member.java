@@ -59,13 +59,11 @@ public class Member {
 	@Builder.Default
 	private String role = "Member";// Member, Guest, Admin
 	@Builder.Default
-	private String grade = "Rookie"; /* Rookie Bronze, Silver, Gold, Platinum, Diamond 결제 가격의 1%가 등급 포인트로 쌓임
-										등급 점수   Rookie : 0 ~ 1000
-										Bronze : 1001 ~ 5000
-										Silver : 5001 ~ 10000
-										Gold : 10001 ~ 20000
-										Platinum : 20001 ~ 35000
-										Diamond : 35001 ~  */
+	private String grade = "Rookie"; /*
+	 * Rookie Bronze, Silver, Gold, Platinum, Diamond 결제 가격의 1%가 등급 포인트로 쌓임 등급 점수
+	 * Rookie : 0 ~ 999 Bronze : 1000 ~ 4999 Silver : 5000 ~ 9999 Gold : 10000 ~ 19999 
+	 * Platinum : 20000 ~ 34999 Diamond : 35000 ~
+	 */
 	@Builder.Default
 	private Integer gradePoint = 0;
 

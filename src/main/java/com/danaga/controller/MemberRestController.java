@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.danaga.dao.MemberDao;
 import com.danaga.dto.CartDto;
 import com.danaga.dto.KakaoMemberUpdateDto;
 import com.danaga.dto.MemberFindDto;
@@ -38,6 +39,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberRestController {
 	private final MemberService memberService;
+	private final MemberDao memberDao;
 	private final CartService cartService;
 	private final RecentViewService recentViewService;
 
@@ -143,11 +145,7 @@ public class MemberRestController {
 		int result = 5;
 
 		try {
-			// 가입시 랜덤 등급포인트
-			member.setGradePoint(memberService.randomPoint());
 			memberService.joinMember(member);
-			memberService.updateGrade(member, member.getGradePoint());
-
 		} catch (ExistedMemberByUserNameException e) {
 			result = 1;
 			map.put("result", result);
@@ -182,10 +180,11 @@ public class MemberRestController {
 			String sUserId = (String) session.getAttribute("sUserId");
 			Long sUserLongId = memberService.getMemberBy(sUserId).getId();
 			member.setId(sUserLongId);
-			// 통합시 랜덤 등급포인트
-			member.setGradePoint(memberService.randomPoint());
-			memberService.kakaoToMember(KakaoMemberUpdateDto.toDto(member));
-			memberService.updateGrade(member, member.getGradePoint());
+			MemberResponseDto dto = memberService.kakaoToMember(KakaoMemberUpdateDto.toDto(member));
+			//카카오 통합시 이벤트 랜덤 포인트 지급
+			int point = dto.getGradePoint()+memberDao.randomPoint();
+			dto.setGradePoint(dto.getGradePoint()+memberDao.randomPoint());
+			memberService.updateGrade(member, point);
 		}catch (ExistedMemberByUserNameException e) {
 			result = 1;
 			map.put("result", result);

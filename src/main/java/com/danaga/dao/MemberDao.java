@@ -17,4 +17,6 @@ public interface MemberDao {
 	public boolean existedMemberByNickname(String nickname) throws Exception;
 	public Member updateGuestPhoneNo(Member updateMember) throws Exception;
 	public Member updateGuestEmail(Member updateMember) throws Exception;
+	public int randomPoint();
+	public String randomPointGrade(int randomPoint);
 	}

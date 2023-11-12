@@ -53,14 +53,32 @@ public class MemberServiceImpl implements MemberService {
 	@Transactional
 	public MemberResponseDto joinMember(Member member) throws Exception, ExistedMemberByUserNameException {
 		// 1.중복체크
+		int randomPoint = memberDao.randomPoint();
 		if (memberDao.existedMemberByUserName(member.getUserName())) {
 			// 중복
 			throw new ExistedMemberByUserNameException(member.getUserName() + " 는 이미 존재하는 아이디 입니다.");
+		} else if (memberDao.existedMemberByEmail(member.getEmail())
+				&& (memberDao.findMember(member.getEmail()).getRole().equals("Guest"))) {
+			//예외 발생 (이메일이나 번호가 둘다 db에 있을시 예외처리 어떻게 할 것 인가..
+			// (비회원 주문시 조회할때 번호가 필요없어지면 번호를 가진 게스트의 번호를 null로 만들거나
+			// 번호의 유니크 조건을 빼거나
+			Member mem = memberDao.findMember(member.getEmail());
+			member.setId(mem.getId());
+			member.setRole("Member");
+			//이벤트 랜덤 포인트 지급
+			member.setGradePoint(randomPoint);
+			member.setGrade(memberDao.randomPointGrade(randomPoint));
+			return MemberResponseDto.toDto((memberDao.update(member)));
 		} else if (memberDao.existedMemberByEmail(member.getEmail())) {
 			throw new ExistedMemberByEmailException(member.getEmail() + " 는 이미 등록된 이메일 입니다.");
 		} else if (memberDao.existedMemberByPhoneNo(member.getPhoneNo())
 				&& (memberDao.findMember(member.getPhoneNo()).getRole().equals("Guest"))) {
+			Member mem = memberDao.findMember(member.getPhoneNo());
+			member.setId(mem.getId());
 			member.setRole("Member");
+			//이벤트 랜덤 포인트 지급
+			member.setGradePoint(randomPoint);
+			member.setGrade(memberDao.randomPointGrade(randomPoint));
 			return MemberResponseDto.toDto((memberDao.update(member)));
 		} else if (memberDao.existedMemberByPhoneNo(member.getPhoneNo())) {
 			throw new ExistedMemberByPhoneNoException(member.getPhoneNo() + " 는 이미 등록된 번호 입니다.");
@@ -69,6 +87,9 @@ public class MemberServiceImpl implements MemberService {
 		}
 		// 안중복
 		// 2.회원가입
+		//이벤트 랜덤 포인트 지급
+		member.setGradePoint(randomPoint);
+		member.setGrade(memberDao.randomPointGrade(randomPoint));
 		return MemberResponseDto.toDto(memberDao.insert(member));
 	}
 
@@ -103,7 +124,9 @@ public class MemberServiceImpl implements MemberService {
 				.password(memberUpdateDto.getPassword()).nickname(memberUpdateDto.getNickname())
 				.postCode(memberUpdateDto.getPostCode()).address(memberUpdateDto.getAddress())
 				.detailAddress(memberUpdateDto.getDetailAddress()).role(originalMember.getRole())
-				.grade(originalMember.getGrade()).gradePoint(originalMember.getGradePoint()).build();
+				.grade(originalMember.getGrade()).gradePoint(originalMember.getGradePoint())
+				.birthday(originalMember.getBirthday())
+				.build();
 
 		if (originalMember.getNickname().equals(member.getNickname())) {
 
@@ -122,7 +145,7 @@ public class MemberServiceImpl implements MemberService {
 				.password(kakaoMemberUpdateDto.getPassword()).nickname(kakaoMemberUpdateDto.getNickname())
 				.postCode(kakaoMemberUpdateDto.getPostCode()).address(kakaoMemberUpdateDto.getAddress())
 				.detailAddress(kakaoMemberUpdateDto.getDetailAddress()).role("Member").grade(originalMember.getGrade())
-				.gradePoint(originalMember.getGradePoint()).build();
+				.gradePoint(originalMember.getGradePoint()).birthday(originalMember.getBirthday()).build();
 		if (originalMember.getNickname().equals(member.getNickname())) {
 
 		} else if (memberRepository.findByNickname(member.getNickname()).isPresent()) {
@@ -176,8 +199,8 @@ public class MemberServiceImpl implements MemberService {
 		if (member.getGradePoint() < 1000) {
 			/*
 			 * Rookie Bronze, Silver, Gold, Platinum, Diamond 결제 가격의 1%가 등급 포인트로 쌓임 등급 점수
-			 * Rookie : 0 ~ 999 Bronze : 1000 ~ 4999 Silver : 5000 ~ 9999 Gold : 10000 ~
-			 * 19999 Platinum : 20000 ~ 34999 Diamond : 35000 ~
+			 * Rookie : 0 ~ 999 Bronze : 1000 ~ 4999 Silver : 5000 ~ 9999 Gold : 10000 ~ 19999 
+			 * Platinum : 20000 ~ 34999 Diamond : 35000 ~
 			 */
 			member.setGrade("Rookie");
 		} else if (member.getGradePoint() >= 1000 && member.getGradePoint() < 5000) {
@@ -214,17 +237,5 @@ public class MemberServiceImpl implements MemberService {
 		}
 		return true;
 	}
-	@Override
-	public int randomPoint() {
-		int randomPoint = 0;
-		int randomNo =(int) (Math.random() * 101);
-		if(randomNo > -1 && randomNo <= 50) {
-			randomPoint = 1000;
-		} else if(randomNo > 50 && randomNo <= 85) {
-			randomPoint = 5000;
-		} else {
-			randomPoint = 10000;
-		}
-		return randomPoint;
-	}
+	
 }

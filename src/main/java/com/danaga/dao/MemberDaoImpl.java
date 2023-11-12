@@ -91,6 +91,7 @@ public class MemberDaoImpl implements MemberDao {
 			member.setPostCode(updateMember.getPostCode());
 			member.setAddress(updateMember.getAddress());
 			member.setDetailAddress(updateMember.getDetailAddress());
+			member.setBirthday(updateMember.getBirthday());
 			member.setRole(updateMember.getRole());
 			member.setGrade(updateMember.getGrade());
 			member.setGradePoint(updateMember.getGradePoint());
@@ -134,6 +135,28 @@ public class MemberDaoImpl implements MemberDao {
 				return true;
 			}
 		return false;
+	}
+	@Override
+	public int randomPoint() {
+		int randomPoint = 0;
+		int randomNo =(int) (Math.random() * 101);
+		if(randomNo > -1 && randomNo <= 50) {
+			randomPoint = 1000;
+		} else if(randomNo > 50 && randomNo <= 85) {
+			randomPoint = 5000;
+		} else {
+			randomPoint = 10000;
+		}
+		return randomPoint;
+	}
+	public String randomPointGrade(int randomPoint) {
+		if (randomPoint == 1000) {
+			return "Bronze";
+		} else if (randomPoint == 5000) {
+			return "Silver";
+		} else {
+			return "Gold";
+		}
 	}
 
 }
