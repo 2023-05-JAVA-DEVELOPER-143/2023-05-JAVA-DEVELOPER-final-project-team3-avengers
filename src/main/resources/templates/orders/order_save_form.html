@@ -31,29 +31,41 @@
 						<table class="table" style="margin: 0 auto;">
 							<thead class="thead-inverse">
 								<tr>
-									<th style="width: 500px; white-space: nowrap; text-align: center; border: 1px solid #ccc;">상품
+									<th
+										style="width: 500px; white-space: nowrap; text-align: center; border: 1px solid #ccc;">
+										상품
 										번호</th>
-									<th style="width: 500px; white-space: nowrap; text-align: center; border: 1px solid #ccc;">상품
+									<th
+										style="width: 500px; white-space: nowrap; text-align: center; border: 1px solid #ccc;">
+										상품
 										이름</th>
-									<th style="width: 500px; white-space: nowrap; text-align: center; border: 1px solid #ccc;">수량</th>
-									<th style="width: 500px; white-space: nowrap; text-align: center; border: 1px solid #ccc;">결제금액</th>
+									<th
+										style="width: 500px; white-space: nowrap; text-align: center; border: 1px solid #ccc;">
+										수량</th>
+									<th
+										style="width: 500px; white-space: nowrap; text-align: center; border: 1px solid #ccc;">
+										결제금액</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr th:each="item : ${sUserCartOrderDto}">
-									<td style="width: 500px; text-align: center; border: 1px solid #ccc; border-radius: 10px; background-color: #f5f5f5" th:text="${item.id}">112</td>
+									<td style="width: 500px; text-align: center; border: 1px solid #ccc; border-radius: 10px; background-color: #f5f5f5"
+										th:text="${item.id}">112</td>
 									<td style="width: 500px; white-space: nowrap; text-align: center; border: 1px solid #ccc; border-radius: 10px; background-color: #f5f5f5"
 										th:text="${item.productName}">좋은 컴퓨터 외 5개</td>
 									<td style="width: 500px; white-space: nowrap; text-align: center; border: 1px solid #ccc; border-radius: 10px; background-color: #f5f5f5"
 										th:text="${item.qty}">2023.10.15</td>
-									<td style="width: 500px; white-space: nowrap; text-align: center; border: 1px solid #ccc; border-radius: 10px; background-color: #f5f5f5">
-										<span class="price" th:text="|${#numbers.formatInteger(item.totalPrice * item.qty, 0, 'COMMA')}원|"></span> 
+									<td
+										style="width: 500px; white-space: nowrap; text-align: center; border: 1px solid #ccc; border-radius: 10px; background-color: #f5f5f5">
+										<span class="price"
+											th:text="|${#numbers.formatInteger(item.totalPrice * item.qty, 0, 'COMMA')}원|"></span>
 									</td>
 								</tr>
 								<tr>
 									<td colspan="4" style="text-align: center;">
 										<strong>총가격:</strong>
-									<strong class="text-medium" th:text="|${#numbers.formatInteger(realTotalPrice, 0, 'COMMA')}원|"></strong>
+										<strong class="text-medium"
+											th:text="|${#numbers.formatInteger(realTotalPrice, 0, 'COMMA')}원|"></strong>
 									</td>
 								</tr>
 							</tbody>
@@ -87,7 +99,7 @@
 							</div>
 						</div>
 						<div class="custom-section">
-							<div id="ordererErrorEmail" class="error-message"></div>
+							<div id="ordererEmailError" class="error-message"></div>
 							<div class="col-sm-8">
 								<div class="form-group" style="display: flex; align-items: center;">
 									<label for="checkout-ordererEmail"
@@ -125,17 +137,19 @@
 						<div class="custom-section">
 							<div class="col-sm-10">
 								<div class="form-group">
-									<label for="reg-address" style="display: block; text-align: center; font-size: 1.1em;">주소 입력</label><br>
+									<label for="reg-address"
+										style="display: block; text-align: center; font-size: 1.1em;">주소 입력</label><br>
 									<input name="receiverPostCode" type="text" class="form-control"
 										id="receiverPostCode" placeholder="우편번호" required>
 									<input name="findaddr" type="button" class="form-control"
-										onclick="execDaumPostcode()" value="우편번호 찾기" style="background-color: #555; color: #fff;"><br>
+										onclick="execDaumPostcode()" value="우편번호 찾기"
+										style="background-color: #555; color: #fff;"><br>
 									<input name="receiverAddress" type="text" class="form-control" id="receiverAddress"
 										placeholder="주소" required>
-										<br>
+									<br>
 									<input name="receiverDetailAddress" type="text" class="form-control"
 										id="receiverDetailAddress" placeholder="상세주소" required>
-										<br>
+									<br>
 
 								</div>
 							</div>
@@ -180,17 +194,22 @@
 							<h3 class="widget-title">Order Summary</h3>
 							<table class="table">
 								<tr>
-									<td style = "border: 1px solid #ccc; border-radius: 10px; background-color: #f5f5f5">총주문상품</td>
-									<td class="text-medium" style = "border: 1px solid #ccc; border-radius: 10px; background-color: #f5f5f5"><span
-											th:text="${sUserCartOrderDto.get(0).productName}"></span>
+									<td style="border: 1px solid #ccc; border-radius: 10px; background-color: #f5f5f5">
+										총주문상품</td>
+									<td class="text-medium"
+										style="border: 1px solid #ccc; border-radius: 10px; background-color: #f5f5f5">
+										<span th:text="${sUserCartOrderDto.get(0).productName}"></span>
 										<th:block th:if="${sUserCartOrderDto.size() > 1}">
 											외 <span th:text="${sUserCartOrderDto.size() - 1}"></span> 건
 										</th:block>
 									</td>
 								</tr>
-								<tr>	
-									<td style = "border: 1px solid #ccc; border-radius: 10px; background-color: #f5f5f5">총가격</td>
-									<td  style = "border: 1px solid #ccc; border-radius: 10px; background-color: #f5f5f5" class="text-medium" th:text="|${#numbers.formatInteger(realTotalPrice, 0, 'COMMA')}원|"></td>
+								<tr>
+									<td style="border: 1px solid #ccc; border-radius: 10px; background-color: #f5f5f5">
+										총가격</td>
+									<td style="border: 1px solid #ccc; border-radius: 10px; background-color: #f5f5f5"
+										class="text-medium"
+										th:text="|${#numbers.formatInteger(realTotalPrice, 0, 'COMMA')}원|"></td>
 								</tr>
 							</table>
 						</section>
@@ -262,7 +281,7 @@
 				var receiverPostCode = document.getElementById('receiverPostCode').value;
 				var receiverAddress = document.getElementById('receiverAddress').value;
 				var receiverDetailAddress = document.getElementById('receiverDetailAddress').value;
-
+				var ordererEmailErrorElement = document.getElementById('ordererEmailError');
 
 				if (ordererName.trim() === '') {
 					document.getElementById('ordererName').value = '주문자 이름을 입력하세요.';
@@ -276,6 +295,15 @@
 
 				if (ordererPhoneNo.trim() === '') {
 					document.getElementById('ordererPhoneNo').value = '주문자 전화번호를 입력하세요.';
+					return;
+				}
+
+				if (ordererEmail.trim() === '') {
+					ordererEmailErrorElement.textContent = '주문자 이메일을 입력하세요.'; // 추가
+					return;
+				}
+
+				if (!isEmailValid(ordererEmail)) {
 					return;
 				}
 
@@ -337,6 +365,12 @@
 					errorElement.textContent = "20글자 이하로 작성하세요";
 				}
 			}
+			function isEmailValid(email) {
+				// 간단한 이메일 유효성을 검사하기 위한 정규 표현식
+				var emailRegex = /\S+@\S+\.\S+/;
+				return emailRegex.test(email);
+			}
+
 			function validatePhoneNo(inputElement, errorElement) {
 				const phoneNo = inputElement.value;
 
@@ -346,18 +380,28 @@
 					errorElement.textContent = "";
 				}
 			}
+			function validateEmail(inputElement, errorElement) {
+				const email = inputElement.value;
+
+				if (isEmailValid(email)) {
+					errorElement.textContent = "";
+				} else {
+					errorElement.textContent = "유효하지 않은 이메일 형식입니다. ex) example@email.com";
+				}
+			}
 
 			window.addEventListener("DOMContentLoaded", () => {
 				const receiverPhoneNoInput = document.getElementById("receiverPhoneNo");
 				const ordererPhoneNoInput = document.getElementById("ordererPhoneNo");
 				const ordererNameInput = document.getElementById("ordererName");
 				const receiverNameInput = document.getElementById("receiverName");
+				const ordererEmailInput = document.getElementById("ordererEmail");
 
 				const receiverErrorElement = document.getElementById("receiverError");
 				const ordererErrorElement = document.getElementById("ordererError");
 				const receiverNameErrorElement = document.getElementById("receiverNameError");
 				const ordererNameErrorElement = document.getElementById("ordererNameError");
-
+				const ordererEmailErrorElement = document.getElementById("ordererEmailError");
 
 
 				receiverPhoneNoInput.addEventListener("input", () => {
@@ -374,6 +418,9 @@
 
 				ordererNameInput.addEventListener("input", () => {
 					validateName(ordererNameInput, ordererNameErrorElement);
+				});
+				ordererEmailInput.addEventListener("input", () => { // 이 블록을 추가합니다
+					validateEmail(ordererEmailInput, ordererEmailErrorElement);
 				});
 			});
 
@@ -392,7 +439,7 @@
 			addClickEventToInput('receiverPostCode');
 			addClickEventToInput('receiverAddress');
 			addClickEventToInput('receiverDetailAddress');
-			
+
 		</script>
 	</th:block>
 </body>

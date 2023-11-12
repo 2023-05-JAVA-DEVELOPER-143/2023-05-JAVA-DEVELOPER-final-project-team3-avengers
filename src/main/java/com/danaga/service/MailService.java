@@ -61,11 +61,11 @@ public class MailService {
     	try {
     		//message.setFrom(new InternetAddress(senderEmail));
     		message.setRecipients(MimeMessage.RecipientType.TO, mail);
-    		message.setSubject("다나가 이메일 인증");
+    		message.setSubject("다나가 주문번호 확인");
     		String body = "";
     		body += "<h3>" + "주문하신 번호는" + "</h3>";
-    		body += "<h1>" + orderId + "</h1>";
-    		body += "<h3>" + "입니다 감사합니다." + "</h3>";
+    		body += "<h1>" + orderId +  "</h1>" +"입니다.";
+    		body += "<h3>" + "감사합니다." + "</h3>";
     		message.setText(body,"UTF-8", "html");
     	} catch (MessagingException e) {
     		e.printStackTrace();
