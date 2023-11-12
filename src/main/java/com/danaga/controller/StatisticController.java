@@ -137,7 +137,6 @@ public class StatisticController {
 	}
 	@GetMapping("/admin_board_upload")
 	public String uploadBoard(Model model) {
-		model.addAttribute("boardList", statisticService.boardList());
 		return "admin/admin_board_upload";
 	}
 	

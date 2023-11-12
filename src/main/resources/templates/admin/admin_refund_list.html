@@ -198,7 +198,18 @@
 				contentType: "application/json",
 				data: JSON.stringify(data),
 				success: function () {
-					$('.dropdown-selected'+orderId).text(statement);
+					var $selectedSpan = $('.dropdown-selected' + orderId);
+					$selectedSpan.text(statement);
+					var $dropdownButton = $selectedSpan.closest('button');
+					if(statement==='환불대기중') {
+					$dropdownButton.removeClass('btn-primary').removeClass('btn-warning').addClass('btn-danger');
+					}
+					if(statement==='취소') {
+					$dropdownButton.removeClass('btn-primary').removeClass('btn-danger').addClass('btn-warning');
+					}
+					if(statement==='환불완료') {
+					$dropdownButton.removeClass('btn-warning').removeClass('btn-danger').addClass('btn-primary');
+					}
 				},
 				error: function () {
 					modalBody.textContent = "변경이 안되는데요ㅠㅠ?";
