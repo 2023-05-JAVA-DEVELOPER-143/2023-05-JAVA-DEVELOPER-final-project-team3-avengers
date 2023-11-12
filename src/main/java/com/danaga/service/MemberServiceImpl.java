@@ -115,7 +115,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Transactional
-	public MemberResponseDto updateKakaoMember(KakaoMemberUpdateDto kakaoMemberUpdateDto)
+	public MemberResponseDto kakaoToMember(KakaoMemberUpdateDto kakaoMemberUpdateDto)
 			throws Exception, ExistedMemberByNicknameException {
 		Member originalMember = memberRepository.findById(kakaoMemberUpdateDto.getId()).get();
 		Member member = Member.builder().id(kakaoMemberUpdateDto.getId()).userName(kakaoMemberUpdateDto.getUserName())
@@ -173,22 +173,22 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public void updateGrade(Member member, int gradePoint) throws Exception {
 		member.setGradePoint(member.getGradePoint() + gradePoint);
-		if (member.getGradePoint() <= 1000) {
+		if (member.getGradePoint() < 1000) {
 			/*
 			 * Rookie Bronze, Silver, Gold, Platinum, Diamond 결제 가격의 1%가 등급 포인트로 쌓임 등급 점수
-			 * Rookie : 0 ~ 1000 Bronze : 1001 ~ 5000 Silver : 5001 ~ 10000 Gold : 10001 ~
-			 * 20000 Platinum : 20001 ~ 35000 Diamond : 35001 ~
+			 * Rookie : 0 ~ 999 Bronze : 1000 ~ 4999 Silver : 5000 ~ 9999 Gold : 10000 ~
+			 * 19999 Platinum : 20000 ~ 34999 Diamond : 35000 ~
 			 */
 			member.setGrade("Rookie");
-		} else if (member.getGradePoint() > 1000 && member.getGradePoint() <= 5000) {
+		} else if (member.getGradePoint() >= 1000 && member.getGradePoint() < 5000) {
 			member.setGrade("Bronze");
-		} else if (member.getGradePoint() > 5000 && member.getGradePoint() <= 10000) {
+		} else if (member.getGradePoint() >= 5000 && member.getGradePoint() < 10000) {
 			member.setGrade("Silver");
-		} else if (member.getGradePoint() > 10000 && member.getGradePoint() <= 20000) {
+		} else if (member.getGradePoint() >= 10000 && member.getGradePoint() < 20000) {
 			member.setGrade("Gold");
-		} else if (member.getGradePoint() > 20000 && member.getGradePoint() <= 35000) {
+		} else if (member.getGradePoint() >= 20000 && member.getGradePoint() < 35000) {
 			member.setGrade("Platinum");
-		} else if (member.getGradePoint() > 35000) {
+		} else if (member.getGradePoint() >= 35000) {
 			member.setGrade("Diamond");
 		}
 		memberDao.updatePoint(member);
@@ -213,5 +213,18 @@ public class MemberServiceImpl implements MemberService {
 			}
 		}
 		return true;
+	}
+	@Override
+	public int randomPoint() {
+		int randomPoint = 0;
+		int randomNo =(int) (Math.random() * 101);
+		if(randomNo > -1 && randomNo <= 50) {
+			randomPoint = 1000;
+		} else if(randomNo > 50 && randomNo <= 85) {
+			randomPoint = 5000;
+		} else {
+			randomPoint = 10000;
+		}
+		return randomPoint;
 	}
 }

@@ -143,7 +143,10 @@ public class MemberRestController {
 		int result = 5;
 
 		try {
+			// 가입시 랜덤 등급포인트
+			member.setGradePoint(memberService.randomPoint());
 			memberService.joinMember(member);
+			memberService.updateGrade(member, member.getGradePoint());
 
 		} catch (ExistedMemberByUserNameException e) {
 			result = 1;
@@ -179,7 +182,10 @@ public class MemberRestController {
 			String sUserId = (String) session.getAttribute("sUserId");
 			Long sUserLongId = memberService.getMemberBy(sUserId).getId();
 			member.setId(sUserLongId);
-			memberService.updateKakaoMember(KakaoMemberUpdateDto.toDto(member));
+			// 통합시 랜덤 등급포인트
+			member.setGradePoint(memberService.randomPoint());
+			memberService.kakaoToMember(KakaoMemberUpdateDto.toDto(member));
+			memberService.updateGrade(member, member.getGradePoint());
 		}catch (ExistedMemberByUserNameException e) {
 			result = 1;
 			map.put("result", result);

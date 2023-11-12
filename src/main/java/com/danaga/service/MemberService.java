@@ -19,7 +19,7 @@ public interface MemberService {
 	public MemberResponseDto joinMember(Member member) throws Exception;
 	public MemberResponseDto joinGuest(MemberInsertGuestDto memberInsertGuestDto) throws Exception;
 	public MemberResponseDto updateMember(MemberUpdateDto memberUpdateDto) throws Exception;
-	public MemberResponseDto updateKakaoMember(KakaoMemberUpdateDto kakaoMemberUpdateDto) throws Exception, ExistedMemberByNicknameException;
+	public MemberResponseDto kakaoToMember(KakaoMemberUpdateDto kakaoMemberUpdateDto) throws Exception, ExistedMemberByNicknameException;
 	public void deleteMember(String value) throws Exception;
 	public boolean isDuplicateByUserName(String userName) throws Exception;
 	public boolean isDuplicateByEmail(String email) throws Exception;
@@ -29,5 +29,5 @@ public interface MemberService {
 	public void updateGrade(Member member, int gradePoint) throws Exception;
 	Long findIdByUsername(String userName) throws Exception;
 	public boolean isMatchEmailByUserName(String userName, String email) throws Exception;
-	
+	public int randomPoint();
 }
