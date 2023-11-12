@@ -14,10 +14,6 @@ public interface OrderService {
 	/*****************************비회원*************************/
 	
 	/*
-	 * 카트에서 주문(비회원)
-	 */
-//	OrdersDto guestCartOrderSave(List<CartDto> fUserCarts, DeliveryDto deliveryDto, OrderGuestDto orderGuestDto)  throws Exception; 
-	/*
 	 * 상품에서 직접주문(비회원)
 	 */
 	OrdersDto guestProductOrderSave(OrdersProductDto ordersProductDto,OrderGuestDto orderGuestDto) throws Exception;
@@ -41,12 +37,6 @@ public interface OrderService {
 	 * 상품에서 직접주문(회원)
 	 */
 	OrdersDto memberProductOrderSave(String sUserId,OrdersProductDto ordersProductDto) throws Exception;
-
-	/*
-	 * cart에서 주문(회원)
-	 */
-//	OrdersDto memberCartOrderSave(String sUserId,DeliveryDto deliveryDto) throws Exception;
-
 	/*
 	 * cart에서 선택주문(회원)
 	 */

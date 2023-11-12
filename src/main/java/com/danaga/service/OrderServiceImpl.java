@@ -22,87 +22,13 @@ import lombok.RequiredArgsConstructor;
 
 public class OrderServiceImpl implements OrderService {
 
-	private final CartRepository cartRepository;
-	private final OrderItemRepository orderItemRepository;
 	private final MemberService memberService;
 	private final OptionSetDao optionSetDao;
 	private final OrderDao orderDao;
-	private final CartService cartService;
-	private final MemberDao memberDao;
 
 	/******************************************************
 	 * 비회원
 	 ******************************************************************/
-	/*
-	 * 카트에서 주문(비회원)
-	 */
-//	@Transactional
-//	public OrdersDto guestCartOrderSave(List<CartDto> fUserCarts, DeliveryDto deliveryDto, OrderGuestDto orderGuestDto)  throws Exception{
-//		//CartCreateDto에는 int qty와 OptionSet optionSet이 들어있다.
-//	
-//	    int o_tot_price = 0;
-//	    int oi_tot_count = 0;
-//	    List<OrderItem> orderItemList = new ArrayList<>();
-//	   
-//	    
-//	    for (CartDto cartDto : fUserCarts) {//카트Dto로 부터 orderItem을 만들어서 orderItemList를만들려고
-//	    	OptionSet optionSet =optionSetDao.findById(cartDto.getOptionSetId());
-//	    	
-//	    	o_tot_price+=optionSet.getTotalPrice()*cartDto.getQty();//주문의 요소 중 하나임
-//	    	oi_tot_count+=cartDto.getQty();//주문Desc만드려고
-//	    	
-//	    	
-//	    	 OrderItem orderItem = orderItemRepository.save(OrderItem.builder()
-//		               .qty(cartDto.getQty())
-//		               .optionSet(optionSet)
-//		               .build());
-//	    	 
-//	         orderItemList.add(orderItem);
-//	    	
-//	    }
-//	    
-//	    OptionSet optionSet= optionSetDao.findById(orderItemList.get(0).getOptionSet().getId());
-//		
-//	    String o_desc = optionSet.getProduct().getName() + "외" + (oi_tot_count - 1) + "개";
-//	       if (oi_tot_count == 1) {
-//	    	   o_desc = optionSet.getProduct().getName();
-//	       }
-//		
-//		   	MemberResponseDto memberResponseDto =memberService.joinGuest(MemberInsertGuestDto.builder()
-//										   							   .name(orderGuestDto.getName())
-//										   							   .phoneNo(orderGuestDto.getPhoneNo())
-//										   							   .userName(orderGuestDto.getName()+orderGuestDto.getPhoneNo())
-//										   							   .role("Guest")
-//										   							   .build());
-//		   	Member member= Member.toResponseEntity(memberResponseDto);
-//		   	
-//		      Delivery delivery = Delivery.builder()
-//	  					.name(deliveryDto.getName())
-//	  					.phoneNumber(deliveryDto.getPhoneNumber())
-//	  					.address(deliveryDto.getAddress())
-//	  					.build();
-//		   	
-//		     Orders orders = orderDao.save(Orders.builder()
-//                      .description(o_desc)
-//                      .price(o_tot_price)
-//                      .statement(OrderStateMsg.입금대기중)
-//                      .member(member)
-//                      .orderItems(orderItemList)
-//                      .delivery(delivery)
-//                      .build());
-//		     
-//		     member.setUserName(orders.getId()+member.getPhoneNo());
-//		     memberDao.insert(member);
-//		     
-//		      for (OrderItem orderItem : orderItemList) {
-//					orderItem.setOrders(orders);
-//				}
-//		      delivery.setOrders(orders);
-//		      
-//
-//		      return OrdersDto.orderDto(orders);
-//	}
-
 	/*
 	 * 상품에서 직접주문(비회원)
 	 */
@@ -226,7 +152,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	/*
-	 * 주문상세보기(회원)
+	 * 주문상세보기(비회원)
 	 */
 	@Transactional
 	public OrdersDto guestOrderDetail(Long orderNo, String phoneNo) throws Exception {
@@ -279,70 +205,6 @@ public class OrderServiceImpl implements OrderService {
 		return OrdersDto.orderDto(orders);
 
 	}
-	/*
-	 * cart에서 주문(회원)
-	 */
-//	   @Transactional
-//	   public OrdersDto memberCartOrderSave(String sUserId,DeliveryDto deliveryDto) throws Exception {
-//	      
-//	      
-//	      List<SUserCartResponseDto> cartList= cartService.findsUserCartList(sUserId);
-//	      
-//	      int o_tot_price = 0;
-//	      int oi_tot_count = 0;
-//	      List<OrderItem> orderItemList = new ArrayList<>();
-//	      for (SUserCartResponseDto cart : cartList) {
-//	    	  OptionSet optionSet = optionSetDao.findById(cart.getOsId());
-//	         o_tot_price+=optionSet.getTotalPrice()*(cart.getQty());
-//	         oi_tot_count+=cart.getQty();
-//	      
-//	         
-//	         OrderItem inputOIEntity = OrderItem.builder()
-//		               .qty(cart.getQty())
-//		               .optionSet(optionSet)
-//		               .build();
-//	         
-//	         orderItemList.add(inputOIEntity);
-//	      }
-//	      
-//	       OptionSet optionSet= optionSetDao.findById(orderItemList.get(0).getOptionSet().getId());
-//	      
-//	       String o_desc = optionSet.getProduct().getName() + "외" + (oi_tot_count - 1) + "개";
-//	       if (oi_tot_count == 1) {
-//	    	   o_desc = optionSet.getProduct().getName();
-//	       }
-//		   	Delivery delivery = Delivery.builder()
-//										.name(deliveryDto.getName())
-//										.phoneNumber(deliveryDto.getPhoneNumber())
-//										.address(deliveryDto.getAddress())
-//										.build();
-//						      
-//	       
-//	      Orders orders = orderDao.save(Orders.builder()
-//	                            .description(o_desc)
-//	                            .price(o_tot_price)
-//	                            .statement(OrderStateMsg.입금대기중)
-//	                            .member(Member.toResponseEntity(memberService.getMemberBy(sUserId)))
-//	                            .delivery(delivery)
-//	                            .orderItems(orderItemList)
-//	                            .build());
-//	      
-//	      for (OrderItem orderItem : orderItemList) {
-//			orderItem.setOrders(orders);
-//		}
-//	      delivery.setOrders(orders);
-//	      
-//	      
-//		    MemberResponseDto memberResponseDto =memberService.getMemberBy(sUserId);
-//			
-//		      Member member1= Member.toResponseEntity(memberResponseDto);
-//		      
-//		       memberService.updateGrade(member1,(int)((orders.getPrice())*0.001));
-//		     
-//		      orders.setMember(Member.toResponseEntity(memberResponseDto));
-////		      cartService.deleteCarts(sUserId);
-//	      return OrdersDto.orderDto(orders);
-//	   }
 
 	/*
 	 * cart에서 선택주문(회원)

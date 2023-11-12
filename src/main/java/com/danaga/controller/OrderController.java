@@ -22,12 +22,10 @@ import com.danaga.dto.OrderMemberBasicDto;
 import com.danaga.dto.OrderTotalDto;
 import com.danaga.dto.OrdersDto;
 import com.danaga.dto.OrdersGuestDetailDto;
-import com.danaga.dto.OrdersProductDto;
 import com.danaga.dto.ResponseDto;
 import com.danaga.dto.product.OptionSetUpdateDto;
 import com.danaga.dto.product.ProductDto;
 import com.danaga.entity.Member;
-import com.danaga.repository.MemberRepository;
 import com.danaga.service.CartService;
 import com.danaga.service.MemberService;
 import com.danaga.service.OrderService;
@@ -46,9 +44,7 @@ public class OrderController {
 	private final CartService cartService;
 	private final OptionSetService optionSetService;
 	private final MemberService memberService;
-	private final MemberRepository memberRepository;
 	private final OrderDao orderDao;
-
 	/*
 	 * 주문완료알림페이지에서 index.html로 돌아가기 session으로 회원일 떄 비회원일 때
 	 */
@@ -66,17 +62,13 @@ public class OrderController {
 	public String memberOrderList(Model model, HttpSession session) {// model은 데이터를 담아서 넘겨주는역활
 
 		try {
-//		   String sUserId = "User1";
 			String loginUser = (String) session.getAttribute("sUserId");
-			System.out.println("@@@@@@@@@"+loginUser);
 			List<OrdersDto> orderDtoList = orderService.memberOrderList(loginUser);
 			// orderDtoList를 id 기준으로 오름차순 정렬
 			orderDtoList.sort(Comparator.comparing(OrdersDto::getId));
 			model.addAttribute("orderDtoList", orderDtoList);
-			System.out.println("%%%%%%%%%%%"+orderDtoList);
 			Member member = Member.toResponseEntity(memberService.getMemberBy(loginUser));
 			model.addAttribute("loginUser", member);
-			System.out.println("@@@@@@@@@"+member);
 			return "orders/order_member_list";
 		} catch (Exception e) {
 			e.printStackTrace();

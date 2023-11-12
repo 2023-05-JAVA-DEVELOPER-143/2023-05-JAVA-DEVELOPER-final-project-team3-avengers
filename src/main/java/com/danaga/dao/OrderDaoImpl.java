@@ -117,7 +117,6 @@ public class OrderDaoImpl implements OrderDao {
 	}
 
 	// Id로 주문전체(특정사용자)
-
 	@Override
 	public List<Orders> findOrdersByMember_UserName(String userName) throws Exception {
 		if(userName!=null) {
@@ -130,7 +129,6 @@ public class OrderDaoImpl implements OrderDao {
 	}
 	
 	// Email로 주문전체(특정사용자)
-
 	@Override
 	public List<Orders> findOrdersByMember_Email(String email) throws Exception {
 		if(email!=null) {
@@ -141,10 +139,8 @@ public class OrderDaoImpl implements OrderDao {
 			throw new Exception("일치하는 이메일이 없습니다.");
 		}
 	}
-	
 
 	// 주문 번호로 1개보기(주문상세리스트)
-	// 주문번호는 id+10000이므로 받을때 id-10000으로 받아야함 --컨트롤러에서!!
 	@Override
 	public Orders findById(Long id) throws Exception {
 		Orders ordersDetail = orderRepository.findById(id).get();
@@ -172,7 +168,6 @@ public class OrderDaoImpl implements OrderDao {
 	/*
 	 * 주문+주문아이템 목록(회원)
 	 */
-
 	@Transactional
 	public List<Orders> memberOrdersListNull(String userName) throws Exception {
 
@@ -180,7 +175,6 @@ public class OrderDaoImpl implements OrderDao {
 			throw new Exception("일치하는 사용자가없습니다.");
 		}
 		List<Orders> orderList = this.findOrdersByMember_UserName(userName);
-		System.out.println("3333333333333333"+orderList);
 		
 		return orderList;
 	}
