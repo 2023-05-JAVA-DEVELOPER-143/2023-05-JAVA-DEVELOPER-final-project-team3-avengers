@@ -109,13 +109,14 @@ public class MemberServiceImpl implements MemberService {
 				.password(kakaoMemberUpdateDto.getPassword()).nickname(kakaoMemberUpdateDto.getNickname())
 				.postCode(kakaoMemberUpdateDto.getPostCode()).address(kakaoMemberUpdateDto.getAddress())
 				.detailAddress(kakaoMemberUpdateDto.getDetailAddress()).role("Member").grade(originalMember.getGrade())
-				.gradePoint(originalMember.getGradePoint()).birthday(originalMember.getBirthday()).build();
+				.gradePoint(originalMember.getGradePoint()+memberDao.randomPoint()).birthday(originalMember.getBirthday()).build();
 		if (originalMember.getNickname().equals(member.getNickname())) {
 
 		} else if (memberRepository.findByNickname(member.getNickname()).isPresent()) {
 			throw new ExistedMemberByNicknameException(member.getNickname() + "는 사용중인 닉네임 입니다.");
 		}
 		// Member updatedMember = Member.toUpdateEntity(memberUpdateDto);
+		memberDao.updatePoint(member);
 		return MemberResponseDto.toDto(memberDao.update(member));
 	}
 
