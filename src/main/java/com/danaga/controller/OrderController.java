@@ -16,6 +16,7 @@ import com.danaga.dto.CartDto;
 import com.danaga.dto.CartOrderDto;
 import com.danaga.dto.DeliveryDto;
 import com.danaga.dto.MemberResponseDto;
+import com.danaga.dto.MemberUpdateDto;
 import com.danaga.dto.OrderGuestDto;
 import com.danaga.dto.OrderItemDto;
 import com.danaga.dto.OrderMemberBasicDto;
@@ -93,13 +94,13 @@ public class OrderController {
 
 			List<CartOrderDto> sUserCartOrderDtoList = new ArrayList<>();
 			CartOrderDto sUserCartOrderDto = CartOrderDto.builder().id(cartDto.getOptionSetId()).qty(cartDto.getQty())
-					.productName(productDto.getName()).totalPrice(productDto.getTotalPrice())
+					.productName(productDto.getName()).totalPrice(productDto.getTotalPrice()*cartDto.getQty())
 					.build();
 			sUserCartOrderDtoList.add(sUserCartOrderDto);
 
 			Integer realTotalPrice = 0;
 			for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
-				realTotalPrice += sUserCartOrderDtoList.get(i).getTotalPrice() * sUserCartOrderDtoList.get(i).getQty();
+				realTotalPrice += sUserCartOrderDtoList.get(i).getTotalPrice();
 				System.out.println(realTotalPrice);
 			}
 			OrderMemberBasicDto orderMemberBasicDto = new OrderMemberBasicDto("", "ex) 010-1111-1111","");
@@ -120,12 +121,12 @@ public class OrderController {
 			Integer discountRate = gradePoint(memberResponseDto.getGrade());
 			List<CartOrderDto> sUserCartOrderDtoList = new ArrayList<>();
 			CartOrderDto sUserCartOrderDto = CartOrderDto.builder().id(cartDto.getOptionSetId()).qty(cartDto.getQty())
-					.productName(productDto.getName()).totalPrice(productDto.getTotalPrice()-(productDto.getTotalPrice()*discountRate/100)).build();
+					.productName(productDto.getName()).totalPrice(productDto.getTotalPrice()*cartDto.getQty()-(productDto.getTotalPrice()*cartDto.getQty()*discountRate/100)).build();
 			sUserCartOrderDtoList.add(sUserCartOrderDto);
 
 			Integer realTotalPrice = 0;
 			for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
-				realTotalPrice += (sUserCartOrderDtoList.get(i).getTotalPrice()* sUserCartOrderDtoList.get(i).getQty());
+				realTotalPrice += (sUserCartOrderDtoList.get(i).getTotalPrice());
 				System.out.println(realTotalPrice);
 			}
 			OrderMemberBasicDto orderMemberBasicDto = new OrderMemberBasicDto(memberResponseDto.getName(),
@@ -292,7 +293,7 @@ public class OrderController {
 						(sUserCartOrderDtoList.get(i).getTotalPrice() * sUserCartOrderDtoList.get(i).getQty())
 								- (sUserCartOrderDtoList.get(i).getTotalPrice() * sUserCartOrderDtoList.get(i).getQty()
 										* discountRate / 100));
-				realTotalPrice += sUserCartOrderDtoList.get(i).getTotalPrice() * sUserCartOrderDtoList.get(i).getQty();
+				realTotalPrice += sUserCartOrderDtoList.get(i).getTotalPrice();
 				System.out.println(realTotalPrice);
 			}
 			OrderMemberBasicDto orderMemberBasicDto = new OrderMemberBasicDto(memberResponseDto.getName(),
@@ -306,9 +307,12 @@ public class OrderController {
 			session.setAttribute("realTotalPrice", realTotalPrice);
 			return "orders/order_save_form";
 		} else { // 비회원
+			
 			Integer realTotalPrice = 0;
 			for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
-				realTotalPrice += sUserCartOrderDtoList.get(i).getTotalPrice() * sUserCartOrderDtoList.get(i).getQty();
+				sUserCartOrderDtoList.get(i).setTotalPrice(sUserCartOrderDtoList.get(i).getTotalPrice()*sUserCartOrderDtoList.get(i).getQty());
+				
+				realTotalPrice += sUserCartOrderDtoList.get(i).getTotalPrice();
 				System.out.println(realTotalPrice);
 			}
 
@@ -517,7 +521,7 @@ public class OrderController {
 			return "orders/find_order_guest";
 		}
 	}
-
+	
 	static Integer gradePoint(String value) {
 		String grade = value;
 		Integer gradePoint = 0;

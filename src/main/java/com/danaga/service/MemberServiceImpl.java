@@ -78,7 +78,8 @@ public class MemberServiceImpl implements MemberService {
 			memberDao.updateGuestEmail(member);
 		}
 		if (memberDao.existedMemberByPhoneNo(memberInsertGuestDto.getPhoneNo())) {
-			return MemberResponseDto.toDto(memberDao.findMember((memberInsertGuestDto).getPhoneNo()));
+			memberInsertGuestDto.setId(memberDao.findMember(memberInsertGuestDto.getPhoneNo()).getId()); 
+			return MemberResponseDto.toDto(memberDao.updateGuestEmail((Member.toGuestEntity(memberInsertGuestDto))));
 		} else {
 			return MemberResponseDto.toDto(memberDao.insert(Member.toGuestEntity(memberInsertGuestDto)));
 		}
