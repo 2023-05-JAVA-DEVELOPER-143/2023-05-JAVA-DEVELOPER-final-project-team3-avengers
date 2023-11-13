@@ -456,16 +456,16 @@ function confirmNumber(){
 
     if(number1 == number2){
 		$('#number').css('border','0.5px solid green');
-		$('#number').tooltip('show');
 		$('#number').tooltip({'trigger':'hover', 'title':'인증번호가 일치합니다.'});
+		$('#number').tooltip('show');
 		setTimeout(function() {
 	    $('#number').tooltip('dispose');
 	    }, 2000);
         emailCheck = true;
     }else{
         $('#number').css('border','0.5px dotted orange');
-		$('#number').tooltip('show');
 		$('#number').tooltip({'trigger':'hover', 'title':'인증번호가 일치하지 않습니다.'});
+		$('#number').tooltip('show');
 		setTimeout(function() {
 	    $('#number').tooltip('dispose');
 	    }, 2000);
