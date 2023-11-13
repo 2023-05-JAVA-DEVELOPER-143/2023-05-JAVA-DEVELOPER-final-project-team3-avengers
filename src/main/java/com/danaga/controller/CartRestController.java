@@ -50,6 +50,8 @@ public class CartRestController {
 		String message = "";
 		CartCheckResponseDto response = new CartCheckResponseDto();
 		Integer osStock = optionSetService.findById(dto.getOptionSetId()).getData().get(0).getStock();
+		System.out.println(">>>>>>>>>>>> 카트 컨트롤러>>>>>>>>>>>>>"+sUserId);
+		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>> 카트 들어오는 dto"+dto);
 		if (osStock >= dto.getQty()) {
 			if (sUserId != null) {
 				Cart findCart = cartService.findCart(sUserId, dto.getOptionSetId());
