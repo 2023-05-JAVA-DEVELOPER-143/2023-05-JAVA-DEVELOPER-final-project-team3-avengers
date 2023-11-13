@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import com.danaga.dto.admin.AdminBoardUploadDto;
 import com.danaga.dto.admin.AdminCategoryCountDto;
 import com.danaga.dto.admin.AdminOptionSetDto;
 import com.danaga.dto.admin.AdminOrderDataDto;
@@ -13,6 +14,8 @@ import com.danaga.entity.Board;
 import com.danaga.entity.Member;
 import com.danaga.entity.Orders;
 import com.danaga.entity.Statistic;
+
+import jakarta.servlet.http.HttpSession;
 
 @Transactional
 public interface StatisticService {
@@ -69,6 +72,7 @@ public interface StatisticService {
 	// 자유게시판
 	List<Board> boardList();
 	List<Board> oneToOneList();
+	void createBoard(AdminBoardUploadDto adminBoardUploadDto, HttpSession session);
 	
 	
 

@@ -41,7 +41,7 @@ public class StatisticController {
 	private final ProductRepository productRepository;
 	private final CategoryRepository categoryRepository;
 	
-	//@AdminCheck
+	@AdminCheck
 	@GetMapping
 	public String main(Model model) {
 		try {
@@ -54,6 +54,7 @@ public class StatisticController {
 			return "redirect:admin/rescue";
 		}
 	}
+	@AdminCheck
 	@GetMapping("/m")
 	public String main_sub(Model model) {
 		model.addAttribute("thisMonthList", statisticService.thisMonthStatistic());
@@ -70,18 +71,21 @@ public class StatisticController {
 		statisticService.createMoData(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMM")));
 		return "redirect:/admin";
 	}
+	@AdminCheck
 	@GetMapping("/admin_product_insert")
 	public String adminProductInsert(Model model) {
 		List<Product> productList = productRepository.findAll();
 		model.addAttribute("productList", productList);
 		return "admin/admin_product_insert";
 	}
+	@AdminCheck
 	@GetMapping("/admin_product_list")
 	public String adminProductList(Model model) {
 		List<OptionSet> productList = optionSetRepository.findAll();
 		model.addAttribute("productList",productList);
 		return "admin/admin_product_list";
 	}
+	@AdminCheck
 	@GetMapping("/admin_category_insert")
 	public String adminCategoryInsert(Model model) {
 		List<AdminCategoryCountDto> computerList = statisticService.countCategoryComputer();
@@ -90,6 +94,7 @@ public class StatisticController {
 		model.addAttribute("laptopList", laptopList);
 		return "admin/admin_category_insert";
 	}
+	@AdminCheck
 	@GetMapping("/admin_product_only_insert")
 	public String adminProductOnlyInsert(Model model) {
 		List<Category> computerList = categoryRepository.findChildTypesByParent_Id(1L);
@@ -98,43 +103,51 @@ public class StatisticController {
 		model.addAttribute("laptopList", laptopList);
 		return "admin/admin_product_only_insert";
 	}
+	@AdminCheck
 	@GetMapping("/admin_optionset_insert")
 	public String adminOptionSetInsert(Model model) {
 		List<Product> productList = productRepository.findAll();
 		model.addAttribute("productList", productList);
 		return "admin/admin_optionset_insert";
 	}
+	@AdminCheck
 	@GetMapping("/admin_optionset_list")
 	public String adminOptionSetList(Model model) {
 		List<OptionSet> productList = optionSetRepository.findAll();
 		model.addAttribute("productList",productList);
 		return "admin/admin_optionset_list";
 	}
+	@AdminCheck
 	@GetMapping("/admin_order_list")
 	public String adminOrderList(Model model) {
 		model.addAttribute("orderList", statisticService.orderList());
 		return "admin/admin_order_list";
 	}
+	@AdminCheck
 	@GetMapping("/admin_refund_list")
 	public String adminRefundList(Model model) {
 		model.addAttribute("orderList", statisticService.refundList());
 		return "admin/admin_refund_list";
 	}
+	@AdminCheck
 	@GetMapping("/admin_member_list")
 	public String adminMemberList(Model model) {
 		model.addAttribute("memberList", statisticService.memberList());
 		return "admin/admin_member_list";
 	}
+	@AdminCheck
 	@GetMapping("/admin_board_list")
 	public String adminBoardList(Model model) {
 		model.addAttribute("boardList", statisticService.boardList());
 		return "admin/admin_board_list";
 	}
+	@AdminCheck
 	@GetMapping("/admin_1to1_list")
 	public String adminOneToOneList(Model model) {
 		model.addAttribute("boardList", statisticService.oneToOneList());
 		return "admin/admin_1to1_list";
 	}
+	@AdminCheck
 	@GetMapping("/admin_board_upload")
 	public String uploadBoard(Model model) {
 		return "admin/admin_board_upload";
