@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.danaga.entity.Member;
+import com.danaga.exception.ExistedMemberByNicknameException;
 import com.danaga.exception.MemberNotFoundException;
 import com.danaga.repository.MemberRepository;
 
@@ -18,7 +19,16 @@ public class MemberDaoImpl implements MemberDao {
 	public List<Member> findMembers() {
 		return memberRepository.findAll();
 	}
-
+	
+	@Override
+	public Member findMemberByNickname(String nickname) throws Exception {
+		Optional<Member> member = memberRepository.findByNickname(nickname);
+		if(member.isPresent()) {
+			return member.get();
+		}
+		throw new ExistedMemberByNicknameException("해당 닉네임으로 찾을 수 없습니다");
+	}
+	
 	public Member findMember(String value) throws Exception, MemberNotFoundException {
 		if (value.contains("@")) {
 			if (memberRepository.findByEmail(value).isPresent()) {
@@ -158,5 +168,7 @@ public class MemberDaoImpl implements MemberDao {
 			return "Gold";
 		}
 	}
+
+	
 
 }
