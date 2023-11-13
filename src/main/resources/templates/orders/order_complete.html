@@ -63,14 +63,15 @@
 				form.submit();
 				
 			}
-			function orderFunction(){
+			function orderFunction(orderId){
 				let email = $("#email").text();
 				console.log('####333'+email);
 				$.ajax({
 				url: "/sendOrderIdemailauthentication",
 				type: "post",
 				dataType: "json",
-				data: {"mail": $("#email").text()},
+				<!--data: {"mail": email, "orderId": orderId}, // 주문번호를 전달-->
+				data: {"mail": $("#email").text(),"orderId": $("#orderId").text()},
 				success: function (data) {
 					alert("주문번호 발송");
 				},
