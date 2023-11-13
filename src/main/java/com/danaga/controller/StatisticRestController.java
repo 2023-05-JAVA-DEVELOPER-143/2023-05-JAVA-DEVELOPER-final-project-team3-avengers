@@ -32,6 +32,7 @@ import com.danaga.entity.Board;
 import com.danaga.entity.BoardGroup;
 import com.danaga.entity.Category;
 import com.danaga.entity.CategorySet;
+import com.danaga.entity.Member;
 import com.danaga.entity.OptionSet;
 import com.danaga.entity.Options;
 import com.danaga.entity.Product;
@@ -46,6 +47,8 @@ import com.danaga.repository.product.ProductRepository;
 import com.danaga.service.MemberService;
 import com.danaga.service.StatisticService;
 import com.danaga.service.product.OptionSetService;
+
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/admin_data")
@@ -68,8 +71,7 @@ public class StatisticRestController {
 	private ProductRepository productRepository;
 	@Autowired
 	private CategoryRepository categoryRepository;
-	@Autowired
-	private BoardGroupRepository boardGroupRepository;
+	
 
 	@GetMapping("/daily_update")
 	public ResponseEntity<?> dailyUpdate() {
@@ -224,12 +226,9 @@ public class StatisticRestController {
 	}
 	
 	@PostMapping("/board")
-	public ResponseEntity<?> uploadBoard(@RequestBody AdminBoardUploadDto adminBoardUploadDto) {
+	public ResponseEntity<?> uploadBoard(@RequestBody AdminBoardUploadDto adminBoardUploadDto, HttpSession session) {
 		try {
-			Board board = Board.builder().title(adminBoardUploadDto.getTitle()).content(adminBoardUploadDto.getContent())
-					.boardGroup(boardGroupRepository.findById(4L).get()).disLike(0).isAdmin(1)
-					.member(memberRepository.findById(4L).get()).isLike(0).readCount(0).build();
-			boardRepository.save(board);
+			statisticService.createBoard(adminBoardUploadDto, session);
 			return new ResponseEntity<>("Board uploaded successfully", HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(e+"Error uploading board", HttpStatus.INTERNAL_SERVER_ERROR);

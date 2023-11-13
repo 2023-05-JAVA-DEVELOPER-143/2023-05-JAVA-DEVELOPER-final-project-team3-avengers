@@ -7,11 +7,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.danaga.config.OrderStateMsg;
 import com.danaga.dao.product.OptionSetDao;
+import com.danaga.dto.admin.AdminBoardUploadDto;
 import com.danaga.dto.admin.AdminCategoryCountDto;
 import com.danaga.dto.admin.AdminOptionDto;
 import com.danaga.dto.admin.AdminOptionSetDto;
@@ -31,16 +31,17 @@ import com.danaga.entity.Options;
 import com.danaga.entity.Orders;
 import com.danaga.entity.Product;
 import com.danaga.entity.Statistic;
+import com.danaga.repository.BoardGroupRepository;
 import com.danaga.repository.BoardRepository;
 import com.danaga.repository.CategorySetRepository;
 import com.danaga.repository.MemberRepository;
 import com.danaga.repository.OrderRepository;
 import com.danaga.repository.StatisticRepository;
 import com.danaga.repository.product.CategoryRepository;
-import com.danaga.repository.product.OptionSetRepository;
 import com.danaga.repository.product.OptionsRepository;
 import com.danaga.repository.product.ProductRepository;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -55,6 +56,8 @@ public class StatisticServiceImpl implements StatisticService {
 	private final OptionsRepository optionsRepository;
 	private final MemberRepository memberRepository;
 	private final BoardRepository boardRepository;
+	private final BoardGroupRepository boardGroupRepository;
+	private final MemberService memberService;
 
 	// 오늘날짜 단순 반환
 	@Override
@@ -321,7 +324,20 @@ public class StatisticServiceImpl implements StatisticService {
 		return returnBoards;
 	}
 	// 게시판 업로드
-
+	@Override
+	public void createBoard(AdminBoardUploadDto adminBoardUploadDto, HttpSession session) {
+		try {
+			Board board = Board.builder().title(adminBoardUploadDto.getTitle()).content(adminBoardUploadDto.getContent())
+					.boardGroup(boardGroupRepository.findById(4L).get()).disLike(0).isAdmin(2)
+					.member(memberRepository.findById(memberService.findIdByUsername((String)session.getAttribute("sUserId"))).get())
+					.isLike(0).readCount(0).build();
+			boardRepository.save(board);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	/*
 	*
 	*
