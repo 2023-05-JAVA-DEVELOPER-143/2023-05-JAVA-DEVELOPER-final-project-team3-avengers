@@ -73,9 +73,8 @@ public class MemberServiceImpl implements MemberService {
 
 	@Transactional
 	public MemberResponseDto joinGuest(MemberInsertGuestDto memberInsertGuestDto) throws Exception {
-		Member member = memberDao.findMember((memberInsertGuestDto).getPhoneNo());
 		if (memberDao.existedMemberByPhoneNo(memberInsertGuestDto.getPhoneNo())) {
-			return MemberResponseDto.toDto(member);
+			return MemberResponseDto.toDto(memberDao.findMember((memberInsertGuestDto).getPhoneNo()));
 		} else {
 			return MemberResponseDto.toDto(memberDao.insert(Member.toGuestEntity(memberInsertGuestDto)));
 		}
