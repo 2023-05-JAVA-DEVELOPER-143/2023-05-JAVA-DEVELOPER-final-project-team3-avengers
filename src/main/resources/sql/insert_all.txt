@@ -80,6 +80,7 @@ insert into board (id, title, content, is_like, dis_like, create_time, update_ti
 insert into like_config (id,board_id,member_id,is_like,dis_like) values(1,1,1,0,0);
 insert into like_config (id,board_id,member_id,is_like,dis_like) values(2,2,2,0,0);
 insert into like_config (id,board_id,member_id,is_like,dis_like) values(3,3,3,0,0);
+commit;
 
 -----------------------------------------------------------------------------------
 PRODUCT
@@ -127,6 +128,7 @@ insert into product (id, name, price, brand, img,desc_image,prev_image,rating,cr
 insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (25,'APPLE 아이맥 MGPK3KH/A (8GB, SSD 256GB)',1870000,'APPLE','/images/imac.jpg','/images/imacdesc.jpg','/images/imacthumb.jpg',0.0,sysdate,sysdate);
 insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (26,'ASUS MiniPC PN40-BC905ZV J4025 Win10 Pro (4GB, eMMC 64GB)',343000,'ASUS','/images/asusminipc.jpg','/images/asusminipcdesc.jpg','/images/asusminipcthumb.jpg',0.0,sysdate,sysdate);
 insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (27,'APPLE 아이맥 MGPK3KH/A (8GB, SSD 256GB)',1870000,'APPLE','/images/imac.jpg','/images/imacdesc.jpg','/images/imacthumb.jpg',0.0,sysdate,sysdate);
+commit;
 
 SELECT category_set_seq.NEXTVAL FROM DUAL; 
 insert into category_set ( ID,CATEGORY_ID, PRODUCT_ID) values (1, 8, 1);
@@ -195,7 +197,7 @@ insert into option_set (id,product_id,stock,total_price,order_count,view_count,c
 insert into option_set (id,product_id,stock,total_price,order_count,view_count,create_time,update_time) values(25,25,1000,1870000,0,0,sysdate,sysdate);
 insert into option_set (id,product_id,stock,total_price,order_count,view_count,create_time,update_time) values(26,26,1000,343000,0,0,sysdate,sysdate);
 insert into option_set (id,product_id,stock,total_price,order_count,view_count,create_time,update_time) values(27,24,1000,1870000,0,0,sysdate,sysdate);
-
+commit;
 
 insert into options (EXTRA_PRICE, ID, OPTION_SET_ID, NAME, VALUE) values (0, options_seq.nextval, 1, '운영체제', '미포함');
 insert into options (EXTRA_PRICE, ID, OPTION_SET_ID, NAME, VALUE) values (0, options_seq.nextval, 1, '화면비율', '16:9');
@@ -482,7 +484,7 @@ insert into options (EXTRA_PRICE, ID, OPTION_SET_ID, NAME, VALUE) values (0, opt
 insert into options (EXTRA_PRICE, ID, OPTION_SET_ID, NAME, VALUE) values (0, options_seq.nextval, 27, '그래픽메모리', '16GB');
 insert into options (EXTRA_PRICE, ID, OPTION_SET_ID, NAME, VALUE) values (0, options_seq.nextval, 27, 'GPU', '지포스 RTX 3080');
 insert into options (EXTRA_PRICE, ID, OPTION_SET_ID, NAME, VALUE) values (0, options_seq.nextval, 27, '운영체제', '윈도우11프로');
-
+commit;
 
 //recentview
 insert into recent_view values(sysdate, 1, 1, 1, sysdate);
@@ -512,6 +514,6 @@ insert into interest values(sysdate, 10, 2, 3, sysdate);
 insert into interest values(sysdate, 11, 2, 9, sysdate);
 insert into interest values(sysdate, 12, 3, 1, sysdate);
 insert into interest values(sysdate, 13, 3, 6, sysdate);
-
+commit;
 
 
