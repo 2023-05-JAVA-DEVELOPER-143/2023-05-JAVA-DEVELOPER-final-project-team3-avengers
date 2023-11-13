@@ -55,33 +55,11 @@ public class MemberServiceImpl implements MemberService {
 		// 1.중복체크
 		int randomPoint = memberDao.randomPoint();
 		if (memberDao.existedMemberByUserName(member.getUserName())) {
-			// 중복
 			throw new ExistedMemberByUserNameException(member.getUserName() + " 는 이미 존재하는 아이디 입니다.");
-		} else if (memberDao.existedMemberByEmail(member.getEmail())
-				&& (memberDao.findMember(member.getEmail()).getRole().equals("Guest"))) {
-			//예외 발생 (이메일이나 번호가 둘다 db에 있을시 예외처리 어떻게 할 것 인가..
-			// (비회원 주문시 조회할때 번호가 필요없어지면 번호를 가진 게스트의 번호를 null로 만들거나
-			// 번호의 유니크 조건을 빼거나
-			Member mem = memberDao.findMember(member.getEmail());
-			member.setId(mem.getId());
-			member.setRole("Member");
-			//이벤트 랜덤 포인트 지급
-			member.setGradePoint(randomPoint);
-			member.setGrade(memberDao.randomPointGrade(randomPoint));
-			return MemberResponseDto.toDto((memberDao.update(member)));
+		} else if (memberDao.existedMemberByPhoneNo(member.getPhoneNo()))  {
+			throw new ExistedMemberByPhoneNoException(member.getPhoneNo() + " 는 이미 등록된 번호 입니다.");
 		} else if (memberDao.existedMemberByEmail(member.getEmail())) {
 			throw new ExistedMemberByEmailException(member.getEmail() + " 는 이미 등록된 이메일 입니다.");
-		} else if (memberDao.existedMemberByPhoneNo(member.getPhoneNo())
-				&& (memberDao.findMember(member.getPhoneNo()).getRole().equals("Guest"))) {
-			Member mem = memberDao.findMember(member.getPhoneNo());
-			member.setId(mem.getId());
-			member.setRole("Member");
-			//이벤트 랜덤 포인트 지급
-			member.setGradePoint(randomPoint);
-			member.setGrade(memberDao.randomPointGrade(randomPoint));
-			return MemberResponseDto.toDto((memberDao.update(member)));
-		} else if (memberDao.existedMemberByPhoneNo(member.getPhoneNo())) {
-			throw new ExistedMemberByPhoneNoException(member.getPhoneNo() + " 는 이미 등록된 번호 입니다.");
 		} else if (memberRepository.findByNickname(member.getNickname()).isPresent()) {
 			throw new ExistedMemberByNicknameException(member.getNickname() + "는 사용중인 닉네임 입니다.");
 		}
@@ -95,22 +73,8 @@ public class MemberServiceImpl implements MemberService {
 
 	@Transactional
 	public MemberResponseDto joinGuest(MemberInsertGuestDto memberInsertGuestDto) throws Exception {
-		if (memberDao.existedMemberByEmail(memberInsertGuestDto.getEmail())
-				&& memberDao.existedMemberByPhoneNo(memberInsertGuestDto.getPhoneNo())) {
-			Member member = memberDao.findMember((memberInsertGuestDto).getPhoneNo());
-			member.setEmail(null);
-			memberDao.updateGuestEmail(member);
-			return MemberResponseDto.toDto(member);
-		} else if (memberDao.existedMemberByEmail(memberInsertGuestDto.getEmail())) {
-			Member member = memberDao.findMember((memberInsertGuestDto).getEmail());
-			member.setPhoneNo(memberInsertGuestDto.getPhoneNo());
-			memberDao.updateGuestPhoneNo(member);
-			return MemberResponseDto.toDto(member);
-		} else if (memberDao.existedMemberByPhoneNo(memberInsertGuestDto.getPhoneNo())) {
-			Member member = memberDao.findMember((memberInsertGuestDto).getPhoneNo());
-			member.setEmail(memberInsertGuestDto.getEmail());
-			memberDao.updateGuestEmail(member);
-			return MemberResponseDto.toDto(member);
+		if (memberDao.existedMemberByPhoneNo(memberInsertGuestDto.getPhoneNo())) {
+			return MemberResponseDto.toDto(memberDao.findMember((memberInsertGuestDto).getPhoneNo()));
 		} else {
 			return MemberResponseDto.toDto(memberDao.insert(Member.toGuestEntity(memberInsertGuestDto)));
 		}
@@ -133,7 +97,6 @@ public class MemberServiceImpl implements MemberService {
 		} else if (memberRepository.findByNickname(member.getNickname()).isPresent()) {
 			throw new ExistedMemberByNicknameException(member.getNickname() + "는 사용중인 닉네임 입니다.");
 		}
-		// Member updatedMember = Member.toUpdateEntity(memberUpdateDto);
 		return MemberResponseDto.toDto(memberDao.update(member));
 	}
 
@@ -145,13 +108,14 @@ public class MemberServiceImpl implements MemberService {
 				.password(kakaoMemberUpdateDto.getPassword()).nickname(kakaoMemberUpdateDto.getNickname())
 				.postCode(kakaoMemberUpdateDto.getPostCode()).address(kakaoMemberUpdateDto.getAddress())
 				.detailAddress(kakaoMemberUpdateDto.getDetailAddress()).role("Member").grade(originalMember.getGrade())
-				.gradePoint(originalMember.getGradePoint()).birthday(originalMember.getBirthday()).build();
+				.gradePoint(originalMember.getGradePoint()+memberDao.randomPoint()).birthday(originalMember.getBirthday()).build();
 		if (originalMember.getNickname().equals(member.getNickname())) {
 
 		} else if (memberRepository.findByNickname(member.getNickname()).isPresent()) {
 			throw new ExistedMemberByNicknameException(member.getNickname() + "는 사용중인 닉네임 입니다.");
 		}
 		// Member updatedMember = Member.toUpdateEntity(memberUpdateDto);
+		memberDao.updatePoint(member);
 		return MemberResponseDto.toDto(memberDao.update(member));
 	}
 
