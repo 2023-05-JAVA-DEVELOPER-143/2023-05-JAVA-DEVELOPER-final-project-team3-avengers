@@ -56,7 +56,7 @@ public class MemberServiceImpl implements MemberService {
 		int randomPoint = memberDao.randomPoint();
 		if (memberDao.existedMemberByUserName(member.getUserName())) {
 			throw new ExistedMemberByUserNameException(member.getUserName() + " 는 이미 존재하는 아이디 입니다.");
-		} else if (memberDao.existedMemberByPhoneNo(member.getPhoneNo()))  {
+		} else if (memberDao.existedMemberByPhoneNo(member.getPhoneNo())) {
 			throw new ExistedMemberByPhoneNoException(member.getPhoneNo() + " 는 이미 등록된 번호 입니다.");
 		} else if (memberDao.existedMemberByEmail(member.getEmail())) {
 			throw new ExistedMemberByEmailException(member.getEmail() + " 는 이미 등록된 이메일 입니다.");
@@ -65,14 +65,18 @@ public class MemberServiceImpl implements MemberService {
 		}
 		// 안중복
 		// 2.회원가입
-		//이벤트 랜덤 포인트 지급
+		// 이벤트 랜덤 포인트 지급
 		member.setGradePoint(randomPoint);
 		member.setGrade(memberDao.randomPointGrade(randomPoint));
 		return MemberResponseDto.toDto(memberDao.insert(member));
 	}
 
-	@Transactional
 	public MemberResponseDto joinGuest(MemberInsertGuestDto memberInsertGuestDto) throws Exception {
+		if(memberRepository.findByEmail(memberInsertGuestDto.getEmail()).isPresent()) {
+			Member member = memberDao.findMember(memberInsertGuestDto.getEmail());
+			member.setEmail(null);
+			memberDao.updateGuestEmail(member);
+		}
 		if (memberDao.existedMemberByPhoneNo(memberInsertGuestDto.getPhoneNo())) {
 			return MemberResponseDto.toDto(memberDao.findMember((memberInsertGuestDto).getPhoneNo()));
 		} else {
@@ -81,16 +85,12 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Transactional
-	public MemberResponseDto updateMember(MemberUpdateDto memberUpdateDto)
-			throws Exception, ExistedMemberByNicknameException {
+	public MemberResponseDto updateMember(MemberUpdateDto memberUpdateDto) throws Exception, ExistedMemberByNicknameException {
 		Member originalMember = memberRepository.findById(memberUpdateDto.getId()).get();
 		Member member = Member.builder().id(memberUpdateDto.getId()).userName(originalMember.getUserName())
-				.password(memberUpdateDto.getPassword()).nickname(memberUpdateDto.getNickname())
-				.postCode(memberUpdateDto.getPostCode()).address(memberUpdateDto.getAddress())
-				.detailAddress(memberUpdateDto.getDetailAddress()).role(originalMember.getRole())
-				.grade(originalMember.getGrade()).gradePoint(originalMember.getGradePoint())
-				.birthday(originalMember.getBirthday())
-				.build();
+				.password(memberUpdateDto.getPassword()).nickname(memberUpdateDto.getNickname()).postCode(memberUpdateDto.getPostCode())
+				.address(memberUpdateDto.getAddress()).detailAddress(memberUpdateDto.getDetailAddress()).role(originalMember.getRole())
+				.grade(originalMember.getGrade()).gradePoint(originalMember.getGradePoint()).birthday(originalMember.getBirthday()).build();
 
 		if (originalMember.getNickname().equals(member.getNickname())) {
 
@@ -101,14 +101,13 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Transactional
-	public MemberResponseDto kakaoToMember(KakaoMemberUpdateDto kakaoMemberUpdateDto)
-			throws Exception, ExistedMemberByNicknameException {
+	public MemberResponseDto kakaoToMember(KakaoMemberUpdateDto kakaoMemberUpdateDto) throws Exception, ExistedMemberByNicknameException {
 		Member originalMember = memberRepository.findById(kakaoMemberUpdateDto.getId()).get();
 		Member member = Member.builder().id(kakaoMemberUpdateDto.getId()).userName(kakaoMemberUpdateDto.getUserName())
 				.password(kakaoMemberUpdateDto.getPassword()).nickname(kakaoMemberUpdateDto.getNickname())
 				.postCode(kakaoMemberUpdateDto.getPostCode()).address(kakaoMemberUpdateDto.getAddress())
 				.detailAddress(kakaoMemberUpdateDto.getDetailAddress()).role("Member").grade(originalMember.getGrade())
-				.gradePoint(originalMember.getGradePoint()+memberDao.randomPoint()).birthday(originalMember.getBirthday()).build();
+				.gradePoint(originalMember.getGradePoint() + memberDao.randomPoint()).birthday(originalMember.getBirthday()).build();
 		if (originalMember.getNickname().equals(member.getNickname())) {
 
 		} else if (memberRepository.findByNickname(member.getNickname()).isPresent()) {
@@ -201,5 +200,5 @@ public class MemberServiceImpl implements MemberService {
 		}
 		return true;
 	}
-	
+
 }

@@ -58,7 +58,7 @@
 									<td
 										style="width: 500px; white-space: nowrap; text-align: center; border: 1px solid #ccc; border-radius: 10px; background-color: #f5f5f5">
 										<span class="price"
-											th:text="|${#numbers.formatInteger(item.totalPrice * item.qty, 0, 'COMMA')}원|"></span>
+											th:text="|${#numbers.formatInteger(item.totalPrice, 0, 'COMMA')}원|"></span>
 									</td>
 								</tr>
 								<tr>
