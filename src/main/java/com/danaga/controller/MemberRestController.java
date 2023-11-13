@@ -19,6 +19,7 @@ import com.danaga.dto.MemberLoginDto;
 import com.danaga.dto.MemberResponseDto;
 import com.danaga.dto.MemberUpdateDto;
 import com.danaga.dto.product.RecentViewDto;
+import com.danaga.entity.Cart;
 import com.danaga.entity.Member;
 import com.danaga.exception.EmailMismatchException;
 import com.danaga.exception.ExistedMemberByEmailException;
@@ -29,6 +30,7 @@ import com.danaga.exception.MemberNotFoundException;
 import com.danaga.exception.PasswordMismatchException;
 import com.danaga.service.CartService;
 import com.danaga.service.MemberService;
+import com.danaga.service.product.OptionSetService;
 import com.danaga.service.product.RecentViewService;
 
 import jakarta.servlet.http.HttpSession;
@@ -42,14 +44,16 @@ public class MemberRestController {
 	private final MemberDao memberDao;
 	private final CartService cartService;
 	private final RecentViewService recentViewService;
+	private final OptionSetService optionSetService;
 
 	@PostMapping(value = "/findid_rest", produces = "application/json;charset=UTF-8")
 	public Map member_findid_action_rest(@RequestBody MemberFindDto memberFindDto, HttpSession session)
 			throws Exception {
 		HashMap map = new HashMap<>();
-		//MemberResponseDto memberResponseDto = MemberResponseDto.builder().userName(userName).password(password).build();
+		// MemberResponseDto memberResponseDto =
+		// MemberResponseDto.builder().userName(userName).password(password).build();
 		int result = 1;
-		
+
 		try {
 			memberService.getMemberBy(memberFindDto.getEmail());
 		} catch (MemberNotFoundException e) {
@@ -58,17 +62,19 @@ public class MemberRestController {
 			map.put("msg", memberFindDto.getEmail() + "는 등록되지 않은 이메일입니다.");
 			return map;
 		}
-		
+
 		map.put("result", result);
 		return map;
 	}
+
 	@PostMapping(value = "/findpass_rest", produces = "application/json;charset=UTF-8")
 	public Map member_findpass_action_rest(@RequestBody MemberFindDto memberFindDto, HttpSession session)
 			throws Exception {
 		HashMap map = new HashMap<>();
-		//MemberResponseDto memberResponseDto = MemberResponseDto.builder().userName(userName).password(password).build();
+		// MemberResponseDto memberResponseDto =
+		// MemberResponseDto.builder().userName(userName).password(password).build();
 		int result = 2;
-		
+
 		try {
 			memberService.isMatchEmailByUserName(memberFindDto.getUserName(), memberFindDto.getEmail());
 		} catch (MemberNotFoundException e) {
@@ -82,15 +88,17 @@ public class MemberRestController {
 			map.put("msg", "해당 아이디에 등록된 이메일이 아닙니다.");
 			return map;
 		}
-		
+
 		map.put("result", result);
 		return map;
 	}
+
 	@PostMapping(value = "/login_rest", produces = "application/json;charset=UTF-8")
 	public Map member_login_action_rest(@RequestBody MemberLoginDto memberLoginDto, HttpSession session)
 			throws Exception {
 		HashMap map = new HashMap<>();
-		//MemberResponseDto memberResponseDto = MemberResponseDto.builder().userName(userName).password(password).build();
+		// MemberResponseDto memberResponseDto =
+		// MemberResponseDto.builder().userName(userName).password(password).build();
 		int result = 2;
 
 		try {
@@ -112,21 +120,26 @@ public class MemberRestController {
 		if (fUserCarts != null) {
 			// 로그인 + 세션 장바구니 존재
 			for (int i = 0; i < fUserCarts.size(); i++) {
+				Cart findCart = cartService.findCart(loginUser.getUserName(), fUserCarts.get(i).getOptionSetId());
+				if (findCart != null) {
+					if (findCart.getQty() + fUserCarts.get(i).getQty() > 5) {
+						fUserCarts.get(i).setQty(5 - findCart.getQty());
+					}
+				}
 				cartService.addCart(fUserCarts.get(i), loginUser.getUserName());
-				// 세션 -> db 로 데이타 인서트 후 세션 데이타 초기화 후 세션카트 카운트
 			}
 			session.setAttribute("fUserCarts", null);
 			session.setAttribute("countCarts", cartService.countCarts(loginUser.getUserName()));
 		}
 		/***************************************************************************************/
 		/********* 비회원으로 최근 본 상품 로그인시 회원 정보에 insert **********/
-		if(session.getAttribute("recentviews")!=null) {
-		List<Long> recentOptionSetIds= (List<Long>) session.getAttribute("recentviews");
-		for (Long optionSetId : recentOptionSetIds) {
-			recentViewService.addRecentView(RecentViewDto.builder()
-					.optionSetId(optionSetId).memberId(loginUser.getId()).build());
-		}
-		session.removeAttribute("recentviews");
+		if (session.getAttribute("recentviews") != null) {
+			List<Long> recentOptionSetIds = (List<Long>) session.getAttribute("recentviews");
+			for (Long optionSetId : recentOptionSetIds) {
+				recentViewService.addRecentView(
+						RecentViewDto.builder().optionSetId(optionSetId).memberId(loginUser.getId()).build());
+			}
+			session.removeAttribute("recentviews");
 		}
 		/***************************************************************************************/
 		if (loginUser.getRole().equals("Admin")) {
@@ -170,6 +183,7 @@ public class MemberRestController {
 		map.put("result", result);
 		return map;
 	}
+
 	@PostMapping("/join_rest_kakao")
 	public Map member_join_action_kakao(@RequestBody Member member, HttpSession session) throws Exception {
 		HashMap map = new HashMap<>();
@@ -181,11 +195,11 @@ public class MemberRestController {
 			Long sUserLongId = memberService.getMemberBy(sUserId).getId();
 			member.setId(sUserLongId);
 			MemberResponseDto dto = memberService.kakaoToMember(KakaoMemberUpdateDto.toDto(member));
-			//카카오 통합시 이벤트 랜덤 포인트 지급
-			int point = dto.getGradePoint()+memberDao.randomPoint();
-			dto.setGradePoint(dto.getGradePoint()+memberDao.randomPoint());
+			// 카카오 통합시 이벤트 랜덤 포인트 지급
+			int point = dto.getGradePoint() + memberDao.randomPoint();
+			dto.setGradePoint(dto.getGradePoint() + memberDao.randomPoint());
 			memberService.updateGrade(member, point);
-		}catch (ExistedMemberByUserNameException e) {
+		} catch (ExistedMemberByUserNameException e) {
 			result = 1;
 			map.put("result", result);
 			map.put("msg", member.getUserName() + "는 사용중인 아이디입니다.");
@@ -221,6 +235,7 @@ public class MemberRestController {
 		map.put("result", result);
 		return map;
 	}
+
 	@LoginCheck
 	@DeleteMapping(value = "/delete_action_rest", produces = "application/json;charset=UTF-8")
 	public Map delete_action_rest(@RequestBody MemberLoginDto memberLoginDto, HttpSession session) throws Exception {
@@ -244,6 +259,5 @@ public class MemberRestController {
 		map.put("result", result);
 		return map;
 	}
-
 
 }
