@@ -5,8 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import com.danaga.service.MailService;
 
@@ -55,10 +54,10 @@ public class MailController {
     }
     @ResponseBody
     @PostMapping("/sendOrderIdemailauthentication")
-    public Map sendOrderIdMailSend(String mail) throws Exception{
+    public Map sendOrderIdMailSend(String mail, @RequestParam String orderId) throws Exception{
     	
     	String id = null;
-    	id = mailService.findOrderIdSendMail(mail);
+    	id = mailService.findOrderIdSendMail(mail, orderId);
     	HashMap map=new HashMap<>();
     	map.put("orderId", id);
     	return map;
