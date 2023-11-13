@@ -80,6 +80,7 @@ insert into board (id, title, content, is_like, dis_like, create_time, update_ti
 insert into like_config (id,board_id,member_id,is_like,dis_like) values(1,1,1,0,0);
 insert into like_config (id,board_id,member_id,is_like,dis_like) values(2,2,2,0,0);
 insert into like_config (id,board_id,member_id,is_like,dis_like) values(3,3,3,0,0);
+commit;
 
 -----------------------------------------------------------------------------------
 PRODUCT
@@ -100,33 +101,34 @@ insert into category (id, parent, name) values (category_seq.nextval, 2, 'AMD CP
 insert into category (id, parent, name) values (category_seq.nextval, 2, '노트북 주변기기');
 
 SELECT product_seq.NEXTVAL FROM DUAL; 
-insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (1,'MSI 사이보그 15 A12VE-i5 (SSD 512GB)',1039990,'MSI','/images/msi사이보그15.jpg','/images/msi사이보그15desc.jpg','/images/msi사이보그15thumb.jpg',0.0,sysdate,sysdate);
-insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (2,'에이서 프레데터 Helios Neo 16 PHN16-71-93WL (SSD 512GB)',1669990,'에이서','/images/heliosneo16.jpg','/images/heliosneo16desc.jpg','/images/heliosneo16thumb.jpg',0.0,sysdate,sysdate);
-insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (3,'레노버 요가 Pro 7i 14IRH8 82Y7005DKR (SSD 512GB)',1770690,'레노버','/images/yoga7i.jpg','/images/yoga7idesc.jpg','/images/yoga7ithumb.jpg',0.0,sysdate,sysdate);
-insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (4,'에이서 프레데터 Helios Neo V 16 PHN16-71-53CH (SSD 512GB)',1399900,'에이서','/images/heliosneov16.jpg','/images/heliosneov16desc.jpg','/images/heliosneov16thumb.jpg',0.0,sysdate,sysdate);
-insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (5,'LG전자 2023 그램16 16Z90R-EA5CK (SSD 512GB)',1761000,'LG전자','/images/lg그램16.jpg','/images/lg그램16desc.jpg','/images/lg그램16thumb.jpg',0.0,sysdate,sysdate);
-insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (6,'MSI GF시리즈 Sword GF76 B13VFK (SSD 512GB)',1318000,'MSI','/images/swordgf.jpg','/images/swordgfdesc.jpg','/images/swordgfthumb.jpg',0.0,sysdate,sysdate);
-insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (7,'레노버 아이디어패드 Pro 5i 16IRH i7 3050 (SSD 512GB)',1291000,'레노버','/images/idea5i.jpg','/images/idea5idesc.jpg','/images/idea5ithumb.jpg',0.0,sysdate,sysdate);
-insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (8,'MSI GF시리즈 Thin GF63 12VE (SSD 512GB)',1131000,'MSI','/images/msithingf.jpg','/images/msithingfdesc.jpg','/images/msithingfthumb.jpg',0.0,sysdate,sysdate);
-insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (9,'MSI GF시리즈 Sword GF76 B13VFK WIN11 32GB램 (SSD 512GB)',1448000,'MSI','/images/swordgf76.jpg','/images/swordgf76desc.jpg','/images/swordgf76thumb.jpg',0.0,sysdate,sysdate);
-insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (10,'LG전자 2022 그램16(12세대) 16ZD90Q-EX5SK (SSD 256GB)',1377000,'MSI','/images/lggram.jpg','/images/lggramdesc.jpg','/images/lggramthumb.jpg',0.0,sysdate,sysdate);
-insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (11,'APPLE 2023 맥북프로14 MPHE3KH/A (16GB, SSD 512GB)',2556100,'APPLE','/images/macpro14.jpg','/images/macpro14desc.jpg','/images/macpro14thumb.jpg',0.0,sysdate,sysdate);
-insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (12,'APPLE 2023 맥북에어15 MQKP3KH/A (8GB, SSD 256GB)',1754100,'APPLE','/images/macair15.jpg','/images/macair15desc.jpg','/images/macair15thumb.jpg',0.0,sysdate,sysdate);
-insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (13,'삼성전자 갤럭시북2 NT550XEZ-A58A WIN11 16GB램 (SSD 256GB)',719100,'삼성전자','/images/galbook2.jpg','/images/galbook2desc.jpg','/images/galbook2thumb.jpg',0.0,sysdate,sysdate);
-insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (14,'삼성전자 갤럭시북3 프로 NT940XFT-A51A (SSD 256GB)',1366100,'삼성전자','/images/galbook3pro.jpg','/images/galbook3prodesc.jpg','/images/galbook3prothumb.jpg',0.0,sysdate,sysdate);
-insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (15,'LG전자 2023 울트라PC 15UD40R-GX56K WIN11 16GB램 (SSD 256GB)',596000,'LG전자','/images/lgultra15.jpg','/images/lgultra15desc.jpg','/images/lgultra15thumb.jpg',0.0,sysdate,sysdate);
-insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (16,'HP Nero 15-fc0065AU WIN11 (SSD 512GB)',558000,'HP','/images/hpnero15.jpg','/images/hpnero15desc.jpg','/images/hpnero15thumb.jpg',0.0,sysdate,sysdate);
-insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (17,'에이서 스위프트 엣지 16 OLED SFE16-43-R8ZU (SSD 512GB)',1518000,'에이서','/images/swiftedge16.jpg','/images/swiftedge16desc.jpg','/images/swiftedge16thumb.jpg',0.0,sysdate,sysdate);
-insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (18,'에이서 스위프트 GO 14 OLED SFG14-42-R16Z (SSD 512GB)',1028000,'에이서','/images/swiftgo14.jpg','/images/swiftgo14desc.jpg','/images/swiftgo14thumb.jpg',0.0,sysdate,sysdate);
-insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (19,'ASUS 젠북 15 UM3504DA-BN144 (SSD 512GB)',1005000,'ASUS','/images/genbook15.jpg','/images/genbook15desc.jpg','/images/genbook15thumb.jpg',0.0,sysdate,sysdate);
-insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (20,'잘만 ZM-NS1000',21000,'잘만','/images/zmns1000.jpg','/images/zmns1000desc.jpg','/images/zmns1000thumb.jpg',0.0,sysdate,sysdate);
-insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (21,'홈플래닛 고급형 알루미늄 노트북 거치대',24600,'홈플래닛','/images/homeplanet.jpg',null,'/images/homeplanetthumb.jpg',0.0,sysdate,sysdate);
-insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (22,'지클릭커 휴 쉴드 정보보안 블루라이트 차단 거치형 모니터필름 (24인치)',42000,'지클릭커','/images/shieldfilm.jpg','/images/shieldfilmdesc.jpg','/images/shieldfilmthumb.jpg',0.0,sysdate,sysdate);
-insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (23,'ASRock DeskMini X300 5600G 120W M.2 대원씨티에스 (16GB, M.2 500GB)',445700,'ASrock','/images/asrockdeskmini.jpg','/images/asrockdeskminidesc.jpg','/images/asrockdeskminithumb.jpg',0.0,sysdate,sysdate);
-insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (24,'DELL 에일리언웨어 Aurora R15 DAWR15N-WP07KR Dark (64GB, M.2 1TB + 2TB)',5999000,'DELL','/images/aurorar15.jpg',null,'/images/aurorar15thumb.jpg',0.0,sysdate,sysdate);
-insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (25,'APPLE 아이맥 MGPK3KH/A (8GB, SSD 256GB)',1870000,'APPLE','/images/imac.jpg','/images/imacdesc.jpg','/images/imacthumb.jpg',0.0,sysdate,sysdate);
-insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (26,'ASUS MiniPC PN40-BC905ZV J4025 Win10 Pro (4GB, eMMC 64GB)',343000,'ASUS','/images/asusminipc.jpg','/images/asusminipcdesc.jpg','/images/asusminipcthumb.jpg',0.0,sysdate,sysdate);
-insert into product (id, name, price, brand, img,desc_image,prev_image,rating,create_time,update_time) values (27,'APPLE 아이맥 MGPK3KH/A (8GB, SSD 256GB)',1870000,'APPLE','/images/imac.jpg','/images/imacdesc.jpg','/images/imacthumb.jpg',0.0,sysdate,sysdate);
+insert into product (id, name, price, brand, img,desc_image,prev_image,create_time,update_time) values (1,'MSI 사이보그 15 A12VE-i5 (SSD 512GB)',1039990,'MSI','/images/msi사이보그15.jpg','/images/msi사이보그15desc.jpg','/images/msi사이보그15thumb.jpg',sysdate,sysdate);
+insert into product (id, name, price, brand, img,desc_image,prev_image,create_time,update_time) values (2,'에이서 프레데터 Helios Neo 16 PHN16-71-93WL (SSD 512GB)',1669990,'에이서','/images/heliosneo16.jpg','/images/heliosneo16desc.jpg','/images/heliosneo16thumb.jpg',sysdate,sysdate);
+insert into product (id, name, price, brand, img,desc_image,prev_image,create_time,update_time) values (3,'레노버 요가 Pro 7i 14IRH8 82Y7005DKR (SSD 512GB)',1770690,'레노버','/images/yoga7i.jpg','/images/yoga7idesc.jpg','/images/yoga7ithumb.jpg',sysdate,sysdate);
+insert into product (id, name, price, brand, img,desc_image,prev_image,create_time,update_time) values (4,'에이서 프레데터 Helios Neo V 16 PHN16-71-53CH (SSD 512GB)',1399900,'에이서','/images/heliosneov16.jpg','/images/heliosneov16desc.jpg','/images/heliosneov16thumb.jpg',sysdate,sysdate);
+insert into product (id, name, price, brand, img,desc_image,prev_image,create_time,update_time) values (5,'LG전자 2023 그램16 16Z90R-EA5CK (SSD 512GB)',1761000,'LG전자','/images/lg그램16.jpg','/images/lg그램16desc.jpg','/images/lg그램16thumb.jpg',sysdate,sysdate);
+insert into product (id, name, price, brand, img,desc_image,prev_image,create_time,update_time) values (6,'MSI GF시리즈 Sword GF76 B13VFK (SSD 512GB)',1318000,'MSI','/images/swordgf.jpg','/images/swordgfdesc.jpg','/images/swordgfthumb.jpg',sysdate,sysdate);
+insert into product (id, name, price, brand, img,desc_image,prev_image,create_time,update_time) values (7,'레노버 아이디어패드 Pro 5i 16IRH i7 3050 (SSD 512GB)',1291000,'레노버','/images/idea5i.jpg','/images/idea5idesc.jpg','/images/idea5ithumb.jpg',sysdate,sysdate);
+insert into product (id, name, price, brand, img,desc_image,prev_image,create_time,update_time) values (8,'MSI GF시리즈 Thin GF63 12VE (SSD 512GB)',1131000,'MSI','/images/msithingf.jpg','/images/msithingfdesc.jpg','/images/msithingfthumb.jpg',sysdate,sysdate);
+insert into product (id, name, price, brand, img,desc_image,prev_image,create_time,update_time) values (9,'MSI GF시리즈 Sword GF76 B13VFK WIN11 32GB램 (SSD 512GB)',1448000,'MSI','/images/swordgf76.jpg','/images/swordgf76desc.jpg','/images/swordgf76thumb.jpg',sysdate,sysdate);
+insert into product (id, name, price, brand, img,desc_image,prev_image,create_time,update_time) values (10,'LG전자 2022 그램16(12세대) 16ZD90Q-EX5SK (SSD 256GB)',1377000,'MSI','/images/lggram.jpg','/images/lggramdesc.jpg','/images/lggramthumb.jpg',sysdate,sysdate);
+insert into product (id, name, price, brand, img,desc_image,prev_image,create_time,update_time) values (11,'APPLE 2023 맥북프로14 MPHE3KH/A (16GB, SSD 512GB)',2556100,'APPLE','/images/macpro14.jpg','/images/macpro14desc.jpg','/images/macpro14thumb.jpg',sysdate,sysdate);
+insert into product (id, name, price, brand, img,desc_image,prev_image,create_time,update_time) values (12,'APPLE 2023 맥북에어15 MQKP3KH/A (8GB, SSD 256GB)',1754100,'APPLE','/images/macair15.jpg','/images/macair15desc.jpg','/images/macair15thumb.jpg',sysdate,sysdate);
+insert into product (id, name, price, brand, img,desc_image,prev_image,create_time,update_time) values (13,'삼성전자 갤럭시북2 NT550XEZ-A58A WIN11 16GB램 (SSD 256GB)',719100,'삼성전자','/images/galbook2.jpg','/images/galbook2desc.jpg','/images/galbook2thumb.jpg',sysdate,sysdate);
+insert into product (id, name, price, brand, img,desc_image,prev_image,create_time,update_time) values (14,'삼성전자 갤럭시북3 프로 NT940XFT-A51A (SSD 256GB)',1366100,'삼성전자','/images/galbook3pro.jpg','/images/galbook3prodesc.jpg','/images/galbook3prothumb.jpg',sysdate,sysdate);
+insert into product (id, name, price, brand, img,desc_image,prev_image,create_time,update_time) values (15,'LG전자 2023 울트라PC 15UD40R-GX56K WIN11 16GB램 (SSD 256GB)',596000,'LG전자','/images/lgultra15.jpg','/images/lgultra15desc.jpg','/images/lgultra15thumb.jpg',sysdate,sysdate);
+insert into product (id, name, price, brand, img,desc_image,prev_image,create_time,update_time) values (16,'HP Nero 15-fc0065AU WIN11 (SSD 512GB)',558000,'HP','/images/hpnero15.jpg','/images/hpnero15desc.jpg','/images/hpnero15thumb.jpg',sysdate,sysdate);
+insert into product (id, name, price, brand, img,desc_image,prev_image,create_time,update_time) values (17,'에이서 스위프트 엣지 16 OLED SFE16-43-R8ZU (SSD 512GB)',1518000,'에이서','/images/swiftedge16.jpg','/images/swiftedge16desc.jpg','/images/swiftedge16thumb.jpg',sysdate,sysdate);
+insert into product (id, name, price, brand, img,desc_image,prev_image,create_time,update_time) values (18,'에이서 스위프트 GO 14 OLED SFG14-42-R16Z (SSD 512GB)',1028000,'에이서','/images/swiftgo14.jpg','/images/swiftgo14desc.jpg','/images/swiftgo14thumb.jpg',sysdate,sysdate);
+insert into product (id, name, price, brand, img,desc_image,prev_image,create_time,update_time) values (19,'ASUS 젠북 15 UM3504DA-BN144 (SSD 512GB)',1005000,'ASUS','/images/genbook15.jpg','/images/genbook15desc.jpg','/images/genbook15thumb.jpg',sysdate,sysdate);
+insert into product (id, name, price, brand, img,desc_image,prev_image,create_time,update_time) values (20,'잘만 ZM-NS1000',21000,'잘만','/images/zmns1000.jpg','/images/zmns1000desc.jpg','/images/zmns1000thumb.jpg',sysdate,sysdate);
+insert into product (id, name, price, brand, img,desc_image,prev_image,create_time,update_time) values (21,'홈플래닛 고급형 알루미늄 노트북 거치대',24600,'홈플래닛','/images/homeplanet.jpg',null,'/images/homeplanetthumb.jpg',sysdate,sysdate);
+insert into product (id, name, price, brand, img,desc_image,prev_image,create_time,update_time) values (22,'지클릭커 휴 쉴드 정보보안 블루라이트 차단 거치형 모니터필름 (24인치)',42000,'지클릭커','/images/shieldfilm.jpg','/images/shieldfilmdesc.jpg','/images/shieldfilmthumb.jpg',sysdate,sysdate);
+insert into product (id, name, price, brand, img,desc_image,prev_image,create_time,update_time) values (23,'ASRock DeskMini X300 5600G 120W M.2 대원씨티에스 (16GB, M.2 500GB)',445700,'ASrock','/images/asrockdeskmini.jpg','/images/asrockdeskminidesc.jpg','/images/asrockdeskminithumb.jpg',sysdate,sysdate);
+insert into product (id, name, price, brand, img,desc_image,prev_image,create_time,update_time) values (24,'DELL 에일리언웨어 Aurora R15 DAWR15N-WP07KR Dark (64GB, M.2 1TB + 2TB)',5999000,'DELL','/images/aurorar15.jpg',null,'/images/aurorar15thumb.jpg',sysdate,sysdate);
+insert into product (id, name, price, brand, img,desc_image,prev_image,create_time,update_time) values (25,'APPLE 아이맥 MGPK3KH/A (8GB, SSD 256GB)',1870000,'APPLE','/images/imac.jpg','/images/imacdesc.jpg','/images/imacthumb.jpg',sysdate,sysdate);
+insert into product (id, name, price, brand, img,desc_image,prev_image,create_time,update_time) values (26,'ASUS MiniPC PN40-BC905ZV J4025 Win10 Pro (4GB, eMMC 64GB)',343000,'ASUS','/images/asusminipc.jpg','/images/asusminipcdesc.jpg','/images/asusminipcthumb.jpg',sysdate,sysdate);
+insert into product (id, name, price, brand, img,desc_image,prev_image,create_time,update_time) values (27,'APPLE 아이맥 MGPK3KH/A (8GB, SSD 256GB)',1870000,'APPLE','/images/imac.jpg','/images/imacdesc.jpg','/images/imacthumb.jpg',sysdate,sysdate);
+commit;
 
 SELECT category_set_seq.NEXTVAL FROM DUAL; 
 insert into category_set ( ID,CATEGORY_ID, PRODUCT_ID) values (1, 8, 1);
@@ -195,7 +197,7 @@ insert into option_set (id,product_id,stock,total_price,order_count,view_count,c
 insert into option_set (id,product_id,stock,total_price,order_count,view_count,create_time,update_time) values(25,25,1000,1870000,0,0,sysdate,sysdate);
 insert into option_set (id,product_id,stock,total_price,order_count,view_count,create_time,update_time) values(26,26,1000,343000,0,0,sysdate,sysdate);
 insert into option_set (id,product_id,stock,total_price,order_count,view_count,create_time,update_time) values(27,24,1000,1870000,0,0,sysdate,sysdate);
-
+commit;
 
 insert into options (EXTRA_PRICE, ID, OPTION_SET_ID, NAME, VALUE) values (0, options_seq.nextval, 1, '운영체제', '미포함');
 insert into options (EXTRA_PRICE, ID, OPTION_SET_ID, NAME, VALUE) values (0, options_seq.nextval, 1, '화면비율', '16:9');
@@ -482,7 +484,7 @@ insert into options (EXTRA_PRICE, ID, OPTION_SET_ID, NAME, VALUE) values (0, opt
 insert into options (EXTRA_PRICE, ID, OPTION_SET_ID, NAME, VALUE) values (0, options_seq.nextval, 27, '그래픽메모리', '16GB');
 insert into options (EXTRA_PRICE, ID, OPTION_SET_ID, NAME, VALUE) values (0, options_seq.nextval, 27, 'GPU', '지포스 RTX 3080');
 insert into options (EXTRA_PRICE, ID, OPTION_SET_ID, NAME, VALUE) values (0, options_seq.nextval, 27, '운영체제', '윈도우11프로');
-
+commit;
 
 //recentview
 insert into recent_view values(sysdate, 1, 1, 1, sysdate);
@@ -512,6 +514,6 @@ insert into interest values(sysdate, 10, 2, 3, sysdate);
 insert into interest values(sysdate, 11, 2, 9, sysdate);
 insert into interest values(sysdate, 12, 3, 1, sysdate);
 insert into interest values(sysdate, 13, 3, 6, sysdate);
-
+commit;
 
 
