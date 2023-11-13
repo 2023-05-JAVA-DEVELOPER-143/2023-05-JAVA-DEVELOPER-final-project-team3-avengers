@@ -51,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
 		System.out.println("@@@@@@@@@@@@@@@delivery= " + delivery);
 
 		MemberResponseDto memberResponseDto = memberService.joinGuest(MemberInsertGuestDto.builder()
-				.name(orderGuestDto.getName()).phoneNo(orderGuestDto.getPhoneNo()).email(orderGuestDto.getEmail()).role("Guest").build());
+				.name(orderGuestDto.getName()).phoneNo("g-"+orderGuestDto.getPhoneNo()).email("g-"+orderGuestDto.getEmail()).role("Guest").build());
 		Member member = Member.toResponseEntity(memberResponseDto);
 
 		Orders orders = orderDao.save(Orders.builder().description(optionSet.getProduct().getName())
@@ -79,8 +79,8 @@ public class OrderServiceImpl implements OrderService {
 
 		MemberResponseDto memberResponseDto = memberService.joinGuest(MemberInsertGuestDto.builder()
 				.name(orderGuestDto.getName())
-				.phoneNo(orderGuestDto.getPhoneNo())
-				.email(orderGuestDto.getEmail())
+				.phoneNo("g-"+orderGuestDto.getPhoneNo())
+				.email("g-"+orderGuestDto.getEmail())
 				.role("Guest")
 				.build());
 		Member member = Member.toResponseEntity(memberResponseDto);
@@ -156,7 +156,7 @@ public class OrderServiceImpl implements OrderService {
 	 */
 	@Transactional
 	public OrdersDto guestOrderDetail(Long orderNo, String phoneNo) throws Exception {
-
+		
 		Orders orders = orderDao.findOrdersByIdAndPhoneNo(orderNo, phoneNo);
 
 		return OrdersDto.orderDto(orders);
