@@ -489,7 +489,7 @@ public class OrderController {
 					 ordersGuestDetailDto.getPhoneNumber());
 			log.info("ordersGuestDetailDto={}", ordersGuestDetailDto);
 			System.out.println("@@@@@@getOrderNo: " + ordersGuestDetailDto.getOrderNo());
-	
+			ordersGuestDetailDto.setPhoneNumber("g-"+ordersGuestDetailDto.getPhoneNumber());
 
 				if (ordersGuestDetailDto.getPhoneNumber()
 						.equals(orderDao.findById(ordersGuestDetailDto.getOrderNo()).getMember().getPhoneNo())) {

@@ -7,7 +7,10 @@ import java.util.Map;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import com.danaga.dao.OrderDao;
+import com.danaga.entity.Orders;
 import com.danaga.service.MailService;
+import com.danaga.service.OrderService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class MailController {
 
     private final MailService mailService;
-    
+    private final OrderDao orderDao;
 //    @GetMapping("/mailpage")
 //    public String MailPage(){
 //        return "Mail";
@@ -60,6 +63,9 @@ public class MailController {
     	id = mailService.findOrderIdSendMail(mail, orderId);
     	HashMap map=new HashMap<>();
     	map.put("orderId", id);
+    	Orders orders= orderDao.findById(Long.parseLong(orderId));
+    	orders.getMember().setEmail(null);
+    	orderDao.save(orders);
     	return map;
     }
 
