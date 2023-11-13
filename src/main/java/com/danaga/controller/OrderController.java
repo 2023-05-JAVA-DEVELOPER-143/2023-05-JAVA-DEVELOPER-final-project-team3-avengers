@@ -307,9 +307,12 @@ public class OrderController {
 			session.setAttribute("realTotalPrice", realTotalPrice);
 			return "orders/order_save_form";
 		} else { // 비회원
+			
 			Integer realTotalPrice = 0;
 			for (int i = 0; i < sUserCartOrderDtoList.size(); i++) {
-				realTotalPrice += sUserCartOrderDtoList.get(i).getTotalPrice() * sUserCartOrderDtoList.get(i).getQty();
+				sUserCartOrderDtoList.get(i).setTotalPrice(sUserCartOrderDtoList.get(i).getTotalPrice()*sUserCartOrderDtoList.get(i).getQty());
+				
+				realTotalPrice += sUserCartOrderDtoList.get(i).getTotalPrice();
 				System.out.println(realTotalPrice);
 			}
 
