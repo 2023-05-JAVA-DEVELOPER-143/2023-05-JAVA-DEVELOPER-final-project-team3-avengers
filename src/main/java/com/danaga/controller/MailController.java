@@ -63,10 +63,17 @@ public class MailController {
     	id = mailService.findOrderIdSendMail(mail, orderId);
     	HashMap map=new HashMap<>();
     	map.put("orderId", id);
-    	Orders orders= orderDao.findById(Long.parseLong(orderId));
-    	orders.getMember().setEmail(null);
-    	orderDao.save(orders);
-    	return map;
+    	if(orderId!=null) {
+    		
+    		Orders orders= orderDao.findById(Long.parseLong(orderId));
+    		if(orders.getMember().getRole().equals("Guest")) {
+    			orders.getMember().setEmail(null);
+    		}
+    		orderDao.save(orders);
+    		return map;
+    	}else {
+    		throw new Exception("주문번호가 없습니다.");
+    	}
     }
 
 }
