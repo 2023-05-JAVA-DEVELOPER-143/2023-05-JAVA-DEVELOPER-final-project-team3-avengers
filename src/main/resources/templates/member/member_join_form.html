@@ -168,6 +168,7 @@ let member_join_action_rest=function(data){
 			    		setTimeout(function () {
 					    $('#reg-email').tooltip('dispose');
 					    }, 2000);
+			    		emailCheck = false;
 					} else if(resultJson.result==3) {
 						$('#reg-username').css('border','0.5px solid green');
 						$('#reg-email').css('border','0.5px solid green');
@@ -192,15 +193,15 @@ let member_join_action_rest=function(data){
 		   			}
 				},
 				error:function(){
+					
+					
 					alert("회원가입 실패 다시 시도해 주십시요.");
 				}
 			});
 		} else {
-        			$('#reg-email').tooltip({'trigger':'hover', 'title':'이메일 인증을 진행해주세요.'});
-        			$('#reg-email').tooltip('show');
-				    setTimeout(function () {
-				    $('#reg-email').tooltip('dispose');
-				    }, 2000);
+			$('#reg-email').css('border','0.5px solid orange');
+			$('#number').css('border','0.5px solid orange');
+			alert('이메일 인증을 진행해주세요');
         		}
 			
 };
