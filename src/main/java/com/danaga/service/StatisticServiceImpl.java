@@ -91,7 +91,7 @@ public class StatisticServiceImpl implements StatisticService {
 	@Override
 	public List<Statistic> yearlyStatistic(String year) {
 		List<Statistic> statisticList = statisticRepository.findByIdStartsWith("1M" + year);
-		//Collections.reverse(statisticList);
+		Collections.reverse(statisticList);
 		return statisticList;
 	}
 
