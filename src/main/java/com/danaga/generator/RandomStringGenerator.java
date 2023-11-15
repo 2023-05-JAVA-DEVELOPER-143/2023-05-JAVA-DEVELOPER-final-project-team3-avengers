@@ -1,4 +1,5 @@
 package com.danaga.generator;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
@@ -7,7 +8,7 @@ public class RandomStringGenerator {
 
     public static String generateRandomString() throws NoSuchAlgorithmException {
         SecureRandom random = new SecureRandom();
-        StringBuilder sb = new StringBuilder(10);
+        StringBuilder sb = new StringBuilder(11);
 
         // 최소 하나의 영문, 숫자 및 특수 문자를 추가
         sb.append(CHARACTERS.charAt(random.nextInt(26))); // 영문
@@ -28,12 +29,11 @@ public class RandomStringGenerator {
     private static String shuffleString(String input) throws NoSuchAlgorithmException {
         char[] characters = input.toCharArray();
         for (int i = characters.length - 1; i > 0; i--) {
-            int index = SecureRandom.getInstanceStrong().nextInt(i + 1);
+            int index = SecureRandom.getInstance("SHA1PRNG").nextInt(i + 1);
             char temp = characters[i];
             characters[i] = characters[index];
             characters[index] = temp;
         }
         return new String(characters);
     }
-
 }
