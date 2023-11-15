@@ -60,6 +60,7 @@
 										<tr>
 											<th>상품번호</th>
 											<th>이름</th>
+											<th>재고</th>
 											<th>브랜드</th>
 											<th>카테고리</th>
 											<th>등록일자</th>
@@ -70,6 +71,7 @@
 										<tr th:each="product : ${productList}">
 											<td th:text="${product.id}"></td>
 											<td th:text="${product.product.name}"></td>
+											<td th:text="${product.stock}"></td>
 											<td th:text="${product.product.brand}"></td>
 											<span
 												th:if="${product.product.categorySets != null and product.product.categorySets.size() > 0}">
